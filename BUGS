@@ -7,6 +7,3 @@ known bugs in abook
 
 * mutt / elm / pine export filters allow to create a file with duplicate
   aliases
-
-* mutt alias import filter is quite poor. It only handles correctly aliases
-  formatted like this: alias myalias Firstname Familyname <user@host.net>
