@@ -257,6 +257,8 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 			else
 				return "invalid value";
 			break;
+		default:
+			assert(0);
 	}
 	
 	return NULL;
@@ -293,16 +295,14 @@ opt_parse_customfield(buffer *b)
 	size_t len;
 
 	find_token_start(b);
-
 	p = b -> ptr;
-
 	find_token_end(b);
 
 	memset(num, 0, sizeof(num));
 
 	len = (b -> ptr - p);
 	strncpy(num, p, min(sizeof(num) - 1, len));
-	n = atoi(num);
+	n = safe_atoi(num);
 
 	find_token_start(b);
 
