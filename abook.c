@@ -723,6 +723,16 @@ add_email_add_item(int quiet, char *name, char *email)
 {
 	list_item item;
 
+	if(opt_get_bool(BOOL_ADD_EMAIL_PREVENT_DUPLICATES)) {
+		int search_fields[] = { EMAIL, -1 };
+		if(find_item(email, 0, search_fields) >= 0) {
+			if(!quiet)
+				printf("Address %s already in addressbook\n",
+						email);
+			return 0;
+		}
+	}
+					
 	if(!quiet) {
 		FILE *in = fopen("/dev/tty", "r");
 		char c;

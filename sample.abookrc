@@ -47,3 +47,4 @@ set address_style=eu
 # use ASCII characters only
 set use_ascii_only=false
 
+set add_email_prevent_duplicates=false
