@@ -33,11 +33,11 @@ extern int items;
 WINDOW *editw;
 
 static void
-editor_tab(int tab)
+editor_tab(const int tab)
 {
 	int i;
-	int spacing = 12;
-	char *tab_names[] = {
+	const int spacing = 12;
+	const char *tab_names[] = {
 		"CONTACT",
 		"ADDRESS",
 		" PHONE ",
@@ -371,6 +371,8 @@ edit_undo(int item, int mode)
 				my_free(backup);
 			}
 			break;
+		default:
+			assert(0);
 	}
 }
 
