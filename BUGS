@@ -8,4 +8,5 @@ known bugs in abook
   aliases
 
 misc:
-* cursor dissappears in some cases with abook_readline() on Solaris
+* Cursor disappears in some cases with abook_readline() on Solaris. If
+  you have problems it is recommended to use ncurses library

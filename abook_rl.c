@@ -118,7 +118,9 @@ abook_readline(WINDOW *w, int y, int x, char *s, int limit, bool use_completion)
 	if(s && *s)
 		add_history(s);
 	
+	nocbreak();
 	ret = readline(NULL);
+	cbreak();
 
 	if(rl_cancelled && ret) {
 		free(ret);
