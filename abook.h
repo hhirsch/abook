@@ -7,8 +7,8 @@ void		*abook_malloc(size_t size);
 void		*abook_realloc(void *ptr, size_t size);
 FILE		*abook_fopen (const char *path, const char *mode);
 void		quit_abook();
-void		launch_lynx();
-void		launch_mutt();
+void		launch_wwwbrowser(int item);
+void		launch_mutt(int item);
 #ifdef _AIX
 int		strcasecmp (const char *, const char *);
 int		strncasecmp (const char *, const char *, size_t);

@@ -146,6 +146,7 @@ static void
 editor_print_data(int tab, int item)
 {
 	const int pos_x = EDITW_COLS > 70 ? 8:4;
+	const int start_y = 4;
 	int i, j;
 
 	for(i = 0, j = 1; i < ITEM_FIELDS; i++) {
@@ -156,18 +157,19 @@ editor_print_data(int tab, int item)
 			int k;
 			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 			split_emailstr(item, emails);
-			mvwaddstr(editw, (LINES > 21 ? 7:6), pos_x, "E-mail addresses:");
+			mvwaddstr(editw, 6, pos_x, "E-mail addresses:");
 			for(k=0; k < MAX_EMAILS; k++)
-				mvwprintw(editw, (LINES > 21 ? 9:7)+k*2, pos_x,
+				mvwprintw(editw, 7 + k, pos_x,
 				"%c -\t\t%s", '2' + k, emails[k] );
 			continue;
 		}
 				
-		mvwprintw(editw, 3+j*2, pos_x, "%d - %s",
+		mvwprintw(editw, start_y + j, pos_x, "%d - %s",
 				j,
 				abook_fields[i].name);
-		mvwaddch(editw, 3+j*2, 28, ':');
-		mvwaddstr(editw, 3+j*2, 30, safe_str(database[item][i]));
+		mvwaddch(editw, start_y + j, 28, ':');
+		mvwaddstr(editw, start_y + j, 30, safe_str(database[item][i]));
+
 		j++;
 	}
 }
@@ -375,6 +377,8 @@ edit_loop(int item)
 		case 'r': roll_emails(item); break;
 		case '?': display_help(HELP_EDITOR); break;
 		case 'u': edit_undo(item, RESTORE_ITEM); break;
+		case 'm': launch_mutt(item);
+		case 'v': launch_wwwbrowser(item);
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
 		default:  return edit_field(tab, c, item);
 	}

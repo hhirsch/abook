@@ -320,14 +320,14 @@ quit_mutt_query(int status)
 
 
 void
-launch_mutt()
+launch_mutt(int item)
 {
 	int i;
 	char email[MAX_EMAIL_LEN];
 	char *cmd;
 	char *tmp = options_get_str("mutt_command");
 
-	if( list_is_empty() )
+	if( !is_valid_item(item) )
 		return;
 
 	cmd = strconcat(tmp, " '", NULL );
@@ -356,21 +356,20 @@ launch_mutt()
 	system(cmd);	
 
 	free(cmd);
-	refresh_screen();
 }
 
 void
-launch_lynx()
+launch_wwwbrowser(int item)
 {
 	char *cmd = NULL;
 
-	if( list_is_empty() )
+	if( !is_valid_item(item) )
 		return;
 
-	if( database[list_current_item()][URL] )
+	if( database[item][URL] )
 		cmd = mkstr("%s '%s'",
 				options_get_str("www_command"),
-				safe_str(database[list_current_item()][URL]));
+				safe_str(database[item][URL]));
 	else
 		return;
 
@@ -378,7 +377,6 @@ launch_lynx()
 		system(cmd);
 
 	free(cmd);
-	refresh_screen();
 }
 
 void *

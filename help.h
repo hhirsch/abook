@@ -39,7 +39,7 @@ static char *mainhelp[] = {
 "	Z		move current item down\n",
 "\n",
 "	m		send mail with mutt\n",
-"	u		view URL with lynx\n",
+"	u		view URL with www browser\n",
 NULL
 
 };
@@ -54,6 +54,9 @@ static char *editorhelp[] = {
 "	r			roll e-mail addresses\n",
 "\n",
 "	u			undo\n",
+"\n",
+"	m			send mail with mutt\n",
+"	v			view url with WWW browser\n",
 "\n",
 NULL
 

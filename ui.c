@@ -472,11 +472,15 @@ get_commands()
 			case 'Z': move_curitem(MOVE_ITEM_DOWN);
 				break;
 
-			case 'm': launch_mutt(); break;
+			case 'm': launch_mutt(list_current_item());
+				  refresh_screen();
+				  break;
 
 			case 'p': ui_print_database(); break;
 
-			case 'u': launch_lynx(); break;
+			case 'u': launch_wwwbrowser(list_current_item());
+				  refresh_screen();
+				  break;
 		}
 	}
 }
