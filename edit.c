@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "abook_curses.h"
+#include "ui.h"
 #include "abook.h"
 #include "database.h"
 #include "list.h"
@@ -42,7 +43,7 @@ editor_tab(int tab)
 		"/  OTHER  \\"
 	};
 
-	mvwhline(editw, TABLINE+1, 0, ACS_HLINE, EDITW_COLS);
+	mvwhline(editw, TABLINE+1, 0, UI_HLINE_CHAR, EDITW_COLS);
 
 	for(i=0; i < TABS; i++)
 		mvwaddstr(editw, TABLINE, 16 * i + 3, tab_names[i]);
@@ -371,7 +372,7 @@ edit_loop(int item)
 		case KEY_RIGHT: tab = tab == MAX_TAB ? 0 : tab + 1;
 				break;
 		case 'r': roll_emails(item); break;
-		case '?': display_editor_help(editw); break;
+		case '?': display_help(HELP_EDITOR); break;
 		case 'u': edit_undo(item, RESTORE_ITEM); break;
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
 		default:  return edit_field(tab, c, item);

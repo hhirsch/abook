@@ -1,19 +1,14 @@
 #ifndef _ABOOK_H
 #define _ABOOK_H
 
-void            refresh_screen();
-void            statusline_msg(char *msg);
-char		*ask_filename(char *prompt, int flags);
-void            clear_statusline();
-void		statusline_addstr(char *str);
-char		*statusline_getnstr(char *str, int n, int use_filesel);
-void		headerline(char *str);
-void		refresh_statusline();
-void		display_editor_help();
+#include <stdio.h>
+
 void		*abook_malloc(size_t size);
 void		*abook_realloc(void *ptr, size_t size);
 FILE		*abook_fopen (const char *path, const char *mode);
 void		quit_abook();
+void		launch_lynx();
+void		launch_mutt();
 #ifdef _AIX
 int		strcasecmp (const char *, const char *);
 int		strncasecmp (const char *, const char *, size_t);

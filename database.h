@@ -43,15 +43,13 @@ int		save_database();
 void		close_database();
 int		add_item2database(list_item item);
 void		free_list_item(list_item item);
-void		remove_items();
+void		remove_selected_items();
 void		sort_surname();
 void		sort_database();
-void		clear_database();
-void		find(int next);
-void		print_number_of_items();
-void		read_database();
 char		*get_surname(char *s);
-void		print_database();
+int		find_item(char *str, int start);
+int		is_selected(int item);
+
 
 #define LAST_ITEM	(items - 1)
 

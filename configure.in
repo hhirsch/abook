@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.4.13-cvs)
+AM_INIT_AUTOMAKE(abook, 0.4.13-dev)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -50,7 +50,7 @@ AC_CHECK_FUNCS(resizeterm)
 AC_CHECK_FUNC(snprintf, [AC_DEFINE(HAVE_SNPRINTF)],)
 AC_CHECK_FUNC(vsnprintf, [AC_DEFINE(HAVE_VSNPRINTF)],)
 
-AC_ARG_ENABLE(debug, [  --enable-debug	  Enable debugging support ], [case "${enableval}" in
+AC_ARG_ENABLE(debug, [  --enable-debug	Enable debugging support ], [case "${enableval}" in
 	yes) debug=true ;;
 	no) debug=false ;;
 	*) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
@@ -61,6 +61,20 @@ if test x$debug = xtrue; then
 	CFLAGS="-g $CFLAGS"
 fi
 
+AC_ARG_ENABLE(nonascii, [  --disable-nonascii    Disable usage of non-ascii characters ], [case "${enableval}" in
+	yes) nonascii=true ;;
+	no) nonascii=false ;;
+	*) AC_MSG_ERROR(bad value ${enableval} for --disable-nonascii) ;;
+	esac], [nonascii=true])
+
+if test x$nonascii = xfalse; then
+	AC_DEFINE(USE_ASCII_ONLY)
+fi
+
+if test x$debug = xtrue; then
+	CPPFLAGS="-DDEBUG $CPPFLAGS"
+	CFLAGS="-g $CFLAGS"
+fi
 if test x$GCC = xyes; then
 	CFLAGS="-Wall $CFLAGS"
 fi

@@ -1,6 +1,7 @@
 #ifndef _LIST_H
 #define _LIST_H
 
+#include "ui.h"
 
 void		init_list();
 void		close_list();
@@ -19,6 +20,8 @@ void		goto_end();
 void		highlight_line(WINDOW *win, int line);
 int		selected_items();
 void		invert_selection();
+int		list_current_item();
+int		list_is_empty();
 
 
 enum {

@@ -9,8 +9,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "abook_curses.h"
 #include "abook.h"
+#include "ui.h"
 #include "database.h"
 #include "edit.h"
 #include "list.h"
@@ -48,7 +48,7 @@ refresh_list()
 	
 	werase(list);
 
-	print_number_of_items();
+	ui_print_number_of_items();
 	
 	if( items < 1 ) {
 		refresh();
@@ -291,3 +291,16 @@ invert_selection()
 		selected[i] = !selected[i];
 }
 
+inline int
+list_current_item()
+{
+	return curitem;
+}
+
+inline int
+list_is_empty()
+{
+	return items < 1 ? 1 : 0;
+}
+
+	

@@ -12,7 +12,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "abook_curses.h"
 #include "abook.h"
 #include "database.h"
 #include "list.h"
@@ -277,22 +276,12 @@ add_item2database(list_item item)
 }
 
 void
-remove_items()
+remove_selected_items()
 {
 	int i, j;
 
 	if( items < 1 || curitem < 0 )
 		return;
-
-	statusline_addstr("Remove selected item(s) (Y/n)");
-	switch( getch() ) {
-		case '\r':
-		case 'y':
-		case 'Y': break;
-		default:
-			  clear_statusline();
-			  return;
-	}
 
 	if( ! selected_items() )
 		selected[ curitem ] = 1;
@@ -315,8 +304,6 @@ remove_items()
 	adjust_list_capacity();
 
 	select_none();
-	clear_statusline();	
-	refresh_list();
 }
 
 char *
@@ -392,110 +379,38 @@ sort_surname()
 	refresh_screen();
 }
 
-void
-clear_database()
-{
-
-	statusline_addstr("Clear WHOLE database (y/N)");
-	switch( getch() ) {
-		case 'y':
-		case 'Y': break;
-		default:
-			clear_statusline();
-			return;
-	}
-
-	close_database();
-
-	refresh_screen();
-}
-
-void
-find(int next)
+int
+find_item(char *str, int start)
 {
 	int i;
-	static char findstr[MAX_FIELD_LEN];
-	char tmp[MAX_FIELD_LEN];
+	char *findstr = NULL;
+	char *tmp = NULL;
+	int ret = -1; /* not found */
 
-#ifdef DEBUG
-	fprintf(stderr, "find(): findstr = |%s|\n", findstr);
-#endif
-	
-	if(next) {
-		if( !*findstr )
-			return;
-	} else {
-		clear_statusline();
-		statusline_addstr("/");
-		statusline_getnstr(findstr, MAX_FIELD_LEN - 1, 0);
-		strupper(findstr);
-		clear_statusline();
-	}
+	if(items < 1 || start < 0 || start >= LAST_ITEM)
+		return -2; /* error */
 
-	if(items < 1)
-		return;
+	findstr = strdup(str);
+	findstr = strupper(findstr);
 
-	for( i = (curitem < LAST_ITEM) && next ? curitem+1 : curitem;
-			i < items; i++ ) {
-		strncpy(tmp, database[i][NAME], MAX_FIELD_LEN - 1);
+	for( i = start; i < items; i++ ) {
+		tmp = strdup(database[i][NAME]);
 		if( strstr(strupper(tmp), findstr) != NULL ) {
-			curitem = i;
-			refresh_list();
-			break;
+			ret = i;
+			goto out;
 		}
-	}
-}
-
-
-void
-print_number_of_items()
-{
-	char *str = mkstr("     " "|%3d/%3d", selected_items(), items);
-
-	mvaddstr(0, COLS-strlen(str), str);
-
-	free(str);
-}
-
-void
-read_database()
-{
-	if(items > 0) {
-		statusline_addstr("Your current data will be lost - Press 'y' to continue");
-		switch( getch() ) {
-			case 'y':
-			case 'Y': break;
-			default: clear_statusline();
-				 return;
-		}
-		clear_statusline();
+		my_free(tmp);
 	}
 
-	load_database(datafile);
-	refresh_list();
+out:
+	free(findstr);
+	free(tmp);
+	return ret;
 }
 
 
-void
-print_database()
+int
+is_selected(int item)
 {
-	FILE *handle;
-	char *command = options_get_str("print_command");
-
-	statusline_addstr("Print addressbook? (y/N)");
-	switch( getch() ) {
-		case 'y':
-		case 'Y':
-			break;
-		default: clear_statusline(); return;
-	}
-	clear_statusline();
-
-	if( ! *command || (handle = popen(command, "w")) == NULL)
-		return;
-
-	fexport("text", handle);
-	
-	pclose(handle);
+	return selected[item];
 }
-

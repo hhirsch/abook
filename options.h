@@ -9,7 +9,6 @@
 int	options_get_int(char *key);
 char	*options_get_str(char *key);
 void	init_options();
-void	edit_options();
 void	close_config();
 void	load_options();
 void	save_options();

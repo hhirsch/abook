@@ -88,15 +88,6 @@ close_config()
 	conff_free_nodes(abook_config);
 }
 
-void
-edit_options()
-{
-	/*
-	 * not yet implemented
-	 * edit your ~/.abook.conf manually
-	 */
-}
-
 static int
 rcfile_exist()
 {

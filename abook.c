@@ -3,7 +3,7 @@
  *
  * by JH <jheinonen@bigfoot.com>
  *
- * Copyright (C) 1999, 2000 Jaakko Heinonen
+ * Copyright (C) Jaakko Heinonen
  */
 
 #include <string.h>
@@ -12,75 +12,34 @@
 #include <sys/stat.h>
 #include <signal.h>
 #include <fcntl.h>
-#include "abook_curses.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
 #if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
 #	include <locale.h>
 #endif
-#ifdef HAVE_TERMIOS_H
-#	include <termios.h>
-#else
-#	ifdef HAVE_LINUX_TERMIOS_H
-#		include <linux/termios.h>
-#	endif
-#endif
-#ifdef HAVE_SYS_IOCTL_H
-#	include <sys/ioctl.h>
-#endif
 #include "abook.h"
+#include "ui.h"
 #include "database.h"
 #include "list.h"
 #include "filter.h"
 #include "edit.h"
 #include "misc.h"
-#include "help.h"
 #include "options.h"
-#include "estr.h"
 
 static void             init_abook();
 static void             set_filenames();
 static void		free_filenames();
-static void		display_help(char **tbl);
-static void             get_commands();
 static void             parse_command_line(int argc, char **argv);
 static void             show_usage();
 static void             mutt_query(char *str);
 static void             init_mutt_query();
 static void             quit_mutt_query();
-static void             launch_mutt();
-static void		launch_lynx();
-static void		win_changed(int dummy);
-static void		open_datafile();
-#ifdef SIGWINCH
-static void		resize_abook();
-#endif
 static void		convert(char *srcformat, char *srcfile,
 				char *dstformat, char *dstfile);
 
-int should_resize = FALSE;
-int can_resize = FALSE;
-
 char *datafile = NULL;
 char *rcfile = NULL;
-
-WINDOW *top = NULL, *bottom = NULL;
-
-static void
-init_windows()
-{
-	top = newwin(LIST_TOP - 1, COLS, 0, 0);
-	
-	bottom = newwin(LINES - LIST_BOTTOM, COLS, LIST_BOTTOM, 0);
-}
-
-static void
-free_windows()
-{
-	delwin(top);
-	delwin(bottom);
-}
 
 static void
 init_abook()
@@ -88,32 +47,14 @@ init_abook()
 	set_filenames();
 	init_options();
 
-	initscr(); cbreak(); noecho();
-	nonl();
-	intrflush(stdscr, FALSE);
-	keypad(stdscr, TRUE);
-#ifdef DEBUG
-        fprintf(stderr, "init_abook():\n");
-        fprintf(stderr, "  COLS = %d, LINES = %d\n", COLS, LINES);
-#endif
-	if( LINES < MIN_LINES || COLS < MIN_COLS ) {
-		clear(); refresh(); endwin();
-		fprintf(stderr, "Your terminal size is %dx%d\n", COLS, LINES);
-		fprintf(stderr, "Terminal is too small. Minium terminal size "
-				"for abook is "
-				"%dx%d\n", MIN_COLS, MIN_LINES);
-		exit(1);
-	}
-	umask(DEFAULT_UMASK);
-#ifdef SIGWINCH
-	signal(SIGWINCH, win_changed);
-#endif
 	signal(SIGINT, quit_abook);
 	signal(SIGKILL, quit_abook);
 	signal(SIGTERM, quit_abook);
 	
-	init_list();
-	init_windows();
+	if( init_ui() )
+		exit(1);
+	
+	umask(DEFAULT_UMASK);
 
 	/*
 	 * this is very ugly for now
@@ -155,12 +96,9 @@ quit_abook()
 	}
 	close_config();
 	close_database();
-	close_list();
-	free_windows();
-	clear();
-	refresh();
-	endwin();
 
+	close_ui();
+	
 	exit(0);
 }
 
@@ -205,299 +143,6 @@ free_filenames()
 {
 	my_free(rcfile);
 	my_free(datafile);
-}
-
-void
-headerline(char *str)
-{
-	werase(top);
-	
-	mvwhline(top, 1, 0, ACS_HLINE, COLS);
-	
-	mvwprintw(top, 0, 0, "%s | %s", PACKAGE " " VERSION, str);
-
-	refresh();
-	wrefresh(top);
-}
-		
-
-void
-refresh_screen()
-{
-#ifdef SIGWINCH
-	if( should_resize ) {
-		resize_abook();
-		return;
-	}
-#endif
-	clear();
-	
-	refresh_statusline();
-	headerline(MAIN_HELPLINE);
-	list_headerline();
-
-	refresh_list();
-}
-
-#ifdef DEBUG
-extern int curitem;
-extern list_item *database;
-static void
-dump_item()
-{
-	int i;
-
-	fprintf(stderr,"sizeof(list_item) = %d\n", sizeof(list_item));
-	fprintf(stderr,"--- dumping item %d ---\n", curitem);
-	
-	for(i=0; i<ITEM_FIELDS; i++)
-		fprintf(stderr,"%d - %d\n",
-				i, (int)database[curitem][i]);
-
-	fprintf(stderr,"--- end of dump ---\n");
-				
-}
-#endif
-
-extern char *selected;
-extern int curitem;
-
-static void
-get_commands()
-{
-	int ch;
-
-	for(;;) {
-		can_resize = TRUE; /* it's safe to resize now */
-		hide_cursor();
-		if( should_resize )
-			refresh_screen();
-		ch = getch();
-		show_cursor();
-		can_resize = FALSE; /* it's not safe to resize anymore */
-		switch( ch ) {
-			case 'q': return;
-			case '?': display_help(mainhelp); break;
-			case 'a': add_item();		break;
-			case '\r': edit_item(-1);	break;
-			case KEY_DC:
-			case 'd':
-			case 'r': remove_items();	break;
-			case 12: refresh_screen();	break;
-
-			case 'k':
-			case KEY_UP: scroll_up();	break;
-			case 'j':
-			case KEY_DOWN: scroll_down();	break;
-			case 'K':
-			case KEY_PPAGE: page_up();	break;
-			case 'J':
-			case KEY_NPAGE: page_down();	break;
-
-			case 'H':
-			case KEY_HOME: goto_home();	break;
-			case 'E':
-			case KEY_END: goto_end();	break;
-
-			case 'w': save_database();
-				  break;
-			case 'l': read_database();	break;
-			case 'i': import_database();	break;
-			case 'e': export_database();	break;
-			case 'C': clear_database();	break;
-
-			case 'y': edit_options();	break;
-			case 'o': open_datafile();	break;
-
-			case 's': sort_database();	break;
-			case 'S': sort_surname();	break;
-
-			case '/': find(0);		break;
-			case '\\': find(1);		break;
-
-			case ' ': if(curitem >= 0) {
-				   selected[curitem] = !selected[curitem];
-				   print_number_of_items();
-				   refresh_list();
-				  }
-				break;
-			case '+': select_all();
-				  refresh_list();
-				break;
-			case '-': select_none();
-				  refresh_list();
-				break;
-			case '*': invert_selection();
-				  refresh_list();
-				 break;
-			case 'A': move_curitem(MOVE_ITEM_UP);
-				break;
-			case 'Z': move_curitem(MOVE_ITEM_DOWN);
-				break;
-
-			case 'm': launch_mutt(); break;
-
-			case 'p': print_database(); break;
-
-			case 'u': launch_lynx(); break;
-#ifdef DEBUG
-			case 'D': dump_item();
-#endif
-		}
-	}
-}
-
-
-static void
-display_help(char **tbl)
-{
-	int i, j = 3;
-
-	erase();
-	headerline("help");
-	refresh_statusline();
-	
-	for( i = 0; tbl[i] != NULL; i++) {
-		mvaddstr(j++, 0, tbl[i]);
-		if( ( !( (i+1) % (LINES-7) ) ) ||
-				(tbl[i+1] == NULL) ) {
-			refresh();
-			statusline_msg("Press any key to continue...");
-			erase();
-			refresh_statusline();
-			headerline("help");
-			j = 3;
-		}
-	}
-	refresh_screen();
-}
-
-void
-display_editor_help(WINDOW *w)
-{
-	int i;
-
-	werase(w);
-
-	headerline("editor help");
-
-	for( i = 0; editorhelp[i] != NULL; i++) {
-		waddstr(w, editorhelp[i]);
-		if( ( !( (i+1) % (LINES-8) ) ) ||
-			(editorhelp[i+1] == NULL) ) {
-			refresh();
-			wrefresh(w);
-			statusline_msg("Press any key to continue...");
-			wclear(w);
-		}
-	}
-}
-
-
-void
-statusline_msg(char *msg)
-{
-	clear_statusline();
-	statusline_addstr(msg);
-	getch();
-#ifdef DEBUG
-	fprintf(stderr, "statusline_msg(\"%s\")\n", msg);
-#endif
-	clear_statusline();
-}
-
-void
-statusline_addstr(char *str)
-{
-	mvwaddstr(bottom, 1, 0, str);
-	refresh();
-	wrefresh(bottom);
-}
-
-/*
- * function statusline_getnstr
- *
- * parameters:
- *  (char *str)
- *   if n >= 0 str is a pointer which points a place where to store
- *   the string, else str is ingnored
- *  (int n)
- *   the maximum length of the string
- *   If n < 0 function will allocate needed space for the string.
- *   Value 0 is not allowed for n.
- *  (int use_filesel)
- *   if this value is nonzero the fileselector is enabled
- *
- *  returns (char *)
- *   If n < 0 a pointer to a newly allocated string is returned.
- *   If n > 0 a nonzero value is returned if user has typed a valid
- *   string. If not NULL value is returned. Never really use the
- *   _pointer_ if n > 0.
- *
- */
-
-char *
-statusline_getnstr(char *str, int n, int use_filesel)
-{
-	char *buf;
-	int y, x;
-
-	getyx(bottom, y, x);
-	wmove(bottom, 1, x);
-	
-	buf = wenter_string(bottom, n,
-			(use_filesel ? ESTR_USE_FILESEL:0) | ESTR_DONT_WRAP);
-
-	if(n < 0)
-		return buf;
-	
-	if(buf == NULL)
-		str[0] = 0;
-	else
-		strncpy(str, buf, n);
-
-	str[n-1] = 0;
-
-	free(buf);
-
-	return buf;
-}
-
-void
-refresh_statusline()
-{
-	werase(bottom);
-
-	mvwhline(bottom, 0, 0, ACS_HLINE, COLS);
-	mvwhline(bottom, 2, 0, ACS_HLINE, COLS);
-
-	refresh();
-	wrefresh(bottom);
-}
-	
-
-char *
-ask_filename(char *prompt, int flags)
-{
-	char *buf = NULL;
-
-	clear_statusline();
-	
-	statusline_addstr(prompt);
-	buf = statusline_getnstr(NULL, -1, flags);
-
-	clear_statusline();
-
-	return buf;
-}
-
-void
-clear_statusline()
-{
-	wmove(bottom, 1, 0);
-	wclrtoeol(bottom);
-	wrefresh(bottom);
-	refresh();
 }
 
 static void
@@ -681,7 +326,7 @@ quit_mutt_query(int status)
 }
 
 
-static void
+void
 launch_mutt()
 {
 	int i;
@@ -689,13 +334,13 @@ launch_mutt()
 	char *cmd;
 	char *tmp = options_get_str("mutt_command");
 
-	if(curitem < 0)
+	if( list_is_empty() )
 		return;
 
 	cmd = strconcat(tmp, " '", NULL );
 
 	for(i=0; i < items; i++) {
-		if( ! selected[i] && i != curitem )
+		if( ! is_selected(i) && i != list_current_item() )
 			continue;
 		get_first_email(email, i);
 		tmp = mkstr("%s \"%s\"", cmd, database[i][NAME]);
@@ -721,18 +366,18 @@ launch_mutt()
 	refresh_screen();
 }
 
-static void
+void
 launch_lynx()
 {
 	char *cmd = NULL;
 
-	if(curitem < 0)
+	if( list_is_empty() )
 		return;
 
-	if( database[curitem][URL] )
+	if( database[list_current_item()][URL] )
 		cmd = mkstr("%s '%s'",
 				options_get_str("www_command"),
-				safe_str(database[curitem][URL]));
+				safe_str(database[list_current_item()][URL]));
 	else
 		return;
 
@@ -749,7 +394,7 @@ abook_malloc(size_t size)
 	void *ptr;
 
 	if ( (ptr = malloc(size)) == NULL ) {
-		if(top) /* determinate if init_abook has been called */
+		if( is_ui_initialized() )
 			quit_abook();
 		perror("malloc() failed");
 		exit(1);
@@ -767,7 +412,7 @@ abook_realloc(void *ptr, size_t size)
 		return NULL;
 
 	if( ptr == NULL ) {
-		if(top) /* determinate if init_abook has been called */
+		if( is_ui_initialized() )
 			quit_abook();
 		perror("realloc() failed");
 		exit(1);
@@ -790,49 +435,6 @@ abook_fopen (const char *path, const char *mode)
 	return S_ISREG(s.st_mode) ? fopen(path, mode) : NULL;
 }
 
-
-static void
-win_changed(int i)
-{
-	if( can_resize )
-		resize_abook();
-	else
-		should_resize = TRUE;	
-}
-
-#ifdef SIGWINCH
-static void
-resize_abook()
-{
-#ifdef TIOCGWINSZ
-	struct winsize winsz;
-
-	ioctl (0, TIOCGWINSZ, &winsz);
-#ifdef DEBUG
-	if(winsz.ws_col >= MIN_COLS && winsz.ws_row >= MIN_LINES) {
-		fprintf(stderr, "Warning: COLS=%d, LINES=%d\n", winsz.ws_col, winsz.ws_row);
-	}
-#endif
-		
-	if(winsz.ws_col >= MIN_COLS && winsz.ws_row >= MIN_LINES) {
-#ifdef HAVE_RESIZETERM
-		resizeterm(winsz.ws_row, winsz.ws_col);
-#else
-		COLS = winsz.ws_col;
-		LINES = winsz.ws_row;
-#endif
-	}
-
-	should_resize = FALSE;
-	close_list(); /* we need to recreate windows */
-	init_list();
-	free_windows();
-	init_windows();
-	refresh_screen();
-	refresh();
-#endif /* TIOCGWINSZ */
-}
-#endif /* SIGWINCH */
 
 
 static void
@@ -885,42 +487,3 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 }
 
 
-static void
-open_datafile()
-{
-	char *filename;
-
-	filename = ask_filename("File to open: ", 1);
-
-	if( !filename ) {
-		refresh_screen();
-		return;
-	}
-
-	if( options_get_int("autosave") )
-		save_database();
-	else {
-		statusline_addstr("Save current database (y/N)");
-		switch( getch() ) {
-			case 'y':
-			case 'Y':
-				save_database();
-			default: break;
-		}
-	}
-
-	close_database();
-
-	load_database(filename);
-
-	if( items == 0 ) {
-		statusline_msg("Sorry, that specified file appears not to be a valid abook addressbook");
-		load_database(datafile);
-	} else {
-		free(datafile);
-		datafile = strdup(filename);
-	}
-
-	refresh_screen();
-	free(filename);
-}
