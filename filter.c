@@ -490,7 +490,7 @@ ldif_read_line(FILE *in)
 		}
 
 		if(*line != ' ') {
-			fseek(in, pos, SEEK_SET);
+			fseek(in, pos, SEEK_SET); /* fixme ! */
 			free(line);
 			break;
 		}
@@ -913,7 +913,8 @@ pine_parse_buf(char *buf)
 				&& pine_conv_table[i] >= 0) {
 			strncpy(tmp, start, len);
 			tmp[len] = 0;
-			item[pine_conv_table[i]] = strdup(tmp);
+			if(*tmp)
+				item[pine_conv_table[i]] = strdup(tmp);
 		}
 		start = end + 1;
 	}
@@ -1512,7 +1513,7 @@ text_export_database(FILE * out, struct db_enumerator e)
 		fprintf(out,
 			"-----------------------------------------\n\n");
 		fprintf(out, "%s", database[e.item][NAME]);
-		if (database[e.item][NICK])
+		if (database[e.item][NICK] && *database[e.item][NICK])
 			fprintf(out, "\n(%s)", database[e.item][NICK]);
 		fprintf(out, "\n");
 

@@ -15,3 +15,4 @@ known bugs in abook
 misc:
 * Cursor disappears in some cases with abook_readline() on Solaris. If
   you have problems it is recommended to use ncurses library
+* fseek in ldif import filter should be eliminated
