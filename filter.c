@@ -21,6 +21,7 @@
 #include "list.h"
 #include "misc.h"
 #include "options.h"
+#include <assert.h>
 
 extern int items;
 extern list_item *database;
@@ -37,6 +38,7 @@ extern struct abook_field abook_fields[];
 static int      ldif_parse_file(FILE *handle);
 static int	mutt_parse_file(FILE *in);
 static int	pine_parse_file(FILE *in);
+static int 	csv_parse_file(FILE *in);
 
 /*
  * export filter prototypes
@@ -61,6 +63,7 @@ struct abook_input_filter i_filters[] = {
 	{ "ldif", "ldif / Netscape addressbook", ldif_parse_file },
 	{ "mutt", "mutt alias (beta)", mutt_parse_file },
 	{ "pine", "pine addressbook", pine_parse_file },
+	{ "csv", "comma separated values", csv_parse_file },
 	{ "\0", NULL, NULL }
 };
 
@@ -1014,6 +1017,173 @@ pine_export_database(FILE *out, struct db_enumerator e)
 
 
 /*
+ * csv import filter
+ */
+
+/* FIXME
+ * these files should be parsed according to a certain
+ * lay out, or the default if layout is not given, at 
+ * the moment only default is done...
+ */ 
+
+#define CSV_COMMENT_CHAR	'#'
+
+static int csv_conv_table[] = {
+	NAME,
+	EMAIL,
+	PHONE,
+	NOTES,
+	NICK
+};
+
+static void
+csv_convert_emails(char *s)
+{
+	int i;
+	char *tmp;
+
+	if( s == NULL )
+		return;
+
+	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1 )
+		if( i > MAX_EMAILS - 1 ) {
+			*tmp = 0;
+			break;	
+		}
+
+}
+
+static char *
+csv_remove_quotes(char *s)
+{
+	char *copy, *trimmed;
+	int len;
+	
+	copy = trimmed = strdup(s);
+	strtrim(trimmed);
+	
+	len = strlen(trimmed);
+	if(trimmed[len - 1] == '\"' && *trimmed == '\"') {
+		if(len < 3) {
+			my_free(copy);
+			return NULL;
+		}
+		trimmed[len - 1] = 0;
+		trimmed++;
+		trimmed = strdup(trimmed);
+		free(copy);
+		return trimmed;
+	}
+
+	my_free(copy);
+	return strdup(s);
+}
+
+static void
+csv_store_field(list_item item, char *s, int field)
+{
+	char *newstr = NULL;
+
+	if(!s || !*s)
+		return;
+
+	if( !(newstr = csv_remove_quotes(s)) )
+		return;
+
+	if(field < (sizeof(csv_conv_table) / sizeof(*csv_conv_table))
+			&& csv_conv_table[field] >= 0) {
+		item[csv_conv_table[field]] = newstr;
+	}
+}
+
+static int
+csv_is_valid_quote_end(char *p)
+{
+	if(*p != '\"')
+		return FALSE;
+
+	for(p++; *p; p++) {
+		if(*p == ',')
+			return TRUE;
+		else if(!ISSPACE(*p))
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
+static int
+csv_is_valid_quote_start(char *p)
+{
+	for(; *p; p++) {
+		if(*p == '\"')
+			return TRUE;
+		else if(!ISSPACE(*p))
+			return FALSE;
+	}
+
+	return FALSE;
+}
+
+static void
+csv_parse_line(char *line)
+{
+	char *p, *start;
+	int field;
+	int in_quote = FALSE;
+	list_item item;
+
+	memset(item, 0, sizeof(item));
+
+	for(p = start = line, field = 0; *p; p++) {
+		if(!in_quote) {
+			if ( (((p - start) / sizeof (char)) < 2 ) &&
+				csv_is_valid_quote_start(p) )
+				in_quote = TRUE;
+		} else {
+			if(csv_is_valid_quote_end(p))
+				in_quote = FALSE;
+		}
+
+		if( *p == ',' && !in_quote) {
+			*p = 0;
+			csv_store_field(item, start, field);
+			field++;
+			start = p + 1;
+		}
+	}
+	/*
+	 * store last field
+	 */
+	csv_store_field(item, start, field);
+
+	csv_convert_emails(item[EMAIL]);
+	add_item2database(item);
+}
+
+
+static int
+csv_parse_file(FILE *in)
+{
+	char *line = NULL;
+
+	while(!feof(in)) {
+		line = getaline(in);
+
+		if(line && *line && *line != CSV_COMMENT_CHAR)
+			csv_parse_line(line);
+
+		my_free(line);
+	}
+
+	return 0;
+}
+
+/*
+ * end of csv import filter
+ */
+
+/*
  * csv addressbook export filter
  */
 
@@ -1026,12 +1196,16 @@ csv_export_database(FILE *out, struct db_enumerator e)
 		EMAIL,
 		PHONE,
 		NOTES,
+		NICK,
 		-1
 	};
 
 	db_enumerate_items(e) {
 		for(j = 0; csv_export_fields[j] >= 0; j++) {
-			fprintf(out, strchr(safe_str(database[e.item][csv_export_fields[j]]), ',') ?
+			fprintf(out,(
+		strchr(safe_str(database[e.item][csv_export_fields[j]]), ',') ||
+		strchr(safe_str(database[e.item][csv_export_fields[j]]), '\"')
+			) ?
 				"\"%s\"" : "%s",
 				safe_str(database[e.item][csv_export_fields[j]])
 				);

@@ -1,6 +1,9 @@
 0.4.14
+ - added csv import filter
+ - csv export filter fix
  - minor html filter update
  - fixed a minor memory leak in pine import filter
+ - fixes
 
 0.4.13
  - major code reorganization (phase 1)

@@ -417,11 +417,13 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	strlower(srcformat);
 	strlower(dstformat);
 
+#ifndef DEBUG
 	if( !strcmp(srcformat, dstformat) ) {
 		printf(	"input and output formats are the same\n"
 			"exiting...\n");
 		exit(1);
 	}
+#endif
 
 	set_filenames();
 	init_options();
