@@ -489,9 +489,11 @@ ui_clear_database()
 void
 ui_find(int next)
 {
-	int item;
+	int item = -1;
 	static char findstr[MAX_FIELD_LEN];
 	int search_fields[] = {NAME, EMAIL, NICK, -1};
+
+	clear_statusline();
 
 	if(next) {
 		if( !*findstr )
@@ -504,12 +506,15 @@ ui_find(int next)
 		refresh_screen();
 	}
 
-	if( (item = find_item(findstr, curitem + !!next,
-					search_fields )) >= 0 ) {
+	if( (item = find_item(findstr, curitem + !!next, search_fields)) < 0)
+		if((item = find_item(findstr, 0, search_fields)) >= 0)
+			statusline_addstr(
+				"Search hit bottom, continuing at top");
+
+	if(item >= 0) {
 		curitem = item;
 		refresh_list();
 	}
-
 }
 
 

@@ -748,12 +748,12 @@ add_email_add_item(int quiet, char *name, char *email)
 				"you may want to use --add-email-quiet\n");
 			exit(1);
 		}
-		printf("Add ``%s <%s>'' to %s ? (y/n)\n",
-				name,
-				email,
-				datafile
-		);
+
 		do {
+			printf("Add ``%s <%s>'' to %s ? (y/n)\n",
+					name,
+					email,
+					datafile);
 			c = fgetc(in);
 			if(c == 'n' || c == 'N') {
 				fclose(in);
