@@ -109,10 +109,7 @@ refresh_list()
         for( line = 0, i = first_list_item ; i <= LAST_LIST_ITEM && i < items;
 			line++, i++ ) {
 
-		if(i == curitem)
-			highlight_line(list, line);
-		
-		print_list_line(i, line);
+		print_list_line(i, line, i == curitem);
 
 		wstandend(list);
         }
@@ -121,7 +118,7 @@ refresh_list()
 }
 
 void
-print_list_line(int i, int line)
+print_list_line(int i, int line, int highlight)
 {
 	int extra = extra_column;
 	char tmp[MAX_EMAILSTR_LEN];
@@ -129,6 +126,8 @@ print_list_line(int i, int line)
 		EMAILLEN : COLS - EMAILPOS;
 
 	scrollok(list, FALSE);
+	if(highlight)
+		highlight_line(list, line);
 
 	if( selected[i] )
 		mvwaddch(list, line, 0, '*' );
@@ -150,6 +149,8 @@ print_list_line(int i, int line)
 				EXTRALEN);
 
 	scrollok(list, TRUE);
+	if(highlight_line)
+		wstandend(list);
 }
 	
 

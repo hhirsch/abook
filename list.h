@@ -6,7 +6,7 @@
 void		init_list();
 void		close_list();
 void            refresh_list();
-void		print_list_line(int i, int line);
+void		print_list_line(int i, int line, int highlight);
 void		list_headerline();
 void            scroll_up();
 void            scroll_down();
