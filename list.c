@@ -110,8 +110,6 @@ refresh_list()
 			line++, i++ ) {
 
 		print_list_line(i, line, i == curitem);
-
-		wstandend(list);
         }
 
         wrefresh(list);
