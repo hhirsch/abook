@@ -1,0 +1,35 @@
+abook FAQ
+~~~~~~~~~
+
+Q: How to query all addresses when I press 'Q' in mutt?
+
+A: Type "all" to the prompt.
+
+
+Q: Can I mark multiple addresses in mutt after a query?
+
+A: You can tag addresses with 't'. When ready, type ";m" (press first ';'
+   and then 'm') and all tagged addresses will appear to your "To:"
+   line.
+
+
+Q: How to insert an address (or many) with abook when I'm forwarding
+   a message in mutt? ("To:" and "Cc:" prompts)
+
+A: When "To:" or "Cc:" prompt appears press ^t for query. (After query
+   you can tag multiple addresses with 't')
+
+
+Q: Can I add addresses to the abook addressbook from mutt?
+
+A: It's not supported directly by abook or mutt. However abook comes with
+   mail2abook.py python script which does this. (See the contrib directory)
+
+
+Q: Does abook support palm addressbooks?
+
+A: No, but there are utilities to convert palm addressbooks to ldif
+   files. Abook can import ldif files.
+
+
+last update: 2001-03-07 / JH

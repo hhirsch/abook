@@ -1,0 +1,17 @@
+abook AUTHORS
+-------------
+
+Jaakko Heinonen		<jheinonen@bigfoot.com>
+
+Alan Ford		<alan@whirlnet.co.uk>
+ - Debian package
+ - manual pages
+ - GnomeCard, csv, text, elm export filters
+ - etc.
+
+Josua Groeger		<fractalus@gmx.net>
+ - spruce export filter
+ - text export filter update
+
+Matt Kraai		<kraai@alumni.carnegiemellon.edu>
+ - patches

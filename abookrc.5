@@ -1,0 +1,157 @@
+.TH ABOOKRC 5 "Jan 2, 2001"
+.nh
+.SH NAME
+\fB$HOME/.abookrc\fP \- configuration file for abook address book program
+.SH DESCRIPTION
+This manual page documents briefly the
+.B .abookrc
+file.
+.br
+.B .abookrc
+is the (optional) configuration file for use with the
+.B abook(1)
+address book program.
+
+.B .abookrc
+is stored in a user's $HOME directory. It follows a format of option=value.
+The following information lists each of these options and the values they
+may take.
+
+If a variable is not set in 
+.B .abook.conf
+, a sensible default, as 
+listed with the description below, will be used.
+
+Comments in 
+.B .abook.conf 
+are on lines beginning with '#'.
+
+.SH VARIABLES
+
+.TP
+\fBautosave\fP=[true|false]
+Defines whether the addressbook is automatically saved on exit. Default is true.
+
+.TP
+\fBshow_all_emails\fP=[true|false]
+Defines whether all email addresses for a contact are shown in the main list view. Default is true
+
+.TP
+\fBemailpos\fP=column
+Defines the screen column on the main list where the email address is to begin. Default is 25.
+
+.TP
+\fBextra_column\fP=field
+Defines the variable to display in the extra (third) column on the main list. Default is 7 (Home Phone).
+.br
+The following numbers are used to represent commonly used \fIfield\fPs:
+.br
+-1 = disabled
+.br
+ 7 = Home Phone
+.br
+ 8 = Work Phone
+.br
+ 9 = Fax
+.br
+10 = Mobile Phone
+.br
+11 = Nick / Alias
+.br
+12 = URL
+.br
+13 = Notes
+
+.TP
+\fBextra_alternative\fP=field
+This is an optional setting that allows you to specify an alternative field to be displayed in the extra (third) column if there is no data for the field specified in extra_column for a particular item. The numerical codes for the fields are the same as above. Please note that the data shown where the alternative field has been used will NOT be marked differently in any way from the rest of the extra column. There is no default.
+
+.TP
+\fBextrapos\fP=column
+Defines the screen column on the main list where the extra field is to begin. Default is 65.
+
+.TP
+\fBmutt_command\fP=command
+Defines the command to start mutt. Default is "mutt".
+
+.TP
+\fBmutt_return_all_emails\fP=[true|false]
+Defines whether to return all email addresses matching the search criteria to a mutt query. Default is true.
+
+.TP
+\fBprint_command\fP=command
+Defines the command to used when printing the addressbook. Default is "lpr".
+
+.TP
+\fBfilesel_sort\fP=[true|false]
+Defines whether to sort the files in the fileselector in alphabetical order. Default is false.
+
+.TP
+\fBwww_command\fP=command
+Defines the command used to start the web browser to view a contact's URL. Default is "lynx".
+
+.TP
+\fBaddress_style\fP=[eu|uk|us]
+Defines the style of address formatting to be used when exporting as text / printing the database (European, UK, or USA). Default is European ("eu").
+
+.SH SAMPLE CONFIGURATION FILE
+
+.nf
+# sample abook configuration file
+#
+
+# Automatically save database on exit
+autosave=true
+
+# Show all email addresses in list
+show_all_emails=true
+
+# Screen column for email field to start
+emailpos=25
+
+# Field to be used in the extra column
+extra_column=7
+# frequently used values:
+#	-1 = disabled
+#	7 = Home Phone
+#	8 = Work Phone
+#	9 = Fax
+#	10 = Mobile Phone
+#	11 = Nick / Alias
+#	12 = URL
+
+#
+extra_alternative=-1
+
+# Screen column for the extra field to start
+extrapos=65
+
+# Command used to start mutt
+mutt_command=mutt
+
+# Return all email addresses to a mutt query
+mutt_return_all_emails=true
+
+# Command used to print
+print_command=lpr
+
+# Sort files in fileselector (alphabetic order)
+filesel_sort=false
+
+# Command used to start the web browser
+www_command=lynx
+
+# address style [eu|us|uk]
+address_style=eu
+
+.fi
+
+.SH SEE ALSO
+.BR abook (1).
+.br
+.SH AUTHOR
+This manual page was written by Alan Ford <alan@whirlnet.co.uk>.
+
+.br
+.B abook
+was written by Jaakko Heinonen <jheinonen@bigfoot.com>

@@ -1,0 +1,12 @@
+known bugs in abook
+
+* in X terminals keyboard may not behave as expected - this is propably
+  a ncurses problem
+* incompatible with some terminals
+* --datafile option is a bit broken
+
+* mutt / elm / pine export filters allows to create a file with dublicate
+  aliases
+
+* mutt alias import filter is quite poor. It only handles correctly aliases
+  formatted like this: alias myalias Firstname Familyname <user@host.net>

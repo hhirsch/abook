@@ -1,0 +1,76 @@
+.TH ABOOK 1 "March 18, 2000"
+.nh
+.SH NAME
+abook \- text-based address book program
+.SH SYNOPSIS
+.B abook
+[ \fB--help\fP | \fB--datafile\fP <filename> | \fB--mutt-query\fP <string> | \fB--convert\fP <inputformat> <inputfile> <outputformat> <outputfile>] 
+.SH DESCRIPTION
+This manual page documents briefly the
+.B abook
+program.
+This manual page was written for the Debian GNU/Linux distribution
+because the original program does not have a manual page.
+.PP
+.B abook 
+is a text-based address book program. It contains Name, Email, Address 
+and various Phone fields. It is designed for use with mutt, but can be
+equally useful on its own.
+.SH OPTIONS
+.TP
+\fB\-\-help\fP
+Show usage.
+.TP
+\fB\-\-datafile\fP <filename>
+Use an alternative addressbook file (default is $HOME/.abook.addressbook).
+.TP
+\fB\-\-mutt-query\fP <string>
+Make a query for mutt (search the addressbook for <string>).
+.br
+The \fB\-\-datafile\fP option, as documented above, may be used BEFORE this
+option to search a different addressbook file.
+.TP
+\fB\-\-convert\fP <inputformat> <inputfile> <outputformat> <outputfile>
+Converts <inputfile> in <inputformat> to <outputfile> in <outputformat>
+
+.br
+The following \fBinputformats\fP are supported:
+.br
+- \fBabook\fP abook native format
+.br
+- \fBldif\fP ldif / Netscape addressbook
+.br
+- \fBpine\fP pine addressbook
+
+.br
+The following \fBoutputformats\fP are supported:
+.br
+- \fBabook\fP abook native format
+.br
+- \fBmutt\fP mutt alias
+.br
+- \fBhtml\fP html document
+.br
+- \fBpine\fP pine addressbook
+.br
+- \fBgcrd\fP GnomeCard (VCard) addressbook
+.br
+- \fBcsv\fP comma separated values
+.br
+- \fBelm\fP elm alias
+.br
+- \fBtext\fP plain text
+
+.SH COMMANDS DURING USE
+Press '\fB?\fP' during use to get a list of commands.
+.SH SEE ALSO
+.BR mutt (1),
+.BR abookrc (5)
+.br
+.SH AUTHOR
+This manual page was written by Alan Ford <alan@whirlnet.co.uk>,
+for the Debian GNU/Linux system (but may be used by others).
+
+.br
+.B abook
+was written by Jaakko Heinonen <jheinonen@bigfoot.com>

@@ -1,0 +1,49 @@
+# sample abook configuration file
+# see abookrc(5) for detailed explanation
+
+# Automatically save database on exit
+autosave=true
+
+# Show all email addresses in list
+show_all_emails=true
+
+# Screen column for email field to start
+emailpos=25
+
+# Field to be used in the extra column
+extra_column=7
+# frequently used values:
+#	-1 = disabled
+#	7 = Home Phone
+#	8 = Work Phone
+#	9 = Fax
+#	10 = Mobile Phone
+#	11 = Nick / Alias
+#	12 = URL
+
+# Specify an alternative field to be displayed in the extra
+# column if there is no data for the field specified in
+# extra_column for a particular item.  
+extra_alternative=-1
+
+# Screen column for the extra field to start
+extrapos=65
+
+# Command used to start mutt
+mutt_command=mutt
+
+# Return all email addresses to a mutt query
+mutt_return_all_emails=true
+
+# Command used to print
+print_command=lpr
+
+# Sort files in fileselector (alphabetic order)
+filesel_sort=false
+
+# Command used to start the web browser
+www_command=lynx
+
+# address style [eu|us|uk]
+address_style=eu
+
