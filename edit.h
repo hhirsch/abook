@@ -24,10 +24,11 @@ enum {
 	TAB_CONTACT,
 	TAB_ADDRESS,
 	TAB_PHONE,
-	TAB_OTHER
+	TAB_OTHER,
+	TAB_CUSTOM
 };
 
-#define MAX_TAB		TAB_OTHER
+#define MAX_TAB		TAB_CUSTOM
 	
 #define TABS		(MAX_TAB+1)
 

@@ -71,8 +71,25 @@ struct abook_field abook_fields[ITEM_FIELDS] = {
 	{"Nickname/Alias", "nick",      TAB_OTHER},/* NICK */
 	{"URL",		"url",		TAB_OTHER},/* URL */
 	{"Notes",	"notes",	TAB_OTHER},/* NOTES */
+	{"Custom1",	"custom1",	TAB_CUSTOM},/* CUSTOM1 */
+	{"Custom2",	"custom2",	TAB_CUSTOM},/* CUSTOM2 */
+	{"Custom3",	"custom3",	TAB_CUSTOM},/* CUSTOM3 */
+	{"Custom4",	"custom4",	TAB_CUSTOM},/* CUSTOM4 */
+	{"Custom5",	"custom5",	TAB_CUSTOM},/* CUSTOM5 */
 };
 
+
+int
+find_field(const char *field)
+{
+	int i;
+
+	for(i = 0; i < ITEM_FIELDS; i++)
+		if( !strcmp(abook_fields[i].key, field) )
+			return i;
+
+	return -1;
+}
 
 int
 parse_database(FILE *in)
@@ -501,3 +518,42 @@ init_db_enumerator(int mode)
 
 	return e;
 }
+
+static int
+assign_fieldname(const char *name, int i)
+{
+	char *s;
+
+	if(strcasecmp(abook_fields[i].name, name)) { /* name differs */
+		/*
+		 * check if we are overwriting statically allocated default
+		 */
+		if(strcasecmp(abook_fields[i].name, abook_fields[i].key))
+			my_free(abook_fields[i].name);
+		
+		s = abook_malloc(MAX_FIELDNAME_LEN + 1);
+		snprintf(s, MAX_FIELDNAME_LEN, "%s", name);
+		abook_fields[i].name = s;
+	}
+
+	return 0;
+}
+
+int
+change_custom_field_name(const char *name, int n)
+{
+	int i;
+	char keyname[21];
+
+	snprintf(keyname, sizeof(keyname), "custom%d", n);
+
+	for(i = CUSTOM_MIN; i <= CUSTOM_MAX; i++) {
+		if(!strcasecmp(abook_fields[i].key, keyname)) {
+			assign_fieldname(name, i);
+			return i;
+		}
+	}
+
+	return -1;
+}
+

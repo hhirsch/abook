@@ -23,12 +23,22 @@ enum {
 	NICK,
 	URL,
 	NOTES,
+	CUSTOM1,
+	CUSTOM2,
+	CUSTOM3,
+	CUSTOM4,
+	CUSTOM5,
 	ITEM_FIELDS /* this is the last */
 };
 
 #define LAST_FIELD		(ITEM_FIELDS - 1)
 
+#define CUSTOM_MIN		CUSTOM1
+#define CUSTOM_MAX		CUSTOM5
+
 typedef char * list_item[ITEM_FIELDS];
+
+#define	MAX_FIELDNAME_LEN	21
 
 struct abook_field {
 	char *name;
@@ -46,6 +56,7 @@ struct db_enumerator {
 	int mode; /* warning: read only */
 };
 
+int		find_field(const char *field);
 int		parse_database(FILE *in);
 int		write_database(FILE *out, struct db_enumerator e);
 int		load_database(char *filename);
@@ -63,6 +74,7 @@ int		is_valid_item(int item);
 
 int		real_db_enumerate_items(struct db_enumerator e);
 struct db_enumerator	init_db_enumerator(int mode);
+int		change_custom_field_name(const char *name, int n);
 
 #define LAST_ITEM	(items - 1)
 

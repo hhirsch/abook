@@ -283,12 +283,41 @@ opt_parse_set(buffer *b)
 	return "unknown option";
 }
 
+static char *
+opt_parse_customfield(buffer *b)
+{
+	char *p, num[5];
+	int n;
+	size_t len;
+
+	find_token_start(b);
+
+	p = b -> ptr;
+
+	find_token_end(b);
+
+	memset(num, 0, sizeof(num));
+
+	if((len = (b -> ptr - p)) > sizeof(num))
+		return "invalid custom field number";
+
+	strncpy(num, p, min(sizeof(num), len));
+	n = atoi(num);
+
+	find_token_start(b);
+
+	if(change_custom_field_name(b->ptr, n) == -1)
+		return "invalid custom field number";
+
+	return NULL;
+}
 
 static struct {
 	char *token;
 	char * (*func) (buffer *line);
 } opt_parsers[] = {
 	{ "set", opt_parse_set },
+	{ "customfield", opt_parse_customfield },
 	{ NULL }
 };
 
