@@ -43,9 +43,9 @@ Defines the screen column on the main list where the email address is to begin. 
 
 .TP
 \fBextra_column\fP=field
-Defines the variable to display in the extra (third) column on the main list. Default is "phone" (Home Phone).
+Defines the field to display in the extra (third) column on the main list. Default is "phone" (Home Phone).
 .br
-The following strings are used to represent commonly used \fIfield\fPs:
+\fIfield\fP can be any of the following:
 .br
 -1			disabled
 .br
@@ -57,7 +57,7 @@ fax			Fax
 .br
 mobile		Mobile Phone
 .br
-nick			Nick / Alias
+nick			Nickname/Alias
 .br
 url			URL
 .br
@@ -99,6 +99,10 @@ This option allows you to force Abook use only ASCII characters. This option is 
 \fBadd_email_prevent_duplicates\fP=[true|false]
 Defines whether to avoid adding addresses already in data. Default is false.
 
+.TP
+\fBsort_field\fP=field
+Defines the field to be used by the "sort by field" command. Default is "nick" (Nickname/Alias).
+
 .SH SAMPLE CONFIGURATION FILE
 
 .nf
@@ -117,13 +121,13 @@ set emailpos=25
 # Field to be used in the extra column
 set extra_column=phone
 # frequently used values:
-#	-1		disabled
-#	phone		Home Phone
-#	workphone	Work Phone
-#	fax		Fax
-#	mobile		Mobile Phone
-#	nick		Nick / Alias
-#	url		URL
+#	-1          disabled
+#	phone       Home Phone
+#	workphone   Work Phone
+#	fax         Fax
+#	mobile      Mobile Phone
+#	nick        Nickname/Alias
+#	url         URL
 
 #
 set extra_alternative=-1
