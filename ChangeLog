@@ -1,4 +1,4 @@
-0.4.16
+0.4.16-cvs
  - use strcoll instead of strcmp for sorting entries
  - bugfixes
 
