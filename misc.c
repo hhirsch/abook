@@ -85,7 +85,7 @@ char *
 mkstr (const char *format, ... )
 {
 	MY_VA_LOCAL_DECL;
-	int size = 100;
+	size_t size = 100;
 	char *buffer =
 #ifdef ABOOK_SRC
 		(char *) abook_malloc (size);
@@ -188,7 +188,7 @@ char *
 my_getcwd()
 {
 	char *dir = NULL;
-	int size = 100;
+	size_t size = 100;
 
 	if( (dir = (char *)malloc(size)) == NULL)
 		return NULL;
