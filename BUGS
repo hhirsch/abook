@@ -5,7 +5,7 @@ known bugs in abook
 * incompatible with some terminals
 * --datafile option is a bit broken
 
-* mutt / elm / pine export filters allows to create a file with duplicate
+* mutt / elm / pine export filters allow to create a file with duplicate
   aliases
 
 * mutt alias import filter is quite poor. It only handles correctly aliases
