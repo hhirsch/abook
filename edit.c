@@ -398,8 +398,10 @@ edit_loop(int item)
 			       break;
 		case KEY_RIGHT: tab = tab == MAX_TAB ? 0 : tab + 1;
 				break;
+		case KEY_UP:
 		case '<':
 		case 'k': if(is_valid_item(item-1)) item--; break;
+		case KEY_DOWN:
 		case '>':
 		case 'j': if(is_valid_item(item+1)) item++; break;
 		case 'r': roll_emails(item); break;
