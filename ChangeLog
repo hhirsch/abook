@@ -1,8 +1,10 @@
+0.5.0
+ - tried to work around some problems with readline
+ - some documentation update
 20030530
  - updated autoconf/automake
  - updated man page
  - pine import filter update
-
 20021008
  - options.c rewritten (new mutt style rc file support)
  - palmcsv export filter (Koenraad Heijlen)
@@ -11,19 +13,20 @@
  - merged newtab patch by Sinan Kaan Yerli
  - new option: add_email_prevent_duplicates
  - bugfixes
-
 2002-03-11
  - readline support
  - abook can be compiled with g++
  - attempt to improve --datafile behavior
  - html filter update (Morten Brix Pedersen)
  - store rcfile and addressbook to .abook directory
-
 2002-02-04
  - use getopt to parse command line (also new options added)
  - use strcoll instead of strcmp for sorting entries
  - html filter fix
  - bugfixes
+
+0.4.17
+ - fixed an annoying file creation bug
 
 0.4.16
  - use strcoll instead of strcmp for sorting entries

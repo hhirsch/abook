@@ -43,10 +43,14 @@ After this you can make queries from mutt using the query command ('Q')
 and add sender e-mail addresses to the addressbook from pager using 'A'
 command. (Of course you can choose another keybinding if you like.)
 
+It's also recommeded to set pipe_decode variable in mutt configuration.
+See the mutt manual for details.
+
 UPGRADING FROM VERSION 0.4
 
-You must import your abook 0.4 addressbook file because 0.5 uses different
-location to store the file.
+You must import your abook 0.4 addressbook file because it is stored
+to a different location. Configuration file is now located to $HOME/.abook/
+directory and it's called abookrc . (without leading dot)
 
 NOTES
 
