@@ -327,10 +327,16 @@ ldif_type_and_value( char *type, char *val, int vlen )
 {
     char	*buf, *p;
     int		tlen;
+    size_t	bufsize, t;
 
     tlen = strlen( type );
-    if (( buf = (char *)malloc( LDIF_SIZE_NEEDED( tlen, vlen ) + 1 )) !=
-	    NULL ) {
+
+    t = LDIF_SIZE_NEEDED( tlen, vlen );
+    if((bufsize = t + 1) <= t)
+        return NULL;
+
+    if (( buf = (char *)malloc( bufsize )) == NULL ) {
+	return NULL;
     }
 
     p = buf;

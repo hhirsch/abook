@@ -123,7 +123,7 @@ mkstr (const char *format, ... )
 char*
 strconcat (const char *str, ...)
 {
-	int   l;
+	unsigned long l;
 	MY_VA_LOCAL_DECL;
 	char *s, *concat;
 
@@ -144,6 +144,8 @@ strconcat (const char *str, ...)
 #else
 	malloc(l);
 #endif
+	if(concat == NULL)
+		return NULL;
 
 	strcpy (concat, str);
 	MY_VA_START(str);
@@ -190,6 +192,8 @@ my_getcwd()
 
 	if( (dir = (char *)malloc(size)) == NULL)
 		return NULL;
+
+	*dir = 0;
 	
 	while( getcwd(dir, size) == NULL && errno == ERANGE )
 		if( (dir = (char *)realloc(dir, size *=2)) == NULL)
