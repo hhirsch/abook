@@ -224,72 +224,27 @@ muttq_print_item(int item)
 				);
 }
 
-static int
-mutt_query_name(char *str)
-{
-	int i, j;
-	char *tmp;
-
-	for(i = 0, j = 0 ; i < items; i++) {
-		tmp = strdup(database[i][NAME]);
-		if( strstr( strupper(tmp), strupper(str) ) != NULL ) {
-			if( !j )
-				putchar('\n');
-			muttq_print_item(i);
-			j++;
-		}
-		free(tmp);
-	}
-
-	return j;
-}
-
-static int
-mutt_query_email(char *str)
-{
-	int i, j, k;
-	char *tmp, emails[MAX_EMAILS][MAX_EMAIL_LEN];
-
-	for(i = 0, j = 0; i < items; i++) {
-		split_emailstr(i, emails);
-		for(k = 0; k < MAX_EMAILS; k++) {
-			if( *emails[k] ) {
-				tmp = strdup( emails[k] );
-				if( strstr( strupper(tmp), strupper(str) ) != NULL ) {
-					if( !j )
-						putchar('\n');
-					j++;
-					if( options_get_int("mutt_return_all_emails") ) {
-						muttq_print_item(i);
-						free(tmp);
-						break;
-					} else
-						printf("%s\t%s\n", emails[k],
-							database[i][NAME]);
-				}
-				free(tmp);
-			}
-		}
-	}
-
-	return j;
-}
-
 static void
 mutt_query(char *str)
 {
-	int i;
-	
 	init_mutt_query();
 
 	if( str == NULL || !strcasecmp(str, "all") ) {
+		struct db_enumerator e = init_db_enumerator(ENUM_ALL);
 		printf("All items\n");
-		for(i = 0; i < items; i++)
-			muttq_print_item(i);
+		db_enumerate_items(e)
+			muttq_print_item(e.item);
 	} else {
-		if( !mutt_query_name(str) && !mutt_query_email(str) ) {
+		int search_fields[] = {NAME, EMAIL, NICK, -1};
+		int i;
+		if( (i = find_item(str, 0, search_fields)) < 0 ) {
 			printf("Not found\n");
 			quit_mutt_query(1);
+		}
+		putchar('\n');
+		while(i >= 0) {
+			muttq_print_item(i);
+			i = find_item(str, i+1, search_fields);
 		}
 	}
 

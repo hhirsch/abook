@@ -57,7 +57,7 @@ void		remove_selected_items();
 void		sort_surname();
 void		sort_database();
 char		*get_surname(char *s);
-int		find_item(char *str, int start);
+int		find_item(char *str, int start, int search_fields[]);
 int		is_selected(int item);
 int		is_valid_item(int item);
 

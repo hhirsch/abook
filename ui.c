@@ -506,6 +506,7 @@ ui_find(int next)
 {
 	int item;
 	static char findstr[81];
+	int search_fields[] = {NAME, EMAIL, NICK, -1};
 
 	if(next) {
 		if( !*findstr )
@@ -517,7 +518,8 @@ ui_find(int next)
 		clear_statusline();
 	}
 
-	if( (item = find_item(findstr, next ? curitem+1 : curitem)) >= 0 ) {
+	if( (item = find_item(findstr, next ? curitem+1 : curitem,
+					search_fields )) >= 0 ) {
 		curitem = item;
 		refresh_list();
 	}

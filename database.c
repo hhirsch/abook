@@ -386,26 +386,30 @@ sort_surname()
 }
 
 int
-find_item(char *str, int start)
+find_item(char *str, int start, int search_fields[])
 {
 	int i;
 	char *findstr = NULL;
 	char *tmp = NULL;
 	int ret = -1; /* not found */
+	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
 
-	if(items < 1 || start < 0 || start >= LAST_ITEM)
+	if(list_is_empty() || !is_valid_item(start))
 		return -2; /* error */
 
 	findstr = strdup(str);
 	findstr = strupper(findstr);
 
-	for( i = start; i < items; i++ ) {
-		tmp = strdup(database[i][NAME]);
-		if( strstr(strupper(tmp), findstr) != NULL ) {
-			ret = i;
-			goto out;
+	e.item = start - 1; /* must be "real start" - 1 */
+	db_enumerate_items(e) {
+		for( i = 0; search_fields[i] >= 0; i++ ) {
+			tmp = safe_strdup(database[e.item][search_fields[i]]);
+			if( tmp && strstr(strupper(tmp), findstr) ) {
+				ret = e.item;
+				goto out;
+			}
+			my_free(tmp);
 		}
-		my_free(tmp);
 	}
 
 out:
