@@ -383,7 +383,8 @@ get_commands()
 		can_resize = FALSE; /* it's not safe to resize anymore */
 		switch( ch ) {
 			case 'q': return;
-			case 'Q': print_stderr(selected_items() ?
+			case 'Q': quit_abook(QUIT_DONTSAVE);	break;
+			case 'P': print_stderr(selected_items() ?
 						  -1 : list_current_item());
 				  return;
 			case '?':

@@ -137,12 +137,15 @@ init_abook()
 }
 
 void
-quit_abook()
+quit_abook(int save_db)
 {
-	if(opt_get_bool(BOOL_AUTOSAVE))
-		save_database();
-	else if(statusline_ask_boolean("Save database", TRUE))
-		save_database();
+	if(save_db)  {
+		if(opt_get_bool(BOOL_AUTOSAVE))
+			save_database();
+		else if(statusline_ask_boolean("Save database", TRUE))
+			save_database();
+	} else if(!statusline_ask_boolean("Quit without saving", FALSE))
+		return;
 
 	free_opts();
 	close_database();
@@ -155,7 +158,7 @@ quit_abook()
 static void
 quit_abook_sig(int i)
 {
-	quit_abook();
+	quit_abook(QUIT_SAVE);
 }
 
 int
@@ -171,7 +174,7 @@ main(int argc, char **argv)
 
 	get_commands();	
 
-	quit_abook();
+	quit_abook(QUIT_SAVE);
 
 	return 0;
 }
@@ -577,7 +580,7 @@ abook_malloc(size_t size)
 
 	if ( (ptr = malloc(size)) == NULL ) {
 		if( is_ui_initialized() )
-			quit_abook();
+			quit_abook(QUIT_SAVE);
 		perror("malloc() failed");
 		exit(1);
 	}
@@ -595,7 +598,7 @@ abook_realloc(void *ptr, size_t size)
 
 	if(ptr == NULL) {
 		if(is_ui_initialized())
-			quit_abook();
+			quit_abook(QUIT_SAVE);
 		perror("realloc() failed");
 		exit(1);
 	}

@@ -6,7 +6,7 @@
 void		*abook_malloc(size_t size);
 void		*abook_realloc(void *ptr, size_t size);
 FILE		*abook_fopen (const char *path, const char *mode);
-void		quit_abook();
+void		quit_abook(int save_db);
 void		launch_wwwbrowser(int item);
 void		launch_mutt(int item);
 void		print_stderr(int item);
@@ -27,6 +27,9 @@ int		strncasecmp (const char *, const char *, size_t);
 #define DATAFILE	"addressbook"
 
 #define RCFILE		"abookrc"
+
+#define QUIT_SAVE	1
+#define QUIT_DONTSAVE	0
 
 /*
  * some "abookwide" useful macros

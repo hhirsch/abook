@@ -1,5 +1,7 @@
 0.5.1
  - sort by field command
+ - duplicate item command
+ - quit without saving command
  - minor filter fixes
  - tried to fix \" quotation problem with mutt import filter
  - removed obsolete filesel_sort option from abookrc manual page
