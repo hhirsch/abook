@@ -43,6 +43,7 @@
 #endif
 
 #include <stdio.h>
+#include <strings.h>
 
 /* Comment out all this code if we are using the GNU C Library, and are not
    actually compiling the library itself.  This code is part of the GNU C
@@ -656,10 +657,12 @@ int
 								_("%s: option `--%s' doesn't allow an argument\n"),
 								argv[0], pfound->name);
 						else
+						{
 							/* +option or -option */
 							fprintf(stderr,
 								_("%s: option `%c%s' doesn't allow an argument\n"),
 								argv[0], argv[optind - 1][0], pfound->name);
+						}
 
 					nextchar += strlen(nextchar);
 
