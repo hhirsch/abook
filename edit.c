@@ -130,7 +130,7 @@ print_editor_header(int item)
 	if( *database[item][EMAIL] )
 		snprintf(header, EDITW_COLS, "%s <%s>",
 				database[item][NAME],
-				database[item][EMAIL]);
+				email);
 	else
 		snprintf(header, EDITW_COLS, "%s", database[item][NAME]);
 
