@@ -3,6 +3,7 @@
  - proper mutt alias import filter
  - editor update
  - don't handle extra_column and extra_alternative as numbers in abookrc
+ - added second address field
  - mail.vim update in contrib directory
 
 0.4.14

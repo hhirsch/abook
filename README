@@ -31,12 +31,15 @@ INSTALLATION
 
 See INSTALL for detailed instructions.
 
-If you want to use abook with mutt you should add following line to your
+If you want to use abook with mutt you should add following lines to your
 ~/.muttrc or to the systemwide /etc/Muttrc file.
 
 set query_command="abook --mutt-query '%s'"
+macro pager A |'abook --add-email'\n
 
-After this you can make queries from mutt using the query command ( Q ).
+After this you can make queries from mutt using the query command ('Q')
+and add sender e-mail addresses to the addressbook from pager using 'A'
+command. (Of course you can choose another keybinding if you like.)
 
 NOTES
 

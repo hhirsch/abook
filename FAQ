@@ -22,8 +22,8 @@ A: When "To:" or "Cc:" prompt appears press ^t for query. (After query
 
 Q: Can I add addresses to the abook addressbook from mutt?
 
-A: It's not supported directly by abook or mutt. However abook comes with
-   mail2abook.py python script which does this. (See the contrib directory)
+A: Yes, it is possible starting from abook 0.4.15. See --add-email
+   command line option and README.
 
 
 Q: Does abook support palm addressbooks?
