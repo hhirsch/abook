@@ -820,14 +820,13 @@ html_export_write_head(FILE *out, int extra_column)
 {
 	char *realname = get_real_name();
 
-	fprintf(out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-	fprintf(out, "<html>\n<head>\n	<title>%s's addressbook</title>",
-			realname );
+	fprintf(out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+	fprintf(out, "<html>\n<head>\n <title>%s's addressbook</title>", realname );
 	fprintf(out, "\n</head>\n<body>\n");
 	fprintf(out, "\n<h2>%s's addressbook</h2>\n", realname );
 	fprintf(out, "<br><br>\n\n");
 
-	fprintf(out, "<center><table border>\n");
+	fprintf(out, "<table border=\"1\" align=\"center\">\n");
 	fprintf(out, "\n<tr><th>Name<th>E-mail address(es)<th>%s</tr>\n\n",
 			abook_fields[extra_column].name);
 
@@ -837,7 +836,7 @@ html_export_write_head(FILE *out, int extra_column)
 static void
 html_export_write_tail(FILE *out)
 {
-	fprintf(out, "\n</table></center>\n");
+	fprintf(out, "\n</table>\n");
 	fprintf(out, "\n</body>\n</html>\n");
 }
 	

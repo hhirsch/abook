@@ -1,6 +1,7 @@
 2002-xx-xx
  - abook can be compiled with g++
  - attempt to improve --datafile behavior
+ - html filter update (Morten Brix Pedersen)
 
 2002-02-04
  - use getopt to parse command line (also new options added)
