@@ -392,7 +392,7 @@ display_help(int help)
  * end of help
  */
 
-char *selected;
+extern char *selected;
 extern int curitem;
 
 void

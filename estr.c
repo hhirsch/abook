@@ -78,7 +78,7 @@ wenter_string(WINDOW *win, const int maxlen, const int flags)
 	int size = maxlen > 0 ? maxlen + 1 : INITIAL_BUFSIZE; 
 
 	getyx(win, y, x);
-	str = MALLOC(size);
+	str = (char *)MALLOC(size);
 
 	for( ;; ) { /* main loop */
 		if(flags & ESTR_DONT_WRAP && x+i > COLS-2) {
@@ -122,7 +122,7 @@ wenter_string(WINDOW *win, const int maxlen, const int flags)
 		str[i++] = ch;
 		waddch(win,ch);
 		if( i + 1 >= size )
-			str = REALLOC( str, size *= 2 );
+			str = (char *)REALLOC( str, size *= 2 );
 	}
 out:
 	if( i >= 0 && str != NULL )
@@ -258,7 +258,8 @@ filesel_add_filesel_list_item(struct filesel_list_item item)
 	if( ++filesel_items > filesel_list_capacity) {
 		filesel_list_capacity =
 		filesel_list_capacity < 1 ? 30:filesel_list_capacity << 1;
-		lst = REALLOC(lst, filesel_list_capacity *
+		lst = (struct filesel_list_item *)REALLOC(lst,
+			filesel_list_capacity *
 			sizeof(struct filesel_list_item) );
 	}
 
@@ -519,7 +520,8 @@ filesel_enter()
 
 	if(lst[filesel_curitem].type == FLSL_TYPE_DIR) {
 		dir = my_getcwd();
-		newdir = MALLOC(strlen(dir)+strlen(lst[filesel_curitem].filename) +2 );
+		newdir = (char *)MALLOC(strlen(dir) + 
+				strlen(lst[filesel_curitem].filename) +2 );
 		strcpy(newdir, dir);
 		strcat(newdir, "/");
 		strcat(newdir,lst[filesel_curitem].filename);
@@ -595,7 +597,8 @@ filesel()
 
 	if( !filesel_loop() ) {
 		dir = my_getcwd();
-		tmp = MALLOC(strlen(dir) + strlen(lst[filesel_curitem].filename) + 2);
+		tmp = (char *)MALLOC(strlen(dir) +
+				strlen(lst[filesel_curitem].filename) + 2);
 		strcpy(tmp,dir);
 		strcat(tmp, "/");
 		strcat(tmp, lst[filesel_curitem].filename);

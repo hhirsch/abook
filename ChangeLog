@@ -1,4 +1,8 @@
-0.4.16-cvs
+2002-xx-xx
+ - abook can be compiled with g++
+
+2002-02-04
+ - use getopt to parse command line (also new options added)
  - use strcoll instead of strcmp for sorting entries
  - html filter fix
  - bugfixes

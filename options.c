@@ -83,7 +83,13 @@ init_options()
 void
 close_config()
 {
+	/*
+	 * we don't save the configuration file since user can specify
+	 * alternative configuration files
+	 */
+#if 0
 	save_options();
+#endif
 
 	conff_free_nodes(abook_config);
 }
@@ -114,6 +120,7 @@ load_options()
 	}
 }
 
+#if 0
 void
 save_options()
 {
@@ -122,6 +129,7 @@ save_options()
 
 	conff_save_file(abook_config, rcfile);
 }
+#endif
 
 static void
 options_add_key(char *key, char *value)

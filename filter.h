@@ -3,7 +3,7 @@
 
 #include "database.h"
 
-#define		FILTNAME_LEN	6
+#define		FILTNAME_LEN	7
 
 
 struct abook_output_filter {
@@ -20,10 +20,10 @@ struct abook_input_filter {
 
 
 int		import_database();
-int             import(char filtname[FILTNAME_LEN], char *filename);
+int             import_file(char filtname[FILTNAME_LEN], char *filename);
 
 int		export_database();
-int             export(char filtname[FILTNAME_LEN], char *filename);
+int             export_file(char filtname[FILTNAME_LEN], char *filename);
 int		fexport(char filtname[FILTNAME_LEN], FILE *handle,
 		int enum_mode);
 

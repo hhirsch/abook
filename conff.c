@@ -76,7 +76,8 @@ conff_add_key(struct conff_node **ptr, char *key, char *value, int flags)
 				return 1;
 		}
 	
-	if( (new_item = malloc(sizeof(struct conff_node))) == NULL )
+	if( (new_item = (struct conff_node *)malloc(sizeof(struct conff_node)))
+			== NULL )
 		return 5;
 
 	if(replace) { 

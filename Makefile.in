@@ -68,7 +68,7 @@ VERSION = @VERSION@
 
 bin_PROGRAMS = abook
 
-abook_SOURCES = abook.c database.c filter.c list.c misc.c conff.c 		options.c edit.c ldif.c estr.c ui.c getname.c  		abook.h database.h filter.h list.h misc.h help.h conff.h 		options.h edit.h ldif.h estr.h abook_curses.h ui.h getname.h
+abook_SOURCES = abook.c database.c filter.c list.c misc.c conff.c 		options.c edit.c ldif.c estr.c ui.c getname.c 		getopt.c getopt1.c  		abook.h database.h filter.h list.h misc.h help.h conff.h 		options.h edit.h ldif.h estr.h abook_curses.h ui.h getname.h 		getopt.h
 
 
 EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc
@@ -84,7 +84,7 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 abook_OBJECTS =  abook.o database.o filter.o list.o misc.o conff.o \
-options.o edit.o ldif.o estr.o ui.o getname.o
+options.o edit.o ldif.o estr.o ui.o getname.o getopt.o getopt1.o
 abook_LDADD = $(LDADD)
 abook_DEPENDENCIES = 
 abook_LDFLAGS = 
@@ -103,8 +103,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/abook.P .deps/conff.P .deps/database.P .deps/edit.P \
-.deps/estr.P .deps/filter.P .deps/getname.P .deps/ldif.P .deps/list.P \
-.deps/misc.P .deps/options.P .deps/ui.P
+.deps/estr.P .deps/filter.P .deps/getname.P .deps/getopt.P \
+.deps/getopt1.P .deps/ldif.P .deps/list.P .deps/misc.P .deps/options.P \
+.deps/ui.P
 SOURCES = $(abook_SOURCES)
 OBJECTS = $(abook_OBJECTS)
 

@@ -242,7 +242,7 @@ validate_item(list_item item)
 		item[EMAIL] = strdup("");
 
 	for(i=0; i<ITEM_FIELDS; i++)
-		if( item[i] && (strlen(item[i]) > _MAX_FIELD_LEN(i) ) ) {
+		if( item[i] && ((int)strlen(item[i]) > _MAX_FIELD_LEN(i) ) ) {
 			tmp = item[i];
 			item[i][_MAX_FIELD_LEN(i)-1] = 0;
 			item[i] = strdup(item[i]);
@@ -263,9 +263,9 @@ adjust_list_capacity()
 	else
 		return;
 
-	database = abook_realloc(database,
+	database = (list_item *)abook_realloc(database,
 			sizeof(list_item) * list_capacity);
-	selected = abook_realloc(selected, list_capacity);
+	selected = (char *)abook_realloc(selected, list_capacity);
 }
 
 int
@@ -471,10 +471,10 @@ out:
 struct db_enumerator
 init_db_enumerator(int mode)
 {
-	struct db_enumerator new;
+	struct db_enumerator e;
 
-	new.item = -1; /* important - means "start from beginning" */
-	new.mode = mode;
+	e.item = -1; /* important - means "start from beginning" */
+	e.mode = mode;
 
-	return new;
+	return e;
 }

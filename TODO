@@ -1,5 +1,6 @@
- general:
- - update TODO list
- - colors			0.8 - 1.0 ?
- - custom fields		(partially done)
+
+0.5
+ - new file format (xml?)
+ - new configuration system (maybe not yet in 0.5)
+   - custom views, keybindings
 

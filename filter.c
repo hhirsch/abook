@@ -230,14 +230,15 @@ i_read_file(char *filename, int (*func) (FILE *in))
 }
 
 int
-import(char filtname[FILTNAME_LEN], char *filename)
+import_file(char filtname[FILTNAME_LEN], char *filename)
 {
 	int i;
 	int tmp = items;
 	int ret = 0;
 
 	for(i=0;; i++) {
-		if( ! strncmp(i_filters[i].filtname, filtname, FILTNAME_LEN) )
+		if( ! strncasecmp(i_filters[i].filtname, filtname,
+					FILTNAME_LEN) )
 			break;
 		if( ! *i_filters[i].filtname ) {
 			i = -1;
@@ -299,7 +300,7 @@ export_database()
 	
 	filter = getch() - 'a';
 	if(filter == 'x' - 'a' ||
-		filter >= number_of_output_filters(e_filters) || filter < 0) {
+		filter >= number_of_output_filters() || filter < 0) {
 		refresh_screen();
 		return 1;
 	}
@@ -362,7 +363,8 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle, int enum_mode)
 	struct db_enumerator e = init_db_enumerator(enum_mode);
 
 	for(i=0;; i++) {
-		if( ! strncmp(e_filters[i].filtname, filtname, FILTNAME_LEN) )
+		if( ! strncasecmp(e_filters[i].filtname, filtname,
+					FILTNAME_LEN) )
 			break;
 		if( ! *e_filters[i].filtname ) {
 			i = -1;
@@ -376,7 +378,7 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle, int enum_mode)
 	
 
 int
-export(char filtname[FILTNAME_LEN], char *filename)
+export_file(char filtname[FILTNAME_LEN], char *filename)
 {
 	const int mode = ENUM_ALL;
 	int i;
@@ -384,7 +386,8 @@ export(char filtname[FILTNAME_LEN], char *filename)
 	struct db_enumerator e = init_db_enumerator(mode);
 	
 	for(i=0;; i++) {
-		if( ! strncmp(e_filters[i].filtname, filtname, FILTNAME_LEN) )
+		if( ! strncasecmp(e_filters[i].filtname, filtname,
+					FILTNAME_LEN) )
 			break;
 		if( ! *e_filters[i].filtname ) {
 			i = -1;
@@ -587,7 +590,7 @@ ldif_fix_string(char *str)
 {
 	int i, j;
 
-	for( i = 0, j = 0; j < strlen(str); i++, j++)
+	for( i = 0, j = 0; j < (int)strlen(str); i++, j++)
 		str[i] = ( str[j] == (char)0xc3 ?
 				(char) str[++j] + (char) 0x40 :
 				str[j] );
@@ -852,7 +855,7 @@ pine_fixbuf(char *buf)
 {
 	int i,j;
 
-	for(i=0,j=0; j < strlen(buf); i++, j++)
+	for(i=0,j=0; j < (int)strlen(buf); i++, j++)
 		buf[i] = buf[j] == '\n' ? buf[++j] : buf[j];
 }
 
@@ -898,7 +901,7 @@ pine_parse_buf(char *buf)
 		len = last ? strlen(start) : (int) (end-start);
 		len = min(len, 400-1);
 	
-		if(i < sizeof(pine_conv_table) / sizeof(*pine_conv_table)
+		if(i < (int)(sizeof(pine_conv_table) / sizeof(*pine_conv_table))
 				&& pine_conv_table[i] >= 0) {
 			strncpy(tmp, start, len);
 			tmp[len] = 0;
@@ -1060,9 +1063,11 @@ csv_store_field(list_item item, char *s, int field)
 	if( !(newstr = csv_remove_quotes(s)) )
 		return;
 
-	if(field < (sizeof(csv_conv_table) / sizeof(*csv_conv_table))
+	if(field < (int)(sizeof(csv_conv_table) / sizeof(*csv_conv_table))
 			&& csv_conv_table[field] >= 0) {
 		item[csv_conv_table[field]] = newstr;
+	} else {
+		my_free(newstr);
 	}
 }
 

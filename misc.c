@@ -220,11 +220,11 @@ my_getcwd()
 	char *dir = NULL;
 	int size = 100;
 
-	if( (dir = malloc(size)) == NULL)
+	if( (dir = (char *)malloc(size)) == NULL)
 		return NULL;
 	
 	while( getcwd(dir, size) == NULL && errno == ERANGE )
-		if( (dir = realloc(dir, size *=2)) == NULL)
+		if( (dir = (char *)realloc(dir, size *=2)) == NULL)
 			return NULL;
 
 	return dir;
@@ -266,7 +266,8 @@ getaline(FILE *f)
 			break;		/* the whole line has been read */
 
 		for (inc = size, p = NULL; inc > mininc; inc /= 2)
-			if ((p = abook_realloc(buf, size + inc)) != NULL)
+			if ((p = (char *)abook_realloc(buf, size + inc)) !=
+					NULL)
 				break;
 
 		size += inc;
@@ -282,7 +283,7 @@ getaline(FILE *f)
 		buf[--len] = '\0';
 
 	if (size - len > mucho) { /* a plenitude of unused memory? */
-		p = abook_realloc(buf, len+1);
+		p = (char *)abook_realloc(buf, len+1);
 		if (p != NULL) {
 			buf = p;
 			size = len+1;

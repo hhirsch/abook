@@ -27,15 +27,17 @@
 #include "misc.h"
 #include "options.h"
 #include "getname.h"
+#include "getopt.h"
+#include <assert.h>
 
 static void             init_abook();
+static void		quit_abook_sig(int i);
 static void             set_filenames();
 static void		free_filenames();
 static void             parse_command_line(int argc, char **argv);
 static void             show_usage();
 static void             mutt_query(char *str);
 static void             init_mutt_query();
-static void             quit_mutt_query();
 static void		convert(char *srcformat, char *srcfile,
 				char *dstformat, char *dstfile);
 static void		add_email(int);
@@ -49,8 +51,8 @@ init_abook()
 	set_filenames();
 	init_options();
 
-	signal(SIGKILL, quit_abook);
-	signal(SIGTERM, quit_abook);
+	signal(SIGKILL, quit_abook_sig);
+	signal(SIGTERM, quit_abook_sig);
 	
 	if( init_ui() )
 		exit(1);
@@ -97,6 +99,12 @@ quit_abook()
 	exit(0);
 }
 
+static void
+quit_abook_sig(int i)
+{
+	quit_abook();
+}
+
 int
 main(int argc, char **argv)
 {
@@ -125,10 +133,11 @@ set_filenames()
 		exit(1);
 	}
 
-	if (!datafile)
+	if(!datafile)
 		datafile = strconcat(getenv("HOME"), "/" DATAFILE, NULL);
 
-	rcfile = strconcat(getenv("HOME"), "/" RCFILE, NULL);
+	if(!rcfile)
+		rcfile = strconcat(getenv("HOME"), "/" RCFILE, NULL);
 
 	atexit(free_filenames);
 }
@@ -140,51 +149,164 @@ free_filenames()
 	my_free(datafile);
 }
 
+/*
+ * CLI
+ */
+
+enum {
+	MODE_CONT,
+	MODE_ADD_EMAIL,
+	MODE_ADD_EMAIL_QUIET,
+	MODE_QUERY,
+	MODE_CONVERT
+};
+
+static void
+change_mode(int *current, int mode)
+{
+	if(*current != MODE_CONT) {
+		fprintf(stderr, "Cannot combine options --mutt-query, "
+				"--convert, "
+				"--add-email or --add-email-quiet\n");
+		exit(1);
+	}
+
+	*current = mode;
+}
+
+void
+set_filename(char **var, char *path)
+{
+	char *cwd;
+	
+	assert(var != NULL);
+	assert(*var == NULL); /* or else we probably leak memory */
+	assert(path != NULL);
+	
+	if(*path == '/') {
+		*var = strdup(path);
+		return;
+	}
+
+	cwd = my_getcwd();
+
+	*var = strconcat(cwd, path, NULL);
+
+	free(cwd);
+}
+
+#define set_convert_var(X) do { if(mode != MODE_CONVERT) {\
+	fprintf(stderr, "please use option --%s after --convert option\n",\
+			long_options[option_index].name);\
+		exit(1);\
+	} else\
+		X = optarg;\
+	} while(0)
+
 static void
 parse_command_line(int argc, char **argv)
 {
-	int i;
+	int mode = MODE_CONT;
+	char *query_string = NULL;
+	char *informat = "abook",
+		*outformat = "text",
+		*infile = "-",
+		*outfile = "-";
+	int c;
 
-	for( i = 1; i < argc; i++ ) {
-		if( !strcmp(argv[i], "--help") ) {
-			show_usage();
-			exit(1);
-		} else if( !strcmp(argv[i], "--mutt-query") ) {
-			mutt_query(argv[i + 1]);
-		} else if( !strcmp(argv[i], "--datafile") ) {
-			if (argc > i + 1 ) {
-				if (argv[i+1][0] != '/') {
-					char *cwd = my_getcwd();
-					datafile = strconcat(cwd, "/", argv[i+1], NULL);
-					free(cwd);
-				} else {
-					datafile = strdup(argv[i+1]);
-				}
-				i++;
-			} else {
+	for(;;) {
+		int option_index = 0;
+		enum {
+			OPT_ADD_EMAIL,
+			OPT_ADD_EMAIL_QUIET,
+			OPT_MUTT_QUERY,
+			OPT_CONVERT,
+			OPT_INFORMAT,
+			OPT_OUTFORMAT,
+			OPT_INFILE,
+			OPT_OUTFILE,
+			OPT_FORMATS
+		};
+		static struct option long_options[] = {
+			{ "help", 0, 0, 'h' },
+			{ "add-email", 0, 0, OPT_ADD_EMAIL },
+			{ "add-email-quiet", 0, 0, OPT_ADD_EMAIL_QUIET },
+			{ "datafile", 1, 0, 'f' },
+			{ "mutt-query", 1, 0, OPT_MUTT_QUERY },
+			{ "config", 1, 0, 'C' },
+			{ "convert", 0, 0, OPT_CONVERT },
+			{ "informat", 1, 0, OPT_INFORMAT },
+			{ "outformat", 1, 0, OPT_OUTFORMAT },
+			{ "infile", 1, 0, OPT_INFILE },
+			{ "outfile", 1, 0, OPT_OUTFILE },
+			{ "formats", 0, 0, OPT_FORMATS },
+			{ 0, 0, 0, 0 }
+		};
+
+		c = getopt_long(argc, argv, "hC:",
+				long_options, &option_index);
+
+		if(c == -1)
+			break;
+
+		switch(c) {
+			case 'h':
 				show_usage();
 				exit(1);
-			}
-		} else if( !strcmp(argv[i], "--convert") ) {
-			if( argc < 5 || argc > 6 ) {
-				fprintf(stderr, "incorrect number of argumets to make conversion\n");
-				fprintf(stderr, "try %s --help\n", argv[0]);
+			case OPT_ADD_EMAIL:
+				change_mode(&mode, MODE_ADD_EMAIL);
+				break;
+			case OPT_ADD_EMAIL_QUIET:
+				change_mode(&mode, MODE_ADD_EMAIL_QUIET);
+				break;
+			case 'f':
+				set_filename(&datafile, optarg);
+				break;
+			case OPT_MUTT_QUERY:
+				query_string = optarg;
+				change_mode(&mode, MODE_QUERY);
+				break;
+			case 'C':
+				set_filename(&rcfile, optarg);
+				break;
+			case OPT_CONVERT:
+				change_mode(&mode, MODE_CONVERT);
+				break;
+			case OPT_INFORMAT:
+				set_convert_var(informat);
+				break;
+			case OPT_OUTFORMAT:
+				set_convert_var(outformat);
+				break;
+			case OPT_INFILE:
+				set_convert_var(infile);
+				break;
+			case OPT_OUTFILE:
+				set_convert_var(outfile);
+				break;
+			case OPT_FORMATS:
+				print_filters();
+				exit(0);
+			default:
 				exit(1);
-			}
-			if( argc > i + 4 )
-				convert(argv[i+1], argv[i+2],
-					argv[i+3], argv[i+4]);
-			else
-				convert(argv[i+1], argv[i+2], argv[i+3], "-");
-		} else if( !strcmp(argv[i], "--add-email") ) {
-			add_email(0);
-		} else if( !strcmp(argv[i], "--add-email-quiet") ) {
-			add_email(1);
-		} else {
-			printf("option %s not recognized\n", argv[i]);
-			printf("try %s --help\n", argv[0]);
-			exit(1);
 		}
+	}
+
+	if (optind < argc) {
+		fprintf(stderr, "%s: unrecognized arguments on command line\n",
+				argv[0]);
+		exit(1);
+	}
+
+	switch(mode) {
+		case MODE_ADD_EMAIL:
+			add_email(0);
+		case MODE_ADD_EMAIL_QUIET:
+			add_email(1);
+		case MODE_QUERY:
+			mutt_query(query_string);
+		case MODE_CONVERT:
+			convert(informat, infile, outformat, outfile);
 	}
 }
 
@@ -193,11 +315,10 @@ static void
 show_usage()
 {
 	puts	(PACKAGE " v " VERSION "\n");
-	puts	("	--help				show usage");
-	puts	("	--datafile	<filename>	use an alternative addressbook file");
+	puts	("     -h	--help				show usage");
+	puts	("     -C	--config	<file>		use an alternative configuration file");   
+	puts	("	--datafile	<file>		use an alternative addressbook file");
 	puts	("	--mutt-query	<string>	make a query for mutt");
-	puts	("	--convert	<inputformat> <inputfile> "
-		"<outputformat> <outputfile>");
 	puts	("	--add-email			"
 			"read an e-mail message from stdin and\n"
 		"					"
@@ -206,14 +327,33 @@ show_usage()
 		"same as --add-email but doesn't\n"
 		"					confirm adding");
 	putchar('\n');
-	puts	("available formats for --convert option:");
-	print_filters();
-#ifdef DEBUG
-	puts	("\nWarning: this version compiled with DEBUG flag ON");
-#endif
+	puts	("	--convert			convert address book files");
+	puts	("	options to use with --convert:");
+	puts	("	--informat	<format>	format for input file");
+	puts	("					(default: abook)");
+	puts	("	--infile	<file>		source file");
+	puts	("					(default: stdin)");
+	puts	("	--outformat	<format>	format for output file");
+	puts	("					(default: text)");
+	puts	("	--outfile	<file>		destination file");
+	puts	("					(default: stdout)");
+	puts	("	--formats			list available formats");
 }
 
+/*
+ * end of CLI
+ */
+
 extern list_item *database;
+
+static void
+quit_mutt_query(int status)
+{
+	close_database();
+	close_config();
+
+	exit(status);
+}
 
 static void
 muttq_print_item(FILE *file, int item)
@@ -271,15 +411,6 @@ init_mutt_query()
 		quit_mutt_query(1);
 		exit(1);
 	}
-}
-
-static void
-quit_mutt_query(int status)
-{
-	close_database();
-	close_config();
-
-	exit(status);
 }
 
 
@@ -440,11 +571,8 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 		fprintf(stderr, "try --help\n");
 	}
 
-	strlower(srcformat);
-	strlower(dstformat);
-
 #ifndef DEBUG
-	if( !strcmp(srcformat, dstformat) ) {
+	if( !strcasecmp(srcformat, dstformat) ) {
 		printf(	"input and output formats are the same\n"
 			"exiting...\n");
 		exit(1);
@@ -454,7 +582,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	set_filenames();
 	init_options();
 
-	switch( import(srcformat, srcfile) ) {
+	switch( import_file(srcformat, srcfile) ) {
 		case -1:
 			fprintf(stderr,
 				"input format %s not supported\n", srcformat);
@@ -467,7 +595,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	}
 
 	if(!ret)
-		switch( export(dstformat, dstfile) ) {
+		switch( export_file(dstformat, dstfile) ) {
 			case -1:
 				fprintf(stderr,
 					"output format %s not supported\n",

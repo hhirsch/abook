@@ -342,7 +342,7 @@ edit_undo(int item, int mode)
 				free_list_item(backup[0]);
 				my_free(backup);
 			}
-			backup = abook_malloc(sizeof(list_item));
+			backup = (list_item *)abook_malloc(sizeof(list_item));
 			for(i = 0; i < ITEM_FIELDS; i++)
 				backup[0][i] = safe_strdup(database[item][i]);
 			break;
