@@ -43,11 +43,8 @@ enum {
 
 struct db_enumerator {
 	int item;
-	int mode; /* boolean */ /* warning: read only */
+	int mode; /* warning: read only */
 };
-
-#define db_enumerate_items(e) \
-	while( -1 != (e.item = real_db_enumerate_items(e)))
 
 int		parse_database(FILE *in);
 int		write_database(FILE *out, struct db_enumerator e);
@@ -62,6 +59,7 @@ void		sort_database();
 char		*get_surname(char *s);
 int		find_item(char *str, int start);
 int		is_selected(int item);
+int		is_valid_item(int item);
 
 int		real_db_enumerate_items(struct db_enumerator e);
 struct db_enumerator	init_db_enumerator(int mode);
@@ -86,5 +84,8 @@ struct db_enumerator	init_db_enumerator(int mode);
 
 #define have_multiple_emails(item) \
 	strchr(database[item][EMAIL], ',')
+
+#define db_enumerate_items(e) \
+	while( -1 != (e.item = real_db_enumerate_items(e)))
 
 #endif

@@ -422,6 +422,12 @@ is_selected(int item)
 }
 
 int
+is_valid_item(int item)
+{
+	return item <= LAST_ITEM && item >= 0;
+}
+
+int
 real_db_enumerate_items(struct db_enumerator e)
 {
 	int item = max(0, e.item + 1);
