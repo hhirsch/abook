@@ -123,10 +123,13 @@ mkstr (const char *format, ... )
 				format, ap);
 		MY_VA_END;
 
-		if (n > -1)
+		if (n > -1 && n < size)
 			return buffer;
 
-		size *= 2;
+		if (n > -1)
+			size = n + 1;
+		else
+			size *= 2;
 		
 		buffer =
 #ifdef ABOOK_SRC

@@ -204,7 +204,6 @@ show_usage()
 }
 
 extern list_item *database;
-extern int items;
 
 static void
 muttq_print_item(int item)
@@ -277,23 +276,23 @@ quit_mutt_query(int status)
 void
 launch_mutt(int item)
 {
-	int i;
+	/*
+	 * This is _broken_
+	 */
+#if 0
+	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
 	char email[MAX_EMAIL_LEN];
 	char *cmd;
 	char *tmp = options_get_str("mutt_command");
 
-	if( !is_valid_item(item) )
-		return;
-
 	cmd = strconcat(tmp, " '", NULL );
 
-	for(i=0; i < items; i++) {
-		if( ! is_selected(i) && i != list_current_item() )
-			continue;
-		get_first_email(email, i);
-		tmp = mkstr("%s \"%s\"", cmd, database[i][NAME]);
+	db_enumerate_items(e) {
+		if( e.item != item );
+		get_first_email(email, e.item);
+		tmp = mkstr("%s, \"%s\"", cmd, database[e.item][NAME]);
 		my_free(cmd);
-		if( *database[i][EMAIL] ) {
+		if( *database[e.item][EMAIL] ) {
 			cmd = mkstr("%s <%s>", tmp, email);
 			free(tmp);
 			tmp = cmd;
@@ -302,7 +301,7 @@ launch_mutt(int item)
 		free(tmp);
 	}
 
-	tmp = mkstr("%s%c", cmd, '\'');
+	tmp = strconcat(cmd, "\'", NULL);
 	free(cmd);
 	cmd = tmp;
 #ifdef DEBUG
@@ -311,6 +310,7 @@ launch_mutt(int item)
 	system(cmd);	
 
 	free(cmd);
+#endif
 }
 
 void

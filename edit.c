@@ -127,12 +127,12 @@ print_editor_header(int item)
 
 	get_first_email(email, item);
 	
-	if( snprintf(header, EDITW_COLS, "%s <%s>", database[item][NAME],
-				email ) ==  -1 || !*database[item][EMAIL] )
-	if( snprintf(header, EDITW_COLS, "%s", database[item][NAME]) == -1) {
-		free(header);
-		return;
-	}
+	if( *database[item][EMAIL] )
+		snprintf(header, EDITW_COLS, "%s <%s>",
+				database[item][NAME],
+				database[item][EMAIL]);
+	else
+		snprintf(header, EDITW_COLS, "%s", database[item][NAME]);
 
 	len = strlen(header);
 	x = (EDITW_COLS - len) / 2;
