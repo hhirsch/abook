@@ -291,13 +291,13 @@ invert_selection()
 		selected[i] = !selected[i];
 }
 
-inline int
+int
 list_current_item()
 {
 	return curitem;
 }
 
-inline int
+int
 list_is_empty()
 {
 	return items < 1;

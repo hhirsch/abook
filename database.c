@@ -231,7 +231,7 @@ close_database()
 
 #define _MAX_FIELD_LEN(X)	(X == EMAIL ? MAX_EMAILSTR_LEN:MAX_FIELD_LEN)
 
-inline static void
+static void
 validate_item(list_item item)
 {
 	int i;

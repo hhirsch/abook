@@ -1,5 +1,5 @@
 0.4.15
- - new options --add-email and --add-email-force
+ - new options --add-email and --add-email-quiet
  - proper mutt alias import filter
  - mail.vim update in contrib directory
 
