@@ -72,7 +72,7 @@ struct db_enumerator	init_db_enumerator(int mode);
 	int _i,_j,_k,len; \
 	memset(&emails, 0, sizeof(emails) ); \
 	len = strlen(database[item][EMAIL]); \
-	for( _i=0,_j=0, _k=0; _i < len && _j < 4; _i++ ) { \
+	for( _i=0,_j=0, _k=0; _i < len && _j < MAX_EMAILS; _i++ ) { \
 		if( database[item][EMAIL][_i] ==',' ) { \
 			_j++; \
 			_k = 0; \

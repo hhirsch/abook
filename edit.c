@@ -248,7 +248,7 @@ static void
 edit_emails(char c, int item)
 {
 	char *field = NULL;
-	char emails[4][MAX_EMAIL_LEN];
+	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 	char tmp[MAX_EMAILSTR_LEN] = "";
 	int i, len;
 
@@ -268,7 +268,7 @@ edit_emails(char c, int item)
 	
 	my_free(database[item][EMAIL]);
 
-	for(i=0; i<4; i++) {
+	for(i=0; i<MAX_EMAILS; i++) {
 		if( *emails[i] ) {
 			strcat(tmp, emails[i]);
 			strcat(tmp, ",");
