@@ -1,12 +1,10 @@
-.TH ABOOK 1 "March 18, 2000"
+.TH ABOOK 1 "June 6, 2003"
 .nh
 .SH NAME
 abook \- text-based address book program
-.SH WARNING
-This man page is not completely up to date.
 .SH SYNOPSIS
 .B abook
-[ \fB--help\fP | \fB--datafile\fP <filename> | \fB--mutt-query\fP <string> | \fB--convert\fP <inputformat> <inputfile> <outputformat> <outputfile> | \fB--add-email\fP | \fB--add-email-quiet\fP ] 
+[ \fIOPTION\fR ]
 .SH DESCRIPTION
 This manual page documents briefly the
 .B abook
@@ -20,23 +18,28 @@ and various Phone fields. It is designed for use with mutt, but can be
 equally useful on its own.
 .SH OPTIONS
 .TP
-\fB\-\-help\fP
+\fB\-h \-\-help\fP
 Show usage.
 .TP
-\fB\-\-datafile\fP <filename>
-Use an alternative addressbook file (default is $HOME/.abook.addressbook).
+\fB\-C \-\-config\fP \fI<filename>\fR
+Use an alternative configuration file (default is \fI$HOME/.abook/abookrc\fR).
 .TP
-\fB\-\-mutt-query\fP <string>
-Make a query for mutt (search the addressbook for <string>).
+\fB\-\-datafile\fP \fI<filename>\fR
+Use an alternative addressbook file (default is \fI$HOME/.abook/addressbook\fR).
+.TP
+\fB\-\-mutt\-query\fP \fI<string>\fR
+Make a query for mutt (search the addressbook for \fI<string>\fR).
 .br
-The \fB\-\-datafile\fP option, as documented above, may be used BEFORE this
-option to search a different addressbook file.
+The \fB\-\-datafile\fP option, as documented above, may be used
+.BI BEFORE
+this option to search a different addressbook file.
 .TP
-\fB\-\-convert\fP <inputformat> <inputfile> <outputformat> <outputfile>
-Converts <inputfile> in <inputformat> to <outputfile> in <outputformat>
+\fB\-\-convert\fP [ \fB\-\-informat\fP \fI<inputformat>\fR ] [ \fB\-\-infile\fP \fI<inputfile>\fR ] [ \fB\-\-outformat\fP \fI<outputformat>\fR ] [ \fB\-\-outfile\fP \fI<outputfile>\fR ]
+Converts \fI<inputfile>\fR in \fI<inputformat>\fR to \fI<outputfile>\fR in \fI<outputformat>\fR
+(defaults are \fBabook\fP, \fBstdin\fP, \fBtext\fP and \fBstdout\fP).
 
 .br
-The following \fBinputformats\fP are supported:
+The following \fIinputformats\fR are supported:
 .br
 - \fBabook\fP abook native format
 .br
@@ -49,7 +52,7 @@ The following \fBinputformats\fP are supported:
 - \fBcsv\fP comma separated values
 
 .br
-The following \fBoutputformats\fP are supported:
+The following \fIoutputformats\fR are supported:
 .br
 - \fBabook\fP abook native format
 .br
@@ -65,6 +68,8 @@ The following \fBoutputformats\fP are supported:
 .br
 - \fBcsv\fP comma separated values
 .br
+- \fBpalmcsv\fP Palm comma separated values
+.br
 - \fBelm\fP elm alias
 .br
 - \fBtext\fP plain text
@@ -76,6 +81,9 @@ Read an e-mail message from stdin and add the sender to the addressbook.
 .TP
 \fB\-\-add-email-quiet\fP
 Same as --add-email but doesn't confirm adding.
+.TP
+\fB\-\-formats\fP
+List available formats.
 
 .SH COMMANDS DURING USE
 Press '\fB?\fP' during use to get a list of commands.
