@@ -618,6 +618,7 @@ static int
 mutt_read_line(FILE *in, char **alias, char **rest)
 {
 	char *line, *ptr, *tmp;
+	size_t alias_len;
 
 	if( !(line = ptr = getaline(in)) )
 		return 1; /* error / EOF */
@@ -640,13 +641,16 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while( ! ISSPACE(*ptr) )
 		ptr++;
 
-	if( (*alias = (char *)malloc(ptr - tmp)) == NULL) {
+	/* includes also the trailing zero */
+	alias_len = (size_t)(ptr - tmp + 1);
+
+	if( (*alias = (char *)malloc(alias_len)) == NULL) {
 		free(line);
 		return 1;
 	}
 
-	strncpy(*alias, tmp, ptr - tmp - 1);
-	*(*alias + (ptr - tmp - 1)) = 0;
+	strncpy(*alias, tmp, alias_len - 1);
+	*(*alias + alias_len - 1) = 0;
 
 	while(ISSPACE(*ptr))
 		ptr++;
