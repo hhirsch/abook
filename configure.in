@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.4.13-dev)
+AM_INIT_AUTOMAKE(abook, 0.4.13-cvs)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -71,10 +71,6 @@ if test x$nonascii = xfalse; then
 	AC_DEFINE(USE_ASCII_ONLY)
 fi
 
-if test x$debug = xtrue; then
-	CPPFLAGS="-DDEBUG $CPPFLAGS"
-	CFLAGS="-g $CFLAGS"
-fi
 if test x$GCC = xyes; then
 	CFLAGS="-Wall $CFLAGS"
 fi
