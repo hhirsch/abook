@@ -87,7 +87,7 @@ refresh_list()
 
 	ui_print_number_of_items();
 	
-	if( items < 1 ) {
+	if(items < 1) {
 		refresh();
 		wrefresh(list);
 		return;
@@ -125,11 +125,11 @@ print_list_line(int i, int line, int highlight)
 	if(highlight)
 		highlight_line(list, line);
 
-	if( selected[i] )
+	if(selected[i])
 		mvwaddch(list, line, 0, '*' );
 	
 	mvwaddnstr(list, line, NAMEPOS, database[i][NAME], NAMELEN);
-	if( opt_get_bool(BOOL_SHOW_ALL_EMAILS) )
+	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS))
 		mvwaddnstr(list, line, EMAILPOS, database[i][EMAIL],
 				real_emaillen);
 	else {
@@ -171,7 +171,7 @@ list_headerline()
 void
 scroll_up()
 {
-	if( curitem < 1 )
+	if(curitem < 1)
 		return;
 
 	curitem--;
@@ -182,7 +182,7 @@ scroll_up()
 void
 scroll_down()
 {
-	if( curitem > items - 2 )
+	if(curitem > items - 2)
 		return;
 
 	curitem++;
@@ -194,7 +194,7 @@ scroll_down()
 void
 page_up()
 {
-	if( curitem < 1 )
+	if(curitem < 1)
 		return;
 	
 	curitem = curitem == first_list_item ?
@@ -206,7 +206,7 @@ page_up()
 void
 page_down()
 {
-	if( curitem > items - 2 )
+	if(curitem > items - 2)
 		return;
 
 	curitem = curitem == LAST_LIST_ITEM ?
@@ -220,13 +220,13 @@ page_down()
 void
 select_none()
 {
-        memset( selected, 0, items );
+        memset(selected, 0, items);
 }
 
 void
 select_all()
 {
-        memset( selected, 1, items );
+        memset(selected, 1, items);
 }
 
 void
@@ -321,7 +321,7 @@ invert_selection()
 {
 	int i;
 
-	if( items < 1 )
+	if(items < 1)
 		return;
 
 	for(i = 0; i < items; i++)
@@ -340,4 +340,3 @@ list_is_empty()
 	return items < 1;
 }
 
-	

@@ -139,9 +139,9 @@ init_abook()
 void
 quit_abook()
 {
-	if( opt_get_bool(BOOL_AUTOSAVE) )
+	if(opt_get_bool(BOOL_AUTOSAVE))
 		save_database();
-	else if( statusline_ask_boolean("Save database", TRUE) )
+	else if(statusline_ask_boolean("Save database", TRUE))
 		save_database();
 
 	free_opts();
@@ -162,7 +162,7 @@ int
 main(int argc, char **argv)
 {
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LOCALE_H)
-	setlocale(LC_ALL, "" );
+	setlocale(LC_ALL, "");
 #endif
 
 	parse_command_line(argc, argv);
@@ -451,7 +451,7 @@ mutt_query(char *str)
 		putchar('\n');
 		while(i >= 0) {
 			muttq_print_item(stdout, i);
-			i = find_item(str, i+1, search_fields);
+			i = find_item(str, i + 1, search_fields);
 		}
 	}
 
@@ -530,8 +530,7 @@ launch_mutt(int item)
 		}
 	}
 
-	cmd = strconcat(mutt_command, " \'", mailstr,
-				"\'", NULL);
+	cmd = strconcat(mutt_command, " \'", mailstr, "\'", NULL);
 	free(mailstr);
 #ifdef DEBUG
 	fprintf(stderr, "cmd: %s\n", cmd);
@@ -591,11 +590,11 @@ abook_realloc(void *ptr, size_t size)
 {
 	ptr = realloc(ptr, size);
 
-	if( size == 0 )
+	if(size == 0)
 		return NULL;
 
-	if( ptr == NULL ) {
-		if( is_ui_initialized() )
+	if(ptr == NULL) {
+		if(is_ui_initialized())
 			quit_abook();
 		perror("realloc() failed");
 		exit(1);
@@ -642,7 +641,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	init_opts();
 	load_opts(rcfile);
 
-	switch( import_file(srcformat, srcfile) ) {
+	switch(import_file(srcformat, srcfile)) {
 		case -1:
 			fprintf(stderr,
 				"input format %s not supported\n", srcformat);
@@ -655,7 +654,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	}
 
 	if(!ret)
-		switch( export_file(dstformat, dstfile) ) {
+		switch(export_file(dstformat, dstfile)) {
 			case -1:
 				fprintf(stderr,
 					"output format %s not supported\n",
@@ -775,7 +774,7 @@ add_email(int quiet)
 	char *name = NULL, *email = NULL;
 	struct stat s;
 
-	if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode)) {
+	if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode) ) {
 		fprintf(stderr, "stdin is a directory or cannot stat stdin\n");
 		exit(1);
 	}
