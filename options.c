@@ -246,9 +246,9 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 			set_int(opt -> data, safe_atoi(p));
 			break;
 		case OT_BOOL:
-			if(!strcasecmp(p, "true") && !strcasecmp(p, "on"))
+			if(!strcasecmp(p, "true") || !strcasecmp(p, "on"))
 				set_bool(opt -> data, TRUE);
-			else if(!strcasecmp(p, "false") &&
+			else if(!strcasecmp(p, "false") ||
 					!strcasecmp(p, "off"))
 				set_bool(opt -> data, FALSE);
 			else
