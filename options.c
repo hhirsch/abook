@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <unistd.h>
 #include "abook_curses.h"
 #include "abook.h"
 #include "options.h"
