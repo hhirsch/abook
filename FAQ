@@ -32,4 +32,4 @@ A: No, but there are utilities to convert palm addressbooks to ldif
    files. Abook can import ldif files.
 
 
-last update: 2001-03-07 / JH
+last update: $Id$
