@@ -170,7 +170,7 @@ save_database()
 	if( (out = abook_fopen(datafile, "w")) == NULL )
 		return -1;
 
-	if( items < 1 ) {
+	if( list_is_empty() ) {
 		fclose(out);
 		unlink(datafile);
 		return 1;
@@ -280,7 +280,7 @@ remove_selected_items()
 {
 	int i, j;
 
-	if( items < 1 || curitem < 0 )
+	if( list_is_empty() )
 		return;
 
 	if( ! selected_items() )
