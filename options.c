@@ -283,6 +283,8 @@ opt_parse_set(buffer *b)
 	return "unknown option";
 }
 
+#include "database.h" /* needed for change_custom_field_name */
+
 static char *
 opt_parse_customfield(buffer *b)
 {
@@ -298,10 +300,8 @@ opt_parse_customfield(buffer *b)
 
 	memset(num, 0, sizeof(num));
 
-	if((len = (b -> ptr - p)) > sizeof(num))
-		return "invalid custom field number";
-
-	strncpy(num, p, min(sizeof(num), len));
+	len = (b -> ptr - p);
+	strncpy(num, p, min(sizeof(num) - 1, len));
 	n = atoi(num);
 
 	find_token_start(b);

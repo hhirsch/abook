@@ -524,6 +524,9 @@ assign_fieldname(const char *name, int i)
 {
 	char *s;
 
+	assert(name);
+	assert(i >= 0 && i < ITEM_FIELDS);
+
 	if(strcasecmp(abook_fields[i].name, name)) { /* name differs */
 		/*
 		 * check if we are overwriting statically allocated default
@@ -544,6 +547,8 @@ change_custom_field_name(const char *name, int n)
 {
 	int i;
 	char keyname[21];
+
+	assert(name);
 
 	snprintf(keyname, sizeof(keyname), "custom%d", n);
 
