@@ -1,7 +1,7 @@
 
 /*
  *
- *  conff.c by JH <jheinonen@bigfoot.com>
+ *  $Id$
  *
  *  Copyright (C) Jaakko Heinonen
  *
