@@ -47,7 +47,6 @@ init_abook()
 	set_filenames();
 	init_options();
 
-	signal(SIGINT, quit_abook);
 	signal(SIGKILL, quit_abook);
 	signal(SIGTERM, quit_abook);
 	

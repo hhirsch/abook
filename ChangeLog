@@ -2,6 +2,7 @@
  - major code reorganization (phase 1)
  - fixed help viewer functions
  - ability to disable use of non-ascii characters (configuration option)
+ - changed SIGINT behaviour
 
 0.4.12
  - added man page for abookrc (Alan Ford)
