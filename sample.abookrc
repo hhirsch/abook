@@ -49,4 +49,5 @@ set use_ascii_only=false
 
 set add_email_prevent_duplicates=false
 
+# field to be used with "sort by field" command
 set sort_field=nick
