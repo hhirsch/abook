@@ -374,16 +374,20 @@ edit_loop(int item)
 			       break;
 		case KEY_RIGHT: tab = tab == MAX_TAB ? 0 : tab + 1;
 				break;
+		case '<':
+		case 'k': if(is_valid_item(item-1)) item--; break;
+		case '>':
+		case 'j': if(is_valid_item(item+1)) item++; break;
 		case 'r': roll_emails(item); break;
 		case '?': display_help(HELP_EDITOR); break;
 		case 'u': edit_undo(item, RESTORE_ITEM); break;
 		case 'm': launch_mutt(item);
 		case 'v': launch_wwwbrowser(item);
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
-		default:  return edit_field(tab, c, item);
+		default:  return edit_field(tab, c, item) ? item : -1;
 	}
 
-	return 1;
+	return item;
 }
 
 void
@@ -397,8 +401,9 @@ edit_item(int item)
 	}
 
 	init_editor();
-	while( edit_loop(item) )
-		;
+
+	while( (item = edit_loop(item)) >= 0 )
+		curitem = item; /* hmm, this is not very clean way to go */
 
 	close_editor();
 }

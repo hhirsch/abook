@@ -5,6 +5,7 @@
  - changed SIGINT behaviour
  - html export filter creates now valid html documents
  - ablity to print/export only selected items
+ - new editor commands
 
 0.4.12
  - added man page for abookrc (Alan Ford)
