@@ -94,6 +94,10 @@ Defines the command used to start the web browser to view a contact's URL. Defau
 \fBaddress_style\fP=[eu|uk|us]
 Defines the style of address formatting to be used when exporting as text / printing the database (European, UK, or USA). Default is European ("eu").
 
+.TP
+\fBuse_ascii_only\fP=[true|false]
+This option allows you to force Abook use only ASCII characters. This option is useful if your terminal doesn't support non-ASCII characters. Default is false.
+
 .SH SAMPLE CONFIGURATION FILE
 
 .nf
@@ -143,6 +147,9 @@ www_command=lynx
 
 # address style [eu|us|uk]
 address_style=eu
+
+# use ASCII characters only
+use_ascii_only=false
 
 .fi
 
