@@ -292,6 +292,35 @@ make_mailstr(int item)
 }
 
 void
+print_stderr(int item)
+{
+	char *mailstr = NULL;
+
+	if( is_valid_item(item) )
+		mailstr = make_mailstr(item);
+	else {
+		struct db_enumerator e = init_db_enumerator(ENUM_SELECTED);
+		char *tmp = NULL;
+		db_enumerate_items(e) {
+			tmp = mailstr;
+			mailstr = tmp ?
+				strconcat(tmp, ",", make_mailstr(e.item), NULL):
+				strconcat(make_mailstr(e.item), NULL);
+			free(tmp);
+		}
+	}
+
+    fprintf(stderr, "%s", mailstr);
+
+#ifdef DEBUG
+	fprintf(stderr, "mailstr: %s\n", mailstr);
+#endif
+
+	free(mailstr);
+
+}
+
+void
 launch_mutt(int item)
 {
 	char *cmd = NULL, *mailstr = NULL;

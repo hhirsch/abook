@@ -410,6 +410,9 @@ get_commands()
 		can_resize = FALSE; /* it's not safe to resize anymore */
 		switch( ch ) {
 			case 'q': return;
+			case 'Q': print_stderr(selected_items() ?
+						  -1 : list_current_item());
+				  return;
 			case '?':
 				  display_help(HELP_MAIN);
 				  refresh_screen();

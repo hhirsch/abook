@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.4.14-cvs)
+AM_INIT_AUTOMAKE(abook, 0.4.14)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST

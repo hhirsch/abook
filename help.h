@@ -9,6 +9,7 @@ static char *mainhelp[] = {
 
 "	?		help\n",
 "	q		quit\n",
+"	Q		quit and print selected item(s) to stderr\n",
 "	^L		refresh screen\n",
 "\n",
 "	arrows / j,k	scroll list\n",

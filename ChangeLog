@@ -5,6 +5,8 @@
  - fixed a minor memory leak in pine import filter
  - filter cleanups
  - fixes
+ - "quit and print selected item(s) to stderr" command (Brian Medley)
+ - contrib update
 
 0.4.13
  - major code reorganization (phase 1)
