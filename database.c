@@ -136,10 +136,7 @@ load_database(char *filename)
 	
 	parse_database(in);
 
-	if ( items == 0 )
-		return 2;
-
-	return 0;
+	return (items == 0) ? 2 : 0;
 }
 
 int

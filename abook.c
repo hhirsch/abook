@@ -33,7 +33,6 @@
 static void             init_abook();
 static void		quit_abook_sig(int i);
 static void             set_filenames();
-static void		free_filenames();
 static void             parse_command_line(int argc, char **argv);
 static void             show_usage();
 static void             mutt_query(char *str);
@@ -44,6 +43,24 @@ static void		add_email(int);
 
 char *datafile = NULL;
 char *rcfile = NULL;
+
+int alternative_datafile = FALSE;
+int alternative_rcfile = FALSE;
+
+static int
+datafile_writeable()
+{
+	FILE *f;
+
+	assert(datafile != NULL);
+
+	if( (f = fopen(datafile, "a")) == NULL)
+		return FALSE;
+
+	fclose(f);
+
+	return TRUE;
+}
 
 static void
 init_abook()
@@ -59,26 +76,21 @@ init_abook()
 	
 	umask(DEFAULT_UMASK);
 
-	/*
-	 * this is very ugly for now
-	 */
-	/*if( options_get_int("datafile", "autosave") )*/
-
-	if( load_database(datafile) == 2 ) {
-		char *tmp = strconcat(getenv("HOME"),
-				"/" DATAFILE, NULL);
-
-		if( safe_strcmp(tmp, datafile) ) {
-			refresh_screen();
-			statusline_msg("Sorry, the specified file does "
-				"not appear to be a valid abook addressbook");
-			statusline_msg("Will open default addressbook...");
-			free(datafile);
-			datafile = tmp;
-			load_database(datafile);
-		} else
-			free(tmp);
-	}
+	if(!datafile_writeable()) {
+		char *s = mkstr("File %s is not writeable", datafile);
+		refresh_screen();
+		statusline_msg(s);
+		free(s);
+		if(load_database(datafile) || !statusline_ask_boolean(
+					"If you continue all changes will "
+				"be lost. Do you want to continue?", FALSE)) {
+			close_config();
+			close_database();
+			close_ui();
+			exit(1);
+		}
+	} else
+		load_database(datafile);
 
 	refresh_screen();
 }
@@ -124,6 +136,14 @@ main(int argc, char **argv)
 }
 
 static void
+free_filenames()
+{
+	my_free(rcfile);
+	my_free(datafile);
+}
+
+
+static void
 set_filenames()
 {
 	struct stat s;
@@ -140,13 +160,6 @@ set_filenames()
 		rcfile = strconcat(getenv("HOME"), "/" RCFILE, NULL);
 
 	atexit(free_filenames);
-}
-
-static void
-free_filenames()
-{
-	my_free(rcfile);
-	my_free(datafile);
 }
 
 /*
@@ -261,6 +274,7 @@ parse_command_line(int argc, char **argv)
 				break;
 			case 'f':
 				set_filename(&datafile, optarg);
+				alternative_datafile = TRUE;
 				break;
 			case OPT_MUTT_QUERY:
 				query_string = optarg;
@@ -268,6 +282,7 @@ parse_command_line(int argc, char **argv)
 				break;
 			case 'C':
 				set_filename(&rcfile, optarg);
+				alternative_rcfile = TRUE;
 				break;
 			case OPT_CONVERT:
 				change_mode(&mode, MODE_CONVERT);

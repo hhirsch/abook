@@ -44,6 +44,8 @@
 extern int items, curitem;
 extern char *datafile;
 
+extern int alternative_datafile;
+
 /*
  * internal variables
  */
@@ -629,4 +631,6 @@ ui_open_datafile()
 
 	refresh_screen();
 	free(filename);
+
+	alternative_datafile = TRUE;
 }

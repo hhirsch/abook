@@ -1,5 +1,6 @@
 2002-xx-xx
  - abook can be compiled with g++
+ - attempt to improve --datafile behavior
 
 2002-02-04
  - use getopt to parse command line (also new options added)
