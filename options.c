@@ -109,7 +109,7 @@ opt_get_int(enum int_opts opt)
 bool
 opt_get_bool(enum bool_opts opt)
 {
-	assert(opt >= 0 && opt < STR_MAX);
+	assert(opt >= 0 && opt < BOOL_MAX);
 
 	return bool_opts[opt];
 }
@@ -361,7 +361,7 @@ load_opts(char *filename)
 	free(line);
 
 	if(err) {
-		printf("Press any key to continue...\n");
+		printf("Press enter to continue...\n");
 		fgetc(stdin);
 	}
 	
