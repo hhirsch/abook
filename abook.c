@@ -284,7 +284,7 @@ make_mailstr(int item)
 
 	ret = *database[item][EMAIL] ?
 		mkstr("%s <%s>", name, email) :
-		name;
+		strdup(name);
 
 	free(name);
 	
@@ -298,18 +298,17 @@ launch_mutt(int item)
 
 	if( is_valid_item(item) )
 		mailstr = make_mailstr(item);
-
-	/*
-	 * need to implement for multiple addresses
-	 */
-		/*
-	} else {
+	else {
 		struct db_enumerator e = init_db_enumerator(ENUM_SELECTED);
+		char *tmp = NULL;
 		db_enumerate_items(e) {
 			tmp = mailstr;
-			mailstr = strconcat(tmp, make_mailstr(e.item);
-			
-	}*/
+			mailstr = tmp ?
+				strconcat(tmp, ",", make_mailstr(e.item), NULL):
+				strconcat(make_mailstr(e.item), NULL);
+			free(tmp);
+		}
+	}
 
 	cmd = strconcat(options_get_str("mutt_command"), " \'", mailstr,
 				"\'", NULL);

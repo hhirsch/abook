@@ -381,8 +381,8 @@ edit_loop(int item)
 		case 'r': roll_emails(item); break;
 		case '?': display_help(HELP_EDITOR); break;
 		case 'u': edit_undo(item, RESTORE_ITEM); break;
-		case 'm': launch_mutt(item); break;
-		case 'v': launch_wwwbrowser(item); break;
+		case 'm': launch_mutt(item); clearok(stdscr, 1); break;
+		case 'v': launch_wwwbrowser(item); clearok(stdscr, 1); break;
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
 		default:  return edit_field(tab, c, item) ? item : -1;
 	}
