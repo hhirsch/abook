@@ -135,7 +135,7 @@ ui_init_curses()
 	noecho();
 	nonl();
 	intrflush(stdscr, FALSE);
-	keypad(stdscr, TRUE);
+	/*keypad(stdscr, TRUE);*/
 }
 
 int
