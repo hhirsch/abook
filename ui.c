@@ -430,9 +430,9 @@ get_commands()
 			case 'J':
 			case KEY_NPAGE: page_down();	break;
 
-			case 'H':
+			case 'g':
 			case KEY_HOME: goto_home();	break;
-			case 'E':
+			case 'G':
 			case KEY_END: goto_end();	break;
 
 			case 'w': save_database();
