@@ -107,9 +107,12 @@ parse_database(FILE *in)
 		} else if((tmp = strchr(line, '=') ) && sec ) {
 			*tmp++ = '\0';
 			for(i=0; i<ITEM_FIELDS; i++)
-				if( !strcmp(abook_fields[i].key, line) )
+				if( !strcmp(abook_fields[i].key, line) ) {
 					item[i] = strdup(tmp);
+					goto next;
+				}
 		}
+next:
 		free(line);
 	}
 
@@ -144,15 +147,17 @@ write_database(FILE *out, struct db_enumerator e)
 	int j;
 	int i = 0;
 
-	fprintf(out, "# abook addressbook file\n\n");
-	fprintf(out, "[format]\n");
-	fprintf(out, "program=" PACKAGE "\n");
-	fprintf(out, "version=" VERSION "\n");
-	fprintf(out, "\n\n");
+	fprintf(out,
+		"# abook addressbook file\n\n"
+		"[format]\n"
+		"program=" PACKAGE "\n"
+		"version=" VERSION "\n"
+		"\n\n"
+	);
 
 	db_enumerate_items(e) {
 		fprintf(out, "[%d]\n", i);
-		for(j=0; j<ITEM_FIELDS; j++) {
+		for(j = 0; j < ITEM_FIELDS; j++) {
 			if( database[e.item][j] != NULL &&
 					*database[e.item][j] )
 				fprintf(out, "%s=%s\n",

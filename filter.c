@@ -415,10 +415,6 @@ export(char filtname[FILTNAME_LEN], char *filename)
 
 static void	ldif_fix_string(char *str);
 
-#ifndef LINESIZE
-#	define LINESIZE 1024
-#endif
-
 #define	LDIF_ITEM_FIELDS	15
 
 typedef char*  ldif_item[LDIF_ITEM_FIELDS];
@@ -463,36 +459,39 @@ static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
 static char * 
 ldif_read_line(FILE *in)
 {
-	char line[LINESIZE];
-	char *buf=NULL;
+	char *buf = NULL;
 	char *ptr, *tmp;
 	long pos;
 	int i;
 
-	for(i=1;;i++) {
+	for(i = 1;;i++) {
+		char *line;
+
 		pos = ftell(in);
-		fgets(line, LINESIZE, in);
+		line = getaline(in);
 		
-		if( feof(in) )
+		if( feof(in) || !line )
 			break;
 		
 		if(i == 1) {
-			buf = strdup(line);
+			buf = line;
 			continue;
 		}
 		
 		if(*line != ' ') {
 			fseek(in, pos, SEEK_SET);
+			free(line);
 			break;
 		}
 
-		ptr = (char *)&line;
+		ptr = line;
 		while( *ptr == ' ')
 			ptr++;
 
 		tmp = buf;
 		buf = strconcat(buf, ptr, NULL);
 		free(tmp);
+		free(line);
 	}
 
 	if( *buf == '#' ) {
@@ -500,12 +499,6 @@ ldif_read_line(FILE *in)
 		return NULL;
 	}
 		
-	if(buf) {
-		int i,j;
-		for(i=0,j=0; j < strlen(buf); i++, j++)
-			buf[i] = buf[j] == '\n' ? buf[++j] : buf[j];
-	}
-
 	return buf;
 }
 
@@ -614,29 +607,21 @@ enum {
 	MUTT_EMAIL
 };
 
-static void
-remove_newlines(char *buf)
-{
-	int i,j;
-	
-	for(i=0,j=0; j < strlen(buf); i++, j++)
-		buf[i] = buf[j] == '\n' ? buf[++j] : buf[j];
-}
-
 static int
 mutt_read_line(FILE *in, char **alias, char **rest)
 {
-	char line[LINESIZE];
-	char *ptr=(char *)&line;
+	char *line;
+	char *ptr;
 	char *tmp;
 
-	fgets(line, LINESIZE, in);
-	remove_newlines(line);
+	if( !(line = ptr = getaline(in)) )
+		return 1; /* error / EOF */
 
 	while( ISSPACE(*ptr) )
 		ptr++;
 
 	if( strncmp("alias", ptr, 5) ) {
+		free(line);
 		return 1;
 	}
 		
@@ -650,8 +635,10 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while( ! ISSPACE(*ptr) )
 		ptr++;
 
-	if( (*alias = (char *)malloc(ptr-tmp+1)) == NULL)
+	if( (*alias = (char *)malloc(ptr-tmp+1)) == NULL) {
+		free(line);
 		return 1;
+	}
 
 	strncpy(*alias, tmp, ptr-tmp);
 	*(*alias+(ptr-tmp)) = 0;
@@ -660,7 +647,8 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 		ptr++;
 
 	*rest = strdup(ptr);	
-	
+
+	free(line);
 	return 0;
 }
 
@@ -716,11 +704,9 @@ mutt_parse_file(FILE *in)
 
 		memset(mutt_item, 0, sizeof(mutt_item) );
 		
-		if( mutt_read_line(in, &mutt_item[MUTT_ALIAS],
+		if( !mutt_read_line(in, &mutt_item[MUTT_ALIAS],
 				&mutt_item[MUTT_NAME]) )
-			continue;
-
-		mutt_parse_email(mutt_item);
+			mutt_parse_email(mutt_item);
 
 		if( feof(in) ) {
 			free(mutt_item[MUTT_ALIAS]);
@@ -949,23 +935,24 @@ static int
 pine_parse_file(FILE *in)
 {
 	char line[LINESIZE];
-	char *buf=NULL;
+	char *buf = NULL;
 	char *ptr;
 	int i;
 
 	fgets(line, LINESIZE, in);	
 	
 	while(!feof(in)) {
-		for(i=2;;i++) {
+		for(i = 2;;i++) {
 			buf = (char *) realloc(buf, i*LINESIZE);
-			if(i==2)
+			if(i == 2)
 				strcpy(buf, line);
 			fgets(line, LINESIZE, in);
 			ptr=(char *)&line;
 			if(*ptr != ' ' || feof(in) )
 				break;
 			else
-				while( *ptr == ' ') ptr++;
+				while( *ptr == ' ')
+					ptr++;
 				
 			strcat(buf, ptr);
 		}
@@ -1136,13 +1123,13 @@ csv_parse_line(char *line)
 	memset(item, 0, sizeof(item));
 
 	for(p = start = line, field = 0; *p; p++) {
-		if(!in_quote) {
+		if(in_quote) {
+			if(csv_is_valid_quote_end(p))
+				in_quote = FALSE;
+		} else {
 			if ( (((p - start) / sizeof (char)) < 2 ) &&
 				csv_is_valid_quote_start(p) )
 				in_quote = TRUE;
-		} else {
-			if(csv_is_valid_quote_end(p))
-				in_quote = FALSE;
 		}
 
 		if( *p == ',' && !in_quote) {

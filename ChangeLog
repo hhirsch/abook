@@ -3,6 +3,7 @@
  - csv export filter fix
  - minor html filter update
  - fixed a minor memory leak in pine import filter
+ - filter cleanups
  - fixes
 
 0.4.13
