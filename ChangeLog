@@ -1,3 +1,8 @@
+0.4.15
+ - new options --add-email and --add-email-force
+ - proper mutt alias import filter
+ - mail.vim update in contrib directory
+
 0.4.14
  - added csv import filter
  - csv export filter fix

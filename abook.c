@@ -26,6 +26,7 @@
 #include "edit.h"
 #include "misc.h"
 #include "options.h"
+#include "getname.h"
 
 static void             init_abook();
 static void             set_filenames();
@@ -37,6 +38,7 @@ static void             init_mutt_query();
 static void             quit_mutt_query();
 static void		convert(char *srcformat, char *srcfile,
 				char *dstformat, char *dstfile);
+static void		add_email(int);
 
 char *datafile = NULL;
 char *rcfile = NULL;
@@ -147,12 +149,10 @@ parse_command_line(int argc, char **argv)
 		if( !strcmp(argv[i], "--help") ) {
 			show_usage();
 			exit(1);
-		} else
-		if( !strcmp(argv[i], "--mutt-query") )
+		} else if( !strcmp(argv[i], "--mutt-query") ) {
 			mutt_query(argv[i + 1]);
-		else
-		if( !strcmp(argv[i], "--datafile") ) {
-			if (argv[i+1]) {
+		} else if( !strcmp(argv[i], "--datafile") ) {
+			if (argc > i + 1 ) {
 				if (argv[i+1][0] != '/') {
 					char *cwd = my_getcwd();
 					datafile = strconcat(cwd, "/", argv[i+1], NULL);
@@ -165,18 +165,21 @@ parse_command_line(int argc, char **argv)
 				show_usage();
 				exit(1);
 			}
-		} else
-		if( !strcmp(argv[i], "--convert") ) {
+		} else if( !strcmp(argv[i], "--convert") ) {
 			if( argc < 5 || argc > 6 ) {
 				fprintf(stderr, "incorrect number of argumets to make conversion\n");
 				fprintf(stderr, "try %s --help\n", argv[0]);
 				exit(1);
 			}
-			if( argv[i+4] )
+			if( argc > i + 4 )
 				convert(argv[i+1], argv[i+2],
 					argv[i+3], argv[i+4]);
 			else
 				convert(argv[i+1], argv[i+2], argv[i+3], "-");
+		} else if( !strcmp(argv[i], "--add-email") ) {
+			add_email(0);
+		} else if( !strcmp(argv[i], "--add-email-force") ) {
+			add_email(1);
 		} else {
 			printf("option %s not recognized\n", argv[i]);
 			printf("try %s --help\n", argv[0]);
@@ -194,7 +197,14 @@ show_usage()
 	puts	("	--datafile	<filename>	use an alternative addressbook file");
 	puts	("	--mutt-query	<string>	make a query for mutt");
 	puts	("	--convert	<inputformat> <inputfile> "
-		 "<outputformat> <outputfile>");
+		"<outputformat> <outputfile>");
+	puts	("	--add-email			"
+			"read an e-mail message from stdin and\n"
+		"					"
+		"add the sender to the addressbook");
+	puts	("	--add-email-force		"
+		"same as --add-email but doesn't\n"
+		"					confirm adding");
 	putchar('\n');
 	puts	("available formats for --convert option:");
 	print_filters();
@@ -294,7 +304,7 @@ make_mailstr(int item)
 void
 print_stderr(int item)
 {
-    fprintf (stderr, "%c", '\n');
+	fprintf (stderr, "%c", '\n');
 
 	if( is_valid_item(item) )
 		muttq_print_item(stderr, item);
@@ -471,3 +481,106 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	exit(ret);
 }
 
+/*
+ * --add-email handling
+ */
+
+static int add_email_count = 0;
+
+static void
+quit_add_email()
+{
+	if(add_email_count > 0) {
+		if(save_database() < 0) {
+			fprintf(stderr, "cannot open %s\n", datafile);
+			exit(1);
+		}
+		printf("%d item(s) added to %s\n", add_email_count, datafile);
+	} else {
+		puts("Valid sender address not found");
+	}
+
+	exit(0);
+}
+
+static void
+init_add_email()
+{
+	set_filenames();
+	atexit(free_filenames);
+	init_options();
+	atexit(close_config);
+	
+	/*
+	 * we don't actually care if loading fails or not
+	 */
+	load_database(datafile);
+
+	atexit(close_database);
+
+	signal(SIGINT, quit_add_email);
+}
+
+static int
+add_email_add_item(int quiet, char *name, char *email)
+{
+	list_item item;
+
+	if(!quiet) {
+		FILE *in = fopen("/dev/tty", "r");
+		char c;
+		if(!in) {
+			fprintf(stderr, "cannot open /dev/tty\n"
+				"you may want to use --add-email-force\n");
+			exit(1);
+		}
+		printf("Add ``%s <%s>'' to %s ? (y/n)\n",
+				name,
+				email,
+				datafile
+		);
+		do {
+			c = fgetc(in);
+			if(c == 'n' || c == 'N') {
+				fclose(in);
+				return 0;
+			}
+		} while(c != 'y' && c != 'Y');
+		fclose(in);
+	}
+
+	memset(item, 0, sizeof(item));
+	item[NAME] = strdup(name);
+	item[EMAIL] = strdup(email);
+	add_item2database(item);
+
+	return 1;
+}
+
+static void
+add_email(int quiet)
+{
+	char *line;
+	char *name = NULL, *email = NULL;
+	
+	init_add_email();
+
+	do {
+		line = getaline(stdin);
+		if(line && !strncasecmp("From:", line, 5) ) {
+			getname(line, &name, &email);
+			my_free(line);
+			add_email_count += add_email_add_item(quiet,
+					name, email);
+			my_free(name);
+			my_free(email);
+		}
+		my_free(line);
+	} while( !feof(stdin) );
+
+	quit_add_email();
+}
+
+/*
+ * end of --add-email handling
+ */

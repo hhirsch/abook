@@ -483,8 +483,6 @@ get_commands()
 			case 'u': launch_wwwbrowser(list_current_item());
 				  refresh_screen();
 				  break;
-            case 'P': print_stderr(selected_items() ?  -1 : list_current_item());
-                  return;
 		}
 	}
 }
