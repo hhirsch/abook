@@ -242,7 +242,7 @@ set_filename(char **var, char *path)
 
 	cwd = my_getcwd();
 
-	*var = strconcat(cwd, path, NULL);
+	*var = strconcat(cwd, "/", path, NULL);
 
 	free(cwd);
 }
