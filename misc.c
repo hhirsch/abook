@@ -33,38 +33,6 @@
 #include <assert.h>
 
 char *
-revstr(char *str)
-{
-	char *s, *s2;
-
-	assert(str != NULL);
-
-	s = s2 = strdup(str);
-
-	while( *str )
-		str++;
-
-	while( *s )
-		*--str = *s++;
-
-	free(s2);
-	return str;
-}
-
-char *
-strupper(char *str)
-{
-	char *tmp = str;
-
-	assert(str != NULL);
-
-	while( ( *str = toupper( *str ) ) )
-		str++;
-	
-	return tmp;
-}
-
-char *
 strlower(char *str)
 {
 	char *tmp = str;

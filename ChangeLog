@@ -1,4 +1,5 @@
 2002-xx-xx
+ - options.c rewritten (new mutt style rc file support)
  - added a spec file for rpm support
  - bugfixes
 

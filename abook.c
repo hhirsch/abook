@@ -103,7 +103,8 @@ init_abook()
 {
 	set_filenames();
 	check_abook_directory();
-	init_options();
+	init_opts();
+	load_opts(rcfile);
 
 	signal(SIGKILL, quit_abook_sig);
 	signal(SIGTERM, quit_abook_sig);
@@ -121,7 +122,7 @@ init_abook()
 		if(load_database(datafile) || !statusline_ask_boolean(
 					"If you continue all changes will "
 				"be lost. Do you want to continue?", FALSE)) {
-			close_config();
+			free_opts();
 			/*close_database();*/
 			close_ui();
 			exit(1);
@@ -135,12 +136,12 @@ init_abook()
 void
 quit_abook()
 {
-	if( options_get_int("autosave") )
+	if( opt_get_bool(BOOL_AUTOSAVE) )
 		save_database();
 	else if( statusline_ask_boolean("Save database", TRUE) )
 		save_database();
 
-	close_config();
+	free_opts();
 	close_database();
 
 	close_ui();
@@ -404,7 +405,7 @@ static void
 quit_mutt_query(int status)
 {
 	close_database();
-	close_config();
+	free_opts();
 
 	exit(status);
 }
@@ -417,7 +418,7 @@ muttq_print_item(FILE *file, int item)
 
 	split_emailstr(item, emails);
 
-	for(i = 0; i < (options_get_int("mutt_return_all_emails") ?
+	for(i = 0; i < (opt_get_bool(BOOL_MUTT_RETURN_ALL_EMAILS) ?
 			MAX_EMAILS : 1) ; i++)
 		if( *emails[i] )
 			fprintf(file, "%s\t%s\t%s\n", emails[i],
@@ -458,7 +459,8 @@ static void
 init_mutt_query()
 {
 	set_filenames();
-	init_options();
+	init_opts();
+	load_opts(rcfile);
 
 	if( load_database(datafile) ) {
 		printf("Cannot open database\n");
@@ -506,7 +508,7 @@ void
 launch_mutt(int item)
 {
 	char *cmd = NULL, *mailstr = NULL;
-	char *mutt_command = options_get_str("mutt_command");
+	char *mutt_command = opt_get_str(STR_MUTT_COMMAND);
 
 	if(mutt_command == NULL || !*mutt_command)
 		return;
@@ -550,7 +552,7 @@ launch_wwwbrowser(int item)
 
 	if( database[item][URL] )
 		cmd = mkstr("%s '%s'",
-				options_get_str("www_command"),
+				opt_get_str(STR_WWW_COMMAND),
 				safe_str(database[item][URL]));
 	else
 		return;
@@ -633,7 +635,8 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 #endif
 
 	set_filenames();
-	init_options();
+	init_opts();
+	load_opts(rcfile);
 
 	switch( import_file(srcformat, srcfile) ) {
 		case -1:
@@ -663,7 +666,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 		}
 
 	close_database();
-	close_config();
+	free_opts();
 	exit(ret);
 }
 
@@ -700,8 +703,9 @@ init_add_email()
 {
 	set_filenames();
 	atexit(free_filenames);
-	init_options();
-	atexit(close_config);
+	init_opts();
+	load_opts(rcfile);
+	atexit(free_opts);
 
 	/*
 	 * we don't actually care if loading fails or not

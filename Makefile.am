@@ -1,10 +1,10 @@
 
 bin_PROGRAMS = abook
 
-abook_SOURCES = abook.c database.c filter.c list.c misc.c conff.c \
+abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		options.c edit.c ldif.c ui.c getname.c \
 		getopt.c getopt1.c abook_rl.c \
- 		abook.h database.h filter.h list.h misc.h help.h conff.h \
+ 		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
 		getopt.h abook_rl.h
 

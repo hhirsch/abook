@@ -26,6 +26,8 @@ int		strncasecmp (const char *, const char *, size_t);
 #define DIR_IN_HOME	".abook"
 #define DATAFILE	"addressbook"
 
+#define RCFILE		"abookrc"
+
 /*
  * some "abookwide" useful macros
  */

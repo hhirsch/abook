@@ -36,8 +36,8 @@ enum {
 #define LIST_COLS	COLS
 
 #define NAMEPOS		2
-#define EMAILPOS        options_get_int("emailpos")
-#define EXTRAPOS	options_get_int("extrapos")
+#define EMAILPOS        opt_get_int(INT_EMAILPOS)
+#define EXTRAPOS	opt_get_int(INT_EXTRAPOS)
 
 #define NAMELEN		(EMAILPOS-NAMEPOS -1)
 #define EMAILLEN        (EXTRAPOS-EMAILPOS -1)

@@ -783,11 +783,12 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 static void            html_export_write_head(FILE *out, int extra_column);
 static void            html_export_write_tail(FILE *out);
 
+extern int extra_column;
+
 static int
 html_export_database(FILE *out, struct db_enumerator e)
 {
 	char tmp[MAX_EMAILSTR_LEN];
-	int extra_column = options_get_int("extra_column");
 
 	if( items < 1 )
 		return 2;
@@ -1398,7 +1399,7 @@ text_export_database(FILE * out, struct db_enumerator e)
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 	int j;
 	char *realname = get_real_name();
-	char *style = options_get_str("address_style");
+	char *style = opt_get_str(STR_ADDRESS_STYLE);
 
 	fprintf(out,
 		"-----------------------------------------\n%s's address book\n"

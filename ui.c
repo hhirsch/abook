@@ -538,7 +538,7 @@ void
 ui_print_database()
 {
 	FILE *handle;
-	char *command = options_get_str("print_command");
+	char *command = opt_get_str(STR_PRINT_COMMAND);
 	int mode;
 
 	if( list_is_empty() )
@@ -586,7 +586,7 @@ ui_open_datafile()
 		return;
 	}
 
-	if( options_get_int("autosave") )
+	if( opt_get_bool(BOOL_AUTOSAVE) )
 		save_database();
 	else if(statusline_ask_boolean("Save current database", FALSE))
 		save_database();

@@ -35,14 +35,14 @@ extern struct abook_field abook_fields[];
 WINDOW *list = NULL;
 
 static int
-init_extra_field(char *option_name)
+init_extra_field(enum str_opts option)
 {
 	int i, ret = -1;
 	char *option_str;
 
 	assert(option_name != NULL);
 	
-	option_str = options_get_str(option_name);
+	option_str = opt_get_str(option);
 
 	if(option_str && *option_str) {
 		for(i = 0; i < ITEM_FIELDS; i++) {
@@ -69,8 +69,8 @@ init_list()
 	 * init extra_column and extra alternative
 	 */
 
-	extra_column = init_extra_field("extra_column");
-	extra_alternative = init_extra_field("extra_alternative");
+	extra_column = init_extra_field(STR_EXTRA_COLUMN);
+	extra_alternative = init_extra_field(STR_EXTRA_ALTERNATIVE);
 }
 
 void
@@ -131,7 +131,7 @@ print_list_line(int i, int line, int highlight)
 		mvwaddch(list, line, 0, '*' );
 	
 	mvwaddnstr(list, line, NAMEPOS, database[i][NAME], NAMELEN);
-	if( options_get_int( "show_all_emails"  ) )
+	if( opt_get_bool(BOOL_SHOW_ALL_EMAILS) )
 		mvwaddnstr(list, line, EMAILPOS, database[i][EMAIL],
 				real_emaillen);
 	else {

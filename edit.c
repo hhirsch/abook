@@ -182,6 +182,21 @@ editor_print_data(int tab, int item)
 	}
 }
 
+/*
+ * function: change_field
+ *
+ * parameters:
+ *  (char *msg)
+ *   message to display as a prompt
+ *  (char **field)
+ *   a pointer to a pointer which will point a new string. if the latter
+ *   pointer != NULL it will be freed (if user doesn't cancel)
+ *
+ * returns (int)
+ *  a nonzero value if user has cancelled and zero if user has typed a
+ *  valid string
+ */
+
 static int
 change_field(char *msg, char **field)
 {
@@ -246,12 +261,9 @@ edit_emails(char c, int item)
 	split_emailstr(item, emails);
 	field = strdup(emails[email_num]);
 
-	if(change_field("E-mail: ", &field)) {
-#ifdef DEBUG
-		fprintf(stderr, "change_field = TRUE\n");
-#endif
-		return;
-	}
+	if(change_field("E-mail: ", &field))
+		return; /* user cancelled ( C-g ) */
+
 	if(field) {
 		strncpy(emails[email_num], field, MAX_EMAIL_LEN);
 		fix_email_str(emails[email_num]);

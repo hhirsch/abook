@@ -35,7 +35,7 @@ void		ui_open_datafile();
 
 #include "options.h" /* needed for options_get_int */
 
-#define UI_HLINE_CHAR		options_get_int("use_ascii_only") ? \
+#define UI_HLINE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
 					'-' : ACS_HLINE
 
 #endif

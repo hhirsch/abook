@@ -120,9 +120,8 @@ abook_readline(WINDOW *w, int y, int x, char *s, int limit, bool use_completion)
 	
 	ret = readline(NULL);
 
-	if(rl_cancelled) {
-		if(ret)
-			free(ret);
+	if(rl_cancelled && ret) {
+		free(ret);
 		ret = NULL;
 	}
 

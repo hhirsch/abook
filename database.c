@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "abook.h"
+#include <assert.h>
 #include "database.h"
 #include "list.h"
 #include "misc.h"
@@ -318,21 +319,14 @@ remove_selected_items()
 char *
 get_surname(char *s)
 {
-	int i, a;
-	int len = strlen(s);
-	char *name = strdup(s);
+	char *p = s + strlen(s);
 
-	for( a = 0, i = len - 1; i >= 0; i--, a++ ) {
-		name[a] = s[i];
-		if(name[a] == ' ')
-			break;
-	}
+	assert(s != NULL);
 
-	name[ a ] = 0;
+	while(p > s && *(p - 1) != ' ')
+		p--;
 
-	revstr(name);
-
-	return name;
+	return strdup(p);
 }
 
 static int
@@ -401,13 +395,13 @@ find_item(char *str, int start, int search_fields[])
 		return -2; /* error */
 
 	findstr = strdup(str);
-	findstr = strupper(findstr);
+	findstr = strlower(findstr);
 
 	e.item = start - 1; /* must be "real start" - 1 */
 	db_enumerate_items(e) {
 		for( i = 0; search_fields[i] >= 0; i++ ) {
 			tmp = safe_strdup(database[e.item][search_fields[i]]);
-			if( tmp && strstr(strupper(tmp), findstr) ) {
+			if( tmp && strstr(strlower(tmp), findstr) ) {
 				ret = e.item;
 				goto out;
 			}
