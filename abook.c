@@ -605,16 +605,17 @@ FILE *
 abook_fopen (const char *path, const char *mode)
 {	
 	struct stat s;
+	bool stat_ok;
 
-	if((stat(path, &s)) == -1)
-		return NULL;
+	stat_ok = (stat(path, &s) != -1);
 	
 	if(strchr(mode, 'r'))
-		return S_ISREG(s.st_mode) ? fopen(path, mode) : NULL;
+		return (stat_ok && S_ISREG(s.st_mode)) ?
+			fopen(path, mode) : NULL;
 	else
-		return S_ISDIR(s.st_mode) ? NULL : fopen(path, mode);
+		return (stat_ok && S_ISDIR(s.st_mode)) ?
+			NULL : fopen(path, mode);
 }
-
 
 static void
 convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
