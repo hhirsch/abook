@@ -11,6 +11,7 @@ enum {
 	NAME,
 	EMAIL,
 	ADDRESS,
+        ADDRESS2,
 	CITY,
 	STATE,
 	ZIP,
@@ -21,7 +22,7 @@ enum {
 	MOBILEPHONE,
 	NICK,
 	URL,
-	NOTES
+	NOTES,
 };
 
 #define LAST_FIELD		NOTES

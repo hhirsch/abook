@@ -415,7 +415,7 @@ export(char filtname[FILTNAME_LEN], char *filename)
 
 static void	ldif_fix_string(char *str);
 
-#define	LDIF_ITEM_FIELDS	15
+#define	LDIF_ITEM_FIELDS	16
 
 typedef char*  ldif_item[LDIF_ITEM_FIELDS];
 
@@ -423,6 +423,7 @@ static ldif_item ldif_field_names = {
 	"cn",	
 	"mail",
 	"streetaddress",
+	"streetaddress2",
         "locality",
 	"st",
 	"postalcode",
@@ -441,6 +442,7 @@ static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
 	NAME,		/* "cn" */
 	EMAIL,		/* "mail" */
 	ADDRESS,	/* "streetaddress" */
+	ADDRESS2,	/* "streetaddress2" */     
         CITY,		/* "locality" */
 	STATE,		/* "st" */
 	ZIP,		/* "postalcode" */
@@ -1222,8 +1224,9 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 		free(name);
 
 		if ( database[e.item][ADDRESS] )
-			fprintf(out, "ADR:;;%s;%s;%s;%s;%s\n",
+			fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\n",
 				safe_str(database[e.item][ADDRESS]),
+				safe_str(database[e.item][ADDRESS2]),				
 				safe_str(database[e.item][CITY]),
 				safe_str(database[e.item][STATE]),
 				safe_str(database[e.item][ZIP]),
@@ -1320,7 +1323,10 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 static void
 text_write_address_us(FILE *out, int i) {
 	fprintf(out, "\n%s", database[i][ADDRESS]);
-	
+
+   	if (database[i][ADDRESS2])
+		fprintf(out, "\n%s", database[i][ADDRESS2]);
+
 	if (database[i][CITY])
 		fprintf(out, "\n%s", database[i][CITY]);
 		
@@ -1354,7 +1360,10 @@ text_write_address_uk(FILE *out, int i) {
 static void
 text_write_address_eu(FILE *out, int i) {
 	fprintf(out, "\n%s", database[i][ADDRESS]);
-	
+
+   	if (database[i][ADDRESS2])
+		fprintf(out, "\n%s", database[i][ADDRESS2]);
+
 	if (database[i][ZIP] || database[i][CITY]) {
 		fputc('\n', out);
 

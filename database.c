@@ -58,6 +58,7 @@ struct abook_field abook_fields[ITEM_FIELDS] = {
 	{"Name",	"name",		TAB_CONTACT},/* NAME */
 	{"E-mails",	"email",	TAB_CONTACT},/* EMAIL */
 	{"Address",	"address",	TAB_ADDRESS},/* ADDRESS */
+	{"Address2",	"address2",	TAB_ADDRESS},/* ADDRESS2 */   
 	{"City",	"city",		TAB_ADDRESS},/* CITY */
 	{"State/Province","state",	TAB_ADDRESS},/* STATE */
 	{"ZIP/Postal Code","zip",	TAB_ADDRESS},/* ZIP */
