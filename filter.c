@@ -30,22 +30,33 @@ extern struct abook_field abook_fields[];
  * function declarations
  */
 
+/*
+ * import filter prototypes
+ */
+
 static int      ldif_parse_file(FILE *handle);
 static int	mutt_parse_file(FILE *in);
 static int	pine_parse_file(FILE *in);
 
-static int      ldif_export_database(FILE *out);
-static int	html_export_database(FILE *out);
-static int	pine_export_database(FILE *out);
-static int	csv_export_database(FILE *out);
-static int	gcrd_export_database(FILE *out);
-static int	mutt_alias_export(FILE *out);
-static int	elm_alias_export(FILE *out);
-static int	text_export_database(FILE *out);
-static int	spruce_export_database(FILE *out);
+/*
+ * export filter prototypes
+ */
 
+static int      ldif_export_database(FILE *out, struct db_enumerator e);
+static int	html_export_database(FILE *out, struct db_enumerator e);
+static int	pine_export_database(FILE *out, struct db_enumerator e);
+static int	csv_export_database(FILE *out, struct db_enumerator e);
+static int	gcrd_export_database(FILE *out, struct db_enumerator e);
+static int	mutt_alias_export(FILE *out, struct db_enumerator e);
+static int	elm_alias_export(FILE *out, struct db_enumerator e);
+static int	text_export_database(FILE *out, struct db_enumerator e);
+static int	spruce_export_database(FILE *out, struct db_enumerator e);
 
-struct abook_filter i_filters[] = {
+/*
+ * end of function declarations
+ */
+
+struct abook_input_filter i_filters[] = {
 	{ "abook", "abook native format", parse_database },
 	{ "ldif", "ldif / Netscape addressbook", ldif_parse_file },
 	{ "mutt", "mutt alias (beta)", mutt_parse_file },
@@ -53,7 +64,7 @@ struct abook_filter i_filters[] = {
 	{ "\0", NULL, NULL }
 };
 
-struct abook_filter e_filters[] = {
+struct abook_output_filter e_filters[] = {
 	{ "abook", "abook native format", write_database },
 	{ "ldif", "ldif / Netscape addressbook (.4ld)", ldif_export_database },
 	{ "mutt", "mutt alias", mutt_alias_export },
@@ -92,11 +103,22 @@ print_filters()
 }
 
 static int
-number_of_filters(struct abook_filter * filters)
+number_of_output_filters()
 {
 	int i;
 
-	for(i=0; *filters[i].filtname ; i++)
+	for(i=0; *e_filters[i].filtname ; i++)
+		;
+
+	return i;
+}
+
+static int
+number_of_input_filters()
+{
+	int i;
+
+	for(i=0; *i_filters[i].filtname ; i++)
 		;
 
 	return i;
@@ -160,8 +182,8 @@ import_database()
 	import_screen();
 	
 	filter = getch() - 'a';
-	if(filter == 'x' - 'a' || filter >= number_of_filters(e_filters) ||
-			filter < 0) {
+	if(filter == 'x' - 'a' ||
+		filter >= number_of_input_filters() || filter < 0) {
 		refresh_screen();
 		return 1;
 	}
@@ -238,7 +260,8 @@ import(char filtname[FILTNAME_LEN], char *filename)
  * export
  */
 
-static int		e_write_file(char *filename, int (*func) (FILE *in));
+static int		e_write_file(char *filename,
+		int (*func) (FILE *in, struct db_enumerator e), int mode);
 
 static void
 export_screen()
@@ -266,18 +289,32 @@ int
 export_database()
 {
 	int filter;
+	int enum_mode = ENUM_ALL;
 	char *filename;
 
 	export_screen();
 	
 	filter = getch() - 'a';
-	if(filter == 'x' - 'a' || filter >= number_of_filters(e_filters) ||
-			filter < 0) {
+	if(filter == 'x' - 'a' ||
+		filter >= number_of_output_filters(e_filters) || filter < 0) {
 		refresh_screen();
 		return 1;
 	}
 	
 	mvaddstr(5+filter, 2, "->");
+
+	if( selected_items() ) {
+		statusline_addstr("Export All/Selected/Cancel (A/s/c)");
+		switch( tolower(getch()) ) {
+			case 's':
+				enum_mode = ENUM_SELECTED;
+				break;
+			case 'c':
+				clear_statusline();
+				return 1;
+		}
+		clear_statusline();
+	}
 	
 	filename = ask_filename("Filename: ", 0);
 	if( !filename ) {
@@ -285,7 +322,7 @@ export_database()
 		return 2;
 	}
 	
-	if(  e_write_file(filename, e_filters[filter].func ) )
+	if(  e_write_file(filename, e_filters[filter].func, enum_mode ) )
 		statusline_msg("Error occured while exporting");
 	
 	refresh_screen();
@@ -295,10 +332,12 @@ export_database()
 }
 
 static int
-e_write_file(char *filename, int (*func) (FILE *in))
+e_write_file(char *filename, int (*func) (FILE *in, struct db_enumerator e),
+		int mode)
 {
 	FILE *out;
 	int ret = 0;
+	struct db_enumerator enumerator = init_db_enumerator(mode);
 
 	if( (out = fopen(filename, "a")) == NULL )
 		return 1;
@@ -306,7 +345,7 @@ e_write_file(char *filename, int (*func) (FILE *in))
 	if( ftell(out) )
 		return 1;
 
-	ret = (*func) (out);
+	ret = (*func) (out, enumerator);
 	
 	fclose(out);
 	
@@ -314,9 +353,10 @@ e_write_file(char *filename, int (*func) (FILE *in))
 }
 
 int
-fexport(char filtname[FILTNAME_LEN], FILE *handle)
+fexport(char filtname[FILTNAME_LEN], FILE *handle, int enum_mode)
 {
 	int i;
+	struct db_enumerator e = init_db_enumerator(enum_mode);
 
 	for(i=0;; i++) {
 		if( ! strncmp(e_filters[i].filtname, filtname, FILTNAME_LEN) )
@@ -327,7 +367,7 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle)
 		}
 	}
 
-	return (e_filters[i].func) (handle);
+	return (e_filters[i].func) (handle, e);
 }
 
 	
@@ -335,8 +375,10 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle)
 int
 export(char filtname[FILTNAME_LEN], char *filename)
 {
+	const int mode = ENUM_ALL;
 	int i;
 	int ret = 0;
+	struct db_enumerator e = init_db_enumerator(mode);
 	
 	for(i=0;; i++) {
 		if( ! strncmp(e_filters[i].filtname, filtname, FILTNAME_LEN) )
@@ -351,9 +393,9 @@ export(char filtname[FILTNAME_LEN], char *filename)
 		return -1;
 
 	if( !strcmp(filename, "-") )
-		ret = (e_filters[i].func) (stdout);
+		ret = (e_filters[i].func) (stdout, e);
 	else
-		ret =  e_write_file(filename, e_filters[i].func);
+		ret =  e_write_file(filename, e_filters[i].func, mode);
 
 	return ret;
 }
@@ -699,6 +741,7 @@ mutt_parse_file(FILE *in)
  * end of mutt alias import filter
  */
 
+
 /*
  * ldif export filter
  */
@@ -716,18 +759,18 @@ ldif_fput_type_and_value(FILE *out,char *type, char *value )
 }
 
 static int
-ldif_export_database(FILE *out)
+ldif_export_database(FILE *out, struct db_enumerator e)
 {
-	int i;
 	char email[MAX_EMAILSTR_LEN];
 
 	fprintf(out, "version: 1\n");
-	for(i=0; i<items; i++) {
+
+	db_enumerate_items(e) {
 		char *tmp;
 		int j;
-		get_first_email(email, i);
+		get_first_email(email, e.item);
 
-		tmp = mkstr("cn=%s,mail=%s", database[i][NAME], email);
+		tmp = mkstr("cn=%s,mail=%s", database[e.item][NAME], email);
 		ldif_fput_type_and_value(out, "dn", tmp);
 		free(tmp);
 
@@ -736,10 +779,10 @@ ldif_export_database(FILE *out)
 				if(ldif_conv_table[j] == EMAIL)
 					ldif_fput_type_and_value(out,
 						ldif_field_names[j], email);
-				else if(database[i][ldif_conv_table[j]])
+				else if(database[e.item][ldif_conv_table[j]])
 					ldif_fput_type_and_value(out,
 						ldif_field_names[j],
-						database[i][ldif_conv_table[j]]);
+						database[e.item][ldif_conv_table[j]]);
 			}
 		}
 
@@ -762,10 +805,9 @@ static void            html_export_write_head(FILE *out, int extra_column);
 static void            html_export_write_tail(FILE *out);
 
 static int
-html_export_database(FILE *out)
+html_export_database(FILE *out, struct db_enumerator e)
 {
 	char tmp[MAX_EMAILSTR_LEN];
-	int i;
 	int extra_column = options_get_int("extra_column");
 
 	if( items < 1 )
@@ -775,17 +817,19 @@ html_export_database(FILE *out)
 		extra_column : PHONE;
 
 	html_export_write_head(out, extra_column);
-	for( i = 0; i < items; i++ ) {
-		get_first_email(tmp, i);
+
+	db_enumerate_items(e) {
+		get_first_email(tmp, e.item);
 		fprintf(out, "<tr>\n<td><a href=\"mailto:%s\">%s</a>\n",
 				tmp,
-				database[i][NAME] );
+				database[e.item][NAME] );
 				
 		fprintf(out, "<td>%s\n<td>%s\n",
-				database[i][EMAIL],
-				safe_str(database[i][extra_column]) );
+				database[e.item][EMAIL],
+				safe_str(database[e.item][extra_column]) );
 		fprintf(out, "</tr>\n\n");
 	}
+
 	html_export_write_tail(out);
 
 	return 0;
@@ -797,6 +841,7 @@ html_export_write_head(FILE *out, int extra_column)
 {
 	char *realname = get_real_name();
 
+	fprintf(out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
 	fprintf(out, "<html>\n<head>\n	<title>%s's addressbook</title>",
 			realname );
 	fprintf(out, "\n</head>\n<body>\n");
@@ -820,6 +865,7 @@ html_export_write_tail(FILE *out)
 /*
  * end of html export filter
  */
+
 
 /*
  * pine addressbook import filter
@@ -932,6 +978,7 @@ pine_parse_file(FILE *in)
  * end of pine addressbook import filter
  */
 
+
 /*
  * pine addressbook export filter
  *
@@ -940,17 +987,15 @@ pine_parse_file(FILE *in)
  */
 
 static int
-pine_export_database(FILE *out)
+pine_export_database(FILE *out, struct db_enumerator e)
 {
-	int i;
-
-	for(i=0; i < items; i++ ) {
-		fprintf(out, have_multiple_emails(i) ?
+	db_enumerate_items(e) {
+		fprintf(out, have_multiple_emails(e.item) ?
 				"%s\t%s\t(%s)\t\t%s\n" : "%s\t%s\t%s\t\t%s\n",
-				safe_str(database[i][NICK]),
-				safe_str(database[i][NAME]),
-				safe_str(database[i][EMAIL]),
-				safe_str(database[i][NOTES])
+				safe_str(database[e.item][NICK]),
+				safe_str(database[e.item][NAME]),
+				safe_str(database[e.item][EMAIL]),
+				safe_str(database[e.item][NOTES])
 				);
 	}
 
@@ -967,9 +1012,9 @@ pine_export_database(FILE *out)
  */
 
 static int
-csv_export_database(FILE *out)
+csv_export_database(FILE *out, struct db_enumerator e)
 {
-	int i, j;
+	int j;
 	int csv_export_fields[] = {
 		NAME,
 		EMAIL,
@@ -978,11 +1023,11 @@ csv_export_database(FILE *out)
 		-1
 	};
 
-	for(i=0; i < items; i++ ) {
+	db_enumerate_items(e) {
 		for(j = 0; csv_export_fields[j] >= 0; j++) {
-			fprintf(out, strchr(safe_str(database[i][csv_export_fields[j]]), ',') ?
+			fprintf(out, strchr(safe_str(database[e.item][csv_export_fields[j]]), ',') ?
 				"\"%s\"" : "%s",
-				safe_str(database[i][csv_export_fields[j]])
+				safe_str(database[e.item][csv_export_fields[j]])
 				);
 			if(csv_export_fields[j+1] >= 0)
 				fputc(',', out);
@@ -1005,49 +1050,49 @@ csv_export_database(FILE *out)
  */
 
 static int
-gcrd_export_database(FILE *out)
+gcrd_export_database(FILE *out, struct db_enumerator e)
 {
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
-	int i, j;
+	int j;
 	char *name;
 
-	for(i=0; i < items; i++ ) {
+	db_enumerate_items(e) {
 		fprintf(out, "BEGIN:VCARD\nFN:%s\n",
-				safe_str(database[i][NAME]));
+				safe_str(database[e.item][NAME]));
 
-		name = get_surname(database[i][NAME]);
-	        for( j = strlen(database[i][NAME]) - 1; j >= 0; j-- ) {
-	                if(database[i][NAME][j] == ' ')
+		name = get_surname(database[e.item][NAME]);
+	        for( j = strlen(database[e.item][NAME]) - 1; j >= 0; j-- ) {
+	                if(database[e.item][NAME][j] == ' ')
 	                        break;
 	        } 
 		fprintf(out, "N:%s;%.*s\n",
 			safe_str(name),
 			j,
-			safe_str(database[i][NAME])
+			safe_str(database[e.item][NAME])
 			); 
 
 		free(name);
 
-		if ( database[i][ADDRESS] )
+		if ( database[e.item][ADDRESS] )
 			fprintf(out, "ADR:;;%s;%s;%s;%s;%s\n",
-				safe_str(database[i][ADDRESS]),
-				safe_str(database[i][CITY]),
-				safe_str(database[i][STATE]),
-				safe_str(database[i][ZIP]),
-				safe_str(database[i][COUNTRY])
+				safe_str(database[e.item][ADDRESS]),
+				safe_str(database[e.item][CITY]),
+				safe_str(database[e.item][STATE]),
+				safe_str(database[e.item][ZIP]),
+				safe_str(database[e.item][COUNTRY])
 				);
 		
-		if (database[i][PHONE])
-			fprintf(out, "TEL;HOME:%s\n", database[i][PHONE]);
-		if (database[i][WORKPHONE])
-			fprintf(out, "TEL;WORK:%s\n", database[i][WORKPHONE]);
-		if (database[i][FAX])
-			fprintf(out, "TEL;FAX:%s\n", database[i][FAX]);
-		if (database[i][MOBILEPHONE])
-			fprintf(out, "TEL;CELL:%s\n", database[i][MOBILEPHONE]);
+		if (database[e.item][PHONE])
+			fprintf(out, "TEL;HOME:%s\n", database[e.item][PHONE]);
+		if (database[e.item][WORKPHONE])
+			fprintf(out, "TEL;WORK:%s\n", database[e.item][WORKPHONE]);
+		if (database[e.item][FAX])
+			fprintf(out, "TEL;FAX:%s\n", database[e.item][FAX]);
+		if (database[e.item][MOBILEPHONE])
+			fprintf(out, "TEL;CELL:%s\n", database[e.item][MOBILEPHONE]);
 
-		if ( database[i][EMAIL] ) {
-			split_emailstr(i, emails);
+		if ( database[e.item][EMAIL] ) {
+			split_emailstr(e.item, emails);
 			for(j=0; j < MAX_EMAILS ; j++) {
 				if ( *emails[j] ) 
 					fprintf(out, "EMAIL;INTERNET:%s\n",
@@ -1055,10 +1100,10 @@ gcrd_export_database(FILE *out)
 			}
 		}
 		
-		if ( database[i][NOTES] ) 
-			fprintf(out, "NOTE:%s\n", database[i][NOTES]);
-		if (database[i][URL])
-			fprintf(out, "URL:%s\n",  database[i][URL]);
+		if ( database[e.item][NOTES] ) 
+			fprintf(out, "NOTE:%s\n", database[e.item][NOTES]);
+		if (database[e.item][URL])
+			fprintf(out, "URL:%s\n",  database[e.item][URL]);
 
 		fprintf(out, "END:VCARD\n\n");
 		
@@ -1095,19 +1140,18 @@ mutt_alias_genalias(int i)
 }
 
 static int
-mutt_alias_export(FILE *out)
+mutt_alias_export(FILE *out, struct db_enumerator e)
 {
-	int i;
 	char email[MAX_EMAIL_LEN];
 	char *alias = NULL;
 
-	for(i=0; i<items; i++) {
-		alias = mutt_alias_genalias(i);
+	db_enumerate_items(e) {
+		alias = mutt_alias_genalias(e.item);
 
-		get_first_email(email, i);
+		get_first_email(email, e.item);
 		fprintf(out, *email ? "alias %s %s <%s>\n": "alias %s %s%s\n",
 				alias,
-				database[i][NAME],
+				database[e.item][NAME],
 				email);
 		my_free(alias);
 	}
@@ -1125,10 +1169,10 @@ mutt_alias_export(FILE *out)
  */
 
 static int
-text_export_database(FILE * out)
+text_export_database(FILE * out, struct db_enumerator e)
 {
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
-	int i, j;
+	int j;
 	char *realname = get_real_name();
 	char *style = options_get_str("address_style");
 
@@ -1138,76 +1182,79 @@ text_export_database(FILE * out)
 		realname);
 	free(realname);
 
-	for (i = 0; i < items; i++) {
+	db_enumerate_items(e) {
 		fprintf(out,
 			"-----------------------------------------\n\n");
-		fprintf(out, "%s", database[i][NAME]);
-		if (database[i][NICK])
-			fprintf(out, "\n(%s)", database[i][NICK]);
+		fprintf(out, "%s", database[e.item][NAME]);
+		if (database[e.item][NICK])
+			fprintf(out, "\n(%s)", database[e.item][NICK]);
 		fprintf(out, "\n");
 
-		if (*database[i][EMAIL]) {
+		if (*database[e.item][EMAIL]) {
 			fprintf(out, "\n");
-			split_emailstr(i, emails);
+			split_emailstr(e.item, emails);
 			for (j = 0; j < MAX_EMAILS; j++)
 				if (*emails[j])
 					fprintf(out, "%s\n", emails[j]);
 		}
 		/* Print address */
-		if (database[i][ADDRESS]) {
+		if (database[e.item][ADDRESS]) {
 			if (!safe_strcmp(style, "us")) {	/* US like */
-				fprintf(out, "\n%s", database[i][ADDRESS]);
-				if (database[i][CITY])
+				fprintf(out, "\n%s", database[e.item][ADDRESS]);
+				if (database[e.item][CITY])
 					fprintf(out, "\n%s",
-						database[i][CITY]);
-				if (database[i][STATE] || database[i][ZIP])
+						database[e.item][CITY]);
+				if (database[e.item][STATE] || database[e.item][ZIP])
 					fprintf(out, "\n%s %s",
-						safe_str(database[i]
+						safe_str(database[e.item]
 							 [STATE]),
-						safe_str(database[i]
+						safe_str(database[e.item]
 							 [ZIP]));
-				if (database[i][COUNTRY])
+				if (database[e.item][COUNTRY])
 					fprintf(out, "\n%s",
-						database[i][COUNTRY]);
+						database[e.item][COUNTRY]);
 			}
 
 			else if (!safe_strcmp(style, "uk")) {	/* UK like */
 				for (j = ADDRESS; j <= COUNTRY; j++)
-					if (database[i][j])
+					if (database[e.item][j])
 						fprintf(out, "\n%s",
-							database[i][j]);
+							database[e.item][j]);
 			} else {	/* EU like */
-				fprintf(out, "\n%s", database[i][ADDRESS]);
-				if (database[i][ZIP] || database[i][CITY])
+				fprintf(out, "\n%s", database[e.item][ADDRESS]);
+				if (database[e.item][ZIP] ||
+						database[e.item][CITY])
 					fprintf(out, "\n%s %s",
-						safe_str(database[i][ZIP]),
-						safe_str(database[i]
+						safe_str(database[e.item][ZIP]),
+						safe_str(database[e.item]
 							 [CITY]));
-				if (database[i][STATE])
+				if (database[e.item][STATE])
 					fprintf(out, "\n%s",
-						database[i][STATE]);
-				if (database[i][COUNTRY])
+						database[e.item][STATE]);
+				if (database[e.item][COUNTRY])
 					fprintf(out, "\n%s",
-						database[i][COUNTRY]);
+						database[e.item][COUNTRY]);
 			}
 
 			fprintf(out, "\n");
 		}
 
-		if ((database[i][PHONE]) || (database[i][WORKPHONE]) ||
-		    (database[i][FAX]) || (database[i][MOBILEPHONE])) {
+		if ((database[e.item][PHONE]) ||
+			(database[e.item][WORKPHONE]) ||
+			(database[e.item][FAX]) ||
+			(database[e.item][MOBILEPHONE])) {
 			fprintf(out, "\n");
 			for (j = PHONE; j <= MOBILEPHONE; j++)
-				if (database[i][j])
+				if (database[e.item][j])
 					fprintf(out, "%s: %s\n",
 						abook_fields[j].name,
-						database[i][j]);
+						database[e.item][j]);
 		}
 
-		if (database[i][URL])
-			fprintf(out, "\n%s\n", database[i][URL]);
-		if (database[i][NOTES])
-			fprintf(out, "\n%s\n", database[i][NOTES]);
+		if (database[e.item][URL])
+			fprintf(out, "\n%s\n", database[e.item][URL]);
+		if (database[e.item][NOTES])
+			fprintf(out, "\n%s\n", database[e.item][NOTES]);
 
 		fprintf(out, "\n");
 	}
@@ -1226,18 +1273,17 @@ text_export_database(FILE * out)
  */
 
 static int
-elm_alias_export(FILE *out)
+elm_alias_export(FILE *out, struct db_enumerator e)
 {
-	int i;
 	char email[MAX_EMAIL_LEN];
 	char *alias = NULL;
 
-	for(i=0; i<items; i++) {
-		alias = mutt_alias_genalias(i);
-		get_first_email(email, i);
+	db_enumerate_items(e) {
+		alias = mutt_alias_genalias(e.item);
+		get_first_email(email, e.item);
 		fprintf(out, "%s = %s = %s\n",
 				alias,
-				database[i][NAME],
+				database[e.item][NAME],
 				email);
 		my_free(alias);
 	}
@@ -1255,21 +1301,20 @@ elm_alias_export(FILE *out)
  */
 
 static int
-spruce_export_database (FILE *out)
+spruce_export_database (FILE *out, struct db_enumerator e)
 {
-	int i;
 	char email[MAX_EMAIL_LEN];
 
 	fprintf (out, "# This is a generated file made by abook for the Spruce e-mail client.\n\n");
 
-	for (i= 0; i< items; i++) {
-		if(strcmp (safe_str(database[i][EMAIL]), "")) {
-			get_first_email(email, i);
+	db_enumerate_items(e) {
+		if(strcmp (safe_str(database[e.item][EMAIL]), "")) {
+			get_first_email(email, e.item);
 			fprintf(out, "# Address %d\nName: %s\nEmail: %s\nMemo: %s\n\n",
-					i,
-					database[i][NAME],
+					e.item,
+					database[e.item][NAME],
 					email,
-					safe_str(database[i][NOTES])
+					safe_str(database[e.item][NOTES])
 					);
 		}
 	}

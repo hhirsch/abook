@@ -5,7 +5,14 @@
 
 #define		FILTNAME_LEN	6
 
-struct abook_filter {
+
+struct abook_output_filter {
+	char filtname[FILTNAME_LEN];
+	char *desc;
+	int (*func) (FILE *handle, struct db_enumerator e);
+};
+
+struct abook_input_filter {
 	char filtname[FILTNAME_LEN];
 	char *desc;
 	int (*func) (FILE *handle);
@@ -17,7 +24,8 @@ int             import(char filtname[FILTNAME_LEN], char *filename);
 
 int		export_database();
 int             export(char filtname[FILTNAME_LEN], char *filename);
-int		fexport(char filtname[FILTNAME_LEN], FILE *handle);
+int		fexport(char filtname[FILTNAME_LEN], FILE *handle,
+		int enum_mode);
 
 void		print_filters();
 

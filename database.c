@@ -139,9 +139,10 @@ load_database(char *filename)
 }
 
 int
-write_database(FILE *out)
+write_database(FILE *out, struct db_enumerator e)
 {
-	int i,j;
+	int j;
+	int i = 0;
 
 	fprintf(out, "# abook addressbook file\n\n");
 	fprintf(out, "[format]\n");
@@ -149,14 +150,18 @@ write_database(FILE *out)
 	fprintf(out, "version=" VERSION "\n");
 	fprintf(out, "\n\n");
 
-	for( i = 0; i < items; i++ ) {
+	db_enumerate_items(e) {
 		fprintf(out, "[%d]\n", i);
 		for(j=0; j<ITEM_FIELDS; j++) {
-			if( database[i][j] != NULL && *database[i][j] )
+			if( database[e.item][j] != NULL &&
+					*database[e.item][j] )
 				fprintf(out, "%s=%s\n",
-					abook_fields[j].key, database[i][j]);
+					abook_fields[j].key,
+					database[e.item][j]
+					);
 		}
 		fputc('\n', out);
+		i++;
 	}
 
 	return 0;
@@ -166,6 +171,7 @@ int
 save_database()
 {
 	FILE *out;
+	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
 
 	if( (out = abook_fopen(datafile, "w")) == NULL )
 		return -1;
@@ -177,7 +183,7 @@ save_database()
 	}
 
 	
-	write_database(out);
+	write_database(out, e);
 	
 	fclose(out);
 	
@@ -413,4 +419,46 @@ int
 is_selected(int item)
 {
 	return selected[item];
+}
+
+int
+real_db_enumerate_items(struct db_enumerator e)
+{
+	int item = max(0, e.item + 1);
+	int i;
+	
+	switch(e.mode) {
+#ifdef DEBUG
+		case ENUM_ALL:
+			break;
+#endif
+		case ENUM_SELECTED:
+			for(i = item; i < items; i++) {
+				if(is_selected(i)) {
+					item = i;
+					goto out;
+				}
+			}
+			return -1;
+#ifdef DEBUG
+		default:
+			fprintf(stderr, "real_db_enumerate_items() "
+					"BUG: unknown db_enumerator mode: %d\n",
+					e.mode);
+			break;
+#endif
+	}
+out:
+	return (item > LAST_ITEM || item < 0) ? -1 : item;
+}
+
+struct db_enumerator
+init_db_enumerator(int mode)
+{
+	struct db_enumerator new;
+
+	new.item = -1; /* important - means "start from beginning" */
+	new.mode = mode;
+
+	return new;
 }

@@ -556,14 +556,35 @@ ui_print_database()
 {
 	FILE *handle;
 	char *command = options_get_str("print_command");
+	int mode;
 
-	if(!statusline_ask_boolean("Print addressbook", FALSE))
+	if( list_is_empty() )
 		return;
+
+	statusline_addstr("Print All/Selected/Cancel (a/s/C)?");
+
+	switch( tolower(getch()) ) {
+		case 'a':
+			mode = ENUM_ALL;
+			break;
+		case 's':
+			if( !selected_items() ) {
+				statusline_msg("No selected items");
+				return;
+			}
+			mode = ENUM_SELECTED;
+			break;
+		default:
+			clear_statusline();
+			return;
+	}
+
+	clear_statusline();
 
 	if( ! *command || (handle = popen(command, "w")) == NULL)
 		return;
 
-	fexport("text", handle);
+	fexport("text", handle, mode);
 	
 	pclose(handle);
 }

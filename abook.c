@@ -84,7 +84,7 @@ quit_abook()
 {
 	if( options_get_int("autosave") )
 		save_database();
-	else if( statusline_ask_boolean("Save database", FALSE) )
+	else if( statusline_ask_boolean("Save database", TRUE) )
 		save_database();
 
 	close_config();

@@ -354,6 +354,7 @@ edit_loop(int item)
 	
 	werase(editw);
 	headerline(EDITOR_HELPLINE);
+	refresh_statusline();
 	print_editor_header(item);
 	editor_tab(tab);
 	editor_print_data(tab, item);

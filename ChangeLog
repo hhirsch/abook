@@ -3,6 +3,7 @@
  - fixed help viewer functions
  - ability to disable use of non-ascii characters (configuration option)
  - changed SIGINT behaviour
+ - html export filter creates now valid html documents
 
 0.4.12
  - added man page for abookrc (Alan Ford)

@@ -36,8 +36,21 @@ struct abook_field {
 	int tab;
 };
 
+enum {
+	ENUM_ALL,
+	ENUM_SELECTED
+};
+
+struct db_enumerator {
+	int item;
+	int mode; /* boolean */ /* warning: read only */
+};
+
+#define db_enumerate_items(e) \
+	while( -1 != (e.item = real_db_enumerate_items(e)))
+
 int		parse_database(FILE *in);
-int		write_database(FILE *out);
+int		write_database(FILE *out, struct db_enumerator e);
 int		load_database(char *filename);
 int		save_database();
 void		close_database();
@@ -50,6 +63,8 @@ char		*get_surname(char *s);
 int		find_item(char *str, int start);
 int		is_selected(int item);
 
+int		real_db_enumerate_items(struct db_enumerator e);
+struct db_enumerator	init_db_enumerator(int mode);
 
 #define LAST_ITEM	(items - 1)
 
