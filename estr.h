@@ -5,17 +5,10 @@
  * by JH <jheinonen@bigfoot.com>
  *
  * Copyright (C) Jaakko Heinonen
- *
  */
 
 #ifndef _ESTR_H
 #define _ESTR_H
-
-
-/*
- *
- *
- */
 
 char	*wenter_string(WINDOW *win, const int maxlen, const int flags);
 
