@@ -40,6 +40,7 @@ static int      ldif_parse_file(FILE *handle);
 static int	mutt_parse_file(FILE *in);
 static int	pine_parse_file(FILE *in);
 static int 	csv_parse_file(FILE *in);
+static int 	allcsv_parse_file(FILE *in);
 
 /*
  * export filter prototypes
@@ -49,6 +50,7 @@ static int      ldif_export_database(FILE *out, struct db_enumerator e);
 static int	html_export_database(FILE *out, struct db_enumerator e);
 static int	pine_export_database(FILE *out, struct db_enumerator e);
 static int	csv_export_database(FILE *out, struct db_enumerator e);
+static int	allcsv_export_database(FILE *out, struct db_enumerator e);
 static int	palm_export_database(FILE *out, struct db_enumerator e);
 static int	gcrd_export_database(FILE *out, struct db_enumerator e);
 static int	mutt_alias_export(FILE *out, struct db_enumerator e);
@@ -66,6 +68,7 @@ struct abook_input_filter i_filters[] = {
 	{ "mutt", "mutt alias", mutt_parse_file },
 	{ "pine", "pine addressbook", pine_parse_file },
 	{ "csv", "comma separated values", csv_parse_file },
+	{ "allcsv", "comma separated all values", allcsv_parse_file },
 	{ "\0", NULL, NULL }
 };
 
@@ -77,6 +80,7 @@ struct abook_output_filter e_filters[] = {
 	{ "pine", "pine addressbook", pine_export_database },
 	{ "gcrd", "GnomeCard (VCard) addressbook", gcrd_export_database },
 	{ "csv", "comma separated values", csv_export_database },
+	{ "allcsv", "comma separated all values", allcsv_export_database },
 	{ "palmcsv", "Palm comma separated values", palm_export_database},
 	{ "elm", "elm alias", elm_alias_export },
 	{ "text", "plain text", text_export_database },
@@ -1051,6 +1055,29 @@ static int csv_conv_table[] = {
 	NICK
 };
 
+static int allcsv_conv_table[] = {
+	NAME,
+	EMAIL,
+	ADDRESS,
+	ADDRESS2,
+	CITY,
+	STATE,
+	ZIP,
+	COUNTRY,
+	PHONE,
+	WORKPHONE,
+	FAX,
+	MOBILEPHONE,
+	NICK,
+	URL,
+	NOTES,
+	CUSTOM1,
+	CUSTOM2,
+	CUSTOM3,
+	CUSTOM4,
+	CUSTOM5,
+};
+
 static void
 csv_convert_emails(char *s)
 {
@@ -1108,6 +1135,25 @@ csv_store_field(list_item item, char *s, int field)
 	if(field < (int)(sizeof(csv_conv_table) / sizeof(*csv_conv_table))
 			&& csv_conv_table[field] >= 0) {
 		item[csv_conv_table[field]] = newstr;
+	} else {
+		my_free(newstr);
+	}
+}
+
+static void
+allcsv_store_field(list_item item, char *s, int field)
+{
+	char *newstr = NULL;
+
+	if(!s || !*s)
+		return;
+
+	if( !(newstr = csv_remove_quotes(s)) )
+		return;
+
+	if(field < (int)(sizeof(allcsv_conv_table) / sizeof(*allcsv_conv_table))
+			&& allcsv_conv_table[field] >= 0) {
+		item[allcsv_conv_table[field]] = newstr;
 	} else {
 		my_free(newstr);
 	}
@@ -1178,6 +1224,42 @@ csv_parse_line(char *line)
 	add_item2database(item);
 }
 
+static void
+allcsv_parse_line(char *line)
+{
+	char *p, *start;
+	int field;
+	bool in_quote = FALSE;
+	list_item item;
+
+	memset(item, 0, sizeof(item));
+
+	for(p = start = line, field = 0; *p; p++) {
+		if(in_quote) {
+			if(csv_is_valid_quote_end(p))
+				in_quote = FALSE;
+		} else {
+			if ( (((p - start) / sizeof (char)) < 2 ) &&
+				csv_is_valid_quote_start(p) )
+				in_quote = TRUE;
+		}
+
+		if( *p == ',' && !in_quote) {
+			*p = 0;
+			allcsv_store_field(item, start, field);
+			field++;
+			start = p + 1;
+		}
+	}
+	/*
+	 * store last field
+	 */
+	allcsv_store_field(item, start, field);
+
+	csv_convert_emails(item[EMAIL]);
+	add_item2database(item);
+}
+
 
 static int
 csv_parse_file(FILE *in)
@@ -1189,6 +1271,23 @@ csv_parse_file(FILE *in)
 
 		if(line && *line && *line != CSV_COMMENT_CHAR)
 			csv_parse_line(line);
+
+		my_free(line);
+	}
+
+	return 0;
+}
+
+static int
+allcsv_parse_file(FILE *in)
+{
+	char *line = NULL;
+
+	while(!feof(in)) {
+		line = getaline(in);
+
+		if(line && *line && *line != CSV_COMMENT_CHAR)
+			allcsv_parse_line(line);
 
 		my_free(line);
 	}
@@ -1254,6 +1353,60 @@ csv_export_database(FILE *out, struct db_enumerator e)
 	};
 
 	csv_export_common(out, e, csv_export_fields, NULL);
+	
+	return 0;
+}
+
+static int
+allcsv_export_database(FILE *out, struct db_enumerator e)
+{
+	int allcsv_export_fields[] = {
+		NAME,
+		EMAIL,
+		ADDRESS,
+		ADDRESS2,
+		CITY,
+		STATE,
+		ZIP,
+		COUNTRY,
+		PHONE,
+		WORKPHONE,
+		FAX,
+		MOBILEPHONE,
+		NICK,
+		URL,
+		NOTES,
+		CUSTOM1,
+		CUSTOM2,
+		CUSTOM3,
+		CUSTOM4,
+		CUSTOM5,
+		CSV_LAST
+	};
+
+	fprintf(out, "#");
+	fprintf(out, "\"NAME\",");
+	fprintf(out, "\"EMAIL\",");
+	fprintf(out, "\"ADDRESS\",");
+	fprintf(out, "\"ADDRESS2\",");
+	fprintf(out, "\"CITY\",");
+	fprintf(out, "\"STATE\",");
+	fprintf(out, "\"ZIP\",");
+	fprintf(out, "\"COUNTRY\",");
+	fprintf(out, "\"PHONE\",");
+	fprintf(out, "\"WORKPHONE\",");
+	fprintf(out, "\"FAX\",");
+	fprintf(out, "\"MOBILEPHONE\",");
+	fprintf(out, "\"NICK\",");
+	fprintf(out, "\"URL\",");
+	fprintf(out, "\"NOTES\",");
+	fprintf(out, "\"CUSTOM1\",");
+	fprintf(out, "\"CUSTOM2\",");
+	fprintf(out, "\"CUSTOM3\",");
+	fprintf(out, "\"CUSTOM4\",");
+	fprintf(out, "\"CUSTOM5\"\n");
+
+	csv_export_common(out, e, allcsv_export_fields, NULL);
 	
 	return 0;
 }
