@@ -269,13 +269,13 @@ highlight_line(WINDOW *win, int line)
 int
 selected_items()
 {
-	int i, a=0;
+	int i, n = 0;
 
 	for(i = 0; i < items; i++)
 		if(selected[i])
-			a++;
+			n++;
 
-	return a;
+	return n;
 }
 
 void

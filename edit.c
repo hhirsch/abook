@@ -242,7 +242,9 @@ edit_emails(char c, int item)
 	split_emailstr(item, emails);
 
 	if(change_field("E-mail: ", &field)) {
+#ifdef DEBUG
 		fprintf(stderr, "change_field = TRUE\n");
+#endif
 		return; /* user cancelled ( C-g ) */
 	}
 	if(field) {

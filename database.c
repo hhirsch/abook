@@ -152,10 +152,9 @@ write_database(FILE *out)
 	for( i = 0; i < items; i++ ) {
 		fprintf(out, "[%d]\n", i);
 		for(j=0; j<ITEM_FIELDS; j++) {
-			if( database[i][j] != NULL )
-				if( *database[i][j] )
-					fprintf(out, "%s=%s\n",
-						abook_fields[j].key, database[i][j]);
+			if( database[i][j] != NULL && *database[i][j] )
+				fprintf(out, "%s=%s\n",
+					abook_fields[j].key, database[i][j]);
 		}
 		fputc('\n', out);
 	}
@@ -450,8 +449,7 @@ find(int next)
 void
 print_number_of_items()
 {
-	char *str =
-		mkstr("     |%3d/%3d", selected_items(), items);
+	char *str = mkstr("     " "|%3d/%3d", selected_items(), items);
 
 	mvaddstr(0, COLS-strlen(str), str);
 
