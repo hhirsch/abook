@@ -6,3 +6,6 @@ known bugs in abook
 
 * mutt / elm / pine export filters allow to create a file with duplicate
   aliases
+
+misc:
+* cursor dissappears in some cases with abook_readline() on Solaris
