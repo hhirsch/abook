@@ -40,7 +40,7 @@ After this you can make queries from mutt using the query command ( Q ).
 
 NOTES
 
-If your language specific characters doesn't work correctly make sure
+If your language specific characters don't work correctly make sure
 that your locale configuration has been done properly. (On Linux you
 must set at least LC_CTYPE environment variable)
 
