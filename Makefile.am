@@ -3,10 +3,10 @@ bin_PROGRAMS = abook
 
 abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		options.c edit.c ldif.c ui.c getname.c \
-		getopt.c getopt1.c abook_rl.c \
+		getopt.c getopt1.c abook_rl.c mbswidth.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
-		getopt.h abook_rl.h
+		getopt.h abook_rl.h mbswidth.h
 
 EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc abook.spec
 

@@ -33,6 +33,7 @@
 
 #ifdef HANDLE_MULTIBYTE
 #	include <wchar.h>
+#	include <mbswidth.h>
 #endif
 
 #define RL_READLINE_NAME	"Abook"
@@ -53,27 +54,7 @@ rl_refresh()
 static int
 rline_calc_point()
 {
-	char *p;
-	int ret = 0;
-	
-	mbtowc(NULL, NULL, 0);
-	for(p = rl_line_buffer;(p - rl_line_buffer) < rl_point;) {
-		int a, l;
-		wchar_t wc;
-		
-		if((a = mbtowc(&wc, p, MB_CUR_MAX)) == 0)
-			break;
-		else if (a == -1)
-			return rl_point; /* fall back */
-		else
-			p += a;
-
-		l = wcwidth(wc);
-		if(l > 0)
-			ret += l;
-	}
-
-	return ret;
+	return (int)mbsnwidth(rl_line_buffer, rl_point, 0);
 }
 #endif
 

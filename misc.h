@@ -16,6 +16,10 @@ char		*my_getcwd();
 
 char		*getaline(FILE *f);
 
+int		strwidth(const char *s);
+int		bytes2width(const char *s, int width);
+
+
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif

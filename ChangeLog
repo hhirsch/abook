@@ -2,6 +2,8 @@
  - five custom fields added
  - experimental wide character support
  - fixed a crash bug in mutt filter
+ - fixed errors in configure.in (especially snprintf-functions were incorrectly
+   detected)
 
 0.5.1
  - sort by field command

@@ -128,21 +128,23 @@ print_list_line(int i, int line, int highlight)
 	if(selected[i])
 		mvwaddch(list, line, 0, '*' );
 	
-	mvwaddnstr(list, line, NAMEPOS, database[i][NAME], NAMELEN);
+	mvwaddnstr(list, line, NAMEPOS, database[i][NAME],
+		bytes2width(database[i][NAME], NAMELEN));
 	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS))
 		mvwaddnstr(list, line, EMAILPOS, database[i][EMAIL],
-				real_emaillen);
+				bytes2width(database[i][EMAIL], real_emaillen));
 	else {
 		get_first_email(tmp, i);
-		mvwaddnstr(list, line, EMAILPOS, tmp, real_emaillen);
+		mvwaddnstr(list, line, EMAILPOS, tmp,
+			bytes2width(tmp, real_emaillen));
 	}
 
 	if(extra < 0 || !database[i][extra])
 		extra = extra_alternative;
 	if(extra >= 0)
 		mvwaddnstr(list, line, EXTRAPOS,
-				safe_str(database[i][extra]),
-				EXTRALEN);
+			safe_str(database[i][extra]),
+			bytes2width(safe_str(database[i][extra]), EXTRALEN));
 
 	scrollok(list, TRUE);
 	if(highlight)
@@ -215,7 +217,6 @@ page_down()
 
 	refresh_list();
 }
-
 
 void
 select_none()

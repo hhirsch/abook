@@ -118,10 +118,10 @@ bin_PROGRAMS = abook
 
 abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		options.c edit.c ldif.c ui.c getname.c \
-		getopt.c getopt1.c abook_rl.c \
+		getopt.c getopt1.c abook_rl.c mbswidth.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
-		getopt.h abook_rl.h
+		getopt.h abook_rl.h mbswidth.h
 
 
 EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc abook.spec
@@ -136,7 +136,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_abook_OBJECTS = abook.$(OBJEXT) database.$(OBJEXT) filter.$(OBJEXT) \
 	list.$(OBJEXT) misc.$(OBJEXT) options.$(OBJEXT) edit.$(OBJEXT) \
 	ldif.$(OBJEXT) ui.$(OBJEXT) getname.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT) abook_rl.$(OBJEXT)
+	getopt1.$(OBJEXT) abook_rl.$(OBJEXT) mbswidth.$(OBJEXT)
 abook_OBJECTS = $(am_abook_OBJECTS)
 abook_LDADD = $(LDADD)
 abook_DEPENDENCIES =
@@ -150,8 +150,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/filter.Po ./$(DEPDIR)/getname.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/getopt.Po ./$(DEPDIR)/getopt1.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/ldif.Po ./$(DEPDIR)/list.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/misc.Po ./$(DEPDIR)/options.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/ui.Po
+@AMDEP_TRUE@	./$(DEPDIR)/mbswidth.Po ./$(DEPDIR)/misc.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/options.Po ./$(DEPDIR)/ui.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -248,6 +248,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldif.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbswidth.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui.Po@am__quote@

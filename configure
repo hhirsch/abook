@@ -850,7 +850,6 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-dependency-tracking Speeds up one-time builds
   --enable-dependency-tracking  Do not reject slow dependency extractors
-  --enable-widec          Enable wide character support (experimental)
   --enable-debug          Enable debugging support
 
 Optional Packages:
@@ -1675,26 +1674,6 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 
           ac_config_headers="$ac_config_headers config.h"
 
-
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_SNPRINTF 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_VSNPRINTF 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STDARG_H 0
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_NCURSES 0
-_ACEOF
 
 
 # Make sure we can run config.sub.
@@ -4162,7 +4141,8 @@ echo "${ECHO_T}$ac_cv_header_stdarg_h" >&6
 
 fi
 if test $ac_cv_header_stdarg_h = yes; then
-  cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_STDARG_H 1
 _ACEOF
 
@@ -4448,7 +4428,13 @@ echo "${ECHO_T}$ac_cv_header_wchar_h" >&6
 
 fi
 if test $ac_cv_header_wchar_h = yes; then
-  ac_have_wchar_h=yes
+
+	ac_have_wchar_h=yes
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_WCHAR_H 1
+_ACEOF
+
 else
   ac_have_wchar_h=no
 fi
@@ -4456,7 +4442,9 @@ fi
 
 
 
-for ac_func in mbtowc wcwidth
+
+
+for ac_func in mbtowc wcwidth mbrtowc mbsinit
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -4541,6 +4529,69 @@ else
 fi
 done
 
+echo "$as_me:$LINENO: checking whether wcwidth is declared" >&5
+echo $ECHO_N "checking whether wcwidth is declared... $ECHO_C" >&6
+if test "${ac_cv_have_decl_wcwidth+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+#ifndef wcwidth
+  char *p = (char *) wcwidth;
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_have_decl_wcwidth=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_have_decl_wcwidth=no
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_have_decl_wcwidth" >&5
+echo "${ECHO_T}$ac_cv_have_decl_wcwidth" >&6
+if test $ac_cv_have_decl_wcwidth = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_WCWIDTH 1
+_ACEOF
+
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_WCWIDTH 0
+_ACEOF
+
+
+fi
+
+
 echo "$as_me:$LINENO: checking for wchar_t" >&5
 echo $ECHO_N "checking for wchar_t... $ECHO_C" >&6
 if test "${ac_cv_type_wchar_t+set}" = set; then
@@ -4601,26 +4652,6 @@ else
 	ac_widec_possible=no
 fi
 
-# Check whether --enable-widec or --disable-widec was given.
-if test "${enable_widec+set}" = set; then
-  enableval="$enable_widec"
-  case "${enableval}" in
-	yes) ac_widec_support=true ;;
-	no) ac_widec_support=false ;;
-	*) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-widec" >&5
-echo "$as_me: error: bad value ${enableval} for --enable-widec" >&2;}
-   { (exit 1); exit 1; }; } ;;
-	esac
-else
-  ac_widec_support=false
-fi;
-
-if test x$ac_widec_support = xtrue -a x$ac_widec_possible != xyes; then
-	{ { echo "$as_me:$LINENO: error: Wide character support is not possible due to missing wide character functions or wchar.h" >&5
-echo "$as_me: error: Wide character support is not possible due to missing wide character functions or wchar.h" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
 
 abook_cv_curses=/usr
 
@@ -4636,8 +4667,7 @@ if test "${with_curses+set}" = set; then
 	fi
 fi;
 
-if test x$ac_widec_support = xtrue; then
-	echo "$as_me:$LINENO: checking for initscr in -lncursesw" >&5
+echo "$as_me:$LINENO: checking for initscr in -lncursesw" >&5
 echo $ECHO_N "checking for initscr in -lncursesw... $ECHO_C" >&6
 if test "${ac_cv_lib_ncursesw_initscr+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4693,9 +4723,9 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_ncursesw_initscr" >&5
 echo "${ECHO_T}$ac_cv_lib_ncursesw_initscr" >&6
 if test $ac_cv_lib_ncursesw_initscr = yes; then
   LIBS="$LIBS -lncursesw"
-		if test x$abook_cv_curses = x/usr -a -d /usr/include/ncursesw; then
-			CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
-		fi
+	if test x$abook_cv_curses = x/usr -a -d /usr/include/ncursesw; then
+		CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
+	fi
 
 for ac_header in ncurses.h
 do
@@ -4840,12 +4870,7 @@ done
 
 else
 
-		{ { echo "$as_me:$LINENO: error: \"Wide character support is not possible due to missing ncursesw library. Please install it or disable wide character support\"" >&5
-echo "$as_me: error: \"Wide character support is not possible due to missing ncursesw library. Please install it or disable wide character support\"" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-else
+	ac_widec_possible=no
 	echo "$as_me:$LINENO: checking for initscr in -lncurses" >&5
 echo $ECHO_N "checking for initscr in -lncurses... $ECHO_C" >&6
 if test "${ac_cv_lib_ncurses_initscr+set}" = set; then
@@ -5677,7 +5702,9 @@ fi
 
 fi
 
+
 fi
+
 
 
 
@@ -6134,7 +6161,7 @@ echo "$as_me: error: *** readline library not found or it doesn't support histor
 fi
 
 
-if test x$ac_widec_support = xtrue; then
+if test x$ac_widec_possible = xyes; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HANDLE_MULTIBYTE 1
@@ -6227,9 +6254,14 @@ fi
 done
 
 
-echo "$as_me:$LINENO: checking for snprintf" >&5
-echo $ECHO_N "checking for snprintf... $ECHO_C" >&6
-if test "${ac_cv_func_snprintf+set}" = set; then
+
+
+for ac_func in snprintf vsnprintf
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -6240,7 +6272,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 /* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char snprintf (); below.
+    which can conflict with char $ac_func (); below.
     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
     <limits.h> exists even on freestanding compilers.  */
 #ifdef __STDC__
@@ -6255,14 +6287,14 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char snprintf ();
+char $ac_func ();
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined (__stub_snprintf) || defined (__stub___snprintf)
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
 choke me
 #else
-char (*f) () = snprintf;
+char (*f) () = $ac_func;
 #endif
 #ifdef __cplusplus
 }
@@ -6271,7 +6303,7 @@ char (*f) () = snprintf;
 int
 main ()
 {
-return f != snprintf;
+return f != $ac_func;
   ;
   return 0;
 }
@@ -6288,102 +6320,24 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_func_snprintf=yes
+  eval "$as_ac_var=yes"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_func_snprintf=no
+eval "$as_ac_var=no"
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 fi
-echo "$as_me:$LINENO: result: $ac_cv_func_snprintf" >&5
-echo "${ECHO_T}$ac_cv_func_snprintf" >&6
-if test $ac_cv_func_snprintf = yes; then
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_SNPRINTF 1
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
 fi
-
-echo "$as_me:$LINENO: checking for vsnprintf" >&5
-echo $ECHO_N "checking for vsnprintf... $ECHO_C" >&6
-if test "${ac_cv_func_vsnprintf+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char vsnprintf (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char vsnprintf ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_vsnprintf) || defined (__stub___vsnprintf)
-choke me
-#else
-char (*f) () = vsnprintf;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != vsnprintf;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_vsnprintf=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_vsnprintf=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_vsnprintf" >&5
-echo "${ECHO_T}$ac_cv_func_vsnprintf" >&6
-if test $ac_cv_func_vsnprintf = yes; then
-  cat >>confdefs.h <<\_ACEOF
-#define HAVE_VSNPRINTF 1
-_ACEOF
-
-fi
+done
 
 
 # Check whether --enable-debug or --disable-debug was given.

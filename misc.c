@@ -19,6 +19,10 @@
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
+#ifdef HANDLE_MULTIBYTE
+#	include <wchar.h>
+#	include "mbswidth.h"
+#endif
 #include "misc.h"
 #ifdef ABOOK_SRC
 #	include "abook.h"
@@ -263,6 +267,28 @@ getaline(FILE *f)
 	}
 
 	return buf;
+}
+
+int
+strwidth(const char *s)
+{
+	assert(s);
+#ifdef HANDLE_MULTIBYTE
+	return (int)mbswidth(s, 0);
+#else
+	return strlen(s);
+#endif
+}
+
+int
+bytes2width(const char *s, int width)
+{
+	assert(s);
+#ifdef HANDLE_MULTIBYTE
+	return mbsnbytes(s, strlen(s), width, 0);
+#else
+	return width;
+#endif
 }
 
 /**************************************************************
