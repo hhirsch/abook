@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "abook_curses.h"
 #include "ui.h"
 #include "abook.h"
@@ -398,6 +399,7 @@ edit_loop(int item)
 		case 'a': tab = TAB_ADDRESS; break;
 		case 'p': tab = TAB_PHONE; break;
 		case 'o': tab = TAB_OTHER; break;
+		case 'C': tab = TAB_CUSTOM; break;
 		case 'h':
 		case KEY_LEFT: tab = tab == 0 ? MAX_TAB : tab - 1;
 			       break;
