@@ -295,6 +295,10 @@ void
 launch_mutt(int item)
 {
 	char *cmd = NULL, *mailstr = NULL;
+	char *mutt_command = options_get_str("mutt_command");
+
+	if(mutt_command == NULL || !*mutt_command)
+		return;
 
 	if( is_valid_item(item) )
 		mailstr = make_mailstr(item);
@@ -310,7 +314,7 @@ launch_mutt(int item)
 		}
 	}
 
-	cmd = strconcat(options_get_str("mutt_command"), " \'", mailstr,
+	cmd = strconcat(mutt_command, " \'", mailstr,
 				"\'", NULL);
 	free(mailstr);
 #ifdef DEBUG
