@@ -168,7 +168,7 @@ editor_print_data(int tab, int item)
 			continue;
 		}
 				
-		if(i) {
+		if(j > 1) {
 			getyx(editw, y, x); y++;
 		} else
 			y = start_y;
