@@ -47,4 +47,10 @@ A: Export to palmcsv format, and import from there. Several GUI
    not change or delete them.
    (This entry was contributed by Jeff Covey)
 
+Q: Can I use abook in UTF-8 terminal emulator?
+
+A: Abook itself doesn't currently support UTF-8. You can use luit
+   (http://www.pps.jussieu.fr/~jch/software/luit/) or screen as a converter.
+   Luit comes also with recent versions of XFree86.
+
 last update: $Date$
