@@ -414,8 +414,8 @@ void
 find(int next)
 {
 	int i;
-	static char findstr[81];
-	char tmp[81];
+	static char findstr[MAX_FIELD_LEN];
+	char tmp[MAX_FIELD_LEN];
 
 #ifdef DEBUG
 	fprintf(stderr, "find(): findstr = |%s|\n", findstr);
@@ -427,7 +427,7 @@ find(int next)
 	} else {
 		clear_statusline();
 		statusline_addstr("/");
-		statusline_getnstr(findstr, 67, 0);
+		statusline_getnstr(findstr, MAX_FIELD_LEN - 1, 0);
 		strupper(findstr);
 		clear_statusline();
 	}
@@ -437,7 +437,7 @@ find(int next)
 
 	for( i = (curitem < LAST_ITEM) && next ? curitem+1 : curitem;
 			i < items; i++ ) {
-		strcpy(tmp, database[i][NAME]);
+		strncpy(tmp, database[i][NAME], MAX_FIELD_LEN - 1);
 		if( strstr(strupper(tmp), findstr) != NULL ) {
 			curitem = i;
 			refresh_list();
