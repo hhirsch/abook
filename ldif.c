@@ -1,6 +1,6 @@
 
 /*
- * adapted to use with abook by JH <jheinonen@bigfoot.com>
+ * adapted to use with abook by JH <jheinonen@users.sourceforge.net>
  */
 
 /*

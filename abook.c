@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * by JH <jheinonen@bigfoot.com>
+ * by JH <jheinonen@users.sourceforge.net>
  *
  * Copyright (C) Jaakko Heinonen
  */
