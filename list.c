@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "abook.h"
 #include "ui.h"
 #include "database.h"
@@ -33,13 +34,34 @@ extern struct abook_field abook_fields[];
 
 WINDOW *list = NULL;
 
+static int
+init_extra_field(char *option_name)
+{
+	int i, ret = -1;
+	char *option_str;
+
+	assert(option_name != NULL);
+	
+	option_str = options_get_str(option_name);
+
+	if(option_str && *option_str) {
+		for(i = 0; i < ITEM_FIELDS; i++) {
+			if(!strcasecmp(option_str, abook_fields[i].key)) {
+				ret = i;
+				break;
+			}
+		}
+		if(ret < MIN_EXTRA_COLUMN || ret > MAX_EXTRA_COLUMN) {
+			ret = -1;
+		}
+	}
+
+	return ret;
+}
+
 void
 init_list()
 {
-	int i;
-	char *e_column_str = options_get_str("extra_column");
-	char *e_alternative_str = options_get_str("extra_alternative");
-
 	list = newwin(LIST_LINES, LIST_COLS, LIST_TOP, 0);
 	scrollok(list, TRUE);
 
@@ -47,33 +69,8 @@ init_list()
 	 * init extra_column and extra alternative
 	 */
 
-	if(e_column_str && *e_column_str) {
-		for(i = 0; i < ITEM_FIELDS; i++) {
-			if(!strcasecmp(e_column_str, abook_fields[i].key)) {
-				extra_column = i;
-				break;
-			}
-		}
-		if(extra_column < MIN_EXTRA_COLUMN ||
-				extra_column > MAX_EXTRA_COLUMN) {
-			extra_column = -1;
-		}
-	}
-
-	if(e_alternative_str && *e_alternative_str) {
-		for(i = 0; i < ITEM_FIELDS; i++) {
-			if(!strcasecmp(e_alternative_str,
-						abook_fields[i].key)) {
-				extra_alternative = i;
-				break;
-			}
-		}
-		if(extra_alternative < MIN_EXTRA_COLUMN ||
-				extra_alternative > MAX_EXTRA_COLUMN) {
-			extra_alternative = -1;
-		}
-	}
-
+	extra_column = init_extra_field("extra_column");
+	extra_alternative = init_extra_field("extra_alternative");
 }
 
 void
