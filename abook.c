@@ -456,22 +456,25 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 
 	switch( import(srcformat, srcfile) ) {
 		case -1:
-			printf("input format %s not supported\n", srcformat);
+			fprintf(stderr,
+				"input format %s not supported\n", srcformat);
 			ret = 1;
 		case 1:
-			printf("cannot read file %s\n", srcfile);
+			fprintf(stderr, "cannot read file %s\n", srcfile);
 			ret = 1;
 	}
 
 	if(!ret)
 		switch( export(dstformat, dstfile) ) {
 			case -1:
-				printf("output format %s not supported\n",
-						dstformat);
+				fprintf(stderr,
+					"output format %s not supported\n",
+					dstformat);
 				ret = 1;
 				break;
 			case 1:
-				printf("cannot write file %s\n", dstfile);
+				fprintf(stderr,
+					"cannot write file %s\n", dstfile);
 				ret = 1;
 				break;
 		}
