@@ -51,7 +51,7 @@ NULL
 static char *editorhelp[] = {
 
 "\n",
-"	a,c,p,o / left,right	change tab\n",
+"	a,c,p,o / arrows / h,l	change tab\n",
 "\n",
 "	1 - 5			edit fields\n",
 "\n",

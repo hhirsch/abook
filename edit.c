@@ -394,8 +394,10 @@ edit_loop(int item)
 		case 'a': tab = TAB_ADDRESS; break;
 		case 'p': tab = TAB_PHONE; break;
 		case 'o': tab = TAB_OTHER; break;
+		case 'h':
 		case KEY_LEFT: tab = tab == 0 ? MAX_TAB : tab - 1;
 			       break;
+		case 'l':
 		case KEY_RIGHT: tab = tab == MAX_TAB ? 0 : tab + 1;
 				break;
 		case KEY_UP:
