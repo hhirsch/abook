@@ -38,10 +38,10 @@ int		strncasecmp (const char *, const char *, size_t);
 #define hide_cursor()	curs_set(0)
 #define show_cursor()	curs_set(1)
 
-#define safe_atoi(X)    (X == NULL) ? 0 : atoi(X)
+#define safe_atoi(X)    ((X == NULL) ? 0 : atoi(X))
 #define my_free(X)	do {free(X); X=NULL;} while(0)
-#define safe_str(X)	X == NULL ? "" : X
-#define safe_strdup(X)	(X == NULL) ? NULL : strdup(X)
+#define safe_str(X)	((X == NULL) ? "" : X)
+#define safe_strdup(X)	((X == NULL) ? NULL : strdup(X))
 
 #ifndef min
 #       define min(x,y) (((x)<(y)) ? (x):(y))
