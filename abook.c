@@ -578,7 +578,6 @@ add_email(int quiet)
 		line = getaline(stdin);
 		if(line && !strncasecmp("From:", line, 5) ) {
 			getname(line, &name, &email);
-			my_free(line);
 			add_email_count += add_email_add_item(quiet,
 					name, email);
 			my_free(name);
