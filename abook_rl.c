@@ -77,10 +77,11 @@ abook_rl_init(int use_completion)
 	rl_completion_display_matches_hook = rline_compdisp;
 	
 	rl_unbind_function_in_map(rl_clear_screen, rl_get_keymap());
-
-	if(use_completion)
+	rl_unbind_function_in_map(rl_reverse_search_history, rl_get_keymap());
+	
+	if(use_completion) {
 		rl_bind_key('\t', rl_menu_complete);
-	else {
+	} else {
 		rl_unbind_function_in_map(rl_complete, rl_get_keymap());
 		rl_unbind_function_in_map(rl_menu_complete, rl_get_keymap());
 	}
