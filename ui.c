@@ -63,7 +63,7 @@ static void
 init_windows()
 {
 	top = newwin(LIST_TOP - 1, COLS, 0, 0);
-	
+
 	bottom = newwin(LINES - LIST_BOTTOM, COLS, LIST_BOTTOM, 0);
 }
 
@@ -184,15 +184,15 @@ void
 headerline(char *str)
 {
 	werase(top);
-	
+
 	mvwhline(top, 1, 0, UI_HLINE_CHAR, COLS);
-	
+
 	mvwprintw(top, 0, 0, "%s | %s", PACKAGE " " VERSION, str);
 
 	refresh();
 	wrefresh(top);
 }
-		
+
 
 void
 refresh_screen()
@@ -204,7 +204,7 @@ refresh_screen()
 	}
 #endif
 	clear();
-	
+
 	refresh_statusline();
 	headerline(MAIN_HELPLINE);
 	list_headerline();
@@ -213,16 +213,20 @@ refresh_screen()
 }
 
 
-void
+int
 statusline_msg(char *msg)
 {
+	int c;
+	
 	clear_statusline();
 	statusline_addstr(msg);
-	getch();
+	c = getch();
 #ifdef DEBUG
 	fprintf(stderr, "statusline_msg(\"%s\")\n", msg);
 #endif
 	clear_statusline();
+
+	return c;
 }
 
 void
@@ -263,13 +267,13 @@ statusline_getnstr(char *str, int n, int use_filesel)
 
 	getyx(bottom, y, x);
 	wmove(bottom, 1, x);
-	
+
 	buf = wenter_string(bottom, n,
 			(use_filesel ? ESTR_USE_FILESEL:0) | ESTR_DONT_WRAP);
 
 	if(n < 0)
 		return buf;
-	
+
 	if(buf == NULL)
 		str[0] = 0;
 	else
@@ -287,7 +291,7 @@ statusline_ask_boolean(char *msg, int def)
 {
 	int ret;
 	char *msg2 = strconcat(msg,  def ? " (Y/n)?" : " (y/N)?", NULL);
-			
+
 	statusline_addstr(msg2);
 
 	free(msg2);
@@ -321,7 +325,7 @@ refresh_statusline()
 	refresh();
 	wrefresh(bottom);
 }
-	
+
 
 char *
 ask_filename(char *prompt, int flags)
@@ -329,7 +333,7 @@ ask_filename(char *prompt, int flags)
 	char *buf = NULL;
 
 	clear_statusline();
-	
+
 	statusline_addstr(prompt);
 	buf = statusline_getnstr(NULL, -1, flags);
 
@@ -373,7 +377,7 @@ display_help(int help)
 	helpw = newwin(LINES - 5, COLS - 6, 2, 3);
 	erase();
 	headerline("help");
-	
+
 	for( i = 0; tbl[i] != NULL; i++) {
 		waddstr(helpw, tbl[i]);
 		if( ( !( (i+1) % (LINES-8) ) ) ||
@@ -381,7 +385,9 @@ display_help(int help)
 			refresh();
 			wrefresh(helpw);
 			refresh_statusline();
-			statusline_msg("Press any key to continue...");
+			if(statusline_msg("Press any key to continue...")
+					== 'q')
+				break;
 			wclear(helpw);
 		}
 	}

@@ -23,8 +23,8 @@ int		strncasecmp (const char *, const char *, size_t);
 #define MIN_COLS	70	
 
 #define DEFAULT_UMASK	066
-#define DIR_IN_HOME	".abook.dev"
-#define DATAFILE	"addressbook.0"
+#define DIR_IN_HOME	".abook"
+#define DATAFILE	"addressbook"
 
 /*
  * some "abookwide" useful macros

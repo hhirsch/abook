@@ -68,7 +68,7 @@ check_abook_directory()
 {
 	struct stat s;
 	char *dir;
-	
+
 	assert(!is_ui_initialized());
 
 	if(alternative_datafile)
@@ -76,7 +76,7 @@ check_abook_directory()
 
 	dir = strconcat(getenv("HOME"), "/" DIR_IN_HOME, NULL);
 	assert(dir != NULL);
-	
+
 	if(stat(dir, &s) == -1) {
 		if(errno != ENOENT) {
 			perror(dir);
@@ -107,10 +107,10 @@ init_abook()
 
 	signal(SIGKILL, quit_abook_sig);
 	signal(SIGTERM, quit_abook_sig);
-	
+
 	if( init_ui() )
 		exit(1);
-	
+
 	umask(DEFAULT_UMASK);
 
 	if(!datafile_writeable()) {
@@ -144,7 +144,7 @@ quit_abook()
 	close_database();
 
 	close_ui();
-	
+
 	exit(0);
 }
 
@@ -160,13 +160,13 @@ main(int argc, char **argv)
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LOCALE_H)
 	setlocale(LC_ALL, "" );
 #endif
-		
+
 	parse_command_line(argc, argv);
-	
+
 	init_abook();
 
 	get_commands();	
-	
+
 	quit_abook();
 
 	return 0;
@@ -230,11 +230,11 @@ void
 set_filename(char **var, char *path)
 {
 	char *cwd;
-	
+
 	assert(var != NULL);
 	assert(*var == NULL); /* or else we probably leak memory */
 	assert(path != NULL);
-	
+
 	if(*path == '/') {
 		*var = strdup(path);
 		return;
@@ -416,7 +416,7 @@ muttq_print_item(FILE *file, int item)
 	int i;
 
 	split_emailstr(item, emails);
-	
+
 	for(i = 0; i < (options_get_int("mutt_return_all_emails") ?
 			MAX_EMAILS : 1) ; i++)
 		if( *emails[i] )
@@ -459,7 +459,7 @@ init_mutt_query()
 {
 	set_filenames();
 	init_options();
-	
+
 	if( load_database(datafile) ) {
 		printf("Cannot open database\n");
 		quit_mutt_query(1);
@@ -482,7 +482,7 @@ make_mailstr(int item)
 		strdup(name);
 
 	free(name);
-	
+
 	return ret;
 }
 
@@ -533,7 +533,7 @@ launch_mutt(int item)
 #endif
 	system(cmd);	
 	free(cmd);
-	
+
 	/*
 	 * we need to make sure that curses settings are correct
 	 */
@@ -603,16 +603,15 @@ FILE *
 abook_fopen (const char *path, const char *mode)
 {	
 	struct stat s;
-	
+
 	if( ! strchr(mode, 'r') )
 		return fopen(path, mode);
-	
+
 	if ( (stat(path, &s)) == -1 )
 		return NULL;
-	
+
 	return S_ISREG(s.st_mode) ? fopen(path, mode) : NULL;
 }
-
 
 
 static void
@@ -703,7 +702,7 @@ init_add_email()
 	atexit(free_filenames);
 	init_options();
 	atexit(close_config);
-	
+
 	/*
 	 * we don't actually care if loading fails or not
 	 */
@@ -755,7 +754,7 @@ add_email(int quiet)
 {
 	char *line;
 	char *name = NULL, *email = NULL;
-	
+
 	init_add_email();
 
 	do {

@@ -14,7 +14,7 @@ int		init_ui();
 void		close_ui();
 void		headerline(char *str);
 void            refresh_screen();
-void            statusline_msg(char *msg);
+int		statusline_msg(char *msg);
 char		*ask_filename(char *prompt, int flags);
 int		statusline_ask_boolean(char *msg, int def);
 void            clear_statusline();

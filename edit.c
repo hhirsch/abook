@@ -120,12 +120,12 @@ print_editor_header(int item)
 {
 	char *header;
 	char email[MAX_EMAIL_LEN];
-	
+
 	if( (header = (char *)malloc(EDITW_COLS)) == NULL )
 		return;
 
 	get_first_email(email, item);
-	
+
 	if( *database[item][EMAIL] )
 		snprintf(header, EDITW_COLS, "%s <%s>",
 				database[item][NAME],
@@ -165,7 +165,7 @@ editor_print_data(int tab, int item)
 			}
 			continue;
 		}
-				
+
 		if(j > 1) {
 			getyx(editw, y, x); y++;
 		} else
@@ -203,10 +203,10 @@ change_field(char *msg, char **field)
 	char tmp[MAX_FIELD_LEN];
 	int max_len = MAX_FIELD_LEN;
 	int ret;
-	
+
 	if( !strncmp("E-mail", msg, 6) )
 		max_len = MAX_EMAIL_LEN;
-	
+
 	statusline_addstr(msg);
 	if( (ret = statusline_getnstr( tmp, max_len - 1, 0 ) ? 1:0 ) ) {
 		my_free(*field);
@@ -264,7 +264,7 @@ edit_emails(char c, int item)
 		fix_email_str(emails[c - '2']);
 	} else
 		*emails[c - '2'] = 0;
-	
+
 	my_free(database[item][EMAIL]);
 
 	for(i = 0; i < MAX_EMAILS; i++) {
@@ -361,7 +361,7 @@ edit_loop(int item)
 {
 	static int tab = 0; /* first tab */
 	int c;
-	
+
 	werase(editw);
 	headerline(EDITOR_HELPLINE);
 	refresh_statusline();
