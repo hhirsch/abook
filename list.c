@@ -40,8 +40,6 @@ init_extra_field(enum str_opts option)
 	int i, ret = -1;
 	char *option_str;
 
-	assert(option_name != NULL);
-	
 	option_str = opt_get_str(option);
 
 	if(option_str && *option_str) {
