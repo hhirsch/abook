@@ -48,7 +48,7 @@ dnl --------------------------
 
 AC_LIB_READLINE
 
-if test x$ac_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
+if test x$ac_cv_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
 	AC_MSG_ERROR([*** readline library not found or it doesn't support history ***])
 fi
 
