@@ -19,13 +19,14 @@ Linux (Debian GNU/Linux 2.1/2.2, RedHat 6.x)
 Solaris 2.4
 Solaris 2.5
 Solaris 2.6
-FreeBSD 3.3 (newer versions should work)
+FreeBSD 3.3 (newer versions should be OK)
 OpenBSD
 NetBSD (reportedly requires ncurses to work properly)
 AIX 3.2.5
 HPUX
 Irix 6.5
 DEC alpha ?
+GNU/Hurd
 
 INSTALLATION
 
