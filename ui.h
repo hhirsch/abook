@@ -38,5 +38,4 @@ void		ui_open_datafile();
 #define UI_HLINE_CHAR		options_get_int("use_ascii_only") ? \
 					'-' : ACS_HLINE
 
-
 #endif

@@ -356,8 +356,12 @@ filesel_highlight_line(WINDOW *win, int line)
 static void
 filesel_print_list_line(int i, int line)
 {
-	if( lst[i].type == FLSL_TYPE_DIR )
+	if( lst[i].type == FLSL_TYPE_DIR ) {
+		mvwaddch(filesel_list, line, 3, 'd');
+#ifdef A_BOLD
 		wattron(filesel_list, A_BOLD);
+#endif
+	}
 	
 	mvwaddnstr(filesel_list, line, 5, lst[i].filename, COLS - 5);
 }
