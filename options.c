@@ -153,5 +153,5 @@ default_options()
 
 	options_add_key("address_style", "eu");
 
-	options_add_key("use_ascii_only", "true");
+	options_add_key("use_ascii_only", "false");
 }
