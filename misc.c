@@ -90,7 +90,7 @@ mkstr (const char *format, ... )
 #ifdef ABOOK_SRC
 		(char *) abook_malloc (size);
 #else
-		(char *) malloc (size);
+		(char *) xmalloc (size);
 #endif
 	
 	assert(format != NULL);
@@ -114,7 +114,7 @@ mkstr (const char *format, ... )
 #ifdef ABOOK_SRC
 			(char *) abook_realloc (buffer, size);
 #else
-			(char *) realloc (buffer, size);
+			(char *) xrealloc (buffer, size);
 #endif
 	}
 }
@@ -142,7 +142,7 @@ strconcat (const char *str, ...)
 #ifdef ABOOK_SRC
 	abook_malloc(l);
 #else
-	malloc(l);
+	xmalloc(l);
 #endif
 	if(concat == NULL)
 		return NULL;
@@ -204,8 +204,8 @@ my_getcwd()
 
 #define INITIAL_SIZE	128
 #ifndef ABOOK_SRC
-#	define abook_malloc(X) malloc(X)
-#	define abook_realloc(X, XX) realloc(X, XX)
+#	define abook_malloc(X) xmalloc(X)
+#	define abook_realloc(X, XX) xrealloc(X, XX)
 #endif
 
 char *
