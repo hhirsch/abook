@@ -28,7 +28,7 @@ enum bool_opts {
 enum int_opts {
 	INT_EMAILPOS,
 	INT_EXTRAPOS,
-	INT_MAX
+	INT_MAXIMUM /* INT_MAX conflicts on some systems */
 };
 
 /*

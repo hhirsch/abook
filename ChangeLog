@@ -1,7 +1,7 @@
 2002xxxx
+ - updated autoconf/automake
  - updated man page
  - pine import filter update
- - updated autoconf/automake
 
 20021008
  - options.c rewritten (new mutt style rc file support)

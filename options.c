@@ -70,13 +70,13 @@ static struct option abook_vars[] = {
 };
 
 static unsigned char bool_opts[BOOL_MAX];
-static int int_opts[INT_MAX];
+static int int_opts[INT_MAXIMUM];
 static char *str_opts[STR_MAX];
 
 static void
 set_int(enum int_opts opt, int value)
 {
-	assert(opt >= 0 && opt < INT_MAX);
+	assert(opt >= 0 && opt < INT_MAXIMUM);
 
 	int_opts[opt] = value;
 }
@@ -103,7 +103,7 @@ set_str(enum str_opts opt, char *value)
 int
 opt_get_int(enum int_opts opt)
 {
-	assert(opt >= 0 && opt < INT_MAX);
+	assert(opt >= 0 && opt < INT_MAXIMUM);
 
 	return int_opts[opt];
 }

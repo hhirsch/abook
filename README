@@ -8,7 +8,8 @@ COMPILATION
 
 To compile abook you must have ncurses developement libraries installed.
 Starting from version 0.4.10 abook is known to compile with the native curses
-library of SUN Solaris and OpenBSD.
+library of SUN Solaris and OpenBSD. Since version 0.5.0 GNU readline is
+required.
 
 If you compile with --enable-debug flag you should redirect standard error
 to somewhere. (for example abook 2> debug or abook 2> /dev/null. Abook has
@@ -63,6 +64,5 @@ See COPYING for details.
 CONTACT AUTHOR
 
 Send bugreports, fixes, wishes etc. to Jaakko Heinonen
-<jheinonen@users.sourceforge.net> or preferably use the mailing list. (See
-http://abook.sourceforge.net/ for details)
+<jheinonen@users.sourceforge.net>
 
