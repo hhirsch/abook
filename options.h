@@ -1,7 +1,7 @@
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-#define RCFILE		".abookrc"
+#define RCFILE		"abookrc.0"
 #define SYSWIDE_RCFILE	"/etc/abookrc"
 
 #include "conff.h"

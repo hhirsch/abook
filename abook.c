@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <errno.h>
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -63,9 +64,45 @@ datafile_writeable()
 }
 
 static void
+check_abook_directory()
+{
+	struct stat s;
+	char *dir;
+	
+	assert(!is_ui_initialized());
+
+	if(alternative_datafile)
+		return;
+
+	dir = strconcat(getenv("HOME"), "/" DIR_IN_HOME, NULL);
+	assert(dir != NULL);
+	
+	if(stat(dir, &s) == -1) {
+		if(errno != ENOENT) {
+			perror(dir);
+                        free(dir);
+                        exit(1);
+		}
+		if(mkdir(dir, 0700) == -1) {
+			printf("Cannot create directory %s\n", dir);
+			perror(dir);
+			free(dir);
+			exit(1);
+		}
+	} else if(!S_ISDIR(s.st_mode)) {
+		printf("%s is not a directory\n", dir);
+		free(dir);
+		exit(1);
+	}
+
+	free(dir);
+}
+
+static void
 init_abook()
 {
 	set_filenames();
+	check_abook_directory();
 	init_options();
 
 	signal(SIGKILL, quit_abook_sig);
@@ -85,7 +122,7 @@ init_abook()
 					"If you continue all changes will "
 				"be lost. Do you want to continue?", FALSE)) {
 			close_config();
-			close_database();
+			/*close_database();*/
 			close_ui();
 			exit(1);
 		}
@@ -154,10 +191,12 @@ set_filenames()
 	}
 
 	if(!datafile)
-		datafile = strconcat(getenv("HOME"), "/" DATAFILE, NULL);
+		datafile = strconcat(getenv("HOME"), "/" DIR_IN_HOME "/"
+				DATAFILE, NULL);
 
 	if(!rcfile)
-		rcfile = strconcat(getenv("HOME"), "/" RCFILE, NULL);
+		rcfile = strconcat(getenv("HOME"), "/" DIR_IN_HOME "/"
+				RCFILE, NULL);
 
 	atexit(free_filenames);
 }

@@ -80,15 +80,17 @@ init_options()
 		default_options();
 }
 
+
+#if 1
+extern int alternative_rcfile;
+#endif
+
 void
 close_config()
 {
-	/*
-	 * we don't save the configuration file since user can specify
-	 * alternative configuration files
-	 */
-#if 0
-	save_options();
+#if 1
+	if(!alternative_rcfile)
+		save_options();
 #endif
 
 	conff_free_nodes(abook_config);
@@ -120,7 +122,7 @@ load_options()
 	}
 }
 
-#if 0
+#if 1
 void
 save_options()
 {
