@@ -1,5 +1,7 @@
 0.5.1
  - minor filter fixes
+ - tried to fix \" quotation problem with mutt import filter
+ - removed obsolete filesel_sort option from abookrc manual page
  - added bbdb2xx translator source to contrib
 
 0.5.0

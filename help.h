@@ -32,6 +32,7 @@ static char *mainhelp[] = {
 "\n",
 "	s		sort database\n",
 "	S		\"surname sort\"\n",
+"	F		sort by field (defined in configuration file)\n",
 "\n",
 "	/		find\n",
 "	\\		find next\n",

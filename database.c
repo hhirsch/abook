@@ -351,21 +351,53 @@ surnamecmp(const void *i1, const void *i2)
 	return ret;
 }
 
+static int sort_field = -1;
+
 static int
 namecmp(const void *i1, const void *i2)
 {
 	list_item a, b;
 
+	assert(sort_field >= 0 && sort_field <= LAST_FIELD);
+
 	itemcpy(a, i1);
 	itemcpy(b, i2);
 	
-	return safe_strcoll( a[NAME], b[NAME] );
+	return safe_strcoll( a[sort_field], b[sort_field] );
+}
+
+static int
+name2field(char *name)
+{
+	int i, ret = -1;
+
+	for(i = 0; i < ITEM_FIELDS; i++) {
+		if(!strcasecmp(name, abook_fields[i].key)) {
+			ret = i;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 void
-sort_database()
+sort_by_field(int field)
 {
 	select_none();
+
+	assert(field <= LAST_FIELD);
+
+	if(field < 0) {
+		field = name2field(opt_get_str(STR_SORT_FIELD));
+		if(field < 0) {
+			statusline_msg("Not valid field value defined "
+				"in configuration");
+			return;
+		}
+	}
+
+	sort_field = field;
 	
 	qsort((void *)database, items, sizeof(list_item), namecmp);
 

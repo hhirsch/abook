@@ -420,8 +420,9 @@ get_commands()
 
 			case 'o': ui_open_datafile();	break;
 
-			case 's': sort_database();	break;
+			case 's': sort_by_field(NAME);	break;
 			case 'S': sort_surname();	break;
+			case 'F': sort_by_field(-1);	break;
 
 			case '/': ui_find(0);		break;
 			case '\\': ui_find(1);		break;

@@ -658,13 +658,37 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 }
 
 static void
+mutt_fix_quoting(char *p)
+{
+	char *escape = 0;
+
+	for(; *p; p++) {
+		switch(*p) {
+			case '\"':
+				if(escape)
+					*escape = ' ';
+				break;
+			case '\\':
+				escape = p;
+				break;
+			default:
+				escape = 0;
+		}
+	}
+}
+
+static void
 mutt_parse_email(list_item item)
 {
 	char *line = item[NAME];
-	char *start = line, *tmp;
+	char *tmp;
 	char *name, *email;
+#if 0
+	char *start = line;
 	int i = 0;
+#endif
 
+	mutt_fix_quoting(line);
 	tmp = strconcat("From: ", line, NULL);
 	getname(tmp, &name, &email);
 	free(tmp);
@@ -678,6 +702,10 @@ mutt_parse_email(list_item item)
 	else
 		return;
 
+	/*
+	 * this is completely broken
+	 */
+#if 0
 	while( (start = strchr(start, ',')) && i++ < MAX_EMAILS - 1) {
 		tmp = strconcat("From: ", ++start, NULL);
 		getname(tmp, &name, &email);
@@ -693,6 +721,7 @@ mutt_parse_email(list_item item)
 			}
 		}
 	}
+#endif
 }
 
 static int

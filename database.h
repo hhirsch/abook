@@ -55,7 +55,7 @@ int		add_item2database(list_item item);
 void		free_list_item(list_item item);
 void		remove_selected_items();
 void		sort_surname();
-void		sort_database();
+void		sort_by_field(int field);
 char		*get_surname(char *s);
 int		find_item(char *str, int start, int search_fields[]);
 int		is_selected(int item);

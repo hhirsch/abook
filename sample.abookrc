@@ -48,3 +48,5 @@ set address_style=eu
 set use_ascii_only=false
 
 set add_email_prevent_duplicates=false
+
+set sort_field=nick

@@ -65,6 +65,7 @@ static struct option abook_vars[] = {
 	{ "use_ascii_only", OT_BOOL, BOOL_USE_ASCII_ONLY, FALSE },
 
 	{ "add_email_prevent_duplicates", OT_BOOL, BOOL_ADD_EMAIL_PREVENT_DUPLICATES, FALSE },
+	{ "sort_field", OT_STR, STR_SORT_FIELD, UL "nick" },
 
 	{ NULL }
 };
