@@ -300,7 +300,7 @@ list_current_item()
 inline int
 list_is_empty()
 {
-	return items < 1 ? 1 : 0;
+	return items < 1;
 }
 
 	
