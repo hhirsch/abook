@@ -1,5 +1,6 @@
 0.4.16-cvs
  - use strcoll instead of strcmp for sorting entries
+ - html filter fix
  - bugfixes
 
 0.4.15

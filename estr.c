@@ -81,13 +81,13 @@ wenter_string(WINDOW *win, const int maxlen, const int flags)
 	str = MALLOC(size);
 
 	for( ;; ) { /* main loop */
-		if(flags & ESTR_DONT_WRAP && x+i>COLS-2) {
+		if(flags & ESTR_DONT_WRAP && x+i > COLS-2) {
 			mvwaddnstr(win, y, x, str+(1+x+i-COLS), COLS-x-1);
 			wmove(win, y, COLS-1);
-			wclrtoeol(win);
 		} else
 			wmove(win, y, x + i);
 
+		wclrtoeol(win);
 		wrefresh(win);
 
 		switch( (ch = getch()) ) {
@@ -103,6 +103,9 @@ wenter_string(WINDOW *win, const int maxlen, const int flags)
 			case CANCEL_KEY:
 				free(str);
 				return NULL;
+			case XCTRL('u'):
+				i = 0;
+				break;
 #ifdef USE_FILESEL
 			case TAB_KEY:
 				if( ! (flags & ESTR_USE_FILESEL) )
@@ -118,10 +121,8 @@ wenter_string(WINDOW *win, const int maxlen, const int flags)
 			continue;
 		str[i++] = ch;
 		waddch(win,ch);
-		if( i + 1 > size )
+		if( i + 1 >= size )
 			str = REALLOC( str, size *= 2 );
-		if( maxlen > 0 && i > maxlen)
-			break;
 	}
 out:
 	if( i >= 0 && str != NULL )

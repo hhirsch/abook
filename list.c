@@ -283,8 +283,12 @@ void
 highlight_line(WINDOW *win, int line)
 {
 	wstandout(win);
-	
-#ifdef mvwchgat
+
+	/*
+	 * this is a tricky one
+	 */
+#if 0
+/*#ifdef mvwchgat*/
 	mvwchgat(win, line, 0, -1,  A_STANDOUT, 0, NULL);
 #else
 	/*
