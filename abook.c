@@ -459,9 +459,11 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 			fprintf(stderr,
 				"input format %s not supported\n", srcformat);
 			ret = 1;
+			break;
 		case 1:
 			fprintf(stderr, "cannot read file %s\n", srcfile);
 			ret = 1;
+			break;
 	}
 
 	if(!ret)
