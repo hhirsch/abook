@@ -14,6 +14,12 @@ void		add_item();
 
 #define TABLINE		2
 
+#define MAX_TAB_LINES	7
+
+#define TAB_COLON_POS	28
+#define TAB_START_Y	5
+#define TAB_START_X	(EDITW_COLS > 70 ? 8:4)
+
 enum {
 	TAB_CONTACT,
 	TAB_ADDRESS,

@@ -785,7 +785,7 @@ fi
 
 # Define the identity of the package.
 PACKAGE=abook
-VERSION=0.4.15pre1
+VERSION=0.4.15pre2
 cat >> confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
 EOF

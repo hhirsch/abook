@@ -17,9 +17,15 @@
 #include "misc.h"
 #include "options.h"
 
+#define MIN_EXTRA_COLUMN	ADDRESS /* 2 */
+#define MAX_EXTRA_COLUMN	LAST_FIELD
+
 int curitem = -1;
 int first_list_item = -1;
 char *selected = NULL;
+
+int extra_column = -1;
+int extra_alternative = -1;
 
 extern int items;
 extern list_item *database;
@@ -30,8 +36,44 @@ WINDOW *list = NULL;
 void
 init_list()
 {
+	int i;
+	char *e_column_str = options_get_str("extra_column");
+	char *e_alternative_str = options_get_str("extra_alternative");
+
 	list = newwin(LIST_LINES, LIST_COLS, LIST_TOP, 0);
 	scrollok(list, TRUE);
+
+	/*
+	 * init extra_column and extra alternative
+	 */
+
+	if(e_column_str && *e_column_str) {
+		for(i = 0; i < ITEM_FIELDS; i++) {
+			if(!strcasecmp(e_column_str, abook_fields[i].key)) {
+				extra_column = i;
+				break;
+			}
+		}
+		if(extra_column < MIN_EXTRA_COLUMN ||
+				extra_column > MAX_EXTRA_COLUMN) {
+			extra_column = -1;
+		}
+	}
+
+	if(e_alternative_str && *e_alternative_str) {
+		for(i = 0; i < ITEM_FIELDS; i++) {
+			if(!strcasecmp(e_alternative_str,
+						abook_fields[i].key)) {
+				extra_alternative = i;
+				break;
+			}
+		}
+		if(extra_alternative < MIN_EXTRA_COLUMN ||
+				extra_alternative > MAX_EXTRA_COLUMN) {
+			extra_alternative = -1;
+		}
+	}
+
 }
 
 void
@@ -84,9 +126,9 @@ refresh_list()
 void
 print_list_line(int i, int line)
 {
+	int extra = extra_column;
 	char tmp[MAX_EMAILSTR_LEN];
-	int extra_column = options_get_int("extra_column");
-	int real_emaillen = (extra_column > 2 && extra_column < ITEM_FIELDS) ?
+	int real_emaillen = (extra_column > 0 || extra_alternative > 0) ?
 		EMAILLEN : COLS - EMAILPOS;
 
 	scrollok(list, FALSE);
@@ -103,19 +145,12 @@ print_list_line(int i, int line)
 		mvwaddnstr(list, line, EMAILPOS, tmp, real_emaillen);
 	}
 
-	if(extra_column > 2 && extra_column < ITEM_FIELDS) {
-		if( !database[i][extra_column] ) {
-			int extra_alternative =
-				options_get_int("extra_alternative");
-			
-			if(extra_alternative > 2 &&
-					extra_alternative < ITEM_FIELDS)
-				extra_column = extra_alternative;
-		}
+	if(extra < 0 || !database[i][extra])
+		extra = extra_alternative;
+	if(extra >= 0)
 		mvwaddnstr(list, line, EXTRAPOS,
-				safe_str(database[i][extra_column]),
+				safe_str(database[i][extra]),
 				EXTRALEN);
-	}
 
 	scrollok(list, TRUE);
 }
@@ -124,12 +159,10 @@ print_list_line(int i, int line)
 void
 list_headerline()
 {
-	int extra_column = options_get_int("extra_column");
-
 	attrset(A_BOLD);
 	mvaddstr(2, NAMEPOS, abook_fields[NAME].name);
 	mvaddstr(2, EMAILPOS, abook_fields[EMAIL].name);
-	if( extra_column > 2 && extra_column < ITEM_FIELDS )
+	if(extra_column > 0)
 		mvaddnstr(2, EXTRAPOS, abook_fields[extra_column].name,
 				COLS-EXTRAPOS);
 	attrset(A_NORMAL);

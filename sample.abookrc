@@ -11,15 +11,15 @@ show_all_emails=true
 emailpos=25
 
 # Field to be used in the extra column
-extra_column=7
+extra_column=phone
 # frequently used values:
-#	-1 = disabled
-#	7 = Home Phone
-#	8 = Work Phone
-#	9 = Fax
-#	10 = Mobile Phone
-#	11 = Nick / Alias
-#	12 = URL
+#	-1		disabled
+#	phone		Home Phone
+#	workphone	Work Phone
+#	fax		Fax
+#	mobile		Mobile Phone
+#	nick		Nick / Alias
+#	url		URL
 
 # Specify an alternative field to be displayed in the extra
 # column if there is no data for the field specified in

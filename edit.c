@@ -138,15 +138,13 @@ print_editor_header(int item)
 	x = (EDITW_COLS - len) / 2;
 	mvwaddstr(editw, 0, x, header);
 	for(i = x; i < x + len; i++)
-		mvwaddch(editw,1, i, '^');
+		mvwaddch(editw, 1, i, '^');
 	free(header);
 }
 
 static void
 editor_print_data(int tab, int item)
 {
-	const int pos_x = EDITW_COLS > 70 ? 8:4;
-	const int start_y = 5;
 	int i, j;
 	int y, x;
 
@@ -159,11 +157,13 @@ editor_print_data(int tab, int item)
 			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 			split_emailstr(item, emails);
 			getyx(editw, y, x);
-			mvwaddstr(editw, y+1, pos_x, "E-mail addresses:");
+			mvwaddstr(editw, y+1, TAB_START_X, "E-mail addresses:");
 			for(k = 0; k < MAX_EMAILS; k++) {
 				getyx(editw, y, x);
-				mvwprintw(editw, y+1, pos_x,
-				"%c -\t\t%s", '2' + k, emails[k] );
+				mvwprintw(editw, y+1, TAB_START_X,
+				"%c -", '2' + k);
+				mvwprintw(editw, y +1, TAB_COLON_POS,
+						": %s", emails[k]);
 			}
 			continue;
 		}
@@ -171,13 +171,14 @@ editor_print_data(int tab, int item)
 		if(j > 1) {
 			getyx(editw, y, x); y++;
 		} else
-			y = start_y;
+			y = TAB_START_Y;
 
-		mvwprintw(editw, y, pos_x, "%d - %s",
+		mvwprintw(editw, y, TAB_START_X, "%d - %s",
 				j,
 				abook_fields[i].name);
-		mvwaddch(editw, y, 28, ':');
-		mvwaddstr(editw, y, 30, safe_str(database[item][i]));
+		mvwaddch(editw, y, TAB_COLON_POS, ':');
+		mvwaddstr(editw, y, TAB_COLON_POS + 2,
+				safe_str(database[item][i]));
 
 		j++;
 	}
@@ -268,7 +269,7 @@ edit_emails(char c, int item)
 	
 	my_free(database[item][EMAIL]);
 
-	for(i=0; i<MAX_EMAILS; i++) {
+	for(i = 0; i < MAX_EMAILS; i++) {
 		if( *emails[i] ) {
 			strcat(tmp, emails[i]);
 			strcat(tmp, ",");
@@ -289,7 +290,7 @@ edit_field(int tab, char c, int item)
 	int n = c - '1' + 1;
 	char *str;
 
-	if(n < 1 || n > 6)
+	if(n < 1 || n > MAX_TAB_LINES)
 		return 0;
 
 	edit_undo(item, BACKUP_ITEM);
