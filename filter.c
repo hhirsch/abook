@@ -193,7 +193,7 @@ import_database()
 	
 	mvaddstr(5+filter, 2, "->");
 	
-	filename = ask_filename("Filename: ", 1);
+	filename = ask_filename("Filename: ");
 	if( !filename ) {
 		refresh_screen();
 		return 2;
@@ -320,7 +320,7 @@ export_database()
 		clear_statusline();
 	}
 	
-	filename = ask_filename("Filename: ", 0);
+	filename = ask_filename("Filename: ");
 	if( !filename ) {
 		refresh_screen();
 		return 2;

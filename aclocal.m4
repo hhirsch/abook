@@ -1,6 +1,6 @@
-dnl aclocal.m4 generated automatically by aclocal 1.4-p4
+dnl aclocal.m4 generated automatically by aclocal 1.4-p5
 
-dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+dnl Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -94,6 +94,102 @@ fi
 
 ])])
 
+
+
+dnl @synopsis AC_LIB_READLINE
+dnl
+dnl Searches for a readline compatible library.  If found, defines
+dnl `HAVE_LIBREADLINE'.  If the found library has the `add_history'
+dnl function, sets also `HAVE_READLINE_HISTORY'.  Also checks for the
+dnl locations of the necessary include files and sets `HAVE_READLINE_H'
+dnl or `HAVE_READLINE_READLINE_H' and `HAVE_READLINE_HISTORY_H' or
+dnl 'HAVE_HISTORY_H' if the corresponding include files exists.
+dnl
+dnl The libraries that may be readline compatible are `libedit',
+dnl `libeditline' and `libreadline'.  Sometimes we need to link a termcap
+dnl library for readline to work, this macro tests these cases too by
+dnl trying to link with `libtermcap', `libcurses' or `libncurses' before
+dnl giving up.
+dnl
+dnl Here is an example of how to use the information provided by this
+dnl macro to perform the necessary includes or declarations in a C file:
+dnl
+dnl   #include <config.h>
+dnl
+dnl   #ifdef HAVE_LIBREADLINE
+dnl   #if defined(HAVE_READLINE_READLINE_H)
+dnl   #include <readline/readline.h>
+dnl   #elif defined(HAVE_READLINE_H)
+dnl   #include <readline.h>
+dnl   #else /* !defined(HAVE_READLINE_H) */
+dnl   extern char *readline ();
+dnl   #endif /* !defined(HAVE_READLINE_H) */
+dnl   char *cmdline = NULL;
+dnl   #else /* !defined(HAVE_READLINE_READLINE_H) */
+dnl     /* no readline */
+dnl   #endif /* HAVE_LIBREADLINE */
+dnl
+dnl   #ifdef HAVE_READLINE_HISTORY
+dnl   #if defined(HAVE_READLINE_HISTORY_H)
+dnl   #include <readline/history.h>
+dnl   #elif defined(HAVE_HISTORY_H)
+dnl   #include <history.h>
+dnl   #else /* !defined(HAVE_HISTORY_H) */
+dnl   extern void add_history ();
+dnl   extern int write_history ();
+dnl   extern int read_history ();
+dnl   #endif /* defined(HAVE_READLINE_HISTORY_H) */
+dnl     /* no history */
+dnl   #endif /* HAVE_READLINE_HISTORY */
+dnl
+dnl
+dnl @version $Id$
+dnl @author Ville Laurikari <vl@iki.fi>
+dnl
+AC_DEFUN([AC_LIB_READLINE], [
+  AC_CACHE_CHECK([for a readline compatible library],
+                 ac_cv_lib_readline, [
+    ORIG_LIBS=$LIBS
+    for readline_lib in readline edit editline; do
+      for termcap_lib in "" termcap curses ncurses; do
+        if test -z "$termcap_lib"; then
+          TRY_LIB="-l$readline_lib"
+        else
+          TRY_LIB="-l$readline_lib -l$termcap_lib"
+        fi
+        LIBS="$ORIG_LIBS $TRY_LIB"
+        AC_TRY_LINK_FUNC(readline, ac_cv_lib_readline="$TRY_LIB")
+        if test -n "$ac_cv_lib_readline"; then
+          break
+        fi
+      done
+      if test -n "$ac_cv_lib_readline"; then
+        break
+      fi
+    done
+    if test -z "$ac_cv_lib_readline"; then
+      ac_cv_lib_readline="no"
+      LIBS=$ORIG_LIBS
+    fi
+  ])
+
+  if test "$ac_cv_lib_readline" != "no"; then
+    AC_DEFINE(HAVE_LIBREADLINE, 1,
+              [Define if you have a readline compatible library])
+    AC_CHECK_HEADERS(readline.h readline/readline.h)
+    AC_CACHE_CHECK([whether readline supports history],
+                   ac_cv_lib_readline_history, [
+      ac_cv_lib_readline_history="no"
+      AC_TRY_LINK_FUNC(add_history, ac_cv_lib_readline_history="yes")
+    ])
+    if test "$ac_cv_lib_readline_history" = "yes"; then
+      AC_DEFINE(HAVE_READLINE_HISTORY, 1,
+                [Define if your readline library has \`add_history'])
+      AC_CHECK_HEADERS(history.h readline/history.h)
+    fi
+  fi
+])
+
 # Do all the work for Automake.  This macro actually does too much --
 # some checks are only needed if your package does certain things.
 # But this isn't really a big deal.
@@ -103,7 +199,7 @@ fi
 dnl Usage:
 dnl AM_INIT_AUTOMAKE(package,version, [no-define])
 
-AC_DEFUN(AM_INIT_AUTOMAKE,
+AC_DEFUN([AM_INIT_AUTOMAKE],
 [AC_REQUIRE([AC_PROG_INSTALL])
 PACKAGE=[$1]
 AC_SUBST(PACKAGE)
@@ -131,7 +227,7 @@ AC_REQUIRE([AC_PROG_MAKE_SET])])
 # Check to make sure that the build environment is sane.
 #
 
-AC_DEFUN(AM_SANITY_CHECK,
+AC_DEFUN([AM_SANITY_CHECK],
 [AC_MSG_CHECKING([whether build environment is sane])
 # Just in case
 sleep 1
@@ -172,7 +268,7 @@ AC_MSG_RESULT(yes)])
 
 dnl AM_MISSING_PROG(NAME, PROGRAM, DIRECTORY)
 dnl The program must properly implement --version.
-AC_DEFUN(AM_MISSING_PROG,
+AC_DEFUN([AM_MISSING_PROG],
 [AC_MSG_CHECKING(for working $2)
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
@@ -188,7 +284,7 @@ AC_SUBST($1)])
 
 # Like AC_CONFIG_HEADER, but automatically create stamp file.
 
-AC_DEFUN(AM_CONFIG_HEADER,
+AC_DEFUN([AM_CONFIG_HEADER],
 [AC_PREREQ([2.12])
 AC_CONFIG_HEADER([$1])
 dnl When config.status generates a header, we must update the stamp-h file.
@@ -230,7 +326,7 @@ AC_DEFUN([AC_ISC_POSIX],
 
 # serial 1
 
-AC_DEFUN(AM_C_PROTOTYPES,
+AC_DEFUN([AM_C_PROTOTYPES],
 [AC_REQUIRE([AM_PROG_CC_STDC])
 AC_REQUIRE([AC_PROG_CPP])
 AC_MSG_CHECKING([for function prototypes])
@@ -267,7 +363,7 @@ AC_SUBST(ANSI2KNR)dnl
 # program @code{ansi2knr}, which comes with Ghostscript.
 # @end defmac
 
-AC_DEFUN(AM_PROG_CC_STDC,
+AC_DEFUN([AM_PROG_CC_STDC],
 [AC_REQUIRE([AC_PROG_CC])
 AC_BEFORE([$0], [AC_C_INLINE])
 AC_BEFORE([$0], [AC_C_CONST])

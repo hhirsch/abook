@@ -1,4 +1,5 @@
-2002-xx-xx
+2002-03-10
+ - readline support
  - abook can be compiled with g++
  - attempt to improve --datafile behavior
  - html filter update (Morten Brix Pedersen)

@@ -22,7 +22,6 @@
 #include "misc.h"
 #include "options.h"
 #include "filter.h"
-#include "estr.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -36,6 +35,8 @@
 #ifdef HAVE_SYS_IOCTL_H
 #	include <sys/ioctl.h>
 #endif
+
+#include "abook_rl.h"
 
 /*
  * external variables
@@ -237,53 +238,21 @@ statusline_addstr(char *str)
 	wrefresh(bottom);
 }
 
-/*
- * function statusline_getnstr
- *
- * parameters:
- *  (char *str)
- *   if n >= 0 str is a pointer which points a place where to store
- *   the string, else str is ignored
- *  (int n)
- *   the maximum length of the string
- *   If n < 0 function will allocate needed space for the string.
- *   Value 0 is not allowed for n.
- *  (int use_filesel)
- *   if this value is nonzero the fileselector is enabled
- *
- *  returns (char *)
- *   If n < 0 a pointer to a newly allocated string is returned.
- *   If n > 0 a nonzero value is returned if user has typed a valid
- *   string. If not NULL value is returned. Never really use the
- *   _pointer_ if n > 0.
- *
- */
-
 char *
-statusline_getnstr(char *str, int n, int use_filesel)
+ui_readline(char *prompt, char *s, int limit, int use_completion)
 {
-	char *buf;
 	int y, x;
 
+	mvwaddstr(bottom, 1, 0, prompt);
+	//mvwaddstr(stdscr, LINES - 1, 0, prompt);
+
+	/*
+	 * FIXME: stdscr shoulnd't be used ???
+	 */
+//	getyx(stdscr, y, x);
 	getyx(bottom, y, x);
-	wmove(bottom, 1, x);
 
-	buf = wenter_string(bottom, n,
-			(use_filesel ? ESTR_USE_FILESEL:0) | ESTR_DONT_WRAP);
-
-	if(n < 0)
-		return buf;
-
-	if(buf == NULL)
-		str[0] = 0;
-	else
-		strncpy(str, buf, n);
-
-	str[n-1] = 0;
-
-	free(buf);
-
-	return buf;
+	return abook_readline(bottom, y, x, s, limit, use_completion);
 }
 
 int
@@ -320,7 +289,6 @@ refresh_statusline()
 	werase(bottom);
 
 	mvwhline(bottom, 0, 0, UI_HLINE_CHAR, COLS);
-	mvwhline(bottom, 2, 0, UI_HLINE_CHAR, COLS);
 
 	refresh();
 	wrefresh(bottom);
@@ -328,16 +296,13 @@ refresh_statusline()
 
 
 char *
-ask_filename(char *prompt, int flags)
+ask_filename(char *prompt)
 {
 	char *buf = NULL;
 
 	clear_statusline();
 
-	statusline_addstr(prompt);
-	buf = statusline_getnstr(NULL, -1, flags);
-
-	clear_statusline();
+	buf = ui_readline(prompt, NULL, -1, 1);
 
 	return buf;
 }
@@ -529,10 +494,11 @@ ui_find(int next)
 		if( !*findstr )
 			return;
 	} else {
+		char *s;
 		clear_statusline();
-		statusline_addstr("/");
-		statusline_getnstr(findstr, MAX_FIELD_LEN - 1, 0);
-		clear_statusline();
+		s = ui_readline("/", findstr, MAX_FIELD_LEN - 1, 0);
+		strncpy(findstr, s, MAX_FIELD_LEN);
+		refresh_screen();
 	}
 
 	if( (item = find_item(findstr, curitem + !!next,
@@ -611,9 +577,10 @@ ui_open_datafile()
 {
 	char *filename;
 
-	filename = ask_filename("File to open: ", 1);
+	filename = ask_filename("File to open: ");
 
-	if( !filename ) {
+	if( !filename || ! *filename) {
+		free(filename);
 		refresh_screen();
 		return;
 	}

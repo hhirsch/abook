@@ -30,7 +30,7 @@ enum {
 };
 
 #define LIST_TOP        3
-#define LIST_BOTTOM     (LINES-3)
+#define LIST_BOTTOM     (LINES-2)
 
 #define LIST_LINES	(LIST_BOTTOM-LIST_TOP)
 #define LIST_COLS	COLS

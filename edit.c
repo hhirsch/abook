@@ -182,42 +182,25 @@ editor_print_data(int tab, int item)
 	}
 }
 
-/*
- * function: change_field
- * 
- * parameters:
- *  (char *msg)
- *   message to display as a prompt
- *  (char **field)
- *   a pointer to pointer which will point a new string. if the latter
- *   pointer != NULL it will be freed (if user doesn't cancel)
- * 
- * returns (int)
- *  a nonzero value if user has cancelled and zero if user has typed a
- *  valid string
- */
-
 static int
 change_field(char *msg, char **field)
 {
-	char tmp[MAX_FIELD_LEN];
 	int max_len = MAX_FIELD_LEN;
-	int ret;
+	char *old;
 
 	if( !strncmp("E-mail", msg, 6) )
 		max_len = MAX_EMAIL_LEN;
 
-	statusline_addstr(msg);
-	if( (ret = statusline_getnstr( tmp, max_len - 1, 0 ) ? 1:0 ) ) {
-		my_free(*field);
-		if( *tmp )
-			*field = strdup(tmp);
-	}
+	old = *field;
+
+	*field = ui_readline(msg, old, max_len - 1, 0);
+
+	free(old);
 
 	clear_statusline();
 	refresh_statusline();
 
-	return !ret;
+	return 0;
 }
 
 static void
@@ -246,24 +229,26 @@ fix_email_str(char *str)
 static void
 edit_emails(char c, int item)
 {
-	char *field = NULL;
+	char *field;
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 	char tmp[MAX_EMAILSTR_LEN] = "";
 	int i, len;
+	int email_num = c - '2';
 
 	split_emailstr(item, emails);
+	field = strdup(emails[email_num]);
 
 	if(change_field("E-mail: ", &field)) {
 #ifdef DEBUG
 		fprintf(stderr, "change_field = TRUE\n");
 #endif
-		return; /* user cancelled ( C-g ) */
+		return;
 	}
 	if(field) {
-		strncpy(emails[c - '2'], field, MAX_EMAIL_LEN);
-		fix_email_str(emails[c - '2']);
+		strncpy(emails[email_num], field, MAX_EMAIL_LEN);
+		fix_email_str(emails[email_num]);
 	} else
-		*emails[c - '2'] = 0;
+		*emails[email_num] = 0;
 
 	my_free(database[item][EMAIL]);
 
