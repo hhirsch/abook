@@ -87,7 +87,7 @@ print_list_line(int i, int line)
 	char tmp[MAX_EMAILSTR_LEN];
 	int extra_column = options_get_int("extra_column");
 	int real_emaillen = (extra_column > 2 && extra_column < ITEM_FIELDS) ?
-		EMAILLEN : EMAILPOS - COLS;
+		EMAILLEN : COLS - EMAILPOS;
 
 	scrollok(list, FALSE);
 
