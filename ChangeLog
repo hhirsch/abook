@@ -4,6 +4,7 @@
  - fixed a crash bug in mutt filter
  - fixed errors in configure.in (especially snprintf-functions were incorrectly
    detected)
+ - abookrc manual page update
 
 0.5.1
  - sort by field command
