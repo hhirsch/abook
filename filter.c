@@ -1165,59 +1165,75 @@ csv_parse_file(FILE *in)
  */
 
 /*
- * csv addressbook export filter
+ * csv addressbook export filters
  */
+
+#define CSV_LAST		(-2)
+#define CSV_UNDEFINED		(-3)
+#define CSV_SPECIAL(X)		(-4 - (X))
+#define CSV_IS_SPECIAL(X)	((X) <= -4)
+#define CSV_GET_SPECIAL(X)	(-4 + (X))
+
+static int
+csv_export_common(FILE *out, struct db_enumerator e,
+		int fields[], void (*special_func)(FILE *, int, int))
+{
+	int i;
+
+	db_enumerate_items(e) {
+		for(i = 0; fields[i] != CSV_LAST; i++) {
+			if(fields[i] == CSV_UNDEFINED)
+				fprintf(out, "\"\"");
+			else if(CSV_IS_SPECIAL(fields[i])) {
+				if(special_func)
+					(*special_func)(out, e.item, fields[i]);
+			} else
+				/*fprintf(out,(
+			strchr(safe_str(database[e.item][fields[i]]), ',') ||
+			strchr(safe_str(database[e.item][fields[i]]), '\"')) ?
+				"\"%s\"" : "%s",
+				safe_str(database[e.item][fields[i]])
+				);*/
+				fprintf(out, "\"%s\"",
+					safe_str(database[e.item][fields[i]]));
+
+			if(fields[i + 1] != CSV_LAST)
+				fputc(',', out);
+		}
+		fputc('\n', out);
+	}
+
+	return 0;
+}
 
 static int
 csv_export_database(FILE *out, struct db_enumerator e)
 {
-	int j;
 	int csv_export_fields[] = {
 		NAME,
 		EMAIL,
 		PHONE,
 		NOTES,
 		NICK,
-		-1
+		CSV_LAST
 	};
 
-	db_enumerate_items(e) {
-		for(j = 0; csv_export_fields[j] >= 0; j++) {
-			fprintf(out,(
-		strchr(safe_str(database[e.item][csv_export_fields[j]]), ',') ||
-		strchr(safe_str(database[e.item][csv_export_fields[j]]), '\"')
-			) ?
-				"\"%s\"" : "%s",
-				safe_str(database[e.item][csv_export_fields[j]])
-				);
-			if(csv_export_fields[j+1] >= 0)
-				fputc(',', out);
-		}
-		fputc('\n', out);
-	}
-		
-
-
+	csv_export_common(out, e, csv_export_fields, NULL);
+	
 	return 0;
 }
 
 /*
- * end of csv export filter
+ * palm csv
  */
 
-
-/*
- * Palm csv addressbook export filter
- */
-
-/* A few contants, not the best way to init them but better dan
- * some number that will break things later on... 		*/
-#define 	PALM_CSV_UNDEFINED 	 (LAST_FIELD+1)
-#define 	PALM_CSV_END 	 	 (LAST_FIELD+2)
-#define 	PALM_CSV_CAT 	 	 (LAST_FIELD+3)
+#define PALM_CSV_NAME	CSV_SPECIAL(0)
+#define PALM_CSV_END	CSV_SPECIAL(1)
+#define PALM_CSV_CAT	CSV_SPECIAL(2)
 
 static void 
-palm_split_and_write_name(FILE *out, char *name) {
+palm_split_and_write_name(FILE *out, char *name)
+{
 	char *p;
 
 	assert(name);
@@ -1234,14 +1250,31 @@ palm_split_and_write_name(FILE *out, char *name) {
 	}
 }
 
+static void 
+palm_csv_handle_specials(FILE *out, int item, int field)
+{
+	switch(field) {
+		case PALM_CSV_NAME:
+			palm_split_and_write_name(out, database[item][NAME]);
+			break;
+		case PALM_CSV_CAT:
+			fprintf(out, "\"abook\"");
+			break;
+		case PALM_CSV_END:
+			fprintf(out, "\"0\"");
+			break;
+		default:
+			assert(0);
+	}
+}
+
 static int
 palm_export_database(FILE *out, struct db_enumerator e)
 {
-	int j;
 	int palm_export_fields[] = {
-		NAME,			/* LASTNAME, FIRSTNAME 	*/
-		PALM_CSV_UNDEFINED,	/* TITLE,   		*/
-		PALM_CSV_UNDEFINED, 	/* COMPAGNY, 		*/
+		PALM_CSV_NAME,		/* LASTNAME, FIRSTNAME 	*/
+		CSV_UNDEFINED,		/* TITLE   		*/
+		CSV_UNDEFINED, 		/* COMPANY 		*/
 		WORKPHONE,		/* WORK PHONE 		*/
 		PHONE,			/* HOME PHONE		*/
 		FAX,			/* FAX			*/
@@ -1254,53 +1287,22 @@ palm_export_database(FILE *out, struct db_enumerator e)
 		COUNTRY,		/* COUNTRY		*/
         	NICK, 			/* DEFINED 1		*/
         	URL, 			/* DEFINED 2 		*/
-		PALM_CSV_UNDEFINED,	/* DEFINED 3		*/
-		PALM_CSV_UNDEFINED,	/* DEFINED 4 		*/
+		CSV_UNDEFINED,		/* DEFINED 3		*/
+		CSV_UNDEFINED,		/* DEFINED 4 		*/
 		NOTES,			/* NOTE			*/
 		PALM_CSV_END,		/* "0" 			*/
 		PALM_CSV_CAT,		/* CATEGORY 		*/
-		-1
+		CSV_LAST
 	};
 
-	db_enumerate_items(e) {
-		for(j = 0; palm_export_fields[j] >= 0; j++) {
-
-		switch( palm_export_fields[j] ) {
-
-			case PALM_CSV_UNDEFINED:
-				fprintf(out, "\"\"");
-				break;
-			case PALM_CSV_END:
-				fprintf(out, "\"0\"");
-				break;
-			case PALM_CSV_CAT:
-				fprintf(out, "\"abook\"");
-				break;
-			case NAME:
-				palm_split_and_write_name(out,
-						safe_str(database[e.item]
-						[palm_export_fields[j]])) ;
-				break;
-
-			default:
-				fprintf(out, "\"%s\"" ,
-					safe_str(database[e.item]
-						[palm_export_fields[j]]));
-			}
-
-			if(palm_export_fields[j+1] >= 0)
-				fputc(',', out);
-		}
-		fputc('\n', out);
-	}
+	csv_export_common(out, e, palm_export_fields, palm_csv_handle_specials);
 
 	return 0;
 }
 
 /*
- * end of palm csv export filter
+ * end of csv export filters
  */
-
 
 /*
  * GnomeCard (VCard) addressbook export filter
