@@ -232,7 +232,7 @@ getaline(FILE *f)
 
 	len = 0;
 	size = thres;
-	buf = abook_malloc(size);
+	buf = (char *)abook_malloc(size);
 
 	while (fgets(buf+len, size-len, f) != NULL) {
 		len += strlen(buf+len);

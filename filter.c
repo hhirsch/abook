@@ -134,7 +134,7 @@ get_real_name()
 
 	pwent = getpwnam(username);
 
-	if( (tmp = malloc(strlen(pwent->pw_gecos) +1)) == NULL)
+	if( (tmp = (char *)malloc(strlen(pwent->pw_gecos) +1)) == NULL)
 		return strdup(username);
 
 	rtn = sscanf(pwent->pw_gecos, "%[^,]", tmp);
@@ -647,7 +647,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while( ! ISSPACE(*ptr) )
 		ptr++;
 
-	if( (*alias = malloc(ptr-tmp+1)) == NULL)
+	if( (*alias = (char *)malloc(ptr-tmp+1)) == NULL)
 		return 1;
 
 	strncpy(*alias, tmp, ptr-tmp);
