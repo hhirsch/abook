@@ -237,7 +237,7 @@ statusline_addstr(char *str)
  * parameters:
  *  (char *str)
  *   if n >= 0 str is a pointer which points a place where to store
- *   the string, else str is ingnored
+ *   the string, else str is ignored
  *  (int n)
  *   the maximum length of the string
  *   If n < 0 function will allocate needed space for the string.

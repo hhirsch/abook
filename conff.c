@@ -53,36 +53,44 @@ conff_free_node(struct conff_node *node)
 	free(node);
 }
 
-void
+/*
+ * conff_add_key
+ *
+ * returns 0 if the key was successfully added
+ */
+
+int
 conff_add_key(struct conff_node **ptr, char *key, char *value, int flags)
 {
 	struct conff_node *new_item, *next = NULL;
+	int replace = 0;
 
 	assert(key != NULL && value != NULL);
 
 	for(; *ptr; ptr = &( (*ptr) -> next) ) 
 		if(!strcasecmp(key, (*ptr) -> key ) ) {
 			if (flags & REPLACE_KEY) {
-				next = (*ptr) -> next;
-				conff_free_node(*ptr);
+				replace = 1;
 				break;
 			} else
-				return;
+				return 1;
 		}
 	
-	 /*
-	  * out of memory - error is ignored
-	  * NOTE: with REPLACE_KEY flag the node will be deleted in OOM
-	  * situation
-	  */
 	if( (new_item = malloc(sizeof(struct conff_node))) == NULL )
-		return;
-	
+		return 5;
+
+	if(replace) { 
+		next = (*ptr) -> next;
+		conff_free_node(*ptr);
+	}
+
 	new_item -> key = strdup(key);
 	new_item -> value = strdup(value);
 	new_item -> next = next;
 
 	*ptr = new_item;
+
+	return 0;
 }
 
 char *
@@ -157,6 +165,8 @@ conff_load_file(struct conff_node **node, char *filename, int flags)
 	FILE *in;
 	char *line = NULL, *tmp;
 	int i = 0;
+
+	assert(filename != NULL);
 
 	if (!(in = fopen(filename, "r")))
 		return -1;

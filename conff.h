@@ -34,7 +34,7 @@ struct conff_node
 };
 
 
-void		conff_add_key(struct conff_node **ptr, char *key,
+int		conff_add_key(struct conff_node **ptr, char *key,
 		char *value, int flags);
 char		*conff_get_value(struct conff_node *node, char *key);
 #ifdef DEBUG

@@ -37,6 +37,8 @@ revstr(char *str)
 {
 	char *s, *s2;
 
+	assert(str != NULL);
+
 	s = s2 = strdup(str);
 
 	while( *str )
@@ -54,6 +56,8 @@ strupper(char *str)
 {
 	char *tmp = str;
 
+	assert(str != NULL);
+
 	while( ( *str = toupper( *str ) ) )
 		str++;
 	
@@ -64,6 +68,8 @@ char *
 strlower(char *str)
 {
 	char *tmp = str;
+
+	assert(str != NULL);
 
 	while( ( *str = tolower ( *str ) ) )
 		str++;
@@ -119,6 +125,8 @@ mkstr (const char *format, ... )
 		(char *) malloc (size);
 #endif
 	
+	assert(format != NULL);
+
 	for(;;) {
 		int n;
 		MY_VA_START(format);
@@ -151,8 +159,7 @@ strconcat (const char *str, ...)
 	MY_VA_LOCAL_DECL;
 	char *s, *concat;
 
-	if(str == NULL)
-		return NULL;
+	assert(str != NULL);
 
 	l = 1 + strlen (str);
 	MY_VA_START(str);
@@ -213,10 +220,12 @@ my_getcwd()
 	char *dir = NULL;
 	int size = 100;
 
-	dir = malloc(size);
+	if( (dir = malloc(size)) == NULL)
+		return NULL;
 	
 	while( getcwd(dir, size) == NULL && errno == ERANGE )
-		dir = realloc(dir, size *=2);
+		if( (dir = realloc(dir, size *=2)) == NULL)
+			return NULL;
 
 	return dir;
 }
