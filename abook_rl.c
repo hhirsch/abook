@@ -12,6 +12,9 @@
 #include "abook.h"
 #include "abook_rl.h"
 
+#define KEYPAD_HACK 1 /* enable a keypad hack */
+#define CBREAK_HACK 1 /* enable cbreak hack */
+
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -118,9 +121,19 @@ abook_readline(WINDOW *w, int y, int x, char *s, int limit, bool use_completion)
 	if(s && *s)
 		add_history(s);
 	
+#ifdef KEYPAD_HACK
+	keypad(w, FALSE);
+#endif
+#ifdef CBREAK_HACK
 	nocbreak();
+#endif
 	ret = readline(NULL);
+#ifdef CBREAK_HACK
 	cbreak();
+#endif
+#ifdef KEYPAD_HACK
+	keypad(w, TRUE);
+#endif
 
 	if(rl_cancelled && ret) {
 		free(ret);
