@@ -20,8 +20,7 @@
 #	include "config.h"
 #endif
 #ifdef HANDLE_MULTIBYTE
-#	include <wchar.h>
-#	include "mbswidth.h"
+#	include <mbswidth.h>
 #endif
 #include "misc.h"
 #ifdef ABOOK_SRC
