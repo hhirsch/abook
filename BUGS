@@ -5,8 +5,8 @@ known bugs in abook
 * incompatible with some terminals
   - there seems to be some problems with some gnome-terminal versions -
     gnome-terminal bug?
-* some keys may cause to readline to crash - this is a readline (4.3) problem
-  - there is a patch available to fix this problem:
+* some keys may cause readline to crash - this is a readline (4.3) problem
+  - there is a fix available:
     ftp://ftp.gnu.org/gnu/readline/readline-4.3-patches/readline43-001
 
 * mutt / elm / pine export filters allow to create a file with duplicate
