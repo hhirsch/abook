@@ -25,6 +25,27 @@ AC_CHECK_HEADER(stdarg.h,AC_DEFINE(HAVE_STDARG_H),AC_MSG_ERROR([*** stdarg.h is 
 AC_FUNC_STRCOLL
 AC_CHECK_FUNCS(setlocale)
 
+ac_widec_funcs=yes
+AC_CHECK_HEADER(wchar.h,[ac_have_wchar_h=yes], [ac_have_wchar_h=no])
+AC_CHECK_FUNCS(mbtowc wcwidth,,ac_widec_funcs=no)
+AC_CHECK_TYPE(wchar_t,,ac_widec_funcs=no)
+
+if test x$ac_widec_funcs = xyes -a x$ac_have_wchar_h = xyes; then
+	ac_widec_possible=yes
+else
+	ac_widec_possible=no
+fi
+
+AC_ARG_ENABLE(widec, [  --enable-widec          Enable wide character support (experimental) ], [case "${enableval}" in
+	yes) ac_widec_support=true ;;
+	no) ac_widec_support=false ;;
+	*) AC_MSG_ERROR(bad value ${enableval} for --enable-widec) ;;
+	esac], [ac_widec_support=false])
+
+if test x$ac_widec_support = xtrue -a x$ac_widec_possible != xyes; then
+	AC_MSG_ERROR(Wide character support is not possible due to missing wide character functions or wchar.h)
+fi
+
 dnl -------------------
 dnl (n)curses detection
 dnl -------------------
@@ -39,13 +60,23 @@ AC_ARG_WITH(curses, [  --with-curses=DIR       Where ncurses is installed ],
 		CPPFLAGS="$CPPFLAGS -I${abook_cv_curses}/include"
 	fi])
 
-AC_CHECK_LIB(ncurses, initscr,
-	[LIBS="$LIBS -lncurses"
-	if test x$abook_cv_curses = x/usr -a -d /usr/include/ncurses; then
-		CPPFLAGS="$CPPFLAGS -I/usr/include/ncurses"
-	fi
-	AC_CHECK_HEADERS(ncurses.h)],
-	[CF_CURSES_LIBS])
+if test x$ac_widec_support = xtrue; then
+	AC_CHECK_LIB(ncursesw, initscr,
+		[LIBS="$LIBS -lncursesw"
+		if test x$abook_cv_curses = x/usr -a -d /usr/include/ncursesw; then
+			CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
+		fi
+		AC_CHECK_HEADERS(ncurses.h)],[
+		AC_MSG_ERROR("Wide character support is not possible due to missing ncursesw library. Please install it or disable wide character support")])
+else
+	AC_CHECK_LIB(ncurses, initscr,
+		[LIBS="$LIBS -lncurses"
+		if test x$abook_cv_curses = x/usr -a -d /usr/include/ncurses; then
+			CPPFLAGS="$CPPFLAGS -I/usr/include/ncurses"
+		fi
+		AC_CHECK_HEADERS(ncurses.h)],
+		[CF_CURSES_LIBS])
+fi
 
 dnl --------------------------
 dnl end of (n)curses detection
@@ -74,6 +105,10 @@ fi
 dnl -------------------------
 dnl end of readline detection
 dnl -------------------------
+
+if test x$ac_widec_support = xtrue; then
+	AC_DEFINE(HANDLE_MULTIBYTE, 1, [Handle multibyte characters])
+fi
 
 AC_CHECK_FUNCS(resizeterm)
 

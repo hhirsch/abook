@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* Handle multibyte characters */
+#undef HANDLE_MULTIBYTE
+
 /* Define to 1 if you have the <history.h> header file. */
 #undef HAVE_HISTORY_H
 
@@ -14,6 +17,9 @@
 
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
+
+/* Define to 1 if you have the `mbtowc' function. */
+#undef HAVE_MBTOWC
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -81,6 +87,9 @@
 
 /* Define if vsnprintf is available. */
 #undef HAVE_VSNPRINTF
+
+/* Define to 1 if you have the `wcwidth' function. */
+#undef HAVE_WCWIDTH
 
 /* Name of package */
 #undef PACKAGE

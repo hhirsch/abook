@@ -31,6 +31,10 @@
 #       include <history.h>
 #endif
 
+#ifdef HANDLE_MULTIBYTE
+#	include <wchar.h>
+#endif
+
 #define RL_READLINE_NAME	"Abook"
 
 static int rl_x, rl_y;
@@ -45,10 +49,42 @@ rl_refresh()
 	wrefresh(rl_win);
 }
 
+#ifdef HANDLE_MULTIBYTE
+static int
+rline_calc_point()
+{
+	char *p;
+	int ret = 0;
+	
+	mbtowc(NULL, NULL, 0);
+	for(p = rl_line_buffer;(p - rl_line_buffer) < rl_point;) {
+		int a, l;
+		wchar_t wc;
+		
+		if((a = mbtowc(&wc, p, MB_CUR_MAX)) == 0)
+			break;
+		else if (a == -1)
+			return rl_point; /* fall back */
+		else
+			p += a;
+
+		l = wcwidth(wc);
+		if(l > 0)
+			ret += l;
+	}
+
+	return ret;
+}
+#endif
+
 static void
 rline_update()
 {	
+#ifdef HANDLE_MULTIBYTE
+	int real_point = rline_calc_point() + rl_x;
+#else
 	int real_point = rl_point + rl_x;
+#endif
 	
 	if(real_point > (COLS - 1))
 		mvwaddnstr(rl_win, rl_y, rl_x,

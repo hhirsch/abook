@@ -6,9 +6,10 @@
  * Copyright (C) Jaakko Heinonen
  */
 
-#include <string.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <signal.h>
 #include <fcntl.h>
