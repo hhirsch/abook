@@ -50,10 +50,10 @@ extern int alternative_datafile;
  * internal variables
  */
 
-int ui_initialized = FALSE;
+bool ui_initialized = FALSE;
 
-int should_resize = FALSE;
-int can_resize = FALSE;
+bool should_resize = FALSE;
+bool can_resize = FALSE;
 
 WINDOW *top = NULL, *bottom = NULL;
 

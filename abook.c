@@ -45,8 +45,8 @@ static void		add_email(int);
 char *datafile = NULL;
 char *rcfile = NULL;
 
-int alternative_datafile = FALSE;
-int alternative_rcfile = FALSE;
+bool alternative_datafile = FALSE;
+bool alternative_rcfile = FALSE;
 
 static int
 datafile_writeable()

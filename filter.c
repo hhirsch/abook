@@ -1104,7 +1104,7 @@ csv_parse_line(char *line)
 {
 	char *p, *start;
 	int field;
-	int in_quote = FALSE;
+	bool in_quote = FALSE;
 	list_item item;
 
 	memset(item, 0, sizeof(item));
