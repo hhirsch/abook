@@ -900,7 +900,7 @@ pine_convert_emails(char *s)
 		*tmp=0;
 	
 	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s=tmp+1 )
-		if( i > 3 ) {
+		if( i > MAX_EMAILS - 1 ) {
 			*tmp = 0;
 			break;	
 		}
@@ -966,8 +966,10 @@ pine_parse_file(FILE *in)
 				
 			strcat(buf, ptr);
 		}
-		if( *buf == '#' )
+		if( *buf == '#' ) {
+			my_free(buf);
 			continue;
+		}
 		pine_fixbuf(buf);
 
 		pine_parse_buf(buf);

@@ -1,5 +1,6 @@
 0.4.14
  - minor html filter update
+ - fixed a minor memory leak in pine import filter
 
 0.4.13
  - major code reorganization (phase 1)
