@@ -351,8 +351,8 @@ surnamecmp(const void *i1, const void *i2)
 	s1 = get_surname(a[NAME]);
 	s2 = get_surname(b[NAME]);
 
-	if( !(ret = safe_strcmp(s1, s2)) )
-		ret = safe_strcmp(a[NAME], b[NAME]);
+	if( !(ret = safe_strcoll(s1, s2)) )
+		ret = safe_strcoll(a[NAME], b[NAME]);
 
 	free(s1);
 	free(s2);
@@ -368,7 +368,7 @@ namecmp(const void *i1, const void *i2)
 	itemcpy(a, i1);
 	itemcpy(b, i2);
 	
-	return safe_strcmp( a[NAME], b[NAME] );
+	return safe_strcoll( a[NAME], b[NAME] );
 }
 
 void

@@ -1,4 +1,5 @@
 0.4.16
+ - use strcoll instead of strcmp for sorting entries
  - bugfixes
 
 0.4.15

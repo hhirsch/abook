@@ -17,6 +17,7 @@ AC_PROG_INSTALL
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h locale.h termios.h linux/termios.h sys/ioctl.h)
 AC_CHECK_HEADER(stdarg.h,AC_DEFINE(HAVE_STDARG_H),AC_MSG_ERROR([*** stdarg.h is missing on your system ***]))
+AC_FUNC_STRCOLL
 AC_CHECK_FUNCS(setlocale)
 
 dnl -------------------

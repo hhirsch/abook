@@ -16,6 +16,9 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <errno.h>
+#ifdef HAVE_CONFIG_H
+#	include "config.h"
+#endif
 #include "misc.h"
 #ifdef ABOOK_SRC
 #	include "abook.h"
@@ -181,13 +184,27 @@ strconcat (const char *str, ...)
 
 
 int
-safe_strcmp(const char *s1, const char * s2)
+safe_strcmp(const char *s1, const char *s2)
 {
 	if (s1 == NULL && s2 == NULL) return 0;
 	if (s1 == NULL) return -1;
 	if (s2 == NULL) return 1;
 
 	return strcmp(s1, s2);
+}
+
+int
+safe_strcoll(const char *s1, const char *s2)
+{
+#ifdef HAVE_STRCOLL
+	if (s1 == NULL && s2 == NULL) return 0;
+	if (s1 == NULL) return -1;
+	if (s2 == NULL) return 1;
+
+	return strcoll(s1, s2);
+#else /* fall back to strcmp */
+	return safe_strcmp(s1, s2);
+#endif
 }
 
 char *
