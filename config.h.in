@@ -1,71 +1,114 @@
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+/* config.h.in.  Generated from configure.in by autoheader.  */
 
-/* Define if you have the strcoll function and it is properly defined.  */
-#undef HAVE_STRCOLL
-
-/* Define as __inline if that's what the C compiler calls it.  */
-#undef inline
-
-/* Define if you have the ANSI C header files.  */
-#undef STDC_HEADERS
-
-/* Define if you have the <stdarg.h> header file.  */
-#undef HAVE_STDARG_H
-
-#undef HAVE_SNPRINTF
-#undef HAVE_VSNPRINTF
-
-/* Define if you have the resizeterm function.  */
-#undef HAVE_RESIZETERM
-
-/* Define if you have the setlocale function.  */
-#undef HAVE_SETLOCALE
-
-/* Define if you have the <history.h> header file.  */
+/* Define to 1 if you have the <history.h> header file. */
 #undef HAVE_HISTORY_H
 
-/* Define if you have the <linux/termios.h> header file.  */
-#undef HAVE_LINUX_TERMIOS_H
-
-/* Define if you have the <locale.h> header file.  */
-#undef HAVE_LOCALE_H
-
-/* Define if you have the <ncurses.h> header file.  */
-#undef HAVE_NCURSES_H
-
-/* Define if you have the <readline.h> header file.  */
-#undef HAVE_READLINE_H
-
-/* Define if you have the <readline/history.h> header file.  */
-#undef HAVE_READLINE_HISTORY_H
-
-/* Define if you have the <readline/readline.h> header file.  */
-#undef HAVE_READLINE_READLINE_H
-
-/* Define if you have the <string.h> header file.  */
-#undef HAVE_STRING_H
-
-/* Define if you have the <sys/ioctl.h> header file.  */
-#undef HAVE_SYS_IOCTL_H
-
-/* Define if you have the <termios.h> header file.  */
-#undef HAVE_TERMIOS_H
-
-/* Define if you have the <unistd.h> header file.  */
-#undef HAVE_UNISTD_H
-
-/* Name of package */
-#undef PACKAGE
-
-/* Version number of package */
-#undef VERSION
-
-/* Define if compiler has function prototypes */
-#undef PROTOTYPES
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
 
 /* Define if you have a readline compatible library */
 #undef HAVE_LIBREADLINE
 
-/* Define if your readline library has `add_history' */
+/* Define to 1 if you have the <linux/termios.h> header file. */
+#undef HAVE_LINUX_TERMIOS_H
+
+/* Define to 1 if you have the <locale.h> header file. */
+#undef HAVE_LOCALE_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define if you have the <ncurses.h> header file. */
+#undef HAVE_NCURSES
+
+/* Define to 1 if you have the <ncurses.h> header file. */
+#undef HAVE_NCURSES_H
+
+/* Define to 1 if you have the <readline.h> header file. */
+#undef HAVE_READLINE_H
+
+/* Define if your readline library has \`add_history' */
 #undef HAVE_READLINE_HISTORY
 
+/* Define to 1 if you have the <readline/history.h> header file. */
+#undef HAVE_READLINE_HISTORY_H
+
+/* Define to 1 if you have the <readline/readline.h> header file. */
+#undef HAVE_READLINE_READLINE_H
+
+/* Define to 1 if you have the `resizeterm' function. */
+#undef HAVE_RESIZETERM
+
+/* Define to 1 if you have the `setlocale' function. */
+#undef HAVE_SETLOCALE
+
+/* Define if snprintf is available. */
+#undef HAVE_SNPRINTF
+
+/* Define if you have the <stdarg.h> header file. */
+#undef HAVE_STDARG_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strcoll' function and it is properly defined.
+   */
+#undef HAVE_STRCOLL
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <termios.h> header file. */
+#undef HAVE_TERMIOS_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define if vsnprintf is available. */
+#undef HAVE_VSNPRINTF
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define if compiler has function prototypes */
+#undef PROTOTYPES
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Version number of package */
+#undef VERSION
+
+/* Define as `__inline' if that's what the C compiler calls it, or to nothing
+   if it is not supported. */
+#undef inline

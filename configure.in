@@ -4,6 +4,11 @@ AC_INIT(abook.c)
 AM_INIT_AUTOMAKE(abook, 2002xxxx)
 AM_CONFIG_HEADER(config.h)
 
+AC_DEFINE(HAVE_SNPRINTF, 0, [Define if snprintf is available.])
+AC_DEFINE(HAVE_VSNPRINTF, 0, [Define if vsnprintf is available.])
+AC_DEFINE(HAVE_STDARG_H, 0, [Define if you have the <stdarg.h> header file.])
+AC_DEFINE(HAVE_NCURSES, 0, [Define if you have the <ncurses.h> header file.])
+
 AC_CANONICAL_HOST
 
 AC_PROG_CC
