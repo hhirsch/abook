@@ -381,7 +381,7 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle, int enum_mode)
 	return (e_filters[i].func) (handle, e);
 }
 
-	
+
 
 int
 export_file(char filtname[FILTNAME_LEN], char *filename)
@@ -488,7 +488,7 @@ ldif_read_line(FILE *in)
 			buf = line;
 			continue;
 		}
-		
+
 		if(*line != ' ') {
 			fseek(in, pos, SEEK_SET);
 			free(line);
@@ -509,7 +509,7 @@ ldif_read_line(FILE *in)
 		free(buf);
 		return NULL;
 	}
-		
+
 	return buf;
 }
 
@@ -520,10 +520,10 @@ ldif_add_item(ldif_item ldif_item)
 	int i;
 
 	memset(abook_item, 0, sizeof(abook_item));
-	
+
 	if( !ldif_item[LDIF_ITEM_FIELDS -1] )
 		goto bail_out;
-	
+
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
 		if(ldif_conv_table[i] >= 0 && ldif_item[i] && *ldif_item[i] )
@@ -578,7 +578,7 @@ ldif_parse_file(FILE *handle)
 			my_free(line);
 			continue; /* just skip the errors */
 		}
-				
+
 		ldif_fix_string(value);
 
 		ldif_convert(item, type, value);
@@ -629,7 +629,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 		free(line);
 		return 1;
 	}
-		
+
 	ptr += 5;
 
 	while( ISSPACE(*ptr) )
@@ -677,7 +677,7 @@ mutt_parse_email(list_item item)
 		item[EMAIL] = email;
 	else
 		return;
-	
+
 	while( (start = strchr(start, ',')) && i++ < MAX_EMAILS - 1) {
 		tmp = strconcat("From: ", ++start, NULL);
 		getname(tmp, &name, &email);
@@ -702,7 +702,7 @@ mutt_parse_file(FILE *in)
 
 	for(;;) {
 		memset(item, 0, sizeof(item));
-		
+
 		if( !mutt_read_line(in, &item[NICK],
 				&item[NAME]) )
 			mutt_parse_email(item);
@@ -879,7 +879,7 @@ pine_convert_emails(char *s)
 
 	if( ( tmp = strchr(s,')')) )
 		*tmp=0;
-	
+
 	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s=tmp+1 )
 		if( i > MAX_EMAILS - 1 ) {
 			*tmp = 0;
@@ -903,10 +903,10 @@ pine_parse_buf(char *buf)
 	for(i=0, last=0; !last ; i++) {
 		if( ! (end = strchr(start, '\t')) )
 			last=1;
-		
+
 		len = last ? strlen(start) : (int) (end-start);
 		len = min(len, 400-1);
-	
+
 		if(i < (int)(sizeof(pine_conv_table) / sizeof(*pine_conv_table))
 				&& pine_conv_table[i] >= 0) {
 			strncpy(tmp, start, len);
@@ -915,11 +915,11 @@ pine_parse_buf(char *buf)
 		}
 		start = end + 1;
 	}
-	
+
 	pine_convert_emails(item[EMAIL]);
 	add_item2database(item);
 }
-		
+
 
 #define LINESIZE	1024
 
@@ -932,7 +932,7 @@ pine_parse_file(FILE *in)
 	int i;
 
 	fgets(line, LINESIZE, in);	
-	
+
 	while(!feof(in)) {
 		for(i = 2;;i++) {
 			buf = (char *) realloc(buf, i*LINESIZE);
@@ -945,7 +945,7 @@ pine_parse_file(FILE *in)
 			else
 				while( *ptr == ' ')
 					ptr++;
-				
+
 			strcat(buf, ptr);
 		}
 		if( *buf == '#' ) {
@@ -1037,10 +1037,10 @@ csv_remove_quotes(char *s)
 {
 	char *copy, *trimmed;
 	int len;
-	
+
 	copy = trimmed = strdup(s);
 	strtrim(trimmed);
-	
+
 	len = strlen(trimmed);
 	if(trimmed[len - 1] == '\"' && *trimmed == '\"') {
 		if(len < 3) {
@@ -1168,11 +1168,10 @@ csv_parse_file(FILE *in)
  * csv addressbook export filters
  */
 
-#define CSV_LAST		(-2)
-#define CSV_UNDEFINED		(-3)
-#define CSV_SPECIAL(X)		(-4 - (X))
-#define CSV_IS_SPECIAL(X)	((X) <= -4)
-#define CSV_GET_SPECIAL(X)	(-4 + (X))
+#define CSV_LAST		(-1)
+#define CSV_UNDEFINED		(-2)
+#define CSV_SPECIAL(X)		(-3 - (X))
+#define CSV_IS_SPECIAL(X)	((X) <= -3)
 
 static int
 csv_export_common(FILE *out, struct db_enumerator e,
