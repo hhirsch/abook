@@ -7,7 +7,7 @@
  - ablity to print/export only selected items
  - new editor commands
  - text filter update
- - mutt query code cleanup
+ - query/find code cleanup
 
 0.4.12
  - added man page for abookrc (Alan Ford)
