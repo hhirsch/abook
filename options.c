@@ -1,6 +1,7 @@
 
 /*
- * options.c
+ * $Id$
+ *
  * by JH <jheinonen@bigfoot.com>
  *
  * Copyright (C) Jaakko Heinonen

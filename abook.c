@@ -1,5 +1,6 @@
 /*
- * abook.c
+ * $Id$
+ *
  * by JH <jheinonen@bigfoot.com>
  *
  * Copyright (C) 1999, 2000 Jaakko Heinonen

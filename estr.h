@@ -1,7 +1,6 @@
 
 /*
- * 
- * estr.h
+ * $Id$
  *
  * by JH <jheinonen@bigfoot.com>
  *

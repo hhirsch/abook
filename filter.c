@@ -1,6 +1,7 @@
 
 /*
- * filter.c for abook
+ * $Id$
+ *
  * by JH <jheinonen@bigfoot.com>
  *
  * Copyright (C) Jaakko Heinonen
