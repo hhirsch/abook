@@ -9,8 +9,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include "abook.h"
+#include <assert.h>
 #include "ui.h"
 #include "database.h"
 #include "edit.h"
@@ -147,7 +147,7 @@ print_list_line(int i, int line, int highlight)
 				EXTRALEN);
 
 	scrollok(list, TRUE);
-	if(highlight_line)
+	if(highlight)
 		wstandend(list);
 }
 	
