@@ -82,7 +82,7 @@ init_options()
 
 
 #if 1
-extern int alternative_rcfile;
+extern bool alternative_rcfile;
 #endif
 
 void
@@ -148,7 +148,7 @@ default_options()
 
 	options_add_key("show_all_emails", "true");
 	options_add_key("emailpos", "25");
-	options_add_key("extra_column", "7");
+	options_add_key("extra_column", "phone");
 	options_add_key("extra_alternative", "-1");
 	options_add_key("extrapos", "65");
 
