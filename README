@@ -23,8 +23,9 @@ FreeBSD 3.3 (newer versions should work)
 OpenBSD
 NetBSD (reportedly requires ncurses to work properly)
 AIX 3.2.5
-DEC alpha ?
+HPUX
 Irix 6.5
+DEC alpha ?
 
 INSTALLATION
 
