@@ -20,7 +20,7 @@ int		statusline_ask_boolean(char *msg, int def);
 void            clear_statusline();
 void		display_help(int help);
 void		statusline_addstr(char *str);
-char *		ui_readline(char *prompt, char *s, int limit, int use_completion);
+char *		ui_readline(char *prompt, char *s, int limit, bool use_completion);
 void		refresh_statusline();
 void		get_commands();
 void		ui_remove_items();

@@ -187,6 +187,7 @@ change_field(char *msg, char **field)
 {
 	int max_len = MAX_FIELD_LEN;
 	char *old;
+	int ret = 0;
 
 	if( !strncmp("E-mail", msg, 6) )
 		max_len = MAX_EMAIL_LEN;
@@ -195,12 +196,19 @@ change_field(char *msg, char **field)
 
 	*field = ui_readline(msg, old, max_len - 1, 0);
 
-	free(old);
+	if(*field) {
+		free(old);
+		if(!**field)
+			my_free(*field);
+	} else {
+		*field = old;
+		ret = 1;
+	}
 
 	clear_statusline();
 	refresh_statusline();
 
-	return 0;
+	return ret;
 }
 
 static void

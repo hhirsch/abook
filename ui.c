@@ -239,7 +239,7 @@ statusline_addstr(char *str)
 }
 
 char *
-ui_readline(char *prompt, char *s, int limit, int use_completion)
+ui_readline(char *prompt, char *s, int limit, bool use_completion)
 {
 	int y, x;
 	char *ret;
@@ -249,9 +249,6 @@ ui_readline(char *prompt, char *s, int limit, int use_completion)
 	getyx(bottom, y, x);
 
 	ret = abook_readline(bottom, y, x, s, limit, use_completion);
-
-	if(ret && !*ret)
-		my_free(ret);
 
 	if(ret)
 		strtrim(ret);

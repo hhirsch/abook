@@ -33,6 +33,8 @@
 static int rl_x, rl_y;
 static WINDOW *rl_win;
 
+static bool rl_cancelled;
+
 static void
 rl_refresh()
 {
@@ -58,26 +60,36 @@ rline_update()
 	rl_refresh();
 }
 
-void
+static void
 rline_compdisp(char **matches, int n, int max_len)
 {
-	/*
-	 * dummy
-	 */
+	/* dummy */
+}
+
+static int
+rl_cancel(int dummy1, int dummy2)
+{
+	rl_cancelled = TRUE;
+
+	rl_done = 1;
+
+	return 0;
 }
 
 static void
-abook_rl_init(int use_completion)
+abook_rl_init(bool use_completion)
 {
 	rl_readline_name = RL_READLINE_NAME;
 	
 	rl_already_prompted = 1;
+	rl_catch_sigwinch = 0;
 	
 	rl_redisplay_function = rline_update;
 	rl_completion_display_matches_hook = rline_compdisp;
-	
+
 	rl_unbind_function_in_map(rl_clear_screen, rl_get_keymap());
 	rl_unbind_function_in_map(rl_reverse_search_history, rl_get_keymap());
+	rl_unbind_function_in_map(rl_re_read_init_file, rl_get_keymap());
 	
 	if(use_completion) {
 		rl_bind_key('\t', rl_menu_complete);
@@ -86,24 +98,33 @@ abook_rl_init(int use_completion)
 		rl_unbind_function_in_map(rl_menu_complete, rl_get_keymap());
 	}
 
+	rl_bind_key('g' & 31, rl_cancel); /* C-g */
+
 	clear_history();
+
+	rl_cancelled = FALSE;
 }	
 
 char *
-abook_readline(WINDOW *w, int y, int x, char *s, int limit, int use_completion)
+abook_readline(WINDOW *w, int y, int x, char *s, int limit, bool use_completion)
 {
-	char *ret = NULL;
+	char *ret;
 
-	rl_win = w;
 	abook_rl_init(use_completion);
 
-	wmove(rl_win, rl_y = y, rl_x = x);
+	wmove(rl_win = w, rl_y = y, rl_x = x);
 	rl_refresh();
 
 	if(s && *s)
 		add_history(s);
 	
 	ret = readline(NULL);
+
+	if(rl_cancelled) {
+		if(ret)
+			free(ret);
+		ret = NULL;
+	}
 
 	return ret;
 }
