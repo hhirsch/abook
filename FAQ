@@ -49,8 +49,21 @@ A: Export to palmcsv format, and import from there. Several GUI
 
 Q: Can I use abook in UTF-8 terminal emulator?
 
-A: Abook itself doesn't currently support UTF-8. You can use luit
-   (http://www.pps.jussieu.fr/~jch/software/luit/) or screen as a converter.
-   Luit comes also with recent versions of XFree86.
+A: Yes, version 0.5.2 added multibyte character support.
+
+   There are currently some issues:
+
+   - Addressbook files must have the same encoding as you use with abook.
+     If you have used abook previously with ISO-8859-1 encoding you can
+     convert the addressbook files with iconv(1). For example:
+
+     $ iconv -f ISO-8859-1 -t UTF-8 < ~/.abook/addressbook.old > \
+     ~/.abook/addressbook.new
+
+   - Filters will output strings using multibyte representation of the used
+     locale. This is incorrect for (most of) filters. You can again use
+     iconv to convert between encodings. Same goes with input filters. If
+     you use UTF-8 charset the input is expected to be UTF-8 encoded.
+
 
 last update: $Date$
