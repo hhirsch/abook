@@ -61,7 +61,7 @@ static int	spruce_export_database(FILE *out, struct db_enumerator e);
 struct abook_input_filter i_filters[] = {
 	{ "abook", "abook native format", parse_database },
 	{ "ldif", "ldif / Netscape addressbook", ldif_parse_file },
-	{ "mutt", "mutt alias (beta)", mutt_parse_file },
+	{ "mutt", "mutt alias", mutt_parse_file },
 	{ "pine", "pine addressbook", pine_parse_file },
 	{ "csv", "comma separated values", csv_parse_file },
 	{ "\0", NULL, NULL }
@@ -601,18 +601,12 @@ ldif_fix_string(char *str)
  * mutt alias import filter
  */
 
-enum {
-	MUTT_ALIAS,
-	MUTT_NAME,
-	MUTT_EMAIL
-};
+#include "getname.h"
 
 static int
 mutt_read_line(FILE *in, char **alias, char **rest)
 {
-	char *line;
-	char *ptr;
-	char *tmp;
+	char *line, *ptr, *tmp;
 
 	if( !(line = ptr = getaline(in)) )
 		return 1; /* error / EOF */
@@ -641,7 +635,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	}
 
 	strncpy(*alias, tmp, ptr-tmp);
-	*(*alias+(ptr-tmp)) = 0;
+	*(*alias + (ptr - tmp)) = 0;
 
 	while( ISSPACE(*ptr) )
 		ptr++;
@@ -653,75 +647,62 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 }
 
 static void
-mutt_parse_email(char *mutt_item[3])
+mutt_parse_email(list_item item)
 {
-	char *tmp;
-	int i;
+	char *line = item[NAME];
+	char *start = line, *tmp;
+	char *name, *email;
+	int i = 0;
 
-	if( (tmp = strchr(mutt_item[MUTT_NAME], '<')) )
-		*tmp = 0;
+	tmp = strconcat("From: ", line, NULL);
+	getname(tmp, &name, &email);
+	free(tmp);
+
+	if(name)
+		item[NAME] = name;
 	else
 		return;
-
-	mutt_item[MUTT_EMAIL] = strdup(tmp+1);
-
-	if( (tmp = strchr(mutt_item[MUTT_EMAIL], '>')) )
-		*tmp = 0;
-
-	tmp = mutt_item[MUTT_NAME];
-
-	for(i=strlen(tmp)-1; i>0; i--)
-		if(ISSPACE(tmp[i]))
-			tmp[i] = 0;
-		else
-			break;
-
-	mutt_item[MUTT_NAME] = strdup(tmp);
-
-	free(tmp);
-}
-
-static void
-mutt_add_mutt_item(char *mutt_item[3])
-{
-	list_item abook_item;
-
-	memset(abook_item, 0, sizeof(abook_item));
-
-	abook_item[NAME] = safe_strdup(mutt_item[MUTT_NAME]);
-	abook_item[EMAIL] = safe_strdup(mutt_item[MUTT_EMAIL]);
-	abook_item[NICK] = safe_strdup(mutt_item[MUTT_ALIAS]);
-
-	add_item2database(abook_item);
+	if(email)
+		item[EMAIL] = email;
+	else
+		return;
+	
+	while( (start = strchr(start, ',')) && i++ < MAX_EMAILS - 1) {
+		tmp = strconcat("From: ", ++start, NULL);
+		getname(tmp, &name, &email);
+		free(tmp);
+		free(name);
+		if(email) {
+			if(*email) {
+				tmp = strconcat(item[EMAIL], ",", email, NULL);
+				free(item[EMAIL]);
+				item[EMAIL] = tmp;
+			} else {
+				my_free(email);
+			}
+		}
+	}
 }
 
 static int
 mutt_parse_file(FILE *in)
 {
-	char *mutt_item[3];
+	list_item item;
 
 	for(;;) {
-
-		memset(mutt_item, 0, sizeof(mutt_item) );
+		memset(item, 0, sizeof(item));
 		
-		if( !mutt_read_line(in, &mutt_item[MUTT_ALIAS],
-				&mutt_item[MUTT_NAME]) )
-			mutt_parse_email(mutt_item);
+		if( !mutt_read_line(in, &item[NICK],
+				&item[NAME]) )
+			mutt_parse_email(item);
 
 		if( feof(in) ) {
-			free(mutt_item[MUTT_ALIAS]);
-			free(mutt_item[MUTT_NAME]);
-			free(mutt_item[MUTT_EMAIL]);
+			free_list_item(item);
 			break;
 		}
 
-		mutt_add_mutt_item(mutt_item);
-
-		free(mutt_item[MUTT_ALIAS]);
-		free(mutt_item[MUTT_NAME]);
-		free(mutt_item[MUTT_EMAIL]);
+		add_item2database(item);
 	}
-
 
 	return 0;
 }
