@@ -124,14 +124,22 @@ is_ui_initialized()
 	return ui_initialized;
 }
 
+void
+ui_init_curses()
+{
+	if(!is_ui_initialized())
+		initscr();
+	cbreak();
+	noecho();
+	nonl();
+	intrflush(stdscr, FALSE);
+	keypad(stdscr, TRUE);
+}
 
 int
 init_ui()
 {
-	initscr(); cbreak(); noecho();
-	nonl();
-	intrflush(stdscr, FALSE);
-	keypad(stdscr, TRUE);
+	ui_init_curses();
 #ifdef DEBUG
         fprintf(stderr, "init_abook():\n");
         fprintf(stderr, "  COLS = %d, LINES = %d\n", COLS, LINES);

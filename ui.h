@@ -9,6 +9,7 @@ enum {
 };
 
 int		is_ui_initialized();
+void		ui_init_curses();
 int		init_ui();
 void		close_ui();
 void		headerline(char *str);

@@ -322,6 +322,11 @@ launch_mutt(int item)
 #endif
 	system(cmd);	
 	free(cmd);
+	
+	/*
+	 * we need to make sure that curses settings are correct
+	 */
+	ui_init_curses();
 }
 
 void
@@ -343,6 +348,11 @@ launch_wwwbrowser(int item)
 		system(cmd);
 
 	free(cmd);
+
+	/*
+	 * we need to make sure that curses settings are correct
+	 */
+	ui_init_curses();
 }
 
 void *

@@ -9,6 +9,7 @@
  - text filter update
  - query/find code cleanup
  - fixed snprintf related bugs
+ - minor bugfixes
 
 0.4.12
  - added man page for abookrc (Alan Ford)
