@@ -6,7 +6,6 @@
  * Copyright (C) Jaakko Heinonen
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -81,8 +80,10 @@ abook_rl_init(int use_completion)
 
 	if(use_completion)
 		rl_bind_key('\t', rl_menu_complete);
-	else
+	else {
 		rl_unbind_function_in_map(rl_complete, rl_get_keymap());
+		rl_unbind_function_in_map(rl_menu_complete, rl_get_keymap());
+	}
 
 	clear_history();
 }	
@@ -105,3 +106,4 @@ abook_readline(WINDOW *w, int y, int x, char *s, int limit, int use_completion)
 
 	return ret;
 }
+

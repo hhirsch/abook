@@ -695,7 +695,7 @@ fi
 
 PACKAGE=abook
 
-VERSION=2002-xx-xx
+VERSION=2002-03-11
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -2303,7 +2303,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_readline'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   
-    ORIG_LIBS=$LIBS
+    ORIG_LIBS="$LIBS"
     for readline_lib in readline edit editline; do
       for termcap_lib in "" termcap curses ncurses; do
         if test -z "$termcap_lib"; then
@@ -2342,14 +2342,15 @@ rm -f conftest*
     done
     if test -z "$ac_cv_lib_readline"; then
       ac_cv_lib_readline="no"
-      LIBS=$ORIG_LIBS
     fi
+    LIBS="$ORIG_LIBS"
   
 fi
 
 echo "$ac_t""$ac_cv_lib_readline" 1>&6
 
   if test "$ac_cv_lib_readline" != "no"; then
+    LIBS="$LIBS $ac_cv_lib_readline"
     cat >> confdefs.h <<\EOF
 #define HAVE_LIBREADLINE 1
 EOF
@@ -2358,17 +2359,17 @@ EOF
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:2362: checking for $ac_hdr" >&5
+echo "configure:2363: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2367 "configure"
+#line 2368 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2372: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:2373: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -2395,14 +2396,14 @@ fi
 done
 
     echo $ac_n "checking whether readline supports history""... $ac_c" 1>&6
-echo "configure:2399: checking whether readline supports history" >&5
+echo "configure:2400: checking whether readline supports history" >&5
 if eval "test \"`echo '$''{'ac_cv_lib_readline_history'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   
       ac_cv_lib_readline_history="no"
       cat > conftest.$ac_ext <<EOF
-#line 2406 "configure"
+#line 2407 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2413,7 +2414,7 @@ int main() {
 add_history()
 ; return 0; }
 EOF
-if { (eval echo configure:2417: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2418: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   ac_cv_lib_readline_history="yes"
 else
@@ -2434,17 +2435,17 @@ EOF
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:2438: checking for $ac_hdr" >&5
+echo "configure:2439: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2443 "configure"
+#line 2444 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2448: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:2449: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -2474,11 +2475,10 @@ done
   fi
 
 
-if test x$ac_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
+
+if test x$ac_cv_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
 	{ echo "configure: error: *** readline library not found or it doesn't support history ***" 1>&2; exit 1; }
 fi
-
-LDFLAGS="$ac_cv_lib_readline $LDFLAGS"
 
 for ac_func in resizeterm
 do

@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 2002-xx-xx)
+AM_INIT_AUTOMAKE(abook, 2002-03-11)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -51,8 +51,6 @@ AC_LIB_READLINE
 if test x$ac_cv_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
 	AC_MSG_ERROR([*** readline library not found or it doesn't support history ***])
 fi
-
-LDFLAGS="$ac_cv_lib_readline $LDFLAGS"
 
 AC_CHECK_FUNCS(resizeterm)
 

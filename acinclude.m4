@@ -137,7 +137,7 @@ dnl
 AC_DEFUN([AC_LIB_READLINE], [
   AC_CACHE_CHECK([for a readline compatible library],
                  ac_cv_lib_readline, [
-    ORIG_LIBS=$LIBS
+    ORIG_LIBS="$LIBS"
     for readline_lib in readline edit editline; do
       for termcap_lib in "" termcap curses ncurses; do
         if test -z "$termcap_lib"; then
@@ -157,11 +157,12 @@ AC_DEFUN([AC_LIB_READLINE], [
     done
     if test -z "$ac_cv_lib_readline"; then
       ac_cv_lib_readline="no"
-      LIBS=$ORIG_LIBS
     fi
+    LIBS="$ORIG_LIBS"
   ])
 
   if test "$ac_cv_lib_readline" != "no"; then
+    LIBS="$LIBS $ac_cv_lib_readline"
     AC_DEFINE(HAVE_LIBREADLINE, 1,
               [Define if you have a readline compatible library])
     AC_CHECK_HEADERS(readline.h readline/readline.h)
@@ -176,4 +177,5 @@ AC_DEFUN([AC_LIB_READLINE], [
       AC_CHECK_HEADERS(history.h readline/history.h)
     fi
   fi
+
 ])
