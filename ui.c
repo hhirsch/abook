@@ -500,16 +500,14 @@ ui_find(int next)
 			return;
 	} else {
 		char *s;
-		clear_statusline();
 		s = ui_readline("/", findstr, MAX_FIELD_LEN - 1, 0);
 		strncpy(findstr, s, MAX_FIELD_LEN);
 		refresh_screen();
 	}
 
-	if( (item = find_item(findstr, curitem + !!next, search_fields)) < 0)
-		if((item = find_item(findstr, 0, search_fields)) >= 0)
-			statusline_addstr(
-				"Search hit bottom, continuing at top");
+	if( (item = find_item(findstr, curitem + !!next, search_fields)) < 0 &&
+			(item = find_item(findstr, 0, search_fields)) >= 0)
+		statusline_addstr("Search hit bottom, continuing at top");
 
 	if(item >= 0) {
 		curitem = item;
