@@ -37,5 +37,19 @@ void		ui_open_datafile();
 
 #define UI_HLINE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
 					'-' : ACS_HLINE
+#define UI_TEE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'-' : ACS_BTEE
+#define UI_LBOXLINE_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'/' : ACS_HLINE
+#define UI_RBOXLINE_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'\\' : ACS_HLINE
+#define UI_ULCORNER_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					' ' : ACS_ULCORNER
+#define UI_URCORNER_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					' ' : ACS_URCORNER
+#define UI_LLCORNER_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'+' : ACS_LLCORNER
+#define UI_LRCORNER_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'+' : ACS_LRCORNER
 
 #endif

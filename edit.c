@@ -37,18 +37,29 @@ editor_tab(int tab)
 {
 	int i;
 	char *tab_names[] = {
-		"/ CONTACT \\",
-		"/ ADDRESS \\",
-		"/  PHONE  \\",
-		"/  OTHER  \\"
+		" CONTACT ",
+		" ADDRESS ",
+		"  PHONE  ",
+		"  OTHER  "
 	};
 
 	mvwhline(editw, TABLINE+1, 0, UI_HLINE_CHAR, EDITW_COLS);
+	for(i=0; i < TABS; i++) {
+		mvwaddch(editw,  TABLINE+1, 16 * i + 2,  UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE+1, 16 * i + 14, UI_TEE_CHAR);
+	}
 
-	for(i=0; i < TABS; i++)
-		mvwaddstr(editw, TABLINE, 16 * i + 3, tab_names[i]);
+	for(i=0; i < TABS; i++) {
+		mvwaddch(editw,  TABLINE, 16 * i + 2,  UI_ULCORNER_CHAR);
+		mvwaddch(editw,  TABLINE, 16 * i + 3,  UI_LBOXLINE_CHAR);
+		mvwaddstr(editw, TABLINE, 16 * i + 4,  tab_names[i]);
+		mvwaddch(editw,  TABLINE, 16 * i + 13, UI_RBOXLINE_CHAR);
+		mvwaddch(editw,  TABLINE, 16 * i + 14, UI_URCORNER_CHAR);
+	}
 
-	mvwaddstr(editw, TABLINE+1, 16 * tab + 2, "/           \\");
+	mvwaddch(editw,  TABLINE+1, 16 * tab + 2, UI_LRCORNER_CHAR);
+	mvwaddstr(editw, TABLINE+1, 16 * tab + 3, "           ");
+	mvwaddch(editw,  TABLINE+1, 16 * tab + 14, UI_LLCORNER_CHAR);
 }
 
 void
