@@ -12,7 +12,7 @@
 #include "abook.h"
 #include "abook_rl.h"
 
-#define KEYPAD_HACK 1 /* enable a keypad hack */
+#define KEYPAD_HACK 1 /* enable keypad hack */
 #define CBREAK_HACK 1 /* enable cbreak hack */
 
 #ifdef HAVE_CONFIG_H
