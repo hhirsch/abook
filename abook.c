@@ -507,6 +507,12 @@ quit_add_email()
 }
 
 static void
+quit_add_email_sig(int signal)
+{
+	quit_add_email();
+}
+
+static void
 init_add_email()
 {
 	set_filenames();
@@ -521,7 +527,7 @@ init_add_email()
 
 	atexit(close_database);
 
-	signal(SIGINT, quit_add_email);
+	signal(SIGINT, quit_add_email_sig);
 }
 
 static int

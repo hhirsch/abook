@@ -316,7 +316,7 @@ filesel_sort_list()
 		qsort((void *)lst, fdp, sizeof(struct filesel_list_item),
 				filenamecmp );
 
-	qsort((void *)lst + fdp * sizeof(struct filesel_list_item),
+	qsort((void *)(lst + fdp * sizeof(struct filesel_list_item)),
 			FILESEL_LAST_ITEM - fdp + 1,
 			sizeof(struct filesel_list_item),
 			filenamecmp );
