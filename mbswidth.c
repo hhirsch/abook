@@ -16,6 +16,9 @@
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
 /* Written by Bruno Haible <haible@clisp.cons.org>.  */
+/*
+ * Adapted for abook by JH <jheinonen@users.sourceforge.net>
+ */
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -57,7 +60,7 @@
 #endif
 
 #ifndef HAVE_DECL_WCWIDTH
-"this configure-time declaration test was not run"
+#	warn "this configure-time declaration test was not run"
 #endif
 #if !HAVE_DECL_WCWIDTH
 int wcwidth ();

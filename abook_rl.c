@@ -32,7 +32,6 @@
 #endif
 
 #ifdef HANDLE_MULTIBYTE
-#	include <wchar.h>
 #	include <mbswidth.h>
 #endif
 
@@ -101,7 +100,9 @@ abook_rl_init(bool use_completion)
 {
 	rl_readline_name = RL_READLINE_NAME;
 	
+#if RL_VERSION_MAJOR >= 4
 	rl_already_prompted = 1;
+#endif
 	rl_catch_sigwinch = 0;
 	
 	rl_redisplay_function = rline_update;

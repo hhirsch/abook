@@ -4,9 +4,6 @@ AC_INIT(abook.c)
 AM_INIT_AUTOMAKE(abook, 0.5.2pre)
 AM_CONFIG_HEADER(config.h)
 
-dnl AC_DEFINE(HAVE_STDARG_H, 0, [Define if you have the <stdarg.h> header file.])
-dnl AC_DEFINE(HAVE_NCURSES_H, 0, [Define if you have the <ncurses.h> header file.])
-
 AC_CANONICAL_HOST
 
 AC_PROG_CC
