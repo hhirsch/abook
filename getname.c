@@ -288,7 +288,7 @@ void getname(char *line, char **namep, char **emailp)
 	    strcpymax(name, NONAME, NAMESTRLEN);
 	else {
 	    c = email + strlen(email) - 1;
-	    while (isspace(*c))
+	    while (isspace((unsigned char)*c))
 		*c-- = '\0';
 	    strcpymax(name, email, NAMESTRLEN);	/* Yes */
 	}
@@ -348,7 +348,7 @@ void getname(char *line, char **namep, char **emailp)
      */
 
     c = email + (strlen(email) - 1);
-    while (c > email && isspace(*c))
+    while (c > email && isspace((unsigned char)*c))
 	*c-- = '\0';
 
     *namep = strsav(name);
