@@ -37,50 +37,54 @@ const int use_domainaddr = 0;
 
 /*const int set_iso2022jp = 0;*/
 
-void strcpymax(char *dest, const char *src, int n)
+void
+strcpymax(char *dest, const char *src, int n)
 {
 	int i;
-	
+
 	if (n) {
-		n--; /* decrease one to allow for the termination byte */
+		n--;		/* decrease one to allow for the termination byte */
 		for (i = 0; *src && (i < n); i++)
 			*dest++ = *src++;
 	}
 	*dest = 0;
 }
 
-static int blankstring(char *str)
+static int
+blankstring(char *str)
 {
-    register char *cp;
-    for (cp = str; *cp; cp++) {
-	if (*cp != ' ' && *cp != '\t' && *cp != '\r' && *cp != '\n')
-	    return (0);
-    }
-    return (1);
+	register char *cp;
+	for (cp = str; *cp; cp++) {
+		if (*cp != ' ' && *cp != '\t' && *cp != '\r'
+		    && *cp != '\n')
+			return (0);
+	}
+	return (1);
 }
 
 #if 0
-char *spamify(char *input)
+char *
+spamify(char *input)
 {
-  /* we should replace the @-letter in the email
-     address */
-  int newlen=strlen(input)+4;
-  char *atptr=strchr(input, '@');
-  if(atptr) {
-    char *newbuf = malloc(newlen);
-    int index=atptr-input;
-    /* copy the part before the @ */
-    memcpy(newbuf, input, index);
-    /* append _at_ */
-    memcpy(newbuf+index, "_at_", 4);
-    /* append the part after the @ */
-    strcpy(newbuf+index+4, input+index+1);
-    /* correct the pointer and free the old */
-    free(input);
-    return newbuf;
-  }
-  /* weird email, bail out */
-  return input;
+	/* we should replace the @-letter in the email
+	   address */
+	int newlen = strlen(input) + 4;
+	char *atptr = strchr(input, '@');
+	if (atptr) {
+		char *newbuf = malloc(newlen);
+		int index = atptr - input;
+		/* copy the part before the @ */
+		memcpy(newbuf, input, index);
+		/* append _at_ */
+		memcpy(newbuf + index, "_at_", 4);
+		/* append the part after the @ */
+		strcpy(newbuf + index + 4, input + index + 1);
+		/* correct the pointer and free the old */
+		free(input);
+		return newbuf;
+	}
+	/* weird email, bail out */
+	return input;
 }
 #endif
 
@@ -128,230 +132,224 @@ char *spamify(char *input)
 ** From: <name.hidden@era.ericsson.se>›Name.Hidden@era.ericsson.seœ
 */
 
-void getname(char *line, char **namep, char **emailp)
+void
+getname(char *line, char **namep, char **emailp)
 {
-    int i;
-    int len;
-    char *c;
-    int comment_fnd;
+	int i;
+	int len;
+	char *c;
+	int comment_fnd;
 
-    char email[MAILSTRLEN];
-    char name[NAMESTRLEN];
+	char email[MAILSTRLEN];
+	char name[NAMESTRLEN];
 
-    len = MAILSTRLEN - 1;
-    comment_fnd = 0;
+	len = MAILSTRLEN - 1;
+	comment_fnd = 0;
 
-    /*
-     * Zero out data storage.
-     */
-    memset(email, 0, MAILSTRLEN);
-    memset(name, 0, NAMESTRLEN);
-
-    *namep = NULL;
-    *emailp = NULL;
-
-    /* EMail Processing First:
-       ** First, is there an '@' sign we can use as an anchor ?
-     */
-    if ((c = hm_strchr(line, '@')) == NULL) {
-	/* 
-	   ** No '@' sign here so ...
-	 */
-	if (strchr(line, '(')) {	/* From: bob (The Big Guy) */
-	    c = strchr(line, ':') + 1;
-	    while (*c == ' ' || *c == '\t')
-		c++;
-	    for (i = 0; *c && *c != '(' && *c != ' ' &&
-		 *c != '\t' && *c != '\n' && i < len; c++)
-		email[i++] = *c;
-	    email[i] = '\0';
-	}
-	else if ((c = strchr(line, '<'))) {	/* From: <kent> */
-	    c++;
-	    for (i = 0; *c && *c != '>' && *c != ' ' &&
-		 *c != '\t' && *c != '\n' && i < len; c++)
-		email[i++] = *c;
-	    email[i] = '\0';
-	}
-	else {
-	    /* 
-	     *    - check to see if the From: line is blank, (taken care of)
-	     *    - check if From: uu.net!kent formatted line
-	     *    - check if "From: kent" formatted line
-	     */
-	    c = strchr(line, ':') + 1;
-	    while (*c == ' ' || *c == '\t')
-		c++;
-	    for (i = 0; *c && *c != ' ' && *c != '\t' &&
-		 *c != '\n' && *c != ',' && i < len; c++)
-		email[i++] = *c;
-	    email[i] = '\0';
-
-	}
-
-	if (email[0] == '\0')	/* Was it a junk From line ? */
-	    strcpymax(email, NOEMAIL, MAILSTRLEN);
-
-	else if (use_domainaddr) {
-	    /*
-	     * check if site domainizes addresses 
-	     * but don't modify uucp addresses
-	     */
-	    if ((c = strchr(email, '!')) == NULL) {
-		strcat(email, "@");
-		strcat(email, set_domainaddr);
-	    }
-	}
-    }
-    else {
-	while (*c != ' ' && *c != '\t' && *c != '<' && *c != '"' &&
-	       *c != ':') c--;
-	c++;
-	for (i = 0; *c && *c != '>' && *c != ' ' && *c != '\t' &&
-	     *c != '"' && *c != '\n' && *c != ']' && *c != ',' &&
-	     i < len; c++)
-	    email[i++] = *c;
-	email[i] = '\0';
-    }
-
-    /*
-     * NAME Processing - Boy are there a bunch of funky formats here.
-     *                   No promises... I'll do my best. Let me know
-     *                   what I missed...
-     */
-
-    if (strchr(line, '<')) {
-	c = strchr(line, ':') + 1;
-	while (*c == ' ' || *c == '\t')
-	    c++;
-
-	/* if a comment then just look for the end point */
-
-	if (*c == '\"') {
-	    int rmparen = 0;
-
-	    ++c;
-	    if (*c == '(') {
-		++c;
-		rmparen = 1;
-	    }
-	    for (i = 0, len = NAMESTRLEN - 1;
-		 *c && *c != '\"' && *c != '\n' && i < len; c++)
-		name[i++] = *c;
-
-	    if (rmparen && name[(i - 1)] == ')')
-		--i;		/* get rid of "(name-comment)" parens */
-
-	    comment_fnd = 1;
-	}
-	else if (hm_strchr(line, '(')) {
-	    c = hm_strchr(line, '(') + 1;
-	    if (*c == '"')	/* is there a comment in the comment ? */
-		c++;
-	}
-	else if (*c == '<') {	/* Comment may be on the end */
-	    /* From: <bill@celestial.com> Bill Campbell */
-	    c = strchr(line, '>') + 1;
-	    for (i = 0, len = NAMESTRLEN - 1; *c && *c != '\n' && i < len;
-		 c++)
-		name[i++] = *c;
-
-	    comment_fnd = 1;
-	}
-    }
-    else if (strchr(line, '(')) {
-	c = strchr(line, '(');
-	c++;
-	if (*c == '"')		/* is there a comment in the comment ? */
-	    c++;
-	while (*c == ' ' || *c == '\t')
-	    c++;
-    }
-    else if (strchr(line, '[')) {
-	c = strchr(line, ':') + 1;
-	while (*c == ' ' || *c == '\t')
-	    c++;
-
-	for (i = 0, len = NAMESTRLEN - 1;
-	     *c && *c != '\"' && *c != '[' && *c != '\n' && i < len; c++)
-	    name[i++] = *c;
-
-	name[--i] = '\0';
-	comment_fnd = 1;
-    }
-    else {
 	/*
-	 * Is there an email address available 
-	 * that we can use for the name ?
+	 * Zero out data storage.
 	 */
-	if (!strcmp(email, NOEMAIL))	/* No */
-	    strcpymax(name, NONAME, NAMESTRLEN);
-	else {
-	    c = email + strlen(email) - 1;
-	    while (isspace((unsigned char)*c))
-		*c-- = '\0';
-	    strcpymax(name, email, NAMESTRLEN);	/* Yes */
+	memset(email, 0, MAILSTRLEN);
+	memset(name, 0, NAMESTRLEN);
+
+	*namep = NULL;
+	*emailp = NULL;
+
+	/* EMail Processing First:
+	   ** First, is there an '@' sign we can use as an anchor ?
+	 */
+	if ((c = hm_strchr(line, '@')) == NULL) {
+		/* 
+		   ** No '@' sign here so ...
+		 */
+		if (strchr(line, '(')) {	/* From: bob (The Big Guy) */
+			c = strchr(line, ':') + 1;
+			while (*c == ' ' || *c == '\t')
+				c++;
+			for (i = 0; *c && *c != '(' && *c != ' ' &&
+			     *c != '\t' && *c != '\n' && i < len; c++)
+				email[i++] = *c;
+			email[i] = '\0';
+		} else if ((c = strchr(line, '<'))) {	/* From: <kent> */
+			c++;
+			for (i = 0; *c && *c != '>' && *c != ' ' &&
+			     *c != '\t' && *c != '\n' && i < len; c++)
+				email[i++] = *c;
+			email[i] = '\0';
+		} else {
+			/* 
+			 *    - check to see if the From: line is blank, (taken care of)
+			 *    - check if From: uu.net!kent formatted line
+			 *    - check if "From: kent" formatted line
+			 */
+			c = strchr(line, ':') + 1;
+			while (*c == ' ' || *c == '\t')
+				c++;
+			for (i = 0; *c && *c != ' ' && *c != '\t' &&
+			     *c != '\n' && *c != ',' && i < len; c++)
+				email[i++] = *c;
+			email[i] = '\0';
+
+		}
+
+		if (email[0] == '\0')	/* Was it a junk From line ? */
+			strcpymax(email, NOEMAIL, MAILSTRLEN);
+
+		else if (use_domainaddr) {
+			/*
+			 * check if site domainizes addresses 
+			 * but don't modify uucp addresses
+			 */
+			if ((c = strchr(email, '!')) == NULL) {
+				strcat(email, "@");
+				strcat(email, set_domainaddr);
+			}
+		}
+	} else {
+		while (*c != ' ' && *c != '\t' && *c != '<' && *c != '"' &&
+		       *c != ':')
+			c--;
+		c++;
+		for (i = 0; *c && *c != '>' && *c != ' ' && *c != '\t' &&
+		     *c != '"' && *c != '\n' && *c != ']' && *c != ',' &&
+		     i < len; c++)
+			email[i++] = *c;
+		email[i] = '\0';
 	}
+
+	/*
+	 * NAME Processing - Boy are there a bunch of funky formats here.
+	 *                   No promises... I'll do my best. Let me know
+	 *                   what I missed...
+	 */
+
+	if (strchr(line, '<')) {
+		c = strchr(line, ':') + 1;
+		while (*c == ' ' || *c == '\t')
+			c++;
+
+		/* if a comment then just look for the end point */
+
+		if (*c == '\"') {
+			int rmparen = 0;
+
+			++c;
+			if (*c == '(') {
+				++c;
+				rmparen = 1;
+			}
+			for (i = 0, len = NAMESTRLEN - 1;
+			     *c && *c != '\"' && *c != '\n' && i < len;
+			     c++)
+				name[i++] = *c;
+
+			if (rmparen && name[(i - 1)] == ')')
+				--i;	/* get rid of "(name-comment)" parens */
+
+			comment_fnd = 1;
+		} else if (hm_strchr(line, '(')) {
+			c = hm_strchr(line, '(') + 1;
+			if (*c == '"')	/* is there a comment in the comment ? */
+				c++;
+		} else if (*c == '<') {	/* Comment may be on the end */
+			/* From: <bill@celestial.com> Bill Campbell */
+			c = strchr(line, '>') + 1;
+			for (i = 0, len = NAMESTRLEN - 1;
+			     *c && *c != '\n' && i < len; c++)
+				name[i++] = *c;
+
+			comment_fnd = 1;
+		}
+	} else if (strchr(line, '(')) {
+		c = strchr(line, '(');
+		c++;
+		if (*c == '"')	/* is there a comment in the comment ? */
+			c++;
+		while (*c == ' ' || *c == '\t')
+			c++;
+	} else if (strchr(line, '[')) {
+		c = strchr(line, ':') + 1;
+		while (*c == ' ' || *c == '\t')
+			c++;
+
+		for (i = 0, len = NAMESTRLEN - 1;
+		     *c && *c != '\"' && *c != '[' && *c != '\n'
+		     && i < len; c++)
+			name[i++] = *c;
+
+		name[--i] = '\0';
+		comment_fnd = 1;
+	} else {
+		/*
+		 * Is there an email address available 
+		 * that we can use for the name ?
+		 */
+		if (!strcmp(email, NOEMAIL))	/* No */
+			strcpymax(name, NONAME, NAMESTRLEN);
+		else {
+			c = email + strlen(email) - 1;
+			while (isspace((unsigned char) *c))
+				*c-- = '\0';
+			strcpymax(name, email, NAMESTRLEN);	/* Yes */
+		}
+		*namep = strsav(name);
+		*emailp = strsav(email);
+		return;
+	}
+
+	if (!comment_fnd) {
+		/*int in_ascii = TRUE, esclen = 0; */
+		for (i = 0, len = NAMESTRLEN - 1;
+		     *c && *c != '<' && *c != '\"' && *c != ')'
+		     && *c != '(' && *c != '\n' && i < len; c++) {
+			/*if (set_iso2022jp) {
+			   iso2022_state(c, &in_ascii, &esclen);
+			   if (esclen) {
+			   for (; esclen; esclen--, c++) name[i++] = *c;
+			   for (; in_ascii == FALSE && i < len;
+			   c++, iso2022_state(c, &in_ascii, &esclen)) {
+			   name[i++] = *c;
+			   }
+			   c--;
+			   } else {
+			   name[i++] = *c;
+			   }
+			   } else { */
+			name[i++] = *c;
+			/*} */
+		}
+	}
+
+	if (i > 0 && name[i - 1] == ' ' && (*c == '<' || *c == '('))
+		name[--i] = '\0';
+	else
+		name[i] = '\0';
+
+	/*
+	 * Is the name string blank ? If so then 
+	 * force it to get filled with something.
+	 */
+	if (blankstring(name))
+		name[0] = '\0';
+
+	/* Bailing and taking the easy way out... */
+
+	if (name[0] == '\0') {
+		if (email[0] == '\0')
+			strcpymax(name, NONAME, NAMESTRLEN);
+		else
+			strcpymax(name, email, NAMESTRLEN);
+	}
+
+	/* 
+	 * need to strip spaces off the end of 
+	 * the email and name strings 
+	 */
+
+	c = email + (strlen(email) - 1);
+	while (c > email && isspace((unsigned char) *c))
+		*c-- = '\0';
+
 	*namep = strsav(name);
 	*emailp = strsav(email);
-	return;
-    }
-
-    if (!comment_fnd) {
-	/*int in_ascii = TRUE, esclen = 0;*/
-	for (i = 0, len = NAMESTRLEN - 1;
-	     *c && *c != '<' && *c != '\"' && *c != ')' && *c != '(' &&
-	     *c != '\n' && i < len; c++)
-	{
-		/*if (set_iso2022jp) {
-			iso2022_state(c, &in_ascii, &esclen);
-			if (esclen) {
-				for (; esclen; esclen--, c++) name[i++] = *c;
-				for (; in_ascii == FALSE && i < len;
-				     c++, iso2022_state(c, &in_ascii, &esclen)) {
-					name[i++] = *c;
-				}
-				c--;
-			} else {
-				name[i++] = *c;
-			}
-		} else {*/
-			name[i++] = *c;
-		/*}*/
-	}
-    }
-
-    if (i > 0 && name[i-1] == ' ' && (*c == '<' || *c == '('))
-	name[--i] = '\0';
-    else
-	name[i] = '\0';
-
-    /*
-     * Is the name string blank ? If so then 
-     * force it to get filled with something.
-     */
-    if (blankstring(name))
-	name[0] = '\0';
-
-    /* Bailing and taking the easy way out... */
-
-    if (name[0] == '\0') {
-	if (email[0] == '\0')
-	    strcpymax(name, NONAME, NAMESTRLEN);
-	else
-	    strcpymax(name, email, NAMESTRLEN);
-    }
-
-    /* 
-     * need to strip spaces off the end of 
-     * the email and name strings 
-     */
-
-    c = email + (strlen(email) - 1);
-    while (c > email && isspace((unsigned char)*c))
-	*c-- = '\0';
-
-    *namep = strsav(name);
-    *emailp = strsav(email);
 }
-
