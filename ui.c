@@ -395,6 +395,7 @@ get_commands()
 			case KEY_DC:
 			case 'd':
 			case 'r': ui_remove_items();	break;
+			case 'D': duplicate_item();	break;
 			case 12: refresh_screen();	break;
 
 			case 'k':

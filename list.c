@@ -340,3 +340,25 @@ list_is_empty()
 	return items < 1;
 }
 
+int
+duplicate_item()
+{
+	int i;
+	list_item item;
+
+	if(curitem < 0)
+		return 1;
+
+	for(i = 0; i < ITEM_FIELDS; i++)
+		item[i] = database[curitem][i] ? strdup(database[curitem][i]) :
+			NULL;
+
+	if(add_item2database(item))
+		return 1;
+
+	curitem = LAST_ITEM;
+	refresh_list();
+
+	return 0;
+}
+

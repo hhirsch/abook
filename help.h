@@ -16,6 +16,7 @@ static char *mainhelp[] = {
 "	enter		view/edit item\n",
 "	a		add item\n",
 "	r / del		remove selected items\n",
+"	D		duplicate item\n",
 "\n",
 "	space		select item\n",
 "	+		select all\n",

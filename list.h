@@ -22,6 +22,7 @@ int		selected_items();
 void		invert_selection();
 int		list_current_item();
 int		list_is_empty();
+int		duplicate_item();
 
 
 enum {
