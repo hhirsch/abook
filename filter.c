@@ -12,6 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <pwd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include "abook_curses.h"
 #include "filter.h"
@@ -201,8 +202,7 @@ import_database()
 		
 	if(  i_read_file(filename, i_filters[filter].func ) )
 		statusline_msg("Error occured while opening the file");
-	else
-	if( tmp == items )
+	else if( tmp == items )
 		statusline_msg("Hmm.., file seems not to be a valid file");
 	
 	refresh_screen();
@@ -219,7 +219,7 @@ i_read_file(char *filename, int (*func) (FILE *in))
 	FILE *in;
 	int ret = 0;
 
-	if( ( in = fopen( filename, "r" ) ) == NULL )
+	if( ( in = abook_fopen( filename, "r" ) ) == NULL )
 		return 1;
 
 	ret = (*func) (in);
@@ -249,9 +249,13 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 	if( i<0 )
 		return -1;
 
-	if( !strcmp(filename, "-") )
-		ret = (*i_filters[i].func) (stdin);
-	else
+	if( !strcmp(filename, "-") ) {
+		struct stat s;
+		if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode))
+			ret = 1;
+		else
+			ret = (*i_filters[i].func) (stdin);
+	} else
 		ret =  i_read_file(filename, i_filters[i].func);
 	
 	if( tmp == items )
@@ -499,7 +503,7 @@ ldif_read_line(FILE *in)
 		free(line);
 	}
 
-	if( *buf == '#' ) {
+	if(buf && *buf == '#' ) {
 		free(buf);
 		return NULL;
 	}

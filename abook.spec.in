@@ -2,7 +2,7 @@ Summary: Text-based addressbook program
 Name: @PACKAGE@
 Version: @VERSION@
 Release: 1
-Source: http://prdownloads.sourceforge.net/abook/abook-%{version}.tar.gz
+Source: http://prdownloads.sourceforge.net/abook/%{name}-%{version}.tar.gz
 URL: http://abook.sourceforge.net/
 License: GPL
 Group: Utilities
@@ -20,7 +20,7 @@ use with mutt mail client.
 make CFLAGS="$RPM_OPT_FLAGS $CFLAGS"
 
 %install
-make install-strip
+make install
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"

@@ -604,13 +604,13 @@ abook_fopen (const char *path, const char *mode)
 {	
 	struct stat s;
 
-	if( ! strchr(mode, 'r') )
-		return fopen(path, mode);
-
-	if ( (stat(path, &s)) == -1 )
+	if((stat(path, &s)) == -1)
 		return NULL;
-
-	return S_ISREG(s.st_mode) ? fopen(path, mode) : NULL;
+	
+	if(strchr(mode, 'r'))
+		return S_ISREG(s.st_mode) ? fopen(path, mode) : NULL;
+	else
+		return S_ISDIR(s.st_mode) ? NULL : fopen(path, mode);
 }
 
 
@@ -754,6 +754,12 @@ add_email(int quiet)
 {
 	char *line;
 	char *name = NULL, *email = NULL;
+	struct stat s;
+
+	if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode)) {
+		fprintf(stderr, "stdin is a directory or cannot stat stdin\n");
+		exit(1);
+	}
 
 	init_add_email();
 

@@ -242,17 +242,21 @@ char *
 ui_readline(char *prompt, char *s, int limit, int use_completion)
 {
 	int y, x;
+	char *ret;
 
 	mvwaddstr(bottom, 1, 0, prompt);
-	//mvwaddstr(stdscr, LINES - 1, 0, prompt);
 
-	/*
-	 * FIXME: stdscr shoulnd't be used ???
-	 */
-//	getyx(stdscr, y, x);
 	getyx(bottom, y, x);
 
-	return abook_readline(bottom, y, x, s, limit, use_completion);
+	ret = abook_readline(bottom, y, x, s, limit, use_completion);
+
+	if(ret && !*ret)
+		my_free(ret);
+
+	if(ret)
+		strtrim(ret);
+
+	return ret;
 }
 
 int

@@ -1,5 +1,6 @@
 2002-xx-xx
  - added a spec file for rpm support
+ - bugfixes
 
 2002-03-11
  - readline support
