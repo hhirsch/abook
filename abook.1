@@ -4,7 +4,7 @@
 abook \- text-based address book program
 .SH SYNOPSIS
 .B abook
-[ \fB--help\fP | \fB--datafile\fP <filename> | \fB--mutt-query\fP <string> | \fB--convert\fP <inputformat> <inputfile> <outputformat> <outputfile>] 
+[ \fB--help\fP | \fB--datafile\fP <filename> | \fB--mutt-query\fP <string> | \fB--convert\fP <inputformat> <inputfile> <outputformat> <outputfile> | \fB--add-email\fP | \fB--add-email-quiet\fP ] 
 .SH DESCRIPTION
 This manual page documents briefly the
 .B abook
@@ -62,6 +62,12 @@ The following \fBoutputformats\fP are supported:
 - \fBelm\fP elm alias
 .br
 - \fBtext\fP plain text
+.TP
+\fB\-\-add-email\fP
+Read an e-mail message from stdin and add the sender to the addressbook.
+.TP
+\fB\-\-add-email-quiet\fP
+Same as --add-email but doesn't confirm adding.
 
 .SH COMMANDS DURING USE
 Press '\fB?\fP' during use to get a list of commands.
