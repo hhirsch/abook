@@ -61,16 +61,6 @@ if test x$debug = xtrue; then
 	CFLAGS="-g $CFLAGS"
 fi
 
-AC_ARG_ENABLE(nonascii, [  --disable-nonascii    Disable usage of non-ascii characters ], [case "${enableval}" in
-	yes) nonascii=true ;;
-	no) nonascii=false ;;
-	*) AC_MSG_ERROR(bad value ${enableval} for --disable-nonascii) ;;
-	esac], [nonascii=true])
-
-if test x$nonascii = xfalse; then
-	AC_DEFINE(USE_ASCII_ONLY)
-fi
-
 if test x$GCC = xyes; then
 	CFLAGS="-Wall $CFLAGS"
 fi

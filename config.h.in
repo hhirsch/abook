@@ -15,8 +15,6 @@
 #undef HAVE_SNPRINTF
 #undef HAVE_VSNPRINTF
 
-#undef USE_ASCII_ONLY
-
 /* Define if you have the resizeterm function.  */
 #undef HAVE_RESIZETERM
 

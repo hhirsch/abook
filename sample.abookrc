@@ -47,3 +47,6 @@ www_command=lynx
 # address style [eu|us|uk]
 address_style=eu
 
+# use ASCII characters only
+use_ascii_only=true
+

@@ -32,10 +32,10 @@ void		ui_print_database();
 void		ui_open_datafile();
 
 
-#ifdef USE_ASCII_ONLY
-#	define UI_HLINE_CHAR		'-'
-#else
-#	define UI_HLINE_CHAR		ACS_HLINE
-#endif
+#include "options.h" /* needed for options_get_int */
+
+#define UI_HLINE_CHAR		options_get_int("use_ascii_only") ? \
+					'-' : ACS_HLINE
+
 
 #endif

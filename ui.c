@@ -37,13 +37,6 @@
 #	include <sys/ioctl.h>
 #endif
 
-#ifdef USE_ASCII_ONLY
-#	define UI_HLINE_CHAR		'-'
-#else
-#	define UI_HLINE_CHAR		ACS_HLINE
-#endif
-
-
 /*
  * external variables
  */

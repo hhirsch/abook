@@ -9,5 +9,3 @@
 
 #undef HAVE_SNPRINTF
 #undef HAVE_VSNPRINTF
-
-#undef USE_ASCII_ONLY
