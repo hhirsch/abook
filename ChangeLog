@@ -1,7 +1,8 @@
-2002-xx-xx
+2002xxxx
  - options.c rewritten (new mutt style rc file support)
  - palmcsv export filter (Koenraad Heijlen)
  - added a spec file for rpm support
+ - added --with-readline configure option
  - bugfixes
 
 2002-03-11

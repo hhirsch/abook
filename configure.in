@@ -46,11 +46,29 @@ dnl --------------------------
 dnl end of (n)curses detection
 dnl --------------------------
 
+dnl ------------------
+dnl readline detection
+dnl ------------------
+
+abook_cv_readline=/usr
+AC_ARG_WITH(readline, [  --with-readline=DIR     Where readline is installed ],
+	[if test $withval != yes; then
+		abook_cv_readline=$withval
+	fi
+	if test x$abook_cv_readline != x/usr; then
+		LDFLAGS="-L${abook_cv_readline}/lib $LDFLAGS"
+		CPPFLAGS="$CPPFLAGS -I${abook_cv_readline}/include"
+	fi])
+
 AC_LIB_READLINE
 
 if test x$ac_cv_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
 	AC_MSG_ERROR([*** readline library not found or it doesn't support history ***])
 fi
+
+dnl -------------------------
+dnl end of readline detection
+dnl -------------------------
 
 AC_CHECK_FUNCS(resizeterm)
 
