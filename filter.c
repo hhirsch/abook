@@ -646,7 +646,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	}
 
 	strncpy(*alias, tmp, ptr - tmp - 1);
-	*(*alias + (ptr - tmp)) = 0;
+	*(*alias + (ptr - tmp - 1)) = 0;
 
 	while(ISSPACE(*ptr))
 		ptr++;

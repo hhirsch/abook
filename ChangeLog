@@ -1,5 +1,7 @@
 0.5.2
  - five custom fields added
+ - experimental wide character support
+ - fixed a crash bug in mutt filter
 
 0.5.1
  - sort by field command
