@@ -4,6 +4,7 @@
  - ability to disable use of non-ascii characters (configuration option)
  - changed SIGINT behaviour
  - html export filter creates now valid html documents
+ - ablity to print/export only selected items
 
 0.4.12
  - added man page for abookrc (Alan Ford)
