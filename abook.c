@@ -178,7 +178,7 @@ parse_command_line(int argc, char **argv)
 				convert(argv[i+1], argv[i+2], argv[i+3], "-");
 		} else if( !strcmp(argv[i], "--add-email") ) {
 			add_email(0);
-		} else if( !strcmp(argv[i], "--add-email-force") ) {
+		} else if( !strcmp(argv[i], "--add-email-quiet") ) {
 			add_email(1);
 		} else {
 			printf("option %s not recognized\n", argv[i]);
@@ -202,7 +202,7 @@ show_usage()
 			"read an e-mail message from stdin and\n"
 		"					"
 		"add the sender to the addressbook");
-	puts	("	--add-email-force		"
+	puts	("	--add-email-quiet		"
 		"same as --add-email but doesn't\n"
 		"					confirm adding");
 	putchar('\n');
@@ -531,7 +531,7 @@ add_email_add_item(int quiet, char *name, char *email)
 		char c;
 		if(!in) {
 			fprintf(stderr, "cannot open /dev/tty\n"
-				"you may want to use --add-email-force\n");
+				"you may want to use --add-email-quiet\n");
 			exit(1);
 		}
 		printf("Add ``%s <%s>'' to %s ? (y/n)\n",
