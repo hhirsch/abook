@@ -15,6 +15,11 @@
  - html filter fix
  - bugfixes
 
+0.4.16
+ - use strcoll instead of strcmp for sorting entries
+ - html filter fix
+ - many bugfixes
+
 0.4.15
  - new options --add-email and --add-email-quiet
  - proper mutt alias import filter
