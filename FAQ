@@ -31,10 +31,20 @@ A: Yes, it is possible starting from abook 0.4.15. See --add-email
    command line option and README.
 
 
-Q: Does abook support palm addressbooks?
+Q: How can I import my abook entries to my PalmOS addressbook?
 
-A: No, but there are utilities to convert palm addressbooks to ldif
-   files. Abook can import ldif files.
-
+A: Export to palmcsv format, and import from there. Several GUI
+   applications such as jpilot can do this, but the simplest way is to
+   use pilot-addresses from the pilot-link package. Just export to
+   addresses.palmcsv, then run this:
+                                                                                
+   pilot-addresses -d abook -c abook -r addresses.palmcsv
+                                                                                
+   This will delete everything in the abook category and replace it with
+   the latest information from your abook database.  By keeping your
+   abook entries in a separate category, you can continue to add and
+   modify entries in other categories manually, and pilot-addresses will
+   not change or delete them.
+   (This entry was contributed by Jeff Covey)
 
 last update: $Date$
