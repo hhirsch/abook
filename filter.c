@@ -797,7 +797,7 @@ html_export_database(FILE *out, struct db_enumerator e)
 			    tmp,
 			    database[e.item][NAME] );
 		else
-		    fprintf(out, "<tr>\n<td>%s>\n",
+		    fprintf(out, "<tr>\n<td>%s\n",
 			    database[e.item][NAME] );
 
 		fprintf(out, "<td>%s\n<td>%s\n",
