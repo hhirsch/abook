@@ -85,15 +85,9 @@ quit_abook()
 {
 	if( options_get_int("autosave") )
 		save_database();
-	else {
-		statusline_addstr("Save database (y/N)");
-		switch( getch() ) {
-			case 'y':
-			case 'Y':
-				save_database();
-			default: break;
-		}
-	}
+	else if( statusline_ask_boolean("Save database", FALSE) )
+		save_database();
+
 	close_config();
 	close_database();
 

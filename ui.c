@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <ctype.h>
 #include "abook.h"
 #include "ui.h"
 #include "edit.h"
@@ -278,6 +279,34 @@ statusline_getnstr(char *str, int n, int use_filesel)
 	return buf;
 }
 
+int
+statusline_ask_boolean(char *msg, int def)
+{
+	int ret;
+	char *msg2 = strconcat(msg,  def ? " (Y/n)?" : " (y/N)?", NULL);
+			
+	statusline_addstr(msg2);
+
+	free(msg2);
+
+	switch( tolower(getch()) ) {
+		case 'n':
+			ret = FALSE;
+			break;
+		case 'y':
+			ret = TRUE;
+			break;
+		default:
+			ret = def;
+			break;
+	}
+
+	clear_statusline();
+
+	return ret;
+}
+
+
 void
 refresh_statusline()
 {
@@ -456,20 +485,11 @@ get_commands()
 void
 ui_remove_items()
 {
-	if( items < 1 || curitem < 0 )
+	if(list_is_empty())
 		return;
 
-	statusline_addstr("Remove selected item(s) (Y/n)");
-	switch( getch() ) {
-		case '\r':
-		case 'y':
-		case 'Y': break;
-		default:
-			  clear_statusline();
-			  return;
-	}
-
-	remove_selected_items();
+	if(statusline_ask_boolean("Remove selected item(s)", TRUE))
+		remove_selected_items();
 
 	clear_statusline();	
 	refresh_list();
@@ -478,19 +498,10 @@ ui_remove_items()
 void
 ui_clear_database()
 {
-
-	statusline_addstr("Clear WHOLE database (y/N)");
-	switch( getch() ) {
-		case 'y':
-		case 'Y': break;
-		default:
-			clear_statusline();
-			return;
+	if(statusline_ask_boolean("Clear WHOLE database", FALSE)) {
+		close_database();
+		refresh_list();
 	}
-
-	close_database();
-
-	refresh_screen();
 }
 
 void
@@ -530,16 +541,10 @@ ui_print_number_of_items()
 void
 ui_read_database()
 {
-	if(items > 0) {
-		statusline_addstr("Your current data will be lost - Press 'y' to continue");
-		switch( getch() ) {
-			case 'y':
-			case 'Y': break;
-			default: clear_statusline();
-				 return;
-		}
-		clear_statusline();
-	}
+	if(items > 0)
+		if(!statusline_ask_boolean("Your current data will be lost - "
+				"Press 'y' to continue", FALSE))
+			return;
 
 	load_database(datafile);
 	refresh_list();
@@ -552,14 +557,8 @@ ui_print_database()
 	FILE *handle;
 	char *command = options_get_str("print_command");
 
-	statusline_addstr("Print addressbook? (y/N)");
-	switch( getch() ) {
-		case 'y':
-		case 'Y':
-			break;
-		default: clear_statusline(); return;
-	}
-	clear_statusline();
+	if(!statusline_ask_boolean("Print addressbook", FALSE))
+		return;
 
 	if( ! *command || (handle = popen(command, "w")) == NULL)
 		return;
@@ -584,15 +583,8 @@ ui_open_datafile()
 
 	if( options_get_int("autosave") )
 		save_database();
-	else {
-		statusline_addstr("Save current database (y/N)");
-		switch( getch() ) {
-			case 'y':
-			case 'Y':
-				save_database();
-			default: break;
-		}
-	}
+	else if(statusline_ask_boolean("Save current database", FALSE))
+		save_database();
 
 	close_database();
 

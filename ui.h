@@ -7,7 +7,6 @@ enum {
 	HELP_MAIN,
 	HELP_EDITOR
 };
-	
 
 int		is_ui_initialized();
 int		init_ui();
@@ -16,6 +15,7 @@ void		headerline(char *str);
 void            refresh_screen();
 void            statusline_msg(char *msg);
 char		*ask_filename(char *prompt, int flags);
+int		statusline_ask_boolean(char *msg, int def);
 void            clear_statusline();
 void		display_help(int help);
 void		statusline_addstr(char *str);
