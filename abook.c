@@ -273,44 +273,52 @@ quit_mutt_query(int status)
 }
 
 
+static char *
+make_mailstr(int item)
+{
+	char email[MAX_EMAIL_LEN];
+	char *ret;
+	char *name = mkstr("\"%s\"", database[item][NAME]);
+
+	get_first_email(email, item);
+
+	ret = *database[item][EMAIL] ?
+		mkstr("%s <%s>", name, email) :
+		name;
+
+	free(name);
+	
+	return ret;
+}
+
 void
 launch_mutt(int item)
 {
+	char *cmd = NULL, *mailstr = NULL;
+
+	if( is_valid_item(item) )
+		mailstr = make_mailstr(item);
+
 	/*
-	 * This is _broken_
+	 * need to implement for multiple addresses
 	 */
-#if 0
-	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
-	char email[MAX_EMAIL_LEN];
-	char *cmd;
-	char *tmp = options_get_str("mutt_command");
+		/*
+	} else {
+		struct db_enumerator e = init_db_enumerator(ENUM_SELECTED);
+		db_enumerate_items(e) {
+			tmp = mailstr;
+			mailstr = strconcat(tmp, make_mailstr(e.item);
+			
+	}*/
 
-	cmd = strconcat(tmp, " '", NULL );
-
-	db_enumerate_items(e) {
-		if( e.item != item );
-		get_first_email(email, e.item);
-		tmp = mkstr("%s, \"%s\"", cmd, database[e.item][NAME]);
-		my_free(cmd);
-		if( *database[e.item][EMAIL] ) {
-			cmd = mkstr("%s <%s>", tmp, email);
-			free(tmp);
-			tmp = cmd;
-		}
-		cmd = strconcat(tmp, " ", NULL);
-		free(tmp);
-	}
-
-	tmp = strconcat(cmd, "\'", NULL);
-	free(cmd);
-	cmd = tmp;
+	cmd = strconcat(options_get_str("mutt_command"), " \'", mailstr,
+				"\'", NULL);
+	free(mailstr);
 #ifdef DEBUG
 	fprintf(stderr, "cmd: %s\n", cmd);
 #endif
 	system(cmd);	
-
 	free(cmd);
-#endif
 }
 
 void
