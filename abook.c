@@ -104,7 +104,7 @@ init_abook()
 	set_filenames();
 	check_abook_directory();
 	init_opts();
-	if(load_opts(rcfile) > 1) {
+	if(load_opts(rcfile) > 0) {
 		printf("Press enter to continue...\n");
 		fgetc(stdin);
 	}
