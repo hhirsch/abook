@@ -345,11 +345,9 @@ clear_statusline()
 	refresh();
 }
 
-
 /*
- * help - need to rewrite
+ * help
  */
-
 
 #include "help.h"
 
@@ -389,7 +387,6 @@ display_help(int help)
 	clear_statusline();
 	delwin(helpw);
 }
-
 
 /*
  * end of help
@@ -514,7 +511,7 @@ void
 ui_find(int next)
 {
 	int item;
-	static char findstr[81];
+	static char findstr[MAX_FIELD_LEN];
 	int search_fields[] = {NAME, EMAIL, NICK, -1};
 
 	if(next) {
@@ -523,11 +520,11 @@ ui_find(int next)
 	} else {
 		clear_statusline();
 		statusline_addstr("/");
-		statusline_getnstr(findstr, 67, 0);
+		statusline_getnstr(findstr, MAX_FIELD_LEN - 1, 0);
 		clear_statusline();
 	}
 
-	if( (item = find_item(findstr, next ? curitem+1 : curitem,
+	if( (item = find_item(findstr, curitem + !!next,
 					search_fields )) >= 0 ) {
 		curitem = item;
 		refresh_list();
