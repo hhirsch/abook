@@ -339,7 +339,7 @@ load_opts(char *filename)
 	FILE *in;
 	char *line = NULL;
 	int n;
-	bool err = FALSE;
+	int err = 0;
 	
 	if((in = fopen(filename, "r")) == NULL)
 		return -1;
@@ -354,7 +354,7 @@ load_opts(char *filename)
 		if(line && *line) {
 			opt_line_remove_comments(line);
 			if(*line)
-				err = opt_parse_line(line, n, filename);
+				err += opt_parse_line(line, n, filename) ? 1:0;
 		}
 
 		my_free(line);
@@ -362,11 +362,6 @@ load_opts(char *filename)
 
 	free(line);
 
-	if(err) {
-		printf("Press enter to continue...\n");
-		fgetc(stdin);
-	}
-	
 	return err;
 }
 

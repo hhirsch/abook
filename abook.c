@@ -104,7 +104,10 @@ init_abook()
 	set_filenames();
 	check_abook_directory();
 	init_opts();
-	load_opts(rcfile);
+	if(load_opts(rcfile)) {
+		printf("Press enter to continue...\n");
+		fgetc(stdin);
+	}
 
 	signal(SIGKILL, quit_abook_sig);
 	signal(SIGTERM, quit_abook_sig);
