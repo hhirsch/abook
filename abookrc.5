@@ -1,33 +1,30 @@
-.TH ABOOKRC 5 "Jan 2, 2001"
+.TH ABOOKRC 5 "Jun 4, 2003"
 .nh
 .SH NAME
 \fB$HOME/.abook/abookrc\fP \- configuration file for abook address book program
-.SH WARNING
-This man page is not up to date with abook version 0.5. See sample.abookrc
-for abookrc syntax. It can be found on http://abook.sourceforge.net/sample.abookrc .
-Since the version 0.5.0 abookrc is stored in $HOME/abook/.
 .SH DESCRIPTION
 This manual page documents briefly the
-.B .abookrc
+.B abookrc
 file.
 .br
-.B .abookrc
+.B abookrc
 is the (optional) configuration file for use with the
 .B abook(1)
 address book program.
 
-.B .abookrc
-is stored in a user's $HOME directory. It follows a format of option=value.
+.B abookrc
+is stored in a user's $HOME/.abook directory. It follows a format of
+\(lq\fBset option=value\fP\(rq.
 The following information lists each of these options and the values they
 may take.
 
 If a variable is not set in 
-.B .abookrc
+.B abookrc
 , a sensible default, as 
 listed with the description below, will be used.
 
 Comments in 
-.B .abookrc
+.B abookrc
 are on lines beginning with '#'.
 
 .SH VARIABLES
@@ -102,6 +99,10 @@ Defines the style of address formatting to be used when exporting as text / prin
 \fBuse_ascii_only\fP=[true|false]
 This option allows you to force Abook use only ASCII characters. This option is useful if your terminal doesn't support non-ASCII characters. Default is false.
 
+.TP
+\fBadd_email_prevent_duplicates\fP=[true|false]
+Defines whether to avoid adding addresses already in data. Default is false.
+
 .SH SAMPLE CONFIGURATION FILE
 
 .nf
@@ -109,16 +110,16 @@ This option allows you to force Abook use only ASCII characters. This option is 
 #
 
 # Automatically save database on exit
-autosave=true
+set autosave=true
 
 # Show all email addresses in list
-show_all_emails=true
+set show_all_emails=true
 
 # Screen column for email field to start
-emailpos=25
+set emailpos=25
 
 # Field to be used in the extra column
-extra_column=phone
+set extra_column=phone
 # frequently used values:
 #	-1		disabled
 #	phone		Home Phone
@@ -129,31 +130,34 @@ extra_column=phone
 #	url		URL
 
 #
-extra_alternative=-1
+set extra_alternative=-1
 
 # Screen column for the extra field to start
-extrapos=65
+set extrapos=65
 
 # Command used to start mutt
-mutt_command=mutt
+set mutt_command=mutt
 
 # Return all email addresses to a mutt query
-mutt_return_all_emails=true
+set mutt_return_all_emails=true
 
 # Command used to print
-print_command=lpr
+set print_command=lpr
 
 # Sort files in fileselector (alphabetic order)
-filesel_sort=false
+set filesel_sort=false
 
 # Command used to start the web browser
-www_command=lynx
+set www_command=lynx
 
 # address style [eu|us|uk]
-address_style=eu
+set address_style=eu
 
 # use ASCII characters only
-use_ascii_only=false
+set use_ascii_only=false
+
+# Prevent double entry
+set add_email_prevent_duplicates=false
 
 .fi
 
