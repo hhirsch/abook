@@ -1,0 +1,48 @@
+Summary: Text-based addressbook program
+Name: @PACKAGE@
+Version: @VERSION@
+Release: 1
+Source: http://prdownloads.sourceforge.net/abook/abook-%{version}.tar.gz
+URL: http://abook.sourceforge.net/
+License: GPL
+Group: Utilities
+BuildRoot: /var/tmp/%{name}-%{version}-buildroot
+
+%description
+Abook is a text-based addressbook program designed to
+use with mutt mail client.
+
+%prep
+%setup -q
+
+%build
+./configure --prefix="$RPM_BUILD_ROOT/usr"
+make CFLAGS="$RPM_OPT_FLAGS $CFLAGS"
+
+%install
+make install-strip
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS BUGS COPYING ChangeLog FAQ NEWS README THANKS TODO sample.abookrc
+/usr/bin/abook
+/usr/man/man1/abook.1*
+/usr/man/man5/abookrc.5*
+
+%changelog
+* Mon Mar 11 2002 Jaakko Heinonen <jheinonen@users.sourceforge.net>
+- Added missing files: abookrc.5, FAQ
+- Made build use RPM_OPT_FLAGS
+- Changed BuildRoot
+
+* Tue Jun 19 2001 Don Harper <duck@duckland.org>
+- Updated to version 0.4.13.
+
+* Sun Dec 31 2000 Gustavo Niemeyer <niemeyer@conectiva.com>
+- Updated to version 0.4.11.
+
+* Wed Sep 20 2000 Gustavo Niemeyer <niemeyer@conectiva.com>
+- First package.

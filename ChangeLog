@@ -1,3 +1,6 @@
+2002-xx-xx
+ - added a spec file for rpm support
+
 2002-03-11
  - readline support
  - abook can be compiled with g++
