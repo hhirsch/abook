@@ -856,6 +856,8 @@ html_export_write_tail(FILE *out)
  * pine addressbook import filter
  */
 
+#define PINE_BUF_SIZE 2048
+
 static void
 pine_fixbuf(char *buf)
 {
@@ -894,7 +896,7 @@ pine_parse_buf(char *buf)
 	list_item item;
 	char *start = buf;
 	char *end;
-	char tmp[400];
+	char tmp[PINE_BUF_SIZE];
 	int i, len, last;
 	int pine_conv_table[]= {NICK, NAME, EMAIL, -1, NOTES};
 
@@ -905,7 +907,7 @@ pine_parse_buf(char *buf)
 			last=1;
 
 		len = last ? strlen(start) : (int) (end-start);
-		len = min(len, 400-1);
+		len = min(len, PINE_BUF_SIZE - 1);
 
 		if(i < (int)(sizeof(pine_conv_table) / sizeof(*pine_conv_table))
 				&& pine_conv_table[i] >= 0) {
