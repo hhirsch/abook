@@ -820,10 +820,14 @@ html_export_database(FILE *out, struct db_enumerator e)
 
 	db_enumerate_items(e) {
 		get_first_email(tmp, e.item);
-		fprintf(out, "<tr>\n<td><a href=\"mailto:%s\">%s</a>\n",
-				tmp,
-				database[e.item][NAME] );
-				
+		if (*tmp)
+		    fprintf(out, "<tr>\n<td><a href=\"mailto:%s\">%s</a>\n",
+			    tmp,
+			    database[e.item][NAME] );
+		else
+		    fprintf(out, "<tr>\n<td>%s>\n",
+			    database[e.item][NAME] );
+
 		fprintf(out, "<td>%s\n<td>%s\n",
 				database[e.item][EMAIL],
 				safe_str(database[e.item][extra_column]) );
