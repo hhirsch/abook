@@ -1,11 +1,11 @@
 known bugs in abook
 
-* in X terminals keyboard may not behave as expected - this is propably
+* in X terminals keyboard may not behave as expected - this is probably
   a ncurses problem
 * incompatible with some terminals
 * --datafile option is a bit broken
 
-* mutt / elm / pine export filters allows to create a file with dublicate
+* mutt / elm / pine export filters allows to create a file with duplicate
   aliases
 
 * mutt alias import filter is quite poor. It only handles correctly aliases
