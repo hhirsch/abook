@@ -146,8 +146,9 @@ static void
 editor_print_data(int tab, int item)
 {
 	const int pos_x = EDITW_COLS > 70 ? 8:4;
-	const int start_y = 4;
+	const int start_y = 5;
 	int i, j;
+	int y, x;
 
 	for(i = 0, j = 1; i < ITEM_FIELDS; i++) {
 		if(abook_fields[i].tab != tab)
@@ -157,18 +158,26 @@ editor_print_data(int tab, int item)
 			int k;
 			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 			split_emailstr(item, emails);
-			mvwaddstr(editw, 6, pos_x, "E-mail addresses:");
-			for(k=0; k < MAX_EMAILS; k++)
-				mvwprintw(editw, 7 + k, pos_x,
+			getyx(editw, y, x);
+			mvwaddstr(editw, y+1, pos_x, "E-mail addresses:");
+			for(k = 0; k < MAX_EMAILS; k++) {
+				getyx(editw, y, x);
+				mvwprintw(editw, y+1, pos_x,
 				"%c -\t\t%s", '2' + k, emails[k] );
+			}
 			continue;
 		}
 				
-		mvwprintw(editw, start_y + j, pos_x, "%d - %s",
+		if(i) {
+			getyx(editw, y, x); y++;
+		} else
+			y = start_y;
+
+		mvwprintw(editw, y, pos_x, "%d - %s",
 				j,
 				abook_fields[i].name);
-		mvwaddch(editw, start_y + j, 28, ':');
-		mvwaddstr(editw, start_y + j, 30, safe_str(database[item][i]));
+		mvwaddch(editw, y, 28, ':');
+		mvwaddstr(editw, y, 30, safe_str(database[item][i]));
 
 		j++;
 	}
