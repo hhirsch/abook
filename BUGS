@@ -12,8 +12,11 @@ known bugs in abook
 * mutt / elm / pine export filters allow to create a file with duplicate
   aliases
 
-misc:
+* mutt import filter imports only first e-mail address
+
 * Cursor disappears in some cases with abook_readline() on Solaris. If
   you have problems it is recommended to use ncurses library
+
 * fseek in ldif import filter should be eliminated
-* mutt import filter imports only first e-mail address
+
+* file format is not tolerant for character set changes
