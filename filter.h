@@ -3,7 +3,7 @@
 
 #include "database.h"
 
-#define		FILTNAME_LEN	7
+#define		FILTNAME_LEN	8
 
 
 struct abook_output_filter {

@@ -49,6 +49,7 @@ static int      ldif_export_database(FILE *out, struct db_enumerator e);
 static int	html_export_database(FILE *out, struct db_enumerator e);
 static int	pine_export_database(FILE *out, struct db_enumerator e);
 static int	csv_export_database(FILE *out, struct db_enumerator e);
+static int	palm_export_database(FILE *out, struct db_enumerator e);
 static int	gcrd_export_database(FILE *out, struct db_enumerator e);
 static int	mutt_alias_export(FILE *out, struct db_enumerator e);
 static int	elm_alias_export(FILE *out, struct db_enumerator e);
@@ -76,6 +77,7 @@ struct abook_output_filter e_filters[] = {
 	{ "pine", "pine addressbook", pine_export_database },
 	{ "gcrd", "GnomeCard (VCard) addressbook", gcrd_export_database },
 	{ "csv", "comma separated values", csv_export_database },
+	{ "palmcsv", "Palm comma separated values", palm_export_database},
 	{ "elm", "elm alias", elm_alias_export },
 	{ "text", "plain text", text_export_database },
 	{ "spruce", "Spruce address book", spruce_export_database },
@@ -1201,6 +1203,102 @@ csv_export_database(FILE *out, struct db_enumerator e)
 
 /*
  * end of csv export filter
+ */
+
+
+/*
+ * Palm csv addressbook export filter
+ */
+
+/* A few contants, not the best way to init them but better dan
+ * some number that will break things later on... 		*/
+#define 	PALM_CSV_UNDEFINED 	 (LAST_FIELD+1)
+#define 	PALM_CSV_END 	 	 (LAST_FIELD+2)
+#define 	PALM_CSV_CAT 	 	 (LAST_FIELD+3)
+
+static void 
+palm_split_and_write_name(FILE *out, char *name) {
+	char *p;
+
+	assert(name);
+
+	if ( (p = strchr(name, ' ')) ) {
+		/*
+		 * last name first
+		 */
+		fprintf(out, "\"%s\",\"" , p + 1);
+		fwrite((void *)name, p - name, sizeof(char), out);
+		fputc('\"', out);
+	} else {
+		fprintf(out, "\"%s\"", safe_str(name));
+	}
+}
+
+static int
+palm_export_database(FILE *out, struct db_enumerator e)
+{
+	int j;
+	int palm_export_fields[] = {
+		NAME,			/* LASTNAME, FIRSTNAME 	*/
+		PALM_CSV_UNDEFINED,	/* TITLE,   		*/
+		PALM_CSV_UNDEFINED, 	/* COMPAGNY, 		*/
+		WORKPHONE,		/* WORK PHONE 		*/
+		PHONE,			/* HOME PHONE		*/
+		FAX,			/* FAX			*/
+		MOBILEPHONE, 		/* OTHER 		*/
+		EMAIL,			/* EMAIL		*/
+		ADDRESS,		/* ADDRESS		*/ 
+		CITY,			/* CITY			*/
+		STATE,			/* STATE		*/
+		ZIP,			/* ZIP			*/
+		COUNTRY,		/* COUNTRY		*/
+        	NICK, 			/* DEFINED 1		*/
+        	URL, 			/* DEFINED 2 		*/
+		PALM_CSV_UNDEFINED,	/* DEFINED 3		*/
+		PALM_CSV_UNDEFINED,	/* DEFINED 4 		*/
+		NOTES,			/* NOTE			*/
+		PALM_CSV_END,		/* "0" 			*/
+		PALM_CSV_CAT,		/* CATEGORY 		*/
+		-1
+	};
+
+	db_enumerate_items(e) {
+		for(j = 0; palm_export_fields[j] >= 0; j++) {
+
+		switch( palm_export_fields[j] ) {
+
+			case PALM_CSV_UNDEFINED:
+				fprintf(out, "\"\"");
+				break;
+			case PALM_CSV_END:
+				fprintf(out, "\"0\"");
+				break;
+			case PALM_CSV_CAT:
+				fprintf(out, "\"abook\"");
+				break;
+			case NAME:
+				palm_split_and_write_name(out,
+						safe_str(database[e.item]
+						[palm_export_fields[j]])) ;
+				break;
+
+			default:
+				fprintf(out, "\"%s\"" ,
+					safe_str(database[e.item]
+						[palm_export_fields[j]]));
+			}
+
+			if(palm_export_fields[j+1] >= 0)
+				fputc(',', out);
+		}
+		fputc('\n', out);
+	}
+
+	return 0;
+}
+
+/*
+ * end of palm csv export filter
  */
 
 

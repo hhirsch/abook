@@ -23,11 +23,10 @@ enum {
 	NICK,
 	URL,
 	NOTES,
+	ITEM_FIELDS /* this is the last */
 };
 
-#define LAST_FIELD		NOTES
-
-#define ITEM_FIELDS		(LAST_FIELD+1)
+#define LAST_FIELD		(ITEM_FIELDS - 1)
 
 typedef char * list_item[ITEM_FIELDS];
 
