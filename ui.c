@@ -59,7 +59,6 @@ bool can_resize = FALSE;
 WINDOW *top = NULL, *bottom = NULL;
 
 
-
 static void
 init_windows()
 {

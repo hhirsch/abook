@@ -168,6 +168,10 @@ free_opts()
  * file parsing
  */
 
+typedef struct {
+	char *data, *ptr;
+} buffer;
+
 static void
 opt_line_remove_comments(char *p)
 {
@@ -198,28 +202,24 @@ opt_line_remove_comments(char *p)
 	}
 }
 
-static char *
-get_token_start(char *p)
+void
+find_token_start(buffer *b)
 {
-	assert(p);
+	assert(b);
 	
-	for(; ISSPACE(*p); p++);
-
-	return p;
+	for(; ISSPACE(*b -> ptr); b -> ptr ++);
 }
 
-static char *
-get_token_end(char *p)
+void
+find_token_end(buffer *b)
 {
-	assert(p);
+	assert(b);
 
-	for(p = get_token_start(p); *p; p++) {
-		if(ISSPACE(*p)) {
+	for(find_token_start(b); *(b -> ptr); b -> ptr ++) {
+		if(ISSPACE(*(b -> ptr))) {
 			break;
 		}
 	}
-
-	return p;
 }
 
 static char *
@@ -260,22 +260,22 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 }
 
 static char *
-opt_parse_set(char *p)
+opt_parse_set(buffer *b)
 {
-	char *var;
 	int i;
+	char *p;
 
-	var = get_token_start(p);
-	if((p = strchr(var, '=')))
+	find_token_start(b);
+	if((p = strchr(b -> ptr, '=')))
 		*p++ = 0;
 	else
 		return "invalid value assignment";
 	
-	strtrim(var);
+	strtrim(b -> ptr);
 
 	for(i = 0;abook_vars[i].option; i++)
-		if(!strcmp(abook_vars[i].option, var))
-			return opt_set_set_option(var, p, &abook_vars[i]);
+		if(!strcmp(abook_vars[i].option, b -> ptr))
+			return opt_set_set_option(b -> ptr, p, &abook_vars[i]);
 	
 	return "unknown option";
 }
@@ -283,7 +283,7 @@ opt_parse_set(char *p)
 
 static struct {
 	char *token;
-	char * (*func) (char *line);
+	char * (*func) (buffer *line);
 } opt_parsers[] = {
 	{ "set", opt_parse_set },
 	{ NULL }
@@ -293,24 +293,31 @@ static bool
 opt_parse_line(char *line, int n, char *fn)
 {
 	int i;
-	char *p;
 	char *err = NULL;
+	char *token;
+	buffer b;
 	
 	assert(line && fn);
 
-	line = get_token_start(line);
-	p = get_token_end(line);
-	*p++ = 0;
+	b.ptr = line;
+
+	find_token_start(&b);
+	b.data = b.ptr;
+	find_token_end(&b);
+	*b.ptr++ = 0;
 
 	if(!*line)
 		return FALSE;
 
-	strtrim(line);
-	strtrim(p);
+	strtrim(b.data);
+	strtrim(b.ptr);
+
+	token = b.data;
+	b.data = b.ptr = b.ptr;
 
 	for(i = 0; opt_parsers[i].token; i++)
-		if(!strcmp(opt_parsers[i].token, line)) {
-			if(!(err = opt_parsers[i].func(p)))
+		if(!strcmp(opt_parsers[i].token, token)) {
+			if(!(err = opt_parsers[i].func(&b)))
 				return FALSE;
 			break;
 		}
@@ -319,7 +326,7 @@ opt_parse_line(char *line, int n, char *fn)
 	if(err)
 		fprintf(stderr, "%s\n", err);
 	else
-		fprintf(stderr, "unknown token %s\n", line);
+		fprintf(stderr, "unknown token %s\n", token);
 
 	return TRUE;
 }

@@ -2,16 +2,16 @@
 # see abookrc(5) for detailed explanation
 
 # Automatically save database on exit
-autosave=true
+set autosave=true
 
 # Show all email addresses in list
-show_all_emails=true
+set show_all_emails=true
 
 # Screen column for email field to start
-emailpos=25
+set emailpos=25
 
 # Field to be used in the extra column
-extra_column=phone
+set extra_column=phone
 # frequently used values:
 #	-1		disabled
 #	phone		Home Phone
@@ -24,29 +24,26 @@ extra_column=phone
 # Specify an alternative field to be displayed in the extra
 # column if there is no data for the field specified in
 # extra_column for a particular item.  
-extra_alternative=-1
+set extra_alternative=-1
 
 # Screen column for the extra field to start
-extrapos=65
+set extrapos=65
 
 # Command used to start mutt
-mutt_command=mutt
+set mutt_command=mutt
 
 # Return all email addresses to a mutt query
-mutt_return_all_emails=true
+set mutt_return_all_emails=true
 
 # Command used to print
-print_command=lpr
-
-# Sort files in fileselector (alphabetic order)
-filesel_sort=false
+set print_command=lpr
 
 # Command used to start the web browser
-www_command=lynx
+set www_command=lynx
 
 # address style [eu|us|uk]
-address_style=eu
+set address_style=eu
 
 # use ASCII characters only
-use_ascii_only=false
+set use_ascii_only=false
 
