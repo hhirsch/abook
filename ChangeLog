@@ -3,6 +3,7 @@
  - removed a lefover debug message
  - fixed mutt import filter nickname cutoff
  - wrap searches
+ - contrib updates
 
 0.5.2
  - five custom fields added

@@ -1360,6 +1360,10 @@ csv_export_database(FILE *out, struct db_enumerator e)
 static int
 allcsv_export_database(FILE *out, struct db_enumerator e)
 {
+	/*
+	 * TODO: Should get these atomatically from abook_fileds
+	 *  - JH
+	 */
 	int allcsv_export_fields[] = {
 		NAME,
 		EMAIL,
