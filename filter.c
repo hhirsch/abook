@@ -1218,14 +1218,8 @@ text_write_address_eu(FILE *out, int i) {
 
 		if(database[i][CITY])
 			fprintf(out, "%s", database[i][CITY]);
-		/*
-		fprintf(out, "\n%s %s",
-				safe_str(database[i][ZIP]),
-				safe_str(database[i] [CITY]));
-				*/
 	}
 	
-
 	if (database[i][STATE])
 		fprintf(out, "\n%s", database[i][STATE]);
 
