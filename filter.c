@@ -954,7 +954,7 @@ pine_parse_file(FILE *in)
 	
 	while(!feof(in)) {
 		for(i=2;;i++) {
-			buf = realloc(buf, i*LINESIZE);
+			buf = (char *) realloc(buf, i*LINESIZE);
 			if(i==2)
 				strcpy(buf, line);
 			fgets(line, LINESIZE, in);
