@@ -75,7 +75,7 @@ conff_add_key(struct conff_node **ptr, char *key, char *value, int flags)
 		}
 	
 	 /*
-	  * out of memory - error is ingnored
+	  * out of memory - error is ignored
 	  * NOTE: with REPLACE_KEY flag the node will be deleted in OOM
 	  * situation
 	  */
