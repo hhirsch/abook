@@ -7,13 +7,13 @@ Abook is an addressbook program with mutt mail client support.
 COMPILATION
 
 To compile abook you must have ncurses developement libraries installed.
-Starting from version 0.4.10 abook is know to compile with the native curses
+Starting from version 0.4.10 abook is known to compile with the native curses
 library of SUN Solaris and OpenBSD.
 
-If you compile with --enable-debug flag you should run abook like this:
-abook 2> debug or abook 2> /dev/null. Abook has been compiled and tested
-successfully on following platforms: (NOTE: All versions of abook haven't
-been tested on all platforms.)
+If you compile with --enable-debug flag you should redirect standard error
+to somewhere. (for example abook 2> debug or abook 2> /dev/null. Abook has
+been compiled and tested successfully on following platforms:
+(NOTE: All versions of abook haven't been tested on all platforms.)
 
 Linux (Debian GNU/Linux 2.1/2.2, RedHat 6.x)
 Solaris 2.4
