@@ -12,13 +12,13 @@ void		add_item();
 
 #define EDITOR_HELPLINE	"?:help c:contact a:address p:phone o:other"
 
-#define TABLINE		2
+#define TABLINE		1
 
-#define MAX_TAB_LINES	7
+#define MAX_TAB_FIELDS	7
 
 #define TAB_COLON_POS	28
-#define TAB_START_Y	5
-#define TAB_START_X	(EDITW_COLS > 70 ? 8:4)
+#define FIELDS_START_Y	4
+#define FIELDS_START_X	4
 
 enum {
 	TAB_CONTACT,

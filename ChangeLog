@@ -1,7 +1,7 @@
 0.4.15
  - new options --add-email and --add-email-quiet
  - proper mutt alias import filter
- - minor editor update
+ - editor update
  - don't handle extra_column and extra_alternative as numbers in abookrc
  - mail.vim update in contrib directory
 

@@ -120,7 +120,6 @@ print_editor_header(int item)
 {
 	char *header;
 	char email[MAX_EMAIL_LEN];
-	int i, x, len;
 	
 	if( (header = (char *)malloc(EDITW_COLS)) == NULL )
 		return;
@@ -134,11 +133,9 @@ print_editor_header(int item)
 	else
 		snprintf(header, EDITW_COLS, "%s", database[item][NAME]);
 
-	len = strlen(header);
-	x = (EDITW_COLS - len) / 2;
-	mvwaddstr(editw, 0, x, header);
-	for(i = x; i < x + len; i++)
-		mvwaddch(editw, 1, i, '^');
+	mvwaddstr(editw, 0, (EDITW_COLS - strlen(header)) / 2,
+			header);
+
 	free(header);
 }
 
@@ -157,10 +154,11 @@ editor_print_data(int tab, int item)
 			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 			split_emailstr(item, emails);
 			getyx(editw, y, x);
-			mvwaddstr(editw, y+1, TAB_START_X, "E-mail addresses:");
+			mvwaddstr(editw, y+1, FIELDS_START_X,
+					"E-mail addresses:");
 			for(k = 0; k < MAX_EMAILS; k++) {
 				getyx(editw, y, x);
-				mvwprintw(editw, y+1, TAB_START_X,
+				mvwprintw(editw, y+1, FIELDS_START_X,
 				"%c -", '2' + k);
 				mvwprintw(editw, y +1, TAB_COLON_POS,
 						": %s", emails[k]);
@@ -171,9 +169,9 @@ editor_print_data(int tab, int item)
 		if(j > 1) {
 			getyx(editw, y, x); y++;
 		} else
-			y = TAB_START_Y;
+			y = FIELDS_START_Y;
 
-		mvwprintw(editw, y, TAB_START_X, "%d - %s",
+		mvwprintw(editw, y, FIELDS_START_X, "%d - %s",
 				j,
 				abook_fields[i].name);
 		mvwaddch(editw, y, TAB_COLON_POS, ':');
@@ -290,7 +288,7 @@ edit_field(int tab, char c, int item)
 	int n = c - '1' + 1;
 	char *str;
 
-	if(n < 1 || n > MAX_TAB_LINES)
+	if(n < 1 || n > MAX_TAB_FIELDS)
 		return 0;
 
 	edit_undo(item, BACKUP_ITEM);
