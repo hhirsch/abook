@@ -11,15 +11,20 @@ Starting from version 0.4.10 abook is know to compile with the native curses
 library of SUN Solaris and OpenBSD.
 
 If you compile with --enable-debug flag you should run abook like this:
-abook 2> debug or abook 2> /dev/null. Abook 0.4.8 has been compiled and tested
-successfully on following platforms:
+abook 2> debug or abook 2> /dev/null. Abook has been compiled and tested
+successfully on following platforms: (NOTE: All versions of abook haven't
+been tested on all platforms.)
 
-Linux (Debian GNU/Linux 2.1, RedHat 6.1)
-FreeBSD 3.3
-Solaris 2.5 / 2.6 (thanks Michael Wiedmann)
-AIX 3.2.5 (tested by Brian Salter-Duke)
-DEC alpha ? (tested by Brian Salter-Duke)
-Irix 6.5 (abook version 0.4.11)
+Linux (Debian GNU/Linux 2.1/2.2, RedHat 6.x)
+Solaris 2.4
+Solaris 2.5
+Solaris 2.6
+FreeBSD 3.3 (newer versions should work)
+OpenBSD
+NetBSD (reportedly requires ncurses to work properly)
+AIX 3.2.5
+DEC alpha ?
+Irix 6.5
 
 INSTALLATION
 
