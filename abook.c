@@ -707,6 +707,7 @@ init_add_email()
 {
 	set_filenames();
 	atexit(free_filenames);
+	check_abook_directory();
 	init_opts();
 	load_opts(rcfile);
 	atexit(free_opts);
