@@ -1,30 +1,36 @@
-Summary: Text-based addressbook program
-Name: @PACKAGE@
-Version: @VERSION@
-Release: 1
-Copyright: GPL
-Group: Utilities
-Source: http://prdownloads.sourceforge.net/abook/%{name}-%{version}.tar.gz
-Url: http://abook.sourceforge.net/
-BuildPreReq: ncurses-devel readline-devel
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Summary:	Text-based addressbook program
+Name:		@PACKAGE@
+Version:	@VERSION@
+Release:	1
+Copyright:	GPL
+Group:		Utilities
+Source:		http://prdownloads.sourceforge.net/abook/%{name}-%{version}.tar.gz
+URL:		http://abook.sourceforge.net/
+BuildPreReq:	ncurses-devel readline-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
 
 %description
 Abook is a text-based addressbook program designed to
 use with mutt mail client.
 
+
 %prep
 %setup -q
 
+
 %build
 %configure
-make
+make %{_smp_mflags}
+
 
 %install
 %makeinstall
 
+
 %clean
-rm -rf "$RPM_BUILD_ROOT"
+[ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf -- "%{buildroot}"
+
 
 %files
 %defattr(-,root,root)
@@ -32,6 +38,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/abook
 %{_mandir}/man1/abook.*
 %{_mandir}/man5/abookrc.*
+
 
 %changelog
 * Mon Mar 11 2002 Jaakko Heinonen <jheinonen@users.sourceforge.net>
