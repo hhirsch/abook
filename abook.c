@@ -206,7 +206,7 @@ show_usage()
 extern list_item *database;
 
 static void
-muttq_print_item(int item)
+muttq_print_item(FILE *file, int item)
 {
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 	int i;
@@ -216,7 +216,7 @@ muttq_print_item(int item)
 	for(i = 0; i < (options_get_int("mutt_return_all_emails") ?
 			MAX_EMAILS : 1) ; i++)
 		if( *emails[i] )
-			printf("%s\t%s\t%s\n", emails[i],
+			fprintf(file, "%s\t%s\t%s\n", emails[i],
 				database[item][NAME],
 				database[item][NOTES] == NULL ? " " :
 					database[item][NOTES]
@@ -232,7 +232,7 @@ mutt_query(char *str)
 		struct db_enumerator e = init_db_enumerator(ENUM_ALL);
 		printf("All items\n");
 		db_enumerate_items(e)
-			muttq_print_item(e.item);
+			muttq_print_item(stdout, e.item);
 	} else {
 		int search_fields[] = {NAME, EMAIL, NICK, -1};
 		int i;
@@ -242,7 +242,7 @@ mutt_query(char *str)
 		}
 		putchar('\n');
 		while(i >= 0) {
-			muttq_print_item(i);
+			muttq_print_item(stdout, i);
 			i = find_item(str, i+1, search_fields);
 		}
 	}
@@ -294,29 +294,16 @@ make_mailstr(int item)
 void
 print_stderr(int item)
 {
-	char *mailstr = NULL;
+    fprintf (stderr, "%c", '\n');
 
 	if( is_valid_item(item) )
-		mailstr = make_mailstr(item);
+		muttq_print_item(stderr, item);
 	else {
 		struct db_enumerator e = init_db_enumerator(ENUM_SELECTED);
-		char *tmp = NULL;
 		db_enumerate_items(e) {
-			tmp = mailstr;
-			mailstr = tmp ?
-				strconcat(tmp, ",", make_mailstr(e.item), NULL):
-				strconcat(make_mailstr(e.item), NULL);
-			free(tmp);
+			muttq_print_item(stderr, e.item);
 		}
 	}
-
-    fprintf(stderr, "%s", mailstr);
-
-#ifdef DEBUG
-	fprintf(stderr, "mailstr: %s\n", mailstr);
-#endif
-
-	free(mailstr);
 
 }
 
@@ -483,5 +470,4 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	close_config();
 	exit(ret);
 }
-
 

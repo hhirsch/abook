@@ -40,6 +40,7 @@ static char *mainhelp[] = {
 "	Z		move current item down\n",
 "\n",
 "	m		send mail with mutt\n",
+"	P		print item(s) to stderr\n",
 "	u		view URL with www browser\n",
 NULL
 
