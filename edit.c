@@ -38,7 +38,7 @@ editor_tab(const int tab)
 {
 	int i;
 	const int spacing = 12;
-	const char *tab_names[] = {
+	static char *tab_names[] = {
 		"CONTACT",
 		"ADDRESS",
 		" PHONE ",
