@@ -1168,6 +1168,71 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
  * printable export filter
  */
 
+
+static void
+text_write_address_us(FILE *out, int i) {
+	fprintf(out, "\n%s", database[i][ADDRESS]);
+	
+	if (database[i][CITY])
+		fprintf(out, "\n%s", database[i][CITY]);
+		
+	if (database[i][STATE] || database[i][ZIP]) {
+		fputc('\n', out);
+		
+		if(database[i][STATE]) {
+			fprintf(out, "%s", database[i][STATE]);
+			if(database[i][ZIP])
+				fputc(' ', out);
+		}
+
+		if(database[i][ZIP])
+			fprintf(out, "%s", database[i][ZIP]);
+	}
+
+	if (database[i][COUNTRY])
+		fprintf(out, "\n%s", database[i][COUNTRY]);
+}
+
+
+static void
+text_write_address_uk(FILE *out, int i) {
+	int j;
+
+	for (j = ADDRESS; j <= COUNTRY; j++)
+		if (database[i][j])
+			fprintf(out, "\n%s", database[i][j]);
+}
+
+static void
+text_write_address_eu(FILE *out, int i) {
+	fprintf(out, "\n%s", database[i][ADDRESS]);
+	
+	if (database[i][ZIP] || database[i][CITY]) {
+		fputc('\n', out);
+
+		if(database[i][ZIP]) {
+			fprintf(out, "%s", database[i][ZIP]);
+			if(database[i][CITY])
+				fputc(' ', out);
+		}
+
+		if(database[i][CITY])
+			fprintf(out, "%s", database[i][CITY]);
+		/*
+		fprintf(out, "\n%s %s",
+				safe_str(database[i][ZIP]),
+				safe_str(database[i] [CITY]));
+				*/
+	}
+	
+
+	if (database[i][STATE])
+		fprintf(out, "\n%s", database[i][STATE]);
+
+	if (database[i][COUNTRY])
+		fprintf(out, "\n%s", database[i][COUNTRY]);
+}
+
 static int
 text_export_database(FILE * out, struct db_enumerator e)
 {
@@ -1199,42 +1264,12 @@ text_export_database(FILE * out, struct db_enumerator e)
 		}
 		/* Print address */
 		if (database[e.item][ADDRESS]) {
-			if (!safe_strcmp(style, "us")) {	/* US like */
-				fprintf(out, "\n%s", database[e.item][ADDRESS]);
-				if (database[e.item][CITY])
-					fprintf(out, "\n%s",
-						database[e.item][CITY]);
-				if (database[e.item][STATE] || database[e.item][ZIP])
-					fprintf(out, "\n%s %s",
-						safe_str(database[e.item]
-							 [STATE]),
-						safe_str(database[e.item]
-							 [ZIP]));
-				if (database[e.item][COUNTRY])
-					fprintf(out, "\n%s",
-						database[e.item][COUNTRY]);
-			}
-
-			else if (!safe_strcmp(style, "uk")) {	/* UK like */
-				for (j = ADDRESS; j <= COUNTRY; j++)
-					if (database[e.item][j])
-						fprintf(out, "\n%s",
-							database[e.item][j]);
-			} else {	/* EU like */
-				fprintf(out, "\n%s", database[e.item][ADDRESS]);
-				if (database[e.item][ZIP] ||
-						database[e.item][CITY])
-					fprintf(out, "\n%s %s",
-						safe_str(database[e.item][ZIP]),
-						safe_str(database[e.item]
-							 [CITY]));
-				if (database[e.item][STATE])
-					fprintf(out, "\n%s",
-						database[e.item][STATE]);
-				if (database[e.item][COUNTRY])
-					fprintf(out, "\n%s",
-						database[e.item][COUNTRY]);
-			}
+			if (!safe_strcmp(style, "us"))	/* US like */
+				text_write_address_us(out, e.item);
+			else if (!safe_strcmp(style, "uk"))	/* UK like */
+				text_write_address_uk(out, e.item);
+			else	/* EU like */
+				text_write_address_eu(out, e.item);
 
 			fprintf(out, "\n");
 		}
