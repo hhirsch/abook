@@ -147,7 +147,6 @@ print_editor_header(int item)
 	else
 		snprintf(header, EDITW_COLS, "%s", database[item][NAME]);
 
-	fprintf(stderr, "%d\n", strwidth(header));
 	mvwaddstr(editw, 0, (EDITW_COLS - strwidth(header)) / 2,
 			header);
 
