@@ -27,7 +27,7 @@ A: When "To:" or "Cc:" prompt appears press ^t for query. (After query
 
 Q: Can I add addresses to the abook addressbook from mutt?
 
-A: Yes, it is possible starting from abook 0.4.15. See --add-email
+A: Yes, it is possible starting from abook version 0.4.15. See --add-email
    command line option and README.
 
 
@@ -49,7 +49,7 @@ A: Export to palmcsv format, and import from there. Several GUI
 
 Q: Can I use abook in UTF-8 terminal emulator?
 
-A: Yes, version 0.5.2 added multibyte character support.
+A: Yes, the version 0.5.2 added a multibyte character support.
 
    There are currently some issues:
 
