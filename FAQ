@@ -1,6 +1,11 @@
 abook FAQ
 ~~~~~~~~~
 
+Q: Can I recall the old value in editor?
+
+A: Yes, use up arrow to recall the old value.
+
+
 Q: How to query all addresses when I press 'Q' in mutt?
 
 A: Type "all" to the prompt.

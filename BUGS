@@ -3,6 +3,8 @@ known bugs in abook
 * in X terminals keyboard may not behave as expected - this is probably
   a ncurses problem
 * incompatible with some terminals
+  - there seems to be some problems with some gnome-terminal versions -
+    gnome-terminal bug?
 
 * mutt / elm / pine export filters allow to create a file with duplicate
   aliases

@@ -43,6 +43,11 @@ After this you can make queries from mutt using the query command ('Q')
 and add sender e-mail addresses to the addressbook from pager using 'A'
 command. (Of course you can choose another keybinding if you like.)
 
+UPGRADING FROM VERSION 0.4
+
+You must import your abook 0.4 addressbook file because 0.5 uses different
+location to store the file.
+
 NOTES
 
 If your language specific characters don't work correctly make sure
