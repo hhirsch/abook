@@ -12,23 +12,22 @@ library of SUN Solaris and OpenBSD. Since version 0.5.0 GNU readline is
 required.
 
 If you compile with --enable-debug flag you should redirect standard error
-to somewhere. (for example abook 2> debug or abook 2> /dev/null. Abook has
+to somewhere. (for example abook 2> debug or abook 2> /dev/null) Abook has
 been compiled and tested successfully on following platforms:
 (NOTE: All versions of abook haven't been tested on all platforms.)
 
-Linux (Debian GNU/Linux 2.1/2.2, RedHat 6.x)
+Linux (Debian GNU/Linux, RedHat Linux, all other distributions with GNU ncurses
+       and GNU readline should work)
 Darwin
-Solaris 2.4
-Solaris 2.5
-Solaris 2.6
-FreeBSD 3.3 (newer versions should be OK)
+Solaris
+FreeBSD
 OpenBSD
 NetBSD (reportedly requires ncurses to work properly)
+GNU/Hurd
 AIX 3.2.5
 HPUX
 Irix 6.5
 DEC alpha ?
-GNU/Hurd
 
 INSTALLATION
 
