@@ -155,17 +155,15 @@ print_list_line(int i, int line, int highlight)
 void
 list_headerline()
 {
-#ifdef A_BOLD
+#if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_BOLD);
-#else
-	/* hmm, maybe something here */
 #endif
 	mvaddstr(2, NAMEPOS, abook_fields[NAME].name);
 	mvaddstr(2, EMAILPOS, abook_fields[EMAIL].name);
 	if(extra_column > 0)
 		mvaddnstr(2, EXTRAPOS, abook_fields[extra_column].name,
 				COLS-EXTRAPOS);
-#ifdef A_BOLD
+#if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_NORMAL);
 #endif
 }

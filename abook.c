@@ -754,7 +754,7 @@ add_email_add_item(int quiet, char *name, char *email)
 					name,
 					email,
 					datafile);
-			c = fgetc(in);
+			c = getc(in);
 			if(c == 'n' || c == 'N') {
 				fclose(in);
 				return 0;
