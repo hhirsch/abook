@@ -17,6 +17,7 @@ been compiled and tested successfully on following platforms:
 (NOTE: All versions of abook haven't been tested on all platforms.)
 
 Linux (Debian GNU/Linux 2.1/2.2, RedHat 6.x)
+Darwin
 Solaris 2.4
 Solaris 2.5
 Solaris 2.6

@@ -41,7 +41,7 @@ A: Export to palmcsv format, and import from there. Several GUI
    pilot-addresses -d abook -c abook -r addresses.palmcsv
                                                                                 
    This will delete everything in the abook category and replace it with
-   the latest information from your abook database.  By keeping your
+   the latest information from your abook database. By keeping your
    abook entries in a separate category, you can continue to add and
    modify entries in other categories manually, and pilot-addresses will
    not change or delete them.
