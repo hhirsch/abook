@@ -1,3 +1,6 @@
+0.5.4
+ - add show_cursor config option (idea from Cheryl Homiak)
+
 0.5.3
  - add allcvs filters (Christoph Sobotka)
  - removed a lefover debug message

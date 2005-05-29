@@ -375,13 +375,15 @@ get_commands()
 
 	for(;;) {
 		can_resize = TRUE; /* it's safe to resize now */
-		hide_cursor();
-		if( should_resize )
+		if(!opt_get_bool(BOOL_SHOW_CURSOR))
+			hide_cursor();
+		if(should_resize)
 			refresh_screen();
 		ch = getch();
-		show_cursor();
+		if(!opt_get_bool(BOOL_SHOW_CURSOR))
+			show_cursor();
 		can_resize = FALSE; /* it's not safe to resize anymore */
-		switch( ch ) {
+		switch(ch) {
 			case 'q': return;
 			case 'Q': quit_abook(QUIT_DONTSAVE);	break;
 			case 'P': print_stderr(selected_items() ?

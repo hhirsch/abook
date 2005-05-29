@@ -110,6 +110,11 @@ refresh_list()
 		print_list_line(i, line, i == curitem);
         }
 
+	if(opt_get_bool(BOOL_SHOW_CURSOR)) {
+		wmove(list, curitem - first_list_item, 0);
+		/* need to call refresh() to update the cursor positions */
+		refresh();
+	}
         wrefresh(list);
 }
 

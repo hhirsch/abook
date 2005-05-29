@@ -52,6 +52,9 @@ set add_email_prevent_duplicates=false
 # field to be used with "sort by field" command
 set sort_field=nick
 
+# show cursor in main display
+set show_cursor=false
+
 # custom fields
 
 #customfield 1 Name1

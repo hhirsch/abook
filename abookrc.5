@@ -103,6 +103,10 @@ Defines whether to avoid adding addresses already in data. Default is false.
 \fBsort_field\fP=field
 Defines the field to be used by the "sort by field" command. Default is "nick" (Nickname/Alias).
 
+.TP
+\fBshow_cursor\fP=[true|false]
+Defines if the cursor is visible in main display. Default is false.
+
 .SH SAMPLE CONFIGURATION FILE
 
 .nf
@@ -158,6 +162,9 @@ set add_email_prevent_duplicates=false
 
 # field to be used with "sort by field" command
 set sort_field=nick
+
+# show cursor in main display
+set show_cursor=false
 
 .fi
 
