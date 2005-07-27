@@ -83,18 +83,18 @@ check_abook_directory()
 		if(errno != ENOENT) {
 			perror(dir);
                         free(dir);
-                        exit(1);
+                        exit(EXIT_FAILURE);
 		}
 		if(mkdir(dir, 0700) == -1) {
 			printf("Cannot create directory %s\n", dir);
 			perror(dir);
 			free(dir);
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	} else if(!S_ISDIR(s.st_mode)) {
 		printf("%s is not a directory\n", dir);
 		free(dir);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	free(dir);
@@ -128,8 +128,8 @@ init_abook()
 	signal(SIGKILL, quit_abook_sig);
 	signal(SIGTERM, quit_abook_sig);
 
-	if( init_ui() )
-		exit(1);
+	if(init_ui())
+		exit(EXIT_FAILURE);
 
 	umask(DEFAULT_UMASK);
 
@@ -144,7 +144,7 @@ init_abook()
 			free_opts();
 			/*close_database();*/
 			close_ui();
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	} else
 		load_database(datafile);
@@ -168,7 +168,7 @@ quit_abook(int save_db)
 
 	close_ui();
 
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 static void
@@ -211,7 +211,7 @@ set_filenames()
 
 	if( (stat(getenv("HOME"), &s)) == -1 || ! S_ISDIR(s.st_mode) ) {
 		fprintf(stderr,"%s is not a valid HOME directory\n", getenv("HOME") );
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if(!datafile)
@@ -244,7 +244,7 @@ change_mode(int *current, int mode)
 		fprintf(stderr, "Cannot combine options --mutt-query, "
 				"--convert, "
 				"--add-email or --add-email-quiet\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	*current = mode;
@@ -274,7 +274,7 @@ set_filename(char **var, char *path)
 #define set_convert_var(X) do { if(mode != MODE_CONVERT) {\
 	fprintf(stderr, "please use option --%s after --convert option\n",\
 			long_options[option_index].name);\
-		exit(1);\
+		exit(EXIT_FAILURE);\
 	} else\
 		X = optarg;\
 	} while(0)
@@ -328,7 +328,7 @@ parse_command_line(int argc, char **argv)
 		switch(c) {
 			case 'h':
 				show_usage();
-				exit(1);
+				exit(EXIT_SUCCESS);
 			case OPT_ADD_EMAIL:
 				change_mode(&mode, MODE_ADD_EMAIL);
 				break;
@@ -364,16 +364,16 @@ parse_command_line(int argc, char **argv)
 				break;
 			case OPT_FORMATS:
 				print_filters();
-				exit(0);
+				exit(EXIT_SUCCESS);
 			default:
-				exit(1);
+				exit(EXIT_FAILURE);
 		}
 	}
 
 	if (optind < argc) {
 		fprintf(stderr, "%s: unrecognized arguments on command line\n",
 				argv[0]);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	switch(mode) {
@@ -466,7 +466,7 @@ mutt_query(char *str)
 		int i;
 		if( (i = find_item(str, 0, search_fields)) < 0 ) {
 			printf("Not found\n");
-			quit_mutt_query(1);
+			quit_mutt_query(EXIT_FAILURE);
 		}
 		putchar('\n');
 		while(i >= 0) {
@@ -475,7 +475,7 @@ mutt_query(char *str)
 		}
 	}
 
-	quit_mutt_query(0);
+	quit_mutt_query(EXIT_SUCCESS);
 }
 
 static void
@@ -487,8 +487,8 @@ init_mutt_query()
 
 	if( load_database(datafile) ) {
 		printf("Cannot open database\n");
-		quit_mutt_query(1);
-		exit(1);
+		quit_mutt_query(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -620,7 +620,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	if( !strcasecmp(srcformat, dstformat) ) {
 		printf(	"input and output formats are the same\n"
 			"exiting...\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 #endif
 
@@ -672,14 +672,14 @@ quit_add_email()
 	if(add_email_count > 0) {
 		if(save_database() < 0) {
 			fprintf(stderr, "cannot open %s\n", datafile);
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 		printf("%d item(s) added to %s\n", add_email_count, datafile);
 	} else {
 		puts("Valid sender address not found");
 	}
 
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 static void
@@ -729,7 +729,7 @@ add_email_add_item(int quiet, char *name, char *email)
 		if(!in) {
 			fprintf(stderr, "cannot open /dev/tty\n"
 				"you may want to use --add-email-quiet\n");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 
 		do {
@@ -763,7 +763,7 @@ add_email(int quiet)
 
 	if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode) ) {
 		fprintf(stderr, "stdin is a directory or cannot stat stdin\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	init_add_email();
