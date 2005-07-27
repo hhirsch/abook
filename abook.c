@@ -103,8 +103,12 @@ check_abook_directory()
 static void
 xmalloc_error_handler(int err)
 {
+	/*
+	 * We don't try to save addressbook here because we don't know
+	 * if it's fully loaded to to memory.
+	 */
 	if(is_ui_initialized())
-		quit_abook(QUIT_SAVE);
+		close_ui();
 
 	fprintf(stderr, "Memory allocation failure: %s\n", strerror(err));
 	exit(EXIT_FAILURE);
