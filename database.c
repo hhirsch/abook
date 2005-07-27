@@ -19,6 +19,7 @@
 #include "misc.h"
 #include "options.h"
 #include "filter.h"
+#include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -223,7 +224,7 @@ free_list_item(list_item item)
 	int i;
 
 	for(i=0; i<ITEM_FIELDS; i++)
-		my_free(item[i]);
+		xfree(item[i]);
 }
 
 void
@@ -278,9 +279,8 @@ adjust_list_capacity()
 	else
 		return;
 
-	database = (list_item *)abook_realloc(database,
-			sizeof(list_item) * list_capacity);
-	selected = (char *)abook_realloc(selected, list_capacity);
+	database = xrealloc(database, sizeof(list_item) * list_capacity);
+	selected = xrealloc(selected, list_capacity);
 }
 
 int
@@ -454,7 +454,7 @@ find_item(char *str, int start, int search_fields[])
 				ret = e.item;
 				goto out;
 			}
-			my_free(tmp);
+			xfree(tmp);
 		}
 	}
 
@@ -532,9 +532,9 @@ assign_fieldname(const char *name, int i)
 		 * check if we are overwriting statically allocated default
 		 */
 		if(strcasecmp(abook_fields[i].name, abook_fields[i].key))
-			my_free(abook_fields[i].name);
+			xfree(abook_fields[i].name);
 		
-		s = abook_malloc(MAX_FIELDNAME_LEN + 1);
+		s = xmalloc_inc(MAX_FIELDNAME_LEN, 1);
 		snprintf(s, MAX_FIELDNAME_LEN, "%s", name);
 		abook_fields[i].name = s;
 	}

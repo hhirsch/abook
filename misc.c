@@ -7,9 +7,6 @@
  * Copyright (C) Jaakko Heinonen
  */
 
-#define ABOOK_SRC	1
-/*#undef ABOOK_SRC*/
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -23,9 +20,7 @@
 #	include <mbswidth.h>
 #endif
 #include "misc.h"
-#ifdef ABOOK_SRC
-#	include "abook.h"
-#endif
+#include "xmalloc.h"
 
 #ifndef DEBUG
 #	define NDEBUG	1
@@ -55,12 +50,12 @@ strtrim(char *s)
 
 	assert(s != NULL);
 
-	for(t = s; ISSPACE(*t); t++);
+	for(t = s; isspace(*t); t++);
 
 	memmove(s, t, strlen(t)+1);
 
 	for (tt = t = s; *t != '\0'; t++)
-		if(!ISSPACE(*t))
+		if(!isspace(*t))
 			tt = t+1;
 
 	*tt = '\0';
@@ -89,12 +84,7 @@ mkstr (const char *format, ... )
 {
 	MY_VA_LOCAL_DECL;
 	size_t size = 100;
-	char *buffer =
-#ifdef ABOOK_SRC
-		(char *) abook_malloc (size);
-#else
-		(char *) xmalloc (size);
-#endif
+	char *buffer = xmalloc (size);
 	
 	assert(format != NULL);
 
@@ -113,12 +103,7 @@ mkstr (const char *format, ... )
 		else
 			size *= 2;
 		
-		buffer =
-#ifdef ABOOK_SRC
-			(char *) abook_realloc (buffer, size);
-#else
-			(char *) xrealloc (buffer, size);
-#endif
+		buffer = xrealloc (buffer, size);
 	}
 }
 
@@ -142,11 +127,7 @@ strconcat (const char *str, ...)
 	MY_VA_END;
 	
 	concat = (char *)
-#ifdef ABOOK_SRC
-	abook_malloc(l);
-#else
 	xmalloc(l);
-#endif
 	if(concat == NULL)
 		return NULL;
 
@@ -193,23 +174,19 @@ my_getcwd()
 	char *dir = NULL;
 	size_t size = 100;
 
-	if( (dir = (char *)malloc(size)) == NULL)
+	if( (dir = xmalloc(size)) == NULL)
 		return NULL;
 
 	*dir = 0;
 	
 	while( getcwd(dir, size) == NULL && errno == ERANGE )
-		if( (dir = (char *)realloc(dir, size *=2)) == NULL)
+		if( (dir = xrealloc(dir, size *=2)) == NULL)
 			return NULL;
 
 	return dir;
 }
 
 #define INITIAL_SIZE	128
-#ifndef ABOOK_SRC
-#	define abook_malloc(X) xmalloc(X)
-#	define abook_realloc(X, XX) xrealloc(X, XX)
-#endif
 
 char *
 getaline(FILE *f)
@@ -233,7 +210,7 @@ getaline(FILE *f)
 
 	len = 0;
 	size = thres;
-	buf = (char *)abook_malloc(size);
+	buf = xmalloc(size);
 
 	while (fgets(buf+len, size-len, f) != NULL) {
 		len += strlen(buf+len);
@@ -241,7 +218,7 @@ getaline(FILE *f)
 			break;		/* the whole line has been read */
 
 		for (inc = size, p = NULL; inc > mininc; inc /= 2)
-			if ((p = (char *)abook_realloc(buf, size + inc)) !=
+			if ((p = xrealloc(buf, size + inc)) !=
 					NULL)
 				break;
 
@@ -250,7 +227,7 @@ getaline(FILE *f)
 	}
 
 	if (len == 0) {
-		free(buf);
+		xfree(buf);
 		return NULL;	/* nothing read (eof or error) */
 	}
 
@@ -258,7 +235,7 @@ getaline(FILE *f)
 		buf[--len] = '\0';
 
 	if (size - len > mucho) { /* a plenitude of unused memory? */
-		p = (char *)abook_realloc(buf, len+1);
+		p = xrealloc(buf, len+1);
 		if (p != NULL) {
 			buf = p;
 			size = len+1;

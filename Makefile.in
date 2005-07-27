@@ -61,7 +61,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_abook_OBJECTS = abook.$(OBJEXT) database.$(OBJEXT) filter.$(OBJEXT) \
 	list.$(OBJEXT) misc.$(OBJEXT) options.$(OBJEXT) edit.$(OBJEXT) \
 	ldif.$(OBJEXT) ui.$(OBJEXT) getname.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT) abook_rl.$(OBJEXT) mbswidth.$(OBJEXT)
+	getopt1.$(OBJEXT) abook_rl.$(OBJEXT) mbswidth.$(OBJEXT) \
+	xmalloc.$(OBJEXT)
 abook_OBJECTS = $(am_abook_OBJECTS)
 abook_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
@@ -169,9 +170,11 @@ target_alias = @target_alias@
 abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		options.c edit.c ldif.c ui.c getname.c \
 		getopt.c getopt1.c abook_rl.c mbswidth.c \
+		xmalloc.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
-		getopt.h abook_rl.h mbswidth.h
+		getopt.h abook_rl.h mbswidth.h \
+		xmallloc.h
 
 EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc abook.spec \
 	contrib
@@ -280,6 +283,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmalloc.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

@@ -388,7 +388,8 @@ load_opts(char *filename)
 				err += opt_parse_line(line, n, filename) ? 1:0;
 		}
 
-		my_free(line);
+		free(line);
+		line = NULL;
 	}
 
 	free(line);

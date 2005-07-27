@@ -22,6 +22,7 @@
 #include "list.h"
 #include "misc.h"
 #include "options.h"
+#include "xmalloc.h"
 #include <assert.h>
 
 extern int items;
@@ -538,7 +539,7 @@ ldif_add_item(ldif_item ldif_item)
 
 bail_out:
 	for(i=0; i < LDIF_ITEM_FIELDS; i++)
-		my_free(ldif_item[i]);
+		xfree(ldif_item[i]);
 
 }
 
@@ -558,7 +559,7 @@ ldif_convert(ldif_item item, char *type, char *value)
 				if( safe_strcmp("person", value))
 					break;
 			if(item[i])
-				my_free(item[i]);
+				xfree(item[i]);
 			item[i] = strdup(value);
 		}
 	}
@@ -579,7 +580,7 @@ ldif_parse_file(FILE *handle)
 			continue;
 
 		if( -1 == ( str_parse_line(line, &type, &value, &vlen)) ) {
-			my_free(line);
+			xfree(line);
 			continue; /* just skip the errors */
 		}
 
@@ -587,7 +588,7 @@ ldif_parse_file(FILE *handle)
 
 		ldif_convert(item, type, value);
 
-		my_free(line);
+		xfree(line);
 	} while ( !feof(handle) );
 
 	ldif_convert(item, "dn", "");
@@ -648,7 +649,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	/* includes also the trailing zero */
 	alias_len = (size_t)(ptr - tmp + 1);
 
-	if( (*alias = (char *)malloc(alias_len)) == NULL) {
+	if( (*alias = xmalloc(alias_len)) == NULL) {
 		free(line);
 		return 1;
 	}
@@ -725,7 +726,7 @@ mutt_parse_email(list_item item)
 				free(item[EMAIL]);
 				item[EMAIL] = tmp;
 			} else {
-				my_free(email);
+				xfree(email);
 			}
 		}
 	}
@@ -937,7 +938,7 @@ pine_parse_buf(char *buf)
 	int i, len, last;
 	int pine_conv_table[]= {NICK, NAME, EMAIL, -1, NOTES};
 
-	memset(&item, 0, sizeof(item) );
+	memset(&item, 0, sizeof(item));
 	
 	for(i=0, last=0; !last ; i++) {
 		if( ! (end = strchr(start, '\t')) )
@@ -975,7 +976,7 @@ pine_parse_file(FILE *in)
 
 	while(!feof(in)) {
 		for(i = 2;;i++) {
-			buf = (char *) realloc(buf, i*LINESIZE);
+			buf = xrealloc(buf, i*LINESIZE);
 			if(i == 2)
 				strcpy(buf, line);
 			fgets(line, LINESIZE, in);
@@ -989,14 +990,14 @@ pine_parse_file(FILE *in)
 			strcat(buf, ptr);
 		}
 		if( *buf == '#' ) {
-			my_free(buf);
+			xfree(buf);
 			continue;
 		}
 		pine_fixbuf(buf);
 
 		pine_parse_buf(buf);
 
-		my_free(buf);
+		xfree(buf);
 	}
 
 	return 0;
@@ -1107,7 +1108,7 @@ csv_remove_quotes(char *s)
 	len = strlen(trimmed);
 	if(trimmed[len - 1] == '\"' && *trimmed == '\"') {
 		if(len < 3) {
-			my_free(copy);
+			xfree(copy);
 			return NULL;
 		}
 		trimmed[len - 1] = 0;
@@ -1117,7 +1118,7 @@ csv_remove_quotes(char *s)
 		return trimmed;
 	}
 
-	my_free(copy);
+	xfree(copy);
 	return strdup(s);
 }
 
@@ -1136,7 +1137,7 @@ csv_store_field(list_item item, char *s, int field)
 			&& csv_conv_table[field] >= 0) {
 		item[csv_conv_table[field]] = newstr;
 	} else {
-		my_free(newstr);
+		xfree(newstr);
 	}
 }
 
@@ -1155,7 +1156,7 @@ allcsv_store_field(list_item item, char *s, int field)
 			&& allcsv_conv_table[field] >= 0) {
 		item[allcsv_conv_table[field]] = newstr;
 	} else {
-		my_free(newstr);
+		xfree(newstr);
 	}
 }
 
@@ -1272,7 +1273,7 @@ csv_parse_file(FILE *in)
 		if(line && *line && *line != CSV_COMMENT_CHAR)
 			csv_parse_line(line);
 
-		my_free(line);
+		xfree(line);
 	}
 
 	return 0;
@@ -1289,7 +1290,7 @@ allcsv_parse_file(FILE *in)
 		if(line && *line && *line != CSV_COMMENT_CHAR)
 			allcsv_parse_line(line);
 
-		my_free(line);
+		xfree(line);
 	}
 
 	return 0;
@@ -1605,7 +1606,7 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 				alias,
 				database[e.item][NAME],
 				email);
-		my_free(alias);
+		xfree(alias);
 	}
 
 	return 0;
@@ -1772,7 +1773,7 @@ elm_alias_export(FILE *out, struct db_enumerator e)
 				alias,
 				database[e.item][NAME],
 				email);
-		my_free(alias);
+		xfree(alias);
 	}
 
 	return 0;

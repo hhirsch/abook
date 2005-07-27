@@ -17,6 +17,7 @@
 #include "list.h"
 #include "edit.h"
 #include "misc.h"
+#include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -135,7 +136,7 @@ print_editor_header(int item)
 	char *header;
 	char email[MAX_EMAIL_LEN];
 
-	if( (header = (char *)malloc(EDITW_COLS)) == NULL )
+	if( (header = xmalloc(EDITW_COLS)) == NULL )
 		return;
 
 	get_first_email(email, item);
@@ -228,7 +229,7 @@ change_field(char *msg, char **field)
 	if(*field) {
 		free(old);
 		if(!**field)
-			my_free(*field);
+			xfree(*field);
 	} else {
 		*field = old;
 		ret = 1;
@@ -249,11 +250,11 @@ change_name_field(char **field)
 	change_field("Name: ", field);
 
 	if( *field == NULL || ! **field ) {
-		my_free(*field);
+		xfree(*field);
 		*field = strdup(tmp);
 	}
 
-	my_free(tmp);
+	xfree(tmp);
 }
 
 static void
@@ -284,7 +285,7 @@ edit_emails(char c, int item)
 	} else
 		*emails[email_num] = 0;
 
-	my_free(database[item][EMAIL]);
+	xfree(database[item][EMAIL]);
 
 	for(i = 0; i < MAX_EMAILS; i++) {
 		if( *emails[i] ) {
@@ -353,15 +354,15 @@ edit_undo(int item, int mode)
 		case CLEAR_UNDO:
 			if(backup) {
 				free_list_item(backup[0]);
-				my_free(backup);
+				xfree(backup);
 			}
 			break;
 		case BACKUP_ITEM:
 			if(backup) {
 				free_list_item(backup[0]);
-				my_free(backup);
+				xfree(backup);
 			}
-			backup = (list_item *)abook_malloc(sizeof(list_item));
+			backup = xmalloc(sizeof(list_item));
 			for(i = 0; i < ITEM_FIELDS; i++)
 				backup[0][i] = safe_strdup(database[item][i]);
 			break;
@@ -369,7 +370,7 @@ edit_undo(int item, int mode)
 			if(backup) {
 				free_list_item(database[item]);
 				itemcpy(database[item], backup[0]);
-				my_free(backup);
+				xfree(backup);
 			}
 			break;
 		default:

@@ -1,6 +1,7 @@
 0.5.4
  - add show_cursor config option (idea from Cheryl Homiak)
  - autoconf/automake update
+ - replace abook_malloc, abook_realloc and my_free with new xmalloc routines
 
 0.5.3
  - add allcvs filters (Christoph Sobotka)

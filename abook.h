@@ -3,8 +3,6 @@
 
 #include <stdio.h>
 
-void		*abook_malloc(size_t size);
-void		*abook_realloc(void *ptr, size_t size);
 FILE		*abook_fopen (const char *path, const char *mode);
 void		quit_abook(int save_db);
 void		launch_wwwbrowser(int item);
@@ -39,7 +37,6 @@ int		strncasecmp (const char *, const char *, size_t);
 #define show_cursor()	curs_set(1)
 
 #define safe_atoi(X)    ((X == NULL) ? 0 : atoi(X))
-#define my_free(X)	do {free(X); X=NULL;} while(0)
 #define safe_str(X)	((X == NULL) ? "" : X)
 #define safe_strdup(X)	((X == NULL) ? NULL : strdup(X))
 

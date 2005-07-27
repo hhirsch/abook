@@ -6,20 +6,21 @@
  * Copyright (C) Jaakko Heinonen
  */
 
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/stat.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <errno.h>
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
 #if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
 #	include <locale.h>
 #endif
+#include <assert.h>
 #include "abook.h"
 #include "ui.h"
 #include "database.h"
@@ -30,7 +31,7 @@
 #include "options.h"
 #include "getname.h"
 #include "getopt.h"
-#include <assert.h>
+#include "xmalloc.h"
 
 static void             init_abook();
 static void		quit_abook_sig(int i);
@@ -97,6 +98,16 @@ check_abook_directory()
 	}
 
 	free(dir);
+}
+
+static void
+xmalloc_error_handler(int err)
+{
+	if(is_ui_initialized())
+		quit_abook(QUIT_SAVE);
+
+	fprintf(stderr, "Memory allocation failure: %s\n", strerror(err));
+	exit(EXIT_FAILURE);
 }
 
 static void
@@ -168,6 +179,7 @@ main(int argc, char **argv)
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LOCALE_H)
 	setlocale(LC_ALL, "");
 #endif
+	xmalloc_set_error_handler(xmalloc_error_handler);
 
 	parse_command_line(argc, argv);
 
@@ -183,8 +195,8 @@ main(int argc, char **argv)
 static void
 free_filenames()
 {
-	my_free(rcfile);
-	my_free(datafile);
+	xfree(rcfile);
+	xfree(datafile);
 }
 
 
@@ -574,39 +586,6 @@ launch_wwwbrowser(int item)
 	ui_init_curses();
 }
 
-void *
-abook_malloc(size_t size)
-{
-	void *ptr;
-
-	if ( (ptr = malloc(size)) == NULL ) {
-		if( is_ui_initialized() )
-			quit_abook(QUIT_SAVE);
-		perror("malloc() failed");
-		exit(1);
-	}
-
-	return ptr;
-}
-
-void *
-abook_realloc(void *ptr, size_t size)
-{
-	ptr = realloc(ptr, size);
-
-	if(size == 0)
-		return NULL;
-
-	if(ptr == NULL) {
-		if(is_ui_initialized())
-			quit_abook(QUIT_SAVE);
-		perror("realloc() failed");
-		exit(1);
-	}
-
-	return ptr;
-}
-
 FILE *
 abook_fopen (const char *path, const char *mode)
 {	
@@ -791,10 +770,10 @@ add_email(int quiet)
 			getname(line, &name, &email);
 			add_email_count += add_email_add_item(quiet,
 					name, email);
-			my_free(name);
-			my_free(email);
+			xfree(name);
+			xfree(email);
 		}
-		my_free(line);
+		xfree(line);
 	} while( !feof(stdin) );
 
 	quit_add_email();
