@@ -78,22 +78,6 @@ xmalloc0(size_t size)
 	return p;
 }
 
-void *
-xrealloc(void *ptr, size_t size)
-{
-	if((ptr = realloc(ptr, size)) == NULL)
-		(*xmalloc_handle_error)(errno);
-
-	return ptr;
-}
-
-void
-xfree(void *ptr)
-{
-	free(ptr);
-	ptr = NULL;
-}
-
 static void *
 _xmalloc_inc(size_t size, size_t inc, int zero)
 {
@@ -120,5 +104,40 @@ void *
 xmalloc0_inc(size_t size, size_t inc)
 {
 	return _xmalloc_inc(size, inc, 1);
+}
+
+void *
+xrealloc(void *ptr, size_t size)
+{
+	if((ptr = realloc(ptr, size)) == NULL)
+		(*xmalloc_handle_error)(errno);
+
+	return ptr;
+}
+
+void *
+xrealloc_inc(void *ptr, size_t size, size_t inc)
+{
+	size_t total_size = size + inc;
+
+	/*
+	 * check if the calculation overflowed
+	 */
+	if(total_size < size) {
+		(*xmalloc_handle_error)(EINVAL);
+		return NULL;
+	}
+
+	if((ptr = realloc(ptr, total_size)) == NULL)
+		(*xmalloc_handle_error)(errno);
+
+	return ptr;
+}
+
+void
+xfree(void *ptr)
+{
+	free(ptr);
+	ptr = NULL;
 }
 

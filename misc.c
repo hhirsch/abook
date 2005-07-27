@@ -103,7 +103,7 @@ mkstr (const char *format, ... )
 		else
 			size *= 2;
 		
-		buffer = xrealloc (buffer, size);
+		buffer = xrealloc(buffer, size);
 	}
 }
 
@@ -218,7 +218,7 @@ getaline(FILE *f)
 			break;		/* the whole line has been read */
 
 		for (inc = size, p = NULL; inc > mininc; inc /= 2)
-			if ((p = xrealloc(buf, size + inc)) !=
+			if ((p = xrealloc_inc(buf, size, inc)) !=
 					NULL)
 				break;
 
@@ -235,7 +235,7 @@ getaline(FILE *f)
 		buf[--len] = '\0';
 
 	if (size - len > mucho) { /* a plenitude of unused memory? */
-		p = xrealloc(buf, len+1);
+		p = xrealloc_inc(buf, len, 1);
 		if (p != NULL) {
 			buf = p;
 			size = len+1;

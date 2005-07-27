@@ -646,16 +646,12 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while( ! ISSPACE(*ptr) )
 		ptr++;
 
-	/* includes also the trailing zero */
-	alias_len = (size_t)(ptr - tmp + 1);
+	alias_len = (size_t)(ptr - tmp);
 
-	if( (*alias = xmalloc(alias_len)) == NULL) {
-		free(line);
-		return 1;
-	}
+	*alias = xmalloc_inc(alias_len, 1);
 
-	strncpy(*alias, tmp, alias_len - 1);
-	*(*alias + alias_len - 1) = 0;
+	strncpy(*alias, tmp, alias_len);
+	*(*alias + alias_len) = 0;
 
 	while(ISSPACE(*ptr))
 		ptr++;
