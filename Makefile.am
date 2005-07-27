@@ -8,7 +8,7 @@ abook_SOURCES = abook.c database.c filter.c list.c misc.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
 		getopt.h abook_rl.h mbswidth.h \
-		xmallloc.h
+		xmalloc.h
 
 EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc abook.spec \
 	contrib

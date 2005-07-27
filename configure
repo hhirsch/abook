@@ -1613,7 +1613,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=abook
- VERSION=0.5.4
+ VERSION=0.5.4rc1
 
 
 cat >>confdefs.h <<_ACEOF
