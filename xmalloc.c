@@ -134,10 +134,3 @@ xrealloc_inc(void *ptr, size_t size, size_t inc)
 	return ptr;
 }
 
-void
-xfree(void *ptr)
-{
-	free(ptr);
-	ptr = NULL;
-}
-

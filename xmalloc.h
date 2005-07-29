@@ -9,6 +9,7 @@ void *		xmalloc0(size_t);
 void *		xmalloc_inc(size_t, size_t);
 void *		xrealloc(void *, size_t);
 void *		xrealloc_inc(void *, size_t, size_t);
-void		xfree(void *);
+
+#define xfree(ptr)	do { free(ptr); ptr = NULL; } while(0)
 
 #endif

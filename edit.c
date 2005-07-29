@@ -227,7 +227,7 @@ change_field(char *msg, char **field)
 	*field = ui_readline(msg, old, max_len - 1, 0);
 
 	if(*field) {
-		free(old);
+		xfree(old);
 		if(!**field)
 			xfree(*field);
 	} else {
