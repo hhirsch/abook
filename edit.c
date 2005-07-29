@@ -47,13 +47,13 @@ editor_tab(const int tab)
 		"CUSTOM "
 	};
 
-	mvwhline(editw, TABLINE+1, 0, UI_HLINE_CHAR, EDITW_COLS);
-	for(i=0; i < TABS; i++) {
+	mvwhline(editw, TABLINE + 1, 0, UI_HLINE_CHAR, EDITW_COLS);
+	for(i = 0; i < TABS; i++) {
 		mvwaddch(editw,  TABLINE+1, spacing * i + 2,  UI_TEE_CHAR);
 		mvwaddch(editw,  TABLINE+1, spacing * i + 12, UI_TEE_CHAR);
 	}
 
-	for(i=0; i < TABS; i++) {
+	for(i = 0; i < TABS; i++) {
 		mvwaddch(editw,  TABLINE, spacing * i + 2,  UI_ULCORNER_CHAR);
 		mvwaddch(editw,  TABLINE, spacing * i + 3,  UI_LBOXLINE_CHAR);
 		mvwaddstr(editw, TABLINE, spacing * i + 4,  tab_names[i]);
@@ -136,12 +136,12 @@ print_editor_header(int item)
 	char *header;
 	char email[MAX_EMAIL_LEN];
 
-	if( (header = xmalloc(EDITW_COLS)) == NULL )
+	if((header = xmalloc(EDITW_COLS)) == NULL)
 		return;
 
 	get_first_email(email, item);
 
-	if( *database[item][EMAIL] )
+	if(*database[item][EMAIL])
 		snprintf(header, EDITW_COLS, "%s <%s>",
 				database[item][NAME],
 				email);
@@ -164,7 +164,7 @@ editor_print_data(int tab, int item)
 		if(abook_fields[i].tab != tab)
 			continue;
 
-		if(i==EMAIL) { /* special field */
+		if(i == EMAIL) { /* special field */
 			int k;
 			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 			split_emailstr(item, emails);
@@ -182,7 +182,8 @@ editor_print_data(int tab, int item)
 		}
 
 		if(j > 1) {
-			getyx(editw, y, x); y++;
+			getyx(editw, y, x);
+			y++;
 		} else
 			y = FIELDS_START_Y;
 
@@ -219,7 +220,7 @@ change_field(char *msg, char **field)
 	char *old;
 	int ret = 0;
 
-	if( !strncmp("E-mail", msg, 6) )
+	if(!strncmp("E-mail", msg, 6))
 		max_len = MAX_EMAIL_LEN;
 
 	old = *field;
@@ -249,7 +250,7 @@ change_name_field(char **field)
 	tmp = strdup(*field);
 	change_field("Name: ", field);
 
-	if( *field == NULL || ! **field ) {
+	if(*field == NULL || ! **field) {
 		xfree(*field);
 		*field = strdup(tmp);
 	}
@@ -260,7 +261,7 @@ change_name_field(char **field)
 static void
 fix_email_str(char *str)
 {
-	for(; *str; str++ )
+	for(; *str; str++)
 		*str = *str == ',' ? '_' : *str;
 }
 
@@ -326,14 +327,14 @@ edit_field(int tab, char c, int item)
 		return 1;
 	}
 
-	for(i=0, j=0; i< ITEM_FIELDS; i++) {
+	for(i = 0, j = 0; i< ITEM_FIELDS; i++) {
 		if(abook_fields[i].tab == tab)
 			j++;
 		if(j==n)
 			break;
 	}
 
-	if(j!=n)
+	if(j != n)
 		return 0;
 
 	str = mkstr("%s: ", abook_fields[i].name);
@@ -395,7 +396,7 @@ edit_loop(int item)
 	refresh();
 	wrefresh(editw);
 
-	switch( (c = getch()) ) {
+	switch((c = getch())) {
 		case 'c': tab = TAB_CONTACT; break;
 		case 'a': tab = TAB_ADDRESS; break;
 		case 'p': tab = TAB_PHONE; break;
@@ -412,7 +413,7 @@ edit_loop(int item)
 		case 'k': if(is_valid_item(item-1)) item--; break;
 		case KEY_DOWN:
 		case '>':
-		case 'j': if(is_valid_item(item+1)) item++; break;
+		case 'j': if(is_valid_item(item + 1)) item++; break;
 		case 'r': roll_emails(item); break;
 		case '?': display_help(HELP_EDITOR); break;
 		case 'u': edit_undo(item, RESTORE_ITEM); break;
@@ -437,7 +438,7 @@ edit_item(int item)
 
 	init_editor();
 
-	while( (item = edit_loop(item)) >= 0 )
+	while((item = edit_loop(item)) >= 0)
 		curitem = item; /* hmm, this is not very clean way to go */
 
 	close_editor();

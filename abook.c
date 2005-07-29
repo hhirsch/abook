@@ -555,7 +555,7 @@ launch_mutt(int item)
 #ifdef DEBUG
 	fprintf(stderr, "cmd: %s\n", cmd);
 #endif
-	system(cmd);	
+	system(cmd);
 	free(cmd);
 
 	/*
