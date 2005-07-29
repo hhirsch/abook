@@ -126,10 +126,7 @@ strconcat (const char *str, ...)
 	}
 	MY_VA_END;
 
-	concat = (char *)
-	xmalloc(l);
-	if(concat == NULL)
-		return NULL;
+	concat =  xmalloc(l);
 
 	strcpy (concat, str);
 	MY_VA_START(str);
