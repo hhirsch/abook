@@ -335,7 +335,7 @@ ldif_type_and_value(char *type, char *val, int vlen)
 	if((bufsize = t + 1) <= t)
 		return NULL;
 
-	if((buf = (char *) malloc(bufsize)) == NULL) {
+	if((buf = malloc(bufsize)) == NULL) {
 		return NULL;
 	}
 
