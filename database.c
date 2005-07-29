@@ -60,7 +60,7 @@ struct abook_field abook_fields[ITEM_FIELDS] = {
 	{"Name",	"name",		TAB_CONTACT},/* NAME */
 	{"E-mails",	"email",	TAB_CONTACT},/* EMAIL */
 	{"Address",	"address",	TAB_ADDRESS},/* ADDRESS */
-	{"Address2",	"address2",	TAB_ADDRESS},/* ADDRESS2 */   
+	{"Address2",	"address2",	TAB_ADDRESS},/* ADDRESS2 */
 	{"City",	"city",		TAB_ADDRESS},/* CITY */
 	{"State/Province","state",	TAB_ADDRESS},/* STATE */
 	{"ZIP/Postal Code","zip",	TAB_ADDRESS},/* ZIP */
@@ -101,7 +101,7 @@ parse_database(FILE *in)
  	list_item item;
 
 	memset(&item, 0, sizeof(item));
-	
+
 	for(;;) {
 		line = getaline(in);
 		if( feof(in) ) {
@@ -140,7 +140,7 @@ next:
 	return 0;
 }
 
-		
+
 
 int
 load_database(char *filename)
@@ -152,7 +152,7 @@ load_database(char *filename)
 
 	if ( (in = abook_fopen(filename, "r")) == NULL )
 		return -1;
-	
+
 	parse_database(in);
 
 	return (items == 0) ? 2 : 0;
@@ -204,11 +204,11 @@ save_database()
 		return 1;
 	}
 
-	
+
 	write_database(out, e);
-	
+
 	fclose(out);
-	
+
 	return 0;
 }
 
@@ -231,7 +231,7 @@ void
 close_database()
 {
 	int i;
-	
+
 	for(i=0; i < items; i++)
 		free_item(i);
 
@@ -253,7 +253,7 @@ validate_item(list_item item)
 {
 	int i;
 	char *tmp;
-	
+
 	if(item[EMAIL] == NULL)
 		item[EMAIL] = strdup("");
 
@@ -312,7 +312,7 @@ remove_selected_items()
 
 	if( ! selected_items() )
 		selected[ curitem ] = 1;
-	
+
 	for( j = LAST_ITEM; j >= 0; j-- ) {
 		if( selected[j] ) {
 			free_item(j); /* added for .4 data_s_ */
@@ -320,7 +320,7 @@ remove_selected_items()
 				itemcpy(database[ i ], database[ i + 1 ]);
 				selected[ i ] = selected[ i + 1 ];
 			}
-			items--;	
+			items--;
 		}
 	}
 
@@ -379,7 +379,7 @@ namecmp(const void *i1, const void *i2)
 
 	itemcpy(a, i1);
 	itemcpy(b, i2);
-	
+
 	return safe_strcoll( a[sort_field], b[sort_field] );
 }
 
@@ -415,7 +415,7 @@ sort_by_field(int field)
 	}
 
 	sort_field = field;
-	
+
 	qsort((void *)database, items, sizeof(list_item), namecmp);
 
 	refresh_screen();
@@ -482,7 +482,7 @@ real_db_enumerate_items(struct db_enumerator e)
 {
 	int item = max(0, e.item + 1);
 	int i;
-	
+
 	switch(e.mode) {
 #ifdef DEBUG
 		case ENUM_ALL:
@@ -533,7 +533,7 @@ assign_fieldname(const char *name, int i)
 		 */
 		if(strcasecmp(abook_fields[i].name, abook_fields[i].key))
 			xfree(abook_fields[i].name);
-		
+
 		s = xmalloc_inc(MAX_FIELDNAME_LEN, 1);
 		snprintf(s, MAX_FIELDNAME_LEN, "%s", name);
 		abook_fields[i].name = s;

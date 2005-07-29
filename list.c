@@ -82,17 +82,17 @@ void
 refresh_list()
 {
 	int i, line;
-	
+
 	werase(list);
 
 	ui_print_number_of_items();
-	
+
 	if(items < 1) {
 		refresh();
 		wrefresh(list);
 		return;
 	}
-	
+
 	if(curitem < 0)
 		curitem = 0;
 
@@ -132,7 +132,7 @@ print_list_line(int i, int line, int highlight)
 
 	if(selected[i])
 		mvwaddch(list, line, 0, '*' );
-	
+
 	mvwaddnstr(list, line, NAMEPOS, database[i][NAME],
 		bytes2width(database[i][NAME], NAMELEN));
 	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS))
@@ -155,7 +155,7 @@ print_list_line(int i, int line, int highlight)
 	if(highlight)
 		wstandend(list);
 }
-	
+
 
 void
 list_headerline()
@@ -201,10 +201,10 @@ page_up()
 {
 	if(curitem < 1)
 		return;
-	
+
 	curitem = curitem == first_list_item ?
 		((curitem -= LIST_LINES) < 0 ? 0 : curitem) : first_list_item;
-	
+
 	refresh_list();
 }
 
@@ -267,7 +267,7 @@ goto_home()
 {
 	if(items > 0)
 		curitem = 0;
-	
+
 	refresh_list();
 }
 

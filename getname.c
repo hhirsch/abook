@@ -102,12 +102,12 @@ spamify(char *input)
 **   From:                        [blank From: line]
 **   From: uu.net!kent            [uucp addresses - no comment]
 **   From: uu.net!kent (kent)     [uucp addresses - with comment]
-**   From: "(Joe Bloggs)" <joe@anorg.com> 
+**   From: "(Joe Bloggs)" <joe@anorg.com>
 **   From: "Roy T. Fielding" <fielding@kiwi.ics.uci.edu>
 **   From: kent@localhost
 **   From: kent@uu.net (Kent Landfield)
 **   From: (George Burgyan) <gburgyan@cybercon.com>
-**   From: <gburgyan@cybercon.com> (George Burgyan) 
+**   From: <gburgyan@cybercon.com> (George Burgyan)
 **   From:              Kent B. Landfield <kent@landfield.com>
 **   From:      IN%"fekete+reply@c2.net" 26-JAN-1997 13:28:55.36
 **   From:      IN%"vicric@panix.com"  "Vicki Richman" 13-AUG-1996 10:54:33.38
@@ -159,7 +159,7 @@ getname(char *line, char **namep, char **emailp)
 	   ** First, is there an '@' sign we can use as an anchor ?
 	 */
 	if ((c = hm_strchr(line, '@')) == NULL) {
-		/* 
+		/*
 		   ** No '@' sign here so ...
 		 */
 		if (strchr(line, '(')) {	/* From: bob (The Big Guy) */
@@ -177,7 +177,7 @@ getname(char *line, char **namep, char **emailp)
 				email[i++] = *c;
 			email[i] = '\0';
 		} else {
-			/* 
+			/*
 			 *    - check to see if the From: line is blank, (taken care of)
 			 *    - check if From: uu.net!kent formatted line
 			 *    - check if "From: kent" formatted line
@@ -197,7 +197,7 @@ getname(char *line, char **namep, char **emailp)
 
 		else if (use_domainaddr) {
 			/*
-			 * check if site domainizes addresses 
+			 * check if site domainizes addresses
 			 * but don't modify uucp addresses
 			 */
 			if ((c = strchr(email, '!')) == NULL) {
@@ -281,7 +281,7 @@ getname(char *line, char **namep, char **emailp)
 		comment_fnd = 1;
 	} else {
 		/*
-		 * Is there an email address available 
+		 * Is there an email address available
 		 * that we can use for the name ?
 		 */
 		if (!strcmp(email, NOEMAIL))	/* No */
@@ -326,7 +326,7 @@ getname(char *line, char **namep, char **emailp)
 		name[i] = '\0';
 
 	/*
-	 * Is the name string blank ? If so then 
+	 * Is the name string blank ? If so then
 	 * force it to get filled with something.
 	 */
 	if (blankstring(name))
@@ -341,9 +341,9 @@ getname(char *line, char **namep, char **emailp)
 			strcpymax(name, email, NAMESTRLEN);
 	}
 
-	/* 
-	 * need to strip spaces off the end of 
-	 * the email and name strings 
+	/*
+	 * need to strip spaces off the end of
+	 * the email and name strings
 	 */
 
 	c = email + (strlen(email) - 1);

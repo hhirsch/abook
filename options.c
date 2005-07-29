@@ -55,11 +55,11 @@ static struct option abook_vars[] = {
 	{ "mutt_command", OT_STR, STR_MUTT_COMMAND, UL "mutt" },
 	{ "mutt_return_all_emails", OT_BOOL, BOOL_MUTT_RETURN_ALL_EMAILS,
 		TRUE },
-	
+
 	{ "print_command", OT_STR, STR_PRINT_COMMAND, UL "lpr" },
 
 	{ "www_command", OT_STR, STR_WWW_COMMAND, UL "lynx" },
-	
+
 	{ "address_style", OT_STR, STR_ADDRESS_STYLE, UL "eu" },
 
 	{ "use_ascii_only", OT_BOOL, BOOL_USE_ASCII_ONLY, FALSE },
@@ -210,7 +210,7 @@ void
 find_token_start(buffer *b)
 {
 	assert(b);
-	
+
 	for(; ISSPACE(*b -> ptr); b -> ptr ++);
 }
 
@@ -230,7 +230,7 @@ static char *
 opt_set_set_option(char *var, char *p, struct option *opt)
 {
 	int len;
-	
+
 	strtrim(p);
 
 	len = strlen(p);
@@ -261,7 +261,7 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 		default:
 			assert(0);
 	}
-	
+
 	return NULL;
 }
 
@@ -276,13 +276,13 @@ opt_parse_set(buffer *b)
 		*p++ = 0;
 	else
 		return "invalid value assignment";
-	
+
 	strtrim(b -> ptr);
 
 	for(i = 0;abook_vars[i].option; i++)
 		if(!strcmp(abook_vars[i].option, b -> ptr))
 			return opt_set_set_option(b -> ptr, p, &abook_vars[i]);
-	
+
 	return "unknown option";
 }
 
@@ -329,7 +329,7 @@ opt_parse_line(char *line, int n, char *fn)
 	char *err = NULL;
 	char *token;
 	buffer b;
-	
+
 	assert(line && fn);
 
 	b.ptr = line;
@@ -354,7 +354,7 @@ opt_parse_line(char *line, int n, char *fn)
 				return FALSE;
 			break;
 		}
-	
+
 	fprintf(stderr, "%s: parse error at line %d: ", fn, n);
 	if(err)
 		fprintf(stderr, "%s\n", err);
@@ -371,11 +371,11 @@ load_opts(char *filename)
 	char *line = NULL;
 	int n;
 	int err = 0;
-	
+
 	if((in = fopen(filename, "r")) == NULL)
 		return -1;
 
-	
+
 	for(n = 1;!feof(in); n++) {
 		line = getaline(in);
 

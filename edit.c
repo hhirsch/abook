@@ -98,7 +98,7 @@ roll_emails(int item)
 
 	strcpy(database[item][EMAIL], p+1);
 	strcat(database[item][EMAIL], ",");
-	strcat(database[item][EMAIL], tmp);	
+	strcat(database[item][EMAIL], tmp);
 }
 
 static void

@@ -189,7 +189,7 @@ main(int argc, char **argv)
 
 	init_abook();
 
-	get_commands();	
+	get_commands();
 
 	quit_abook(QUIT_SAVE);
 
@@ -394,7 +394,7 @@ show_usage()
 {
 	puts	(PACKAGE " v " VERSION "\n");
 	puts	("     -h	--help				show usage");
-	puts	("     -C	--config	<file>		use an alternative configuration file");   
+	puts	("     -C	--config	<file>		use an alternative configuration file");
 	puts	("	--datafile	<file>		use an alternative addressbook file");
 	puts	("	--mutt-query	<string>	make a query for mutt");
 	puts	("	--add-email			"
@@ -592,12 +592,12 @@ launch_wwwbrowser(int item)
 
 FILE *
 abook_fopen (const char *path, const char *mode)
-{	
+{
 	struct stat s;
 	bool stat_ok;
 
 	stat_ok = (stat(path, &s) != -1);
-	
+
 	if(strchr(mode, 'r'))
 		return (stat_ok && S_ISREG(s.st_mode)) ?
 			fopen(path, mode) : NULL;
@@ -722,7 +722,7 @@ add_email_add_item(int quiet, char *name, char *email)
 			return 0;
 		}
 	}
-					
+
 	if(!quiet) {
 		FILE *in = fopen("/dev/tty", "r");
 		char c;

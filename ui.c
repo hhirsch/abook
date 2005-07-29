@@ -88,7 +88,7 @@ resize_abook()
 		fprintf(stderr, "Warning: COLS=%d, LINES=%d\n", winsz.ws_col, winsz.ws_row);
 	}
 #endif
-		
+
 	if(winsz.ws_col >= MIN_COLS && winsz.ws_row >= MIN_LINES) {
 #ifdef HAVE_RESIZETERM
 		resizeterm(winsz.ws_row, winsz.ws_col);
@@ -115,7 +115,7 @@ win_changed(int i)
 	if( can_resize )
 		resize_abook();
 	else
-		should_resize = TRUE;	
+		should_resize = TRUE;
 }
 #endif /* SIGWINCH */
 
@@ -217,7 +217,7 @@ int
 statusline_msg(char *msg)
 {
 	int c;
-	
+
 	clear_statusline();
 	statusline_addstr(msg);
 	c = getch();
@@ -475,7 +475,7 @@ ui_remove_items()
 	if(statusline_ask_boolean("Remove selected item(s)", TRUE))
 		remove_selected_items();
 
-	clear_statusline();	
+	clear_statusline();
 	refresh_list();
 }
 
@@ -575,7 +575,7 @@ ui_print_database()
 		return;
 
 	fexport("text", handle, mode);
-	
+
 	pclose(handle);
 }
 

@@ -97,14 +97,14 @@ void
 print_filters()
 {
 	int i;
-	
+
 	puts("input:");
 	for(i=0; *i_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", i_filters[i].filtname,
 			i_filters[i].desc);
 
 	putchar('\n');
-	
+
 	puts("output:");
 	for(i=0; *e_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", e_filters[i].filtname,
@@ -159,21 +159,21 @@ get_real_name()
 /*
  * import
  */
-	
+
 static int		i_read_file(char *filename, int (*func) (FILE *in));
 
 static void
 import_screen()
 {
 	int i;
-	
+
 	clear();
 
 	refresh_statusline();
 	headerline("import database");
 
 	mvaddstr(3, 1, "please select a filter");
-	
+
 
 	for(i=0; *i_filters[i].filtname ; i++)
 		mvprintw(5 + i, 6, "%c -\t%s\t%s\n", 'a' + i,
@@ -191,27 +191,27 @@ import_database()
 	int tmp = items;
 
 	import_screen();
-	
+
 	filter = getch() - 'a';
 	if(filter == 'x' - 'a' ||
 		filter >= number_of_input_filters() || filter < 0) {
 		refresh_screen();
 		return 1;
 	}
-	
+
 	mvaddstr(5+filter, 2, "->");
-	
+
 	filename = ask_filename("Filename: ");
 	if( !filename ) {
 		refresh_screen();
 		return 2;
 	}
-		
+
 	if(  i_read_file(filename, i_filters[filter].func ) )
 		statusline_msg("Error occured while opening the file");
 	else if( tmp == items )
 		statusline_msg("Hmm.., file seems not to be a valid file");
-	
+
 	refresh_screen();
 	free(filename);
 
@@ -233,7 +233,7 @@ i_read_file(char *filename, int (*func) (FILE *in))
 
 	fclose(in);
 
-	return ret;	
+	return ret;
 }
 
 int
@@ -264,10 +264,10 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 			ret = (*i_filters[i].func) (stdin);
 	} else
 		ret =  i_read_file(filename, i_filters[i].func);
-	
+
 	if( tmp == items )
 		ret = 1;
-	
+
 	return ret;
 }
 
@@ -282,7 +282,7 @@ static void
 export_screen()
 {
 	int i;
-	
+
 	clear();
 
 
@@ -290,7 +290,7 @@ export_screen()
 	headerline("export database");
 
 	mvaddstr(3, 1, "please select a filter");
-	
+
 
 	for(i=0; *e_filters[i].filtname ; i++)
 		mvprintw(5 + i, 6, "%c -\t%s\t%s\n", 'a' + i,
@@ -308,14 +308,14 @@ export_database()
 	char *filename;
 
 	export_screen();
-	
+
 	filter = getch() - 'a';
 	if(filter == 'x' - 'a' ||
 		filter >= number_of_output_filters() || filter < 0) {
 		refresh_screen();
 		return 1;
 	}
-	
+
 	mvaddstr(5+filter, 2, "->");
 
 	if( selected_items() ) {
@@ -330,16 +330,16 @@ export_database()
 		}
 		clear_statusline();
 	}
-	
+
 	filename = ask_filename("Filename: ");
 	if( !filename ) {
 		refresh_screen();
 		return 2;
 	}
-	
+
 	if(  e_write_file(filename, e_filters[filter].func, enum_mode ) )
 		statusline_msg("Error occured while exporting");
-	
+
 	refresh_screen();
 	free(filename);
 
@@ -361,9 +361,9 @@ e_write_file(char *filename, int (*func) (FILE *in, struct db_enumerator e),
 		return 1;
 
 	ret = (*func) (out, enumerator);
-	
+
 	fclose(out);
-	
+
 	return ret;
 }
 
@@ -395,7 +395,7 @@ export_file(char filtname[FILTNAME_LEN], char *filename)
 	int i;
 	int ret = 0;
 	struct db_enumerator e = init_db_enumerator(mode);
-	
+
 	for(i=0;; i++) {
 		if( ! strncasecmp(e_filters[i].filtname, filtname,
 					FILTNAME_LEN) )
@@ -434,7 +434,7 @@ static void	ldif_fix_string(char *str);
 typedef char*  ldif_item[LDIF_ITEM_FIELDS];
 
 static ldif_item ldif_field_names = {
-	"cn",	
+	"cn",
 	"mail",
 	"streetaddress",
 	"streetaddress2",
@@ -456,7 +456,7 @@ static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
 	NAME,		/* "cn" */
 	EMAIL,		/* "mail" */
 	ADDRESS,	/* "streetaddress" */
-	ADDRESS2,	/* "streetaddress2" */     
+	ADDRESS2,	/* "streetaddress2" */
         CITY,		/* "locality" */
 	STATE,		/* "st" */
 	ZIP,		/* "postalcode" */
@@ -472,7 +472,7 @@ static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
 };
 
 
-static char * 
+static char *
 ldif_read_line(FILE *in)
 {
 	char *buf = NULL;
@@ -485,10 +485,10 @@ ldif_read_line(FILE *in)
 
 		pos = ftell(in);
 		line = getaline(in);
-		
+
 		if( feof(in) || !line )
 			break;
-		
+
 		if(i == 1) {
 			buf = line;
 			continue;
@@ -656,7 +656,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while(ISSPACE(*ptr))
 		ptr++;
 
-	*rest = strdup(ptr);	
+	*rest = strdup(ptr);
 
 	free(line);
 	return 0;
@@ -880,7 +880,7 @@ html_export_write_tail(FILE *out)
 	fprintf(out, "\n</table>\n");
 	fprintf(out, "\n</body>\n</html>\n");
 }
-	
+
 /*
  * end of html export filter
  */
@@ -919,7 +919,7 @@ pine_convert_emails(char *s)
 	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s=tmp+1 )
 		if( i > MAX_EMAILS - 1 ) {
 			*tmp = 0;
-			break;	
+			break;
 		}
 
 }
@@ -935,7 +935,7 @@ pine_parse_buf(char *buf)
 	int pine_conv_table[]= {NICK, NAME, EMAIL, -1, NOTES};
 
 	memset(&item, 0, sizeof(item));
-	
+
 	for(i=0, last=0; !last ; i++) {
 		if( ! (end = strchr(start, '\t')) )
 			last=1;
@@ -968,7 +968,7 @@ pine_parse_file(FILE *in)
 	char *ptr;
 	int i;
 
-	fgets(line, LINESIZE, in);	
+	fgets(line, LINESIZE, in);
 
 	while(!feof(in)) {
 		for(i = 2;;i++) {
@@ -1038,9 +1038,9 @@ pine_export_database(FILE *out, struct db_enumerator e)
 
 /* FIXME
  * these files should be parsed according to a certain
- * lay out, or the default if layout is not given, at 
+ * lay out, or the default if layout is not given, at
  * the moment only default is done...
- */ 
+ */
 
 #define CSV_COMMENT_CHAR	'#'
 
@@ -1087,7 +1087,7 @@ csv_convert_emails(char *s)
 	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1 )
 		if( i > MAX_EMAILS - 1 ) {
 			*tmp = 0;
-			break;	
+			break;
 		}
 
 }
@@ -1350,7 +1350,7 @@ csv_export_database(FILE *out, struct db_enumerator e)
 	};
 
 	csv_export_common(out, e, csv_export_fields, NULL);
-	
+
 	return 0;
 }
 
@@ -1408,7 +1408,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 	fprintf(out, "\"CUSTOM5\"\n");
 
 	csv_export_common(out, e, allcsv_export_fields, NULL);
-	
+
 	return 0;
 }
 
@@ -1420,7 +1420,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 #define PALM_CSV_END	CSV_SPECIAL(1)
 #define PALM_CSV_CAT	CSV_SPECIAL(2)
 
-static void 
+static void
 palm_split_and_write_name(FILE *out, char *name)
 {
 	char *p;
@@ -1439,7 +1439,7 @@ palm_split_and_write_name(FILE *out, char *name)
 	}
 }
 
-static void 
+static void
 palm_csv_handle_specials(FILE *out, int item, int field)
 {
 	switch(field) {
@@ -1469,7 +1469,7 @@ palm_export_database(FILE *out, struct db_enumerator e)
 		FAX,			/* FAX			*/
 		MOBILEPHONE, 		/* OTHER 		*/
 		EMAIL,			/* EMAIL		*/
-		ADDRESS,		/* ADDRESS		*/ 
+		ADDRESS,		/* ADDRESS		*/
 		CITY,			/* CITY			*/
 		STATE,			/* STATE		*/
 		ZIP,			/* ZIP			*/
@@ -1512,25 +1512,25 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 	        for( j = strlen(database[e.item][NAME]) - 1; j >= 0; j-- ) {
 	                if(database[e.item][NAME][j] == ' ')
 	                        break;
-	        } 
+	        }
 		fprintf(out, "N:%s;%.*s\n",
 			safe_str(name),
 			j,
 			safe_str(database[e.item][NAME])
-			); 
+			);
 
 		free(name);
 
 		if ( database[e.item][ADDRESS] )
 			fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\n",
 				safe_str(database[e.item][ADDRESS]),
-				safe_str(database[e.item][ADDRESS2]),				
+				safe_str(database[e.item][ADDRESS2]),
 				safe_str(database[e.item][CITY]),
 				safe_str(database[e.item][STATE]),
 				safe_str(database[e.item][ZIP]),
 				safe_str(database[e.item][COUNTRY])
 				);
-		
+
 		if (database[e.item][PHONE])
 			fprintf(out, "TEL;HOME:%s\n", database[e.item][PHONE]);
 		if (database[e.item][WORKPHONE])
@@ -1543,19 +1543,19 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 		if ( database[e.item][EMAIL] ) {
 			split_emailstr(e.item, emails);
 			for(j=0; j < MAX_EMAILS ; j++) {
-				if ( *emails[j] ) 
+				if ( *emails[j] )
 					fprintf(out, "EMAIL;INTERNET:%s\n",
 						emails[j]);
 			}
 		}
-		
-		if ( database[e.item][NOTES] ) 
+
+		if ( database[e.item][NOTES] )
 			fprintf(out, "NOTE:%s\n", database[e.item][NOTES]);
 		if (database[e.item][URL])
 			fprintf(out, "URL:%s\n",  database[e.item][URL]);
 
 		fprintf(out, "END:VCARD\n\n");
-		
+
 	}
 
 	return 0;
@@ -1574,7 +1574,7 @@ static char *
 mutt_alias_genalias(int i)
 {
 	char *tmp, *pos;
-	
+
 	if(database[i][NICK])
 		return strdup(database[i][NICK]);
 
@@ -1585,7 +1585,7 @@ mutt_alias_genalias(int i)
 
 	strlower(tmp);
 
-	return tmp;	
+	return tmp;
 }
 
 static int
@@ -1627,10 +1627,10 @@ text_write_address_us(FILE *out, int i) {
 
 	if (database[i][CITY])
 		fprintf(out, "\n%s", database[i][CITY]);
-		
+
 	if (database[i][STATE] || database[i][ZIP]) {
 		fputc('\n', out);
-		
+
 		if(database[i][STATE]) {
 			fprintf(out, "%s", database[i][STATE]);
 			if(database[i][ZIP])
@@ -1674,7 +1674,7 @@ text_write_address_eu(FILE *out, int i) {
 		if(database[i][CITY])
 			fprintf(out, "%s", database[i][CITY]);
 	}
-	
+
 	if (database[i][STATE])
 		fprintf(out, "\n%s", database[i][STATE]);
 

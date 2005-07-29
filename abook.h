@@ -17,8 +17,8 @@ int		strncasecmp (const char *, const char *, size_t);
 
 #define Y_STATUSLINE   	(LINES - 2)
 
-#define MIN_LINES	20	
-#define MIN_COLS	70	
+#define MIN_LINES	20
+#define MIN_COLS	70
 
 #define DEFAULT_UMASK	066
 #define DIR_IN_HOME	".abook"

@@ -29,7 +29,7 @@ enum {
 };
 
 #define MAX_TAB		TAB_CUSTOM
-	
+
 #define TABS		(MAX_TAB+1)
 
 #endif
