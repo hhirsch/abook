@@ -1613,7 +1613,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=abook
- VERSION=0.5.4rc1
+ VERSION=0.5.4rc3
 
 
 cat >>confdefs.h <<_ACEOF
@@ -6811,7 +6811,7 @@ else
 fi;
 
 if test x$debug = xtrue; then
-	CPPFLAGS="-DDEBUG $CPPFLAGS"
+	CPPFLAGS="-DDEBUG=1 $CPPFLAGS"
 	CFLAGS="-g $CFLAGS"
 fi
 

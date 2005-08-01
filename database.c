@@ -40,7 +40,6 @@ extern int curitem;
 extern char *selected;
 
 extern char *datafile;
-extern char *rcfile;
 
 /*
  * field definitions
@@ -198,7 +197,7 @@ save_database()
 	if( (out = abook_fopen(datafile, "w")) == NULL )
 		return -1;
 
-	if( list_is_empty() ) {
+	if(list_is_empty()) {
 		fclose(out);
 		unlink(datafile);
 		return 1;

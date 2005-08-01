@@ -45,7 +45,7 @@ static void		convert(char *srcformat, char *srcfile,
 static void		add_email(int);
 
 char *datafile = NULL;
-char *rcfile = NULL;
+static char *rcfile = NULL;
 
 bool alternative_datafile = FALSE;
 bool alternative_rcfile = FALSE;
@@ -125,7 +125,6 @@ init_abook()
 		fgetc(stdin);
 	}
 
-	signal(SIGKILL, quit_abook_sig);
 	signal(SIGTERM, quit_abook_sig);
 
 	if(init_ui())
@@ -692,7 +691,6 @@ static void
 init_add_email()
 {
 	set_filenames();
-	atexit(free_filenames);
 	check_abook_directory();
 	init_opts();
 	load_opts(rcfile);

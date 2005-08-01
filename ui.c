@@ -45,7 +45,7 @@
 extern int items, curitem;
 extern char *datafile;
 
-extern int alternative_datafile;
+extern bool alternative_datafile;
 
 /*
  * internal variables
@@ -82,7 +82,7 @@ resize_abook()
 #ifdef TIOCGWINSZ
 	struct winsize winsz;
 
-	ioctl (0, TIOCGWINSZ, &winsz);
+	ioctl(0, TIOCGWINSZ, &winsz);
 #ifdef DEBUG
 	if(winsz.ws_col >= MIN_COLS && winsz.ws_row >= MIN_LINES) {
 		fprintf(stderr, "Warning: COLS=%d, LINES=%d\n", winsz.ws_col, winsz.ws_row);
@@ -265,11 +265,13 @@ statusline_ask_boolean(char *msg, int def)
 
 	free(msg2);
 
-	switch( tolower(getch()) ) {
+	switch(tolower(getch())) {
 		case 'n':
+		case 'N':
 			ret = FALSE;
 			break;
 		case 'y':
+		case 'Y':
 			ret = TRUE;
 			break;
 		default:
@@ -343,7 +345,7 @@ display_help(int help)
 	erase();
 	headerline("help");
 
-	for( i = 0; tbl[i] != NULL; i++) {
+	for(i = 0; tbl[i] != NULL; i++) {
 		waddstr(helpw, tbl[i]);
 		if( ( !( (i+1) % (LINES-8) ) ) ||
 			(tbl[i+1] == NULL) ) {
@@ -498,7 +500,7 @@ ui_find(int next)
 	clear_statusline();
 
 	if(next) {
-		if( !*findstr )
+		if(!*findstr)
 			return;
 	} else {
 		char *s;
@@ -548,12 +550,12 @@ ui_print_database()
 	char *command = opt_get_str(STR_PRINT_COMMAND);
 	int mode;
 
-	if( list_is_empty() )
+	if(list_is_empty())
 		return;
 
 	statusline_addstr("Print All/Selected/Cancel (a/s/C)?");
 
-	switch( tolower(getch()) ) {
+	switch(tolower(getch())) {
 		case 'a':
 			mode = ENUM_ALL;
 			break;
@@ -587,13 +589,13 @@ ui_open_datafile()
 
 	filename = ask_filename("File to open: ");
 
-	if( !filename || ! *filename) {
+	if(!filename || ! *filename) {
 		free(filename);
 		refresh_screen();
 		return;
 	}
 
-	if( opt_get_bool(BOOL_AUTOSAVE) )
+	if(opt_get_bool(BOOL_AUTOSAVE))
 		save_database();
 	else if(statusline_ask_boolean("Save current database", FALSE))
 		save_database();
@@ -602,7 +604,7 @@ ui_open_datafile()
 
 	load_database(filename);
 
-	if( items == 0 ) {
+	if(items == 0) {
 		statusline_msg("Sorry, that specified file appears not to be a valid abook addressbook");
 		load_database(datafile);
 	} else {

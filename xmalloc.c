@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "xmalloc.h"
 
 static void
 xmalloc_default_error_handler(int err)

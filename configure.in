@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.5.4rc1)
+AM_INIT_AUTOMAKE(abook, 0.5.4rc3)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -108,7 +108,7 @@ AC_ARG_ENABLE(debug, [  --enable-debug          Enable debugging support ], [cas
 	esac], [debug=false])
 
 if test x$debug = xtrue; then
-	CPPFLAGS="-DDEBUG $CPPFLAGS"
+	CPPFLAGS="-DDEBUG=1 $CPPFLAGS"
 	CFLAGS="-g $CFLAGS"
 fi
 

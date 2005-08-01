@@ -33,7 +33,7 @@ void		ui_print_database();
 void		ui_open_datafile();
 
 
-#include "options.h" /* needed for options_get_int */
+#include "options.h" /* needed for options_get_bool */
 
 #define UI_HLINE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
 					'-' : ACS_HLINE

@@ -87,7 +87,7 @@ refresh_list()
 
 	ui_print_number_of_items();
 
-	if(items < 1) {
+	if(list_is_empty()) {
 		refresh();
 		wrefresh(list);
 		return;
