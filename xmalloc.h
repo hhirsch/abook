@@ -3,6 +3,13 @@
 
 #include <stdlib.h> /* for size_t */
 
+/*
+ * avoid possible collision with readline xmalloc functions
+ */
+
+#define xmalloc		_xmalloc_xmalloc
+#define xrealloc	_xmalloc_xrealloc
+
 void		xmalloc_set_error_handler(void (*)(int));
 void *		xmalloc(size_t);
 void *		xmalloc0(size_t);
