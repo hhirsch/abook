@@ -21,7 +21,7 @@
 #elif defined(HAVE_READLINE_H)
 #       include <readline.h>
 #else
-#	error "You don't seem to have readhline.h"
+#	error "You don't seem to have readline.h"
 #	error "No HAVE_READLINE_READLINE_H or HAVE_READLINE_H defined"
 #endif
 
