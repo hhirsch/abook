@@ -282,12 +282,12 @@ adjust_list_capacity()
 int
 add_item2database(list_item item)
 {
-	if( item[NAME] == NULL || ! *item[NAME] ) {
+	if(item[NAME] == NULL || ! *item[NAME]) {
 		free_list_item(item);
 		return 1;
 	}
 
-	if( ++items > list_capacity)
+	if(++items > list_capacity)
 		adjust_list_capacity();
 
 	validate_item(item);
@@ -303,26 +303,25 @@ remove_selected_items()
 {
 	int i, j;
 
-	if( list_is_empty() )
+	if(list_is_empty())
 		return;
 
-	if( ! selected_items() )
-		selected[ curitem ] = 1;
+	if(!selected_items())
+		selected[curitem] = 1;
 
-	for( j = LAST_ITEM; j >= 0; j-- ) {
-		if( selected[j] ) {
+	for(j = LAST_ITEM; j >= 0; j--) {
+		if(selected[j]) {
 			free_item(j); /* added for .4 data_s_ */
-			for( i = j; i < LAST_ITEM; i++ ) {
-				itemcpy(database[ i ], database[ i + 1 ]);
-				selected[ i ] = selected[ i + 1 ];
+			for(i = j; i < LAST_ITEM; i++) {
+				itemcpy(database[i], database[i + 1]);
+				selected[i] = selected[i + 1];
 			}
 			items--;
 		}
 	}
 
-	if( curitem > LAST_ITEM && items > 0 )
+	if(curitem > LAST_ITEM && items > 0)
 		curitem = LAST_ITEM;
-
 
 	adjust_list_capacity();
 
@@ -376,7 +375,7 @@ namecmp(const void *i1, const void *i2)
 	itemcpy(a, i1);
 	itemcpy(b, i2);
 
-	return safe_strcoll( a[sort_field], b[sort_field] );
+	return safe_strcoll(a[sort_field], b[sort_field]);
 }
 
 static int
