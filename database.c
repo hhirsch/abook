@@ -24,16 +24,13 @@
 #	include "config.h"
 #endif
 
-static void	free_item(int i);
-
-
 list_item *database = NULL;
 
 int items = 0;
 
 #define INITIAL_LIST_CAPACITY	30
 
-int list_capacity = 0;
+static int list_capacity = 0;
 
 extern int first_list_item;
 extern int curitem;

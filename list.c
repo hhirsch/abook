@@ -32,7 +32,7 @@ extern int items;
 extern list_item *database;
 extern struct abook_field abook_fields[];
 
-WINDOW *list = NULL;
+static WINDOW *list = NULL;
 
 static int
 init_extra_field(enum str_opts option)

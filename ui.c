@@ -51,12 +51,12 @@ extern bool alternative_datafile;
  * internal variables
  */
 
-bool ui_initialized = FALSE;
+static bool ui_initialized = FALSE;
 
-bool should_resize = FALSE;
-bool can_resize = FALSE;
+static bool should_resize = FALSE;
+static bool can_resize = FALSE;
 
-WINDOW *top = NULL, *bottom = NULL;
+static WINDOW *top = NULL, *bottom = NULL;
 
 
 static void
