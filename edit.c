@@ -110,16 +110,45 @@ init_editor()
 	refresh_statusline();
 }
 
-/*
- * we have to introduce edit_undo here
- */
-static void edit_undo(int item, int mode);
-
 enum {
 	BACKUP_ITEM,
 	RESTORE_ITEM,
 	CLEAR_UNDO
 };
+
+static void
+edit_undo(int item, int mode)
+{
+	int i;
+	static list_item *backup = NULL;
+
+	switch(mode) {
+		case CLEAR_UNDO:
+			if(backup) {
+				free_list_item(backup[0]);
+				xfree(backup);
+			}
+			break;
+		case BACKUP_ITEM:
+			if(backup) {
+				free_list_item(backup[0]);
+				xfree(backup);
+			}
+			backup = xmalloc(sizeof(list_item));
+			for(i = 0; i < ITEM_FIELDS; i++)
+				backup[0][i] = safe_strdup(database[item][i]);
+			break;
+		case RESTORE_ITEM:
+			if(backup) {
+				free_list_item(database[item]);
+				itemcpy(database[item], backup[0]);
+				xfree(backup);
+			}
+			break;
+		default:
+			assert(0);
+	}
+}
 
 
 static void
@@ -343,40 +372,6 @@ edit_field(int tab, char c, int item)
 	free(str);
 
 	return 1;
-}
-
-static void
-edit_undo(int item, int mode)
-{
-	int i;
-	static list_item *backup = NULL;
-
-	switch(mode) {
-		case CLEAR_UNDO:
-			if(backup) {
-				free_list_item(backup[0]);
-				xfree(backup);
-			}
-			break;
-		case BACKUP_ITEM:
-			if(backup) {
-				free_list_item(backup[0]);
-				xfree(backup);
-			}
-			backup = xmalloc(sizeof(list_item));
-			for(i = 0; i < ITEM_FIELDS; i++)
-				backup[0][i] = safe_strdup(database[item][i]);
-			break;
-		case RESTORE_ITEM:
-			if(backup) {
-				free_list_item(database[item]);
-				itemcpy(database[item], backup[0]);
-				xfree(backup);
-			}
-			break;
-		default:
-			assert(0);
-	}
 }
 
 static int
