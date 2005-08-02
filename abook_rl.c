@@ -94,11 +94,16 @@ rline_prep_terminal(int dummy)
 #if (RL_VERSION_MAJOR == 4 && RL_VERSION_MINOR > 2) || (RL_VERSION_MAJOR > 4)
 	/* nothing */
 #else
-#	warning "You seem to have rather old readline version or non-GNU \
-version of the readline. If you have problems please use \
+	/*
+	 * #warning is an extension which all compilers don't support
+	 */
+#	ifdef __GNUC__
+#		warning "You seem to have rather old readline version or \
+non-GNU version of the readline. If you have problems please use \
 GNU readline 4.3 or newer. \
 GNU readline versions 4.0, 4.1 and 4.2 should be OK despite \
 of this warning."
+#	endif
 	/*
 	 * this kludge avoids older readline libraries to print a newline
 	 */
