@@ -95,11 +95,11 @@ rline_prep_terminal(int dummy)
 	/* nothing */
 #else
 	/*
-	 * #warning is an extension which all compilers don't support
+	 * #warning is an extension. Not all compilers support it.
 	 */
 #	ifdef __GNUC__
 #		warning "You seem to have rather old readline version or \
-non-GNU version of the readline. If you have problems please use \
+non-GNU version of it. If you have problems please use \
 GNU readline 4.3 or newer. \
 GNU readline versions 4.0, 4.1 and 4.2 should be OK despite \
 of this warning."
