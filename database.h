@@ -36,7 +36,7 @@ enum {
 #define CUSTOM_MIN		CUSTOM1
 #define CUSTOM_MAX		CUSTOM5
 
-typedef char * list_item[ITEM_FIELDS];
+typedef char *list_item[ITEM_FIELDS];
 
 #define	MAX_FIELDNAME_LEN	21
 

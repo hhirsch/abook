@@ -63,7 +63,6 @@ static void
 init_windows()
 {
 	top = newwin(LIST_TOP - 1, COLS, 0, 0);
-
 	bottom = newwin(LINES - LIST_BOTTOM, COLS, LIST_BOTTOM, 0);
 }
 
@@ -112,7 +111,7 @@ resize_abook()
 static void
 win_changed(int i)
 {
-	if( can_resize )
+	if(can_resize)
 		resize_abook();
 	else
 		should_resize = TRUE;
@@ -155,14 +154,14 @@ init_ui()
 		return 1;
 	}
 
-#ifdef SIGWINCH
-	signal(SIGWINCH, win_changed);
-#endif
-
 	init_list();
 	init_windows();
 
 	ui_initialized = TRUE;
+
+#ifdef SIGWINCH
+	signal(SIGWINCH, win_changed);
+#endif
 
 	return 0;
 }
@@ -198,7 +197,7 @@ void
 refresh_screen()
 {
 #ifdef SIGWINCH
-	if( should_resize ) {
+	if(should_resize) {
 		resize_abook();
 		return;
 	}
@@ -284,7 +283,6 @@ statusline_ask_boolean(char *msg, int def)
 	return ret;
 }
 
-
 void
 refresh_statusline()
 {
@@ -295,7 +293,6 @@ refresh_statusline()
 	refresh();
 	wrefresh(bottom);
 }
-
 
 char *
 ask_filename(char *prompt)
@@ -347,8 +344,8 @@ display_help(int help)
 
 	for(i = 0; tbl[i] != NULL; i++) {
 		waddstr(helpw, tbl[i]);
-		if( ( !( (i+1) % (LINES-8) ) ) ||
-			(tbl[i+1] == NULL) ) {
+		if( (!((i + 1) % (LINES - 8))) ||
+			(tbl[i + 1] == NULL) ) {
 			refresh();
 			wrefresh(helpw);
 			refresh_statusline();
@@ -466,7 +463,6 @@ get_commands()
 		}
 	}
 }
-
 
 void
 ui_remove_items()

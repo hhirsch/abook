@@ -431,7 +431,7 @@ static void	ldif_fix_string(char *str);
 
 #define	LDIF_ITEM_FIELDS	16
 
-typedef char*  ldif_item[LDIF_ITEM_FIELDS];
+typedef char *ldif_item[LDIF_ITEM_FIELDS];
 
 static ldif_item ldif_field_names = {
 	"cn",
@@ -519,27 +519,27 @@ ldif_read_line(FILE *in)
 }
 
 static void
-ldif_add_item(ldif_item ldif_item)
+ldif_add_item(ldif_item li)
 {
 	list_item abook_item;
 	int i;
 
 	memset(abook_item, 0, sizeof(abook_item));
 
-	if( !ldif_item[LDIF_ITEM_FIELDS -1] )
+	if(!li[LDIF_ITEM_FIELDS -1] )
 		goto bail_out;
 
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
-		if(ldif_conv_table[i] >= 0 && ldif_item[i] && *ldif_item[i] )
-			abook_item[ldif_conv_table[i]] = strdup(ldif_item[i]);
+		if(ldif_conv_table[i] >= 0 && li[i] && *li[i] )
+			abook_item[ldif_conv_table[i]] = strdup(li[i]);
 	}
 
 	add_item2database(abook_item);
 
 bail_out:
 	for(i=0; i < LDIF_ITEM_FIELDS; i++)
-		xfree(ldif_item[i]);
+		xfree(li[i]);
 
 }
 

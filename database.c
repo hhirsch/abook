@@ -100,39 +100,38 @@ parse_database(FILE *in)
 
 	for(;;) {
 		line = getaline(in);
-		if( feof(in) ) {
-			if( item[NAME] && sec )
+		if(feof(in)) {
+			if(item[NAME] && sec)
 				add_item2database(item);
 			else
 				free_list_item(item);
 			break;
 		}
 
-		if( !*line || *line == '\n' || *line == '#' ) {
-			free(line);
-			continue;
-		} else if( *line == '[' ) {
+		if(!*line || *line == '\n' || *line == '#') {
+			goto next;
+		} else if(*line == '[') {
 			if( item[NAME] && sec )
 				add_item2database(item);
 			else
 				free_list_item(item);
 			memset(&item, 0, sizeof(item));
 			sec = 1;
-			if ( !(tmp = strchr(line, ']')))
+			if(!(tmp = strchr(line, ']')))
 				sec = 0; /*incorrect section lines are skipped*/
-		} else if((tmp = strchr(line, '=') ) && sec ) {
+		} else if((tmp = strchr(line, '=') ) && sec) {
 			*tmp++ = '\0';
-			for(i=0; i<ITEM_FIELDS; i++)
-				if( !strcmp(abook_fields[i].key, line) ) {
+			for(i = 0; i < ITEM_FIELDS; i++)
+				if(!strcmp(abook_fields[i].key, line)) {
 					item[i] = strdup(tmp);
 					goto next;
 				}
 		}
 next:
-		free(line);
+		xfree(line);
 	}
 
-	free(line);
+	xfree(line);
 	return 0;
 }
 
@@ -143,10 +142,10 @@ load_database(char *filename)
 {
 	FILE *in;
 
-	if( database != NULL )
+	if(database != NULL)
 		close_database();
 
-	if ( (in = abook_fopen(filename, "r")) == NULL )
+	if ((in = abook_fopen(filename, "r")) == NULL)
 		return -1;
 
 	parse_database(in);

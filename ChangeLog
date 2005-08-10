@@ -3,6 +3,7 @@
  - autoconf/automake update
  - replace abook_malloc, abook_realloc and my_free with new xmalloc routines
  - update for abook_rl (abook_readline)
+ - make it compile with tcc (Tiny C Compiler)
  - code cleanups and minor fixes
 
 0.5.3
