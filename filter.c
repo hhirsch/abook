@@ -202,14 +202,14 @@ import_database()
 	mvaddstr(5+filter, 2, "->");
 
 	filename = ask_filename("Filename: ");
-	if( !filename ) {
+	if(!filename) {
 		refresh_screen();
 		return 2;
 	}
 
-	if(  i_read_file(filename, i_filters[filter].func ) )
+	if(i_read_file(filename, i_filters[filter].func ))
 		statusline_msg("Error occured while opening the file");
-	else if( tmp == items )
+	else if(tmp == items)
 		statusline_msg("Hmm.., file seems not to be a valid file");
 
 	refresh_screen();
@@ -226,7 +226,7 @@ i_read_file(char *filename, int (*func) (FILE *in))
 	FILE *in;
 	int ret = 0;
 
-	if( ( in = abook_fopen( filename, "r" ) ) == NULL )
+	if( (in = abook_fopen( filename, "r" )) == NULL )
 		return 1;
 
 	ret = (*func) (in);
@@ -244,28 +244,28 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 	int ret = 0;
 
 	for(i=0;; i++) {
-		if( ! strncasecmp(i_filters[i].filtname, filtname,
+		if(! strncasecmp(i_filters[i].filtname, filtname,
 					FILTNAME_LEN) )
 			break;
-		if( ! *i_filters[i].filtname ) {
+		if(! *i_filters[i].filtname) {
 			i = -1;
 			break;
 		}
 	}
 
-	if( i<0 )
+	if(i < 0)
 		return -1;
 
-	if( !strcmp(filename, "-") ) {
+	if(!strcmp(filename, "-")) {
 		struct stat s;
-		if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode))
+		if((fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode))
 			ret = 1;
 		else
 			ret = (*i_filters[i].func) (stdin);
 	} else
 		ret =  i_read_file(filename, i_filters[i].func);
 
-	if( tmp == items )
+	if(tmp == items)
 		ret = 1;
 
 	return ret;
@@ -292,7 +292,7 @@ export_screen()
 	mvaddstr(3, 1, "please select a filter");
 
 
-	for(i=0; *e_filters[i].filtname ; i++)
+	for(i = 0; *e_filters[i].filtname ; i++)
 		mvprintw(5 + i, 6, "%c -\t%s\t%s\n", 'a' + i,
 			e_filters[i].filtname,
 			e_filters[i].desc);
@@ -318,7 +318,7 @@ export_database()
 
 	mvaddstr(5+filter, 2, "->");
 
-	if( selected_items() ) {
+	if(selected_items()) {
 		statusline_addstr("Export All/Selected/Cancel (A/s/c)");
 		switch( tolower(getch()) ) {
 			case 's':
@@ -332,12 +332,12 @@ export_database()
 	}
 
 	filename = ask_filename("Filename: ");
-	if( !filename ) {
+	if(!filename) {
 		refresh_screen();
 		return 2;
 	}
 
-	if(  e_write_file(filename, e_filters[filter].func, enum_mode ) )
+	if( e_write_file(filename, e_filters[filter].func, enum_mode))
 		statusline_msg("Error occured while exporting");
 
 	refresh_screen();
@@ -354,10 +354,10 @@ e_write_file(char *filename, int (*func) (FILE *in, struct db_enumerator e),
 	int ret = 0;
 	struct db_enumerator enumerator = init_db_enumerator(mode);
 
-	if( (out = fopen(filename, "a")) == NULL )
+	if((out = fopen(filename, "a")) == NULL)
 		return 1;
 
-	if( ftell(out) )
+	if(ftell(out))
 		return 1;
 
 	ret = (*func) (out, enumerator);
@@ -374,10 +374,10 @@ fexport(char filtname[FILTNAME_LEN], FILE *handle, int enum_mode)
 	struct db_enumerator e = init_db_enumerator(enum_mode);
 
 	for(i=0;; i++) {
-		if( ! strncasecmp(e_filters[i].filtname, filtname,
-					FILTNAME_LEN) )
+		if(!strncasecmp(e_filters[i].filtname, filtname,
+					FILTNAME_LEN))
 			break;
-		if( ! *e_filters[i].filtname ) {
+		if(!*e_filters[i].filtname) {
 			i = -1;
 			break;
 		}
@@ -397,19 +397,19 @@ export_file(char filtname[FILTNAME_LEN], char *filename)
 	struct db_enumerator e = init_db_enumerator(mode);
 
 	for(i=0;; i++) {
-		if( ! strncasecmp(e_filters[i].filtname, filtname,
-					FILTNAME_LEN) )
+		if(!strncasecmp(e_filters[i].filtname, filtname,
+					FILTNAME_LEN))
 			break;
-		if( ! *e_filters[i].filtname ) {
+		if(!*e_filters[i].filtname) {
 			i = -1;
 			break;
 		}
 	}
 
-	if( i<0 )
+	if(i < 0)
 		return -1;
 
-	if( !strcmp(filename, "-") )
+	if(!strcmp(filename, "-"))
 		ret = (e_filters[i].func) (stdout, e);
 	else
 		ret =  e_write_file(filename, e_filters[i].func, mode);
@@ -486,7 +486,7 @@ ldif_read_line(FILE *in)
 		pos = ftell(in);
 		line = getaline(in);
 
-		if( feof(in) || !line )
+		if(feof(in) || !line)
 			break;
 
 		if(i == 1) {
@@ -526,12 +526,12 @@ ldif_add_item(ldif_item li)
 
 	memset(abook_item, 0, sizeof(abook_item));
 
-	if(!li[LDIF_ITEM_FIELDS -1] )
+	if(!li[LDIF_ITEM_FIELDS -1])
 		goto bail_out;
 
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
-		if(ldif_conv_table[i] >= 0 && li[i] && *li[i] )
+		if(ldif_conv_table[i] >= 0 && li[i] && *li[i])
 			abook_item[ldif_conv_table[i]] = xstrdup(li[i]);
 	}
 
@@ -548,15 +548,15 @@ ldif_convert(ldif_item item, char *type, char *value)
 {
 	int i;
 
-	if( !strcmp(type, "dn") ) {
+	if(!strcmp(type, "dn")) {
 		ldif_add_item(item);
 		return;
 	}
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
-		if( !safe_strcmp(ldif_field_names[i], type) && *value ) {
-			if( i == LDIF_ITEM_FIELDS -1) /* this is a dirty hack */
-				if( safe_strcmp("person", value))
+		if(!safe_strcmp(ldif_field_names[i], type) && *value) {
+			if(i == LDIF_ITEM_FIELDS - 1) /* this is a dirty hack */
+				if(safe_strcmp("person", value))
 					break;
 			if(item[i])
 				xfree(item[i]);
@@ -576,10 +576,10 @@ ldif_parse_file(FILE *handle)
 	memset(item, 0, sizeof(item));
 
 	do {
-		if( ! (line = ldif_read_line(handle)) )
+		if( !(line = ldif_read_line(handle)) )
 			continue;
 
-		if( -1 == ( str_parse_line(line, &type, &value, &vlen)) ) {
+		if(-1 == (str_parse_line(line, &type, &value, &vlen))) {
 			xfree(line);
 			continue; /* just skip the errors */
 		}
@@ -631,7 +631,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while( ISSPACE(*ptr) )
 		ptr++;
 
-	if( strncmp("alias", ptr, 5) ) {
+	if(strncmp("alias", ptr, 5)) {
 		free(line);
 		return 1;
 	}
@@ -737,11 +737,11 @@ mutt_parse_file(FILE *in)
 	for(;;) {
 		memset(item, 0, sizeof(item));
 
-		if( !mutt_read_line(in, &item[NICK],
+		if(!mutt_read_line(in, &item[NICK],
 				&item[NAME]) )
 			mutt_parse_email(item);
 
-		if( feof(in) ) {
+		if(feof(in)) {
 			free_list_item(item);
 			break;
 		}
@@ -789,7 +789,7 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 		ldif_fput_type_and_value(out, "dn", tmp);
 		free(tmp);
 
-		for(j=0; j < LDIF_ITEM_FIELDS; j++) {
+		for(j = 0; j < LDIF_ITEM_FIELDS; j++) {
 			if(ldif_conv_table[j] >= 0) {
 				if(ldif_conv_table[j] == EMAIL)
 					ldif_fput_type_and_value(out,
@@ -826,7 +826,7 @@ html_export_database(FILE *out, struct db_enumerator e)
 {
 	char tmp[MAX_EMAILSTR_LEN];
 
-	if( items < 1 )
+	if(items < 1)
 		return 2;
 
 	extra_column = (extra_column > 2 && extra_column < ITEM_FIELDS) ?
@@ -907,7 +907,7 @@ pine_convert_emails(char *s)
 	int i;
 	char *tmp;
 
-	if( s == NULL || *s != '(' )
+	if(s == NULL || *s != '(')
 		return;
 
 	for(i=0; s[i]; i++ )
@@ -916,8 +916,8 @@ pine_convert_emails(char *s)
 	if( ( tmp = strchr(s,')')) )
 		*tmp=0;
 
-	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s=tmp+1 )
-		if( i > MAX_EMAILS - 1 ) {
+	for(i = 1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1)
+		if(i > MAX_EMAILS - 1) {
 			*tmp = 0;
 			break;
 		}
@@ -937,7 +937,7 @@ pine_parse_buf(char *buf)
 	memset(&item, 0, sizeof(item));
 
 	for(i=0, last=0; !last ; i++) {
-		if( ! (end = strchr(start, '\t')) )
+		if( !(end = strchr(start, '\t')) )
 			last=1;
 
 		len = last ? strlen(start) : (int) (end-start);
@@ -977,15 +977,15 @@ pine_parse_file(FILE *in)
 				strcpy(buf, line);
 			fgets(line, LINESIZE, in);
 			ptr=(char *)&line;
-			if(*ptr != ' ' || feof(in) )
+			if(*ptr != ' ' || feof(in))
 				break;
 			else
-				while( *ptr == ' ')
+				while(*ptr == ' ')
 					ptr++;
 
 			strcat(buf, ptr);
 		}
-		if( *buf == '#' ) {
+		if(*buf == '#') {
 			xfree(buf);
 			continue;
 		}
@@ -1081,11 +1081,11 @@ csv_convert_emails(char *s)
 	int i;
 	char *tmp;
 
-	if( s == NULL )
+	if(s == NULL)
 		return;
 
-	for(i=1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1 )
-		if( i > MAX_EMAILS - 1 ) {
+	for(i = 1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1 )
+		if(i > MAX_EMAILS - 1) {
 			*tmp = 0;
 			break;
 		}
