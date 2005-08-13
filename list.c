@@ -17,6 +17,7 @@
 #include "list.h"
 #include "misc.h"
 #include "options.h"
+#include "xmalloc.h"
 
 #define MIN_EXTRA_COLUMN	ADDRESS /* 2 */
 #define MAX_EXTRA_COLUMN	LAST_FIELD
@@ -354,7 +355,7 @@ duplicate_item()
 		return 1;
 
 	for(i = 0; i < ITEM_FIELDS; i++)
-		item[i] = database[curitem][i] ? strdup(database[curitem][i]) :
+		item[i] = database[curitem][i] ? xstrdup(database[curitem][i]) :
 			NULL;
 
 	if(add_item2database(item))

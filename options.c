@@ -16,6 +16,7 @@
 #include "options.h"
 #include "abook.h"
 #include "misc.h"
+#include "xmalloc.h"
 
 #ifndef FALSE
 #	define FALSE	0
@@ -99,7 +100,7 @@ set_str(enum str_opts opt, char *value)
 	if(str_opts[opt])
 		free(str_opts[opt]);
 
-	str_opts[opt] = strdup(value);
+	str_opts[opt] = xstrdup(value);
 }
 
 int

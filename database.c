@@ -123,7 +123,7 @@ parse_database(FILE *in)
 			*tmp++ = '\0';
 			for(i = 0; i < ITEM_FIELDS; i++)
 				if(!strcmp(abook_fields[i].key, line)) {
-					item[i] = strdup(tmp);
+					item[i] = xstrdup(tmp);
 					goto next;
 				}
 		}
@@ -250,13 +250,13 @@ validate_item(list_item item)
 	char *tmp;
 
 	if(item[EMAIL] == NULL)
-		item[EMAIL] = strdup("");
+		item[EMAIL] = xstrdup("");
 
 	for(i=0; i<ITEM_FIELDS; i++)
 		if( item[i] && ((int)strlen(item[i]) > _MAX_FIELD_LEN(i) ) ) {
 			tmp = item[i];
 			item[i][_MAX_FIELD_LEN(i)-1] = 0;
-			item[i] = strdup(item[i]);
+			item[i] = xstrdup(item[i]);
 			free(tmp);
 		}
 }
@@ -337,7 +337,7 @@ get_surname(char *s)
 	while(p > s && *(p - 1) != ' ')
 		p--;
 
-	return strdup(p);
+	return xstrdup(p);
 }
 
 static int
@@ -437,13 +437,15 @@ find_item(char *str, int start, int search_fields[])
 	if(list_is_empty() || !is_valid_item(start))
 		return -2; /* error */
 
-	findstr = strdup(str);
+	findstr = xstrdup(str);
 	findstr = strlower(findstr);
 
 	e.item = start - 1; /* must be "real start" - 1 */
 	db_enumerate_items(e) {
-		for( i = 0; search_fields[i] >= 0; i++ ) {
-			tmp = safe_strdup(database[e.item][search_fields[i]]);
+		for(i = 0; search_fields[i] >= 0; i++) {
+			if(database[e.item][search_fields[i]] == NULL)
+				continue;
+			tmp = xstrdup(database[e.item][search_fields[i]]);
 			if( tmp && strstr(strlower(tmp), findstr) ) {
 				ret = e.item;
 				goto out;

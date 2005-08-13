@@ -22,6 +22,7 @@
 #include "misc.h"
 #include "options.h"
 #include "filter.h"
+#include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -605,7 +606,7 @@ ui_open_datafile()
 		load_database(datafile);
 	} else {
 		free(datafile);
-		datafile = strdup(filename);
+		datafile = xstrdup(filename);
 	}
 
 	refresh_screen();

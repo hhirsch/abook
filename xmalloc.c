@@ -135,3 +135,16 @@ xrealloc_inc(void *ptr, size_t size, size_t inc)
 	return ptr;
 }
 
+char *
+xstrdup(const char *s)
+{
+	size_t len = strlen(s);
+	void *new;
+
+	new = xmalloc_inc(len, 1);
+	if(new == NULL)
+		return NULL;
+
+	return (char *)memcpy(new, s, len + 1);
+}
+

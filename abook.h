@@ -38,7 +38,6 @@ int		strncasecmp (const char *, const char *, size_t);
 
 #define safe_atoi(X)    ((X == NULL) ? 0 : atoi(X))
 #define safe_str(X)	((X == NULL) ? "" : X)
-#define safe_strdup(X)	((X == NULL) ? NULL : strdup(X))
 
 #ifndef min
 #       define min(x,y) (((x)<(y)) ? (x):(y))

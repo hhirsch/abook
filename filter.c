@@ -145,13 +145,13 @@ get_real_name()
 
 	pwent = getpwnam(username);
 
-	if((tmp = strdup(pwent->pw_gecos)) == NULL)
-		return strdup(username);
+	if((tmp = xstrdup(pwent->pw_gecos)) == NULL)
+		return xstrdup(username);
 
 	rtn = sscanf(pwent->pw_gecos, "%[^,]", tmp);
 	if (rtn == EOF || rtn == 0) {
 		free(tmp);
-		return strdup(username);
+		return xstrdup(username);
 	} else
 		return tmp;
 }
@@ -532,7 +532,7 @@ ldif_add_item(ldif_item li)
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
 		if(ldif_conv_table[i] >= 0 && li[i] && *li[i] )
-			abook_item[ldif_conv_table[i]] = strdup(li[i]);
+			abook_item[ldif_conv_table[i]] = xstrdup(li[i]);
 	}
 
 	add_item2database(abook_item);
@@ -560,7 +560,7 @@ ldif_convert(ldif_item item, char *type, char *value)
 					break;
 			if(item[i])
 				xfree(item[i]);
-			item[i] = strdup(value);
+			item[i] = xstrdup(value);
 		}
 	}
 }
@@ -656,7 +656,7 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	while(ISSPACE(*ptr))
 		ptr++;
 
-	*rest = strdup(ptr);
+	*rest = xstrdup(ptr);
 
 	free(line);
 	return 0;
@@ -948,7 +948,7 @@ pine_parse_buf(char *buf)
 			strncpy(tmp, start, len);
 			tmp[len] = 0;
 			if(*tmp)
-				item[pine_conv_table[i]] = strdup(tmp);
+				item[pine_conv_table[i]] = xstrdup(tmp);
 		}
 		start = end + 1;
 	}
@@ -1098,7 +1098,7 @@ csv_remove_quotes(char *s)
 	char *copy, *trimmed;
 	int len;
 
-	copy = trimmed = strdup(s);
+	copy = trimmed = xstrdup(s);
 	strtrim(trimmed);
 
 	len = strlen(trimmed);
@@ -1109,13 +1109,13 @@ csv_remove_quotes(char *s)
 		}
 		trimmed[len - 1] = 0;
 		trimmed++;
-		trimmed = strdup(trimmed);
+		trimmed = xstrdup(trimmed);
 		free(copy);
 		return trimmed;
 	}
 
 	xfree(copy);
-	return strdup(s);
+	return xstrdup(s);
 }
 
 static void
@@ -1576,9 +1576,9 @@ mutt_alias_genalias(int i)
 	char *tmp, *pos;
 
 	if(database[i][NICK])
-		return strdup(database[i][NICK]);
+		return xstrdup(database[i][NICK]);
 
-	tmp = strdup(database[i][NAME]);
+	tmp = xstrdup(database[i][NAME]);
 
 	if( ( pos = strchr(tmp, ' ') ) )
 		*pos = 0;

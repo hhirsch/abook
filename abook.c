@@ -259,7 +259,7 @@ set_filename(char **var, char *path)
 	assert(path != NULL);
 
 	if(*path == '/') {
-		*var = strdup(path);
+		*var = xstrdup(path);
 		return;
 	}
 
@@ -503,7 +503,7 @@ make_mailstr(int item)
 
 	ret = *database[item][EMAIL] ?
 		mkstr("%s <%s>", name, email) :
-		strdup(name);
+		xstrdup(name);
 
 	free(name);
 
@@ -745,8 +745,8 @@ add_email_add_item(int quiet, char *name, char *email)
 	}
 
 	memset(item, 0, sizeof(item));
-	item[NAME] = strdup(name);
-	item[EMAIL] = strdup(email);
+	item[NAME] = xstrdup(name);
+	item[EMAIL] = xstrdup(email);
 	add_item2database(item);
 
 	return 1;

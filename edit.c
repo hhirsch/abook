@@ -136,7 +136,11 @@ edit_undo(int item, int mode)
 			}
 			backup = xmalloc(sizeof(list_item));
 			for(i = 0; i < ITEM_FIELDS; i++)
-				backup[0][i] = safe_strdup(database[item][i]);
+				if(database[item][i] == NULL)
+					backup[0][i] = NULL;
+				else
+					backup[0][i] =
+						xstrdup(database[item][i]);
 			break;
 		case RESTORE_ITEM:
 			if(backup) {
@@ -276,12 +280,12 @@ change_name_field(char **field)
 {
 	char *tmp;
 
-	tmp = strdup(*field);
+	tmp = xstrdup(*field);
 	change_field("Name: ", field);
 
 	if(*field == NULL || ! **field) {
 		xfree(*field);
-		*field = strdup(tmp);
+		*field = xstrdup(tmp);
 	}
 
 	xfree(tmp);
@@ -304,7 +308,7 @@ edit_emails(char c, int item)
 	int email_num = c - '2';
 
 	split_emailstr(item, emails);
-	field = strdup(emails[email_num]);
+	field = xstrdup(emails[email_num]);
 
 	if(change_field("E-mail: ", &field))
 		return; /* user cancelled ( C-g ) */
@@ -328,7 +332,7 @@ edit_emails(char c, int item)
 	if(tmp[len -1] == ',')
 		tmp[len-1] =0;
 
-	database[item][EMAIL] = strdup(tmp);
+	database[item][EMAIL] = xstrdup(tmp);
 }
 
 static int
