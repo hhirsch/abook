@@ -105,7 +105,7 @@ xmalloc_error_handler(int err)
 {
 	/*
 	 * We don't try to save addressbook here because we don't know
-	 * if it's fully loaded to to memory.
+	 * if it's fully loaded to memory.
 	 */
 	if(is_ui_initialized())
 		close_ui();
