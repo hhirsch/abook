@@ -2,6 +2,7 @@
  - add show_cursor config option (idea from Cheryl Homiak)
  - autoconf/automake update
  - replace abook_malloc, abook_realloc and my_free with new xmalloc routines
+ - replace strdup with xstrdup
  - update for abook_rl (abook_readline)
  - make it compile with tcc (Tiny C Compiler)
  - code cleanups and minor fixes
