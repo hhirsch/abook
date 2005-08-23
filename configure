@@ -1613,7 +1613,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=abook
- VERSION=0.5.4rc3
+ VERSION=0.5.4
 
 
 cat >>confdefs.h <<_ACEOF
@@ -4024,8 +4024,7 @@ fi
 
 
 
-
-for ac_header in unistd.h locale.h termios.h linux/termios.h sys/ioctl.h
+for ac_header in unistd.h locale.h termios.h sys/ioctl.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then

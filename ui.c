@@ -28,10 +28,6 @@
 #endif
 #ifdef HAVE_TERMIOS_H
 #	include <termios.h>
-#else
-#	ifdef HAVE_LINUX_TERMIOS_H
-#		include <linux/termios.h>
-#	endif
 #endif
 #ifdef HAVE_SYS_IOCTL_H
 #	include <sys/ioctl.h>
