@@ -25,8 +25,4 @@ Filters:
 
 * fseek in ldif import filter should be eliminated
 
-Misc:
-* crashes if compiled with tinycc bound checking. It's still unclear
-  if this is a bug in abook. (Valgrind doesn't show up anything.)
-
 $Id$
