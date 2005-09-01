@@ -1,3 +1,7 @@
+0.5.5
+ - palmcsv import filter (Marc Tardif)
+ - use better common code for csv filters (Marc Tardif)
+
 0.5.4
  - add show_cursor config option (idea from Cheryl Homiak)
  - autoconf/automake update

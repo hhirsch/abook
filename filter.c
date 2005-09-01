@@ -42,6 +42,7 @@ static int	mutt_parse_file(FILE *in);
 static int	pine_parse_file(FILE *in);
 static int 	csv_parse_file(FILE *in);
 static int 	allcsv_parse_file(FILE *in);
+static int 	palmcsv_parse_file(FILE *in);
 
 /*
  * export filter prototypes
@@ -70,6 +71,7 @@ struct abook_input_filter i_filters[] = {
 	{ "pine", "pine addressbook", pine_parse_file },
 	{ "csv", "comma separated values", csv_parse_file },
 	{ "allcsv", "comma separated all values", allcsv_parse_file },
+	{ "palmcsv", "Palm comma separated values", palmcsv_parse_file },
 	{ "\0", NULL, NULL }
 };
 
@@ -601,7 +603,7 @@ ldif_fix_string(char *str)
 {
 	int i, j;
 
-	for( i = 0, j = 0; j < (int)strlen(str); i++, j++)
+	for(i = 0, j = 0; j < (int)strlen(str); i++, j++)
 		str[i] = ( str[j] == (char)0xc3 ?
 				(char) str[++j] + (char) 0x40 :
 				str[j] );
@@ -1043,6 +1045,8 @@ pine_export_database(FILE *out, struct db_enumerator e)
  */
 
 #define CSV_COMMENT_CHAR	'#'
+#define CSV_DUPLICATE_SEPARATOR	" "
+#define CSV_TABLE_SIZE(t)	(sizeof (t) / sizeof *(t))
 
 static int csv_conv_table[] = {
 	NAME,
@@ -1075,6 +1079,28 @@ static int allcsv_conv_table[] = {
 	CUSTOM5,
 };
 
+static int palmcsv_conv_table[] = {
+	NAME,		/* Last name */
+	NAME,		/* First name */
+	NOTES,		/* Title */
+	NICK,		/* Company */
+	WORKPHONE,
+	PHONE,
+	FAX,
+	MOBILEPHONE,
+	EMAIL,
+	ADDRESS,
+	CITY,
+	STATE,
+	ZIP,
+	COUNTRY,
+	CUSTOM1,
+	CUSTOM2,
+	CUSTOM3,
+	CUSTOM4,
+	CUSTOM5,
+};
+
 static void
 csv_convert_emails(char *s)
 {
@@ -1084,7 +1110,7 @@ csv_convert_emails(char *s)
 	if(s == NULL)
 		return;
 
-	for(i = 1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1 )
+	for(i = 1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1)
 		if(i > MAX_EMAILS - 1) {
 			*tmp = 0;
 			break;
@@ -1118,27 +1144,17 @@ csv_remove_quotes(char *s)
 	return xstrdup(s);
 }
 
-static void
-csv_store_field(list_item item, char *s, int field)
+static int
+csv_field_to_item(int *table_base, size_t table_size, int field)
 {
-	char *newstr = NULL;
+	if(field < table_size)
+		return table_base[field];
 
-	if(!s || !*s)
-		return;
-
-	if( !(newstr = csv_remove_quotes(s)) )
-		return;
-
-	if(field < (int)(sizeof(csv_conv_table) / sizeof(*csv_conv_table))
-			&& csv_conv_table[field] >= 0) {
-		item[csv_conv_table[field]] = newstr;
-	} else {
-		xfree(newstr);
-	}
+	return -1;
 }
 
 static void
-allcsv_store_field(list_item item, char *s, int field)
+csv_store_item(list_item item, int i, char *s)
 {
 	char *newstr = NULL;
 
@@ -1148,9 +1164,17 @@ allcsv_store_field(list_item item, char *s, int field)
 	if( !(newstr = csv_remove_quotes(s)) )
 		return;
 
-	if(field < (int)(sizeof(allcsv_conv_table) / sizeof(*allcsv_conv_table))
-			&& allcsv_conv_table[field] >= 0) {
-		item[allcsv_conv_table[field]] = newstr;
+	if(i >= 0) {
+		if (item[i] != NULL) {
+			char *oldstr = item[i];
+
+			item[i] = strconcat(newstr, CSV_DUPLICATE_SEPARATOR,
+				oldstr, NULL);
+			xfree(newstr);
+			xfree(oldstr);
+		} else {
+			item[i] = newstr;
+		}
 	} else {
 		xfree(newstr);
 	}
@@ -1186,7 +1210,7 @@ csv_is_valid_quote_start(char *p)
 }
 
 static void
-csv_parse_line(char *line)
+csv_parse_line(char *line, int *table_base, size_t table_size)
 {
 	char *p, *start;
 	int field;
@@ -1205,9 +1229,13 @@ csv_parse_line(char *line)
 				in_quote = TRUE;
 		}
 
-		if( *p == ',' && !in_quote) {
+		if(*p == ',' && !in_quote) {
 			*p = 0;
-			csv_store_field(item, start, field);
+			csv_field_to_item(table_base, table_size, field);
+			csv_store_item(item,
+				csv_field_to_item(table_base,
+							table_size, field),
+				start);
 			field++;
 			start = p + 1;
 		}
@@ -1215,51 +1243,15 @@ csv_parse_line(char *line)
 	/*
 	 * store last field
 	 */
-	csv_store_field(item, start, field);
+	csv_store_item(item, csv_field_to_item(table_base, table_size, field),
+		start);
 
 	csv_convert_emails(item[EMAIL]);
 	add_item2database(item);
 }
-
-static void
-allcsv_parse_line(char *line)
-{
-	char *p, *start;
-	int field;
-	bool in_quote = FALSE;
-	list_item item;
-
-	memset(item, 0, sizeof(item));
-
-	for(p = start = line, field = 0; *p; p++) {
-		if(in_quote) {
-			if(csv_is_valid_quote_end(p))
-				in_quote = FALSE;
-		} else {
-			if ( (((p - start) / sizeof (char)) < 2 ) &&
-				csv_is_valid_quote_start(p) )
-				in_quote = TRUE;
-		}
-
-		if( *p == ',' && !in_quote) {
-			*p = 0;
-			allcsv_store_field(item, start, field);
-			field++;
-			start = p + 1;
-		}
-	}
-	/*
-	 * store last field
-	 */
-	allcsv_store_field(item, start, field);
-
-	csv_convert_emails(item[EMAIL]);
-	add_item2database(item);
-}
-
 
 static int
-csv_parse_file(FILE *in)
+csv_parse_file_common(FILE *in, int *conv_table, size_t table_size)
 {
 	char *line = NULL;
 
@@ -1267,29 +1259,33 @@ csv_parse_file(FILE *in)
 		line = getaline(in);
 
 		if(line && *line && *line != CSV_COMMENT_CHAR)
-			csv_parse_line(line);
+			csv_parse_line(line, conv_table, table_size);
 
 		xfree(line);
 	}
 
 	return 0;
+}
+
+static int
+csv_parse_file(FILE *in)
+{
+	return csv_parse_file_common(in, csv_conv_table,
+		CSV_TABLE_SIZE(csv_conv_table));
 }
 
 static int
 allcsv_parse_file(FILE *in)
 {
-	char *line = NULL;
+	return csv_parse_file_common(in, allcsv_conv_table,
+		CSV_TABLE_SIZE(allcsv_conv_table));
+}
 
-	while(!feof(in)) {
-		line = getaline(in);
-
-		if(line && *line && *line != CSV_COMMENT_CHAR)
-			allcsv_parse_line(line);
-
-		xfree(line);
-	}
-
-	return 0;
+static int
+palmcsv_parse_file(FILE *in)
+{
+	return csv_parse_file_common(in, palmcsv_conv_table,
+		CSV_TABLE_SIZE(palmcsv_conv_table));
 }
 
 /*
