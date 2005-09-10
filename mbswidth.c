@@ -24,10 +24,10 @@
 # include <config.h>
 #endif
 
-#ifdef HANDLE_MULTIBYTE /* for abook */
-
 /* Specification.  */
 #include "mbswidth.h"
+
+#ifdef HANDLE_MULTIBYTE /* for abook */
 
 /* Get MB_CUR_MAX.  */
 #include <stdlib.h>
@@ -326,4 +326,13 @@ mbsnbytes (const char *string, size_t nbytes, int maxwidth, int flags)
   return maxwidth;
 }
 
+#else /* HANDLE_MULTIBYTE */
+
+#include <string.h>
+int
+mbswidth (const char *string, int flags)
+{
+  return strlen(string);
+}
 #endif /* HANDLE_MULTIBYTE */
+

@@ -18,9 +18,7 @@
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
-#ifdef HANDLE_MULTIBYTE
-#	include <mbswidth.h>
-#endif
+#include <mbswidth.h>
 #include "misc.h"
 #include "xmalloc.h"
 
@@ -274,11 +272,7 @@ int
 strwidth(const char *s)
 {
 	assert(s);
-#ifdef HANDLE_MULTIBYTE
-	return (int)mbswidth(s, 0);
-#else
-	return strlen(s);
-#endif
+	return mbswidth(s, 0);
 }
 
 int
