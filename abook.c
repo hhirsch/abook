@@ -616,7 +616,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	int ret=0;
 
 	if( !srcformat || !srcfile || !dstformat || !dstfile ) {
-		fprintf(stderr, _("too few argumets to make conversion\n"));
+		fprintf(stderr, _("too few arguments to make conversion\n"));
 		fprintf(stderr, _("try --help\n"));
 	}
 
