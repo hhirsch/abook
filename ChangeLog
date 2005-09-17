@@ -1,4 +1,7 @@
 0.5.5
+ - i18n support (Cedric Duval)
+ - French translation (Cedric Duval)
+ - Swedish translation (Susanna Björverud)
  - palmcsv import filter (Marc Tardif)
  - use better common code for csv filters (Marc Tardif)
 

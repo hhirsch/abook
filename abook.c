@@ -22,6 +22,7 @@
 #endif
 #include <assert.h>
 #include "abook.h"
+#include "gettext.h"
 #include "ui.h"
 #include "database.h"
 #include "list.h"
@@ -86,13 +87,13 @@ check_abook_directory()
                         exit(EXIT_FAILURE);
 		}
 		if(mkdir(dir, 0700) == -1) {
-			printf("Cannot create directory %s\n", dir);
+			printf(_("Cannot create directory %s\n"), dir);
 			perror(dir);
 			free(dir);
 			exit(EXIT_FAILURE);
 		}
 	} else if(!S_ISDIR(s.st_mode)) {
-		printf("%s is not a directory\n", dir);
+		printf(_("%s is not a directory\n"), dir);
 		free(dir);
 		exit(EXIT_FAILURE);
 	}
@@ -110,7 +111,7 @@ xmalloc_error_handler(int err)
 	if(is_ui_initialized())
 		close_ui();
 
-	fprintf(stderr, "Memory allocation failure: %s\n", strerror(err));
+	fprintf(stderr, _("Memory allocation failure: %s\n"), strerror(err));
 	exit(EXIT_FAILURE);
 }
 
@@ -121,7 +122,7 @@ init_abook()
 	check_abook_directory();
 	init_opts();
 	if(load_opts(rcfile) > 0) {
-		printf("Press enter to continue...\n");
+		printf(_("Press enter to continue...\n"));
 		fgetc(stdin);
 	}
 
@@ -133,13 +134,13 @@ init_abook()
 	umask(DEFAULT_UMASK);
 
 	if(!datafile_writeable()) {
-		char *s = mkstr("File %s is not writeable", datafile);
+		char *s = mkstr(_("File %s is not writeable"), datafile);
 		refresh_screen();
 		statusline_msg(s);
 		free(s);
 		if(load_database(datafile) || !statusline_ask_boolean(
-					"If you continue all changes will "
-				"be lost. Do you want to continue?", FALSE)) {
+					_("If you continue all changes will "
+				"be lost. Do you want to continue?"), FALSE)) {
 			free_opts();
 			/*close_database();*/
 			close_ui();
@@ -157,9 +158,9 @@ quit_abook(int save_db)
 	if(save_db)  {
 		if(opt_get_bool(BOOL_AUTOSAVE))
 			save_database();
-		else if(statusline_ask_boolean("Save database", TRUE))
+		else if(statusline_ask_boolean(_("Save database"), TRUE))
 			save_database();
-	} else if(!statusline_ask_boolean("Quit without saving", FALSE))
+	} else if(!statusline_ask_boolean(_("Quit without saving"), FALSE))
 		return;
 
 	free_opts();
@@ -182,6 +183,10 @@ main(int argc, char **argv)
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LOCALE_H)
 	setlocale(LC_ALL, "");
 #endif
+
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+
 	xmalloc_set_error_handler(xmalloc_error_handler);
 
 	parse_command_line(argc, argv);
@@ -209,7 +214,7 @@ set_filenames()
 	struct stat s;
 
 	if( (stat(getenv("HOME"), &s)) == -1 || ! S_ISDIR(s.st_mode) ) {
-		fprintf(stderr,"%s is not a valid HOME directory\n", getenv("HOME") );
+		fprintf(stderr,_("%s is not a valid HOME directory\n"), getenv("HOME") );
 		exit(EXIT_FAILURE);
 	}
 
@@ -240,9 +245,9 @@ static void
 change_mode(int *current, int mode)
 {
 	if(*current != MODE_CONT) {
-		fprintf(stderr, "Cannot combine options --mutt-query, "
+		fprintf(stderr, _("Cannot combine options --mutt-query, "
 				"--convert, "
-				"--add-email or --add-email-quiet\n");
+				"--add-email or --add-email-quiet\n"));
 		exit(EXIT_FAILURE);
 	}
 
@@ -271,7 +276,7 @@ set_filename(char **var, char *path)
 }
 
 #define set_convert_var(X) do { if(mode != MODE_CONVERT) {\
-	fprintf(stderr, "please use option --%s after --convert option\n",\
+	fprintf(stderr, _("please use option --%s after --convert option\n"),\
 			long_options[option_index].name);\
 		exit(EXIT_FAILURE);\
 	} else\
@@ -370,7 +375,7 @@ parse_command_line(int argc, char **argv)
 	}
 
 	if (optind < argc) {
-		fprintf(stderr, "%s: unrecognized arguments on command line\n",
+		fprintf(stderr, _("%s: unrecognized arguments on command line\n"),
 				argv[0]);
 		exit(EXIT_FAILURE);
 	}
@@ -392,29 +397,29 @@ static void
 show_usage()
 {
 	puts	(PACKAGE " v " VERSION "\n");
-	puts	("     -h	--help				show usage");
-	puts	("     -C	--config	<file>		use an alternative configuration file");
-	puts	("	--datafile	<file>		use an alternative addressbook file");
-	puts	("	--mutt-query	<string>	make a query for mutt");
-	puts	("	--add-email			"
+	puts	(_("     -h	--help				show usage"));
+	puts	(_("     -C	--config	<file>		use an alternative configuration file"));
+	puts	(_("	--datafile	<file>		use an alternative addressbook file"));
+	puts	(_("	--mutt-query	<string>	make a query for mutt"));
+	puts	(_("	--add-email			"
 			"read an e-mail message from stdin and\n"
 		"					"
-		"add the sender to the addressbook");
-	puts	("	--add-email-quiet		"
+		"add the sender to the addressbook"));
+	puts	(_("	--add-email-quiet		"
 		"same as --add-email but doesn't\n"
-		"					confirm adding");
+		"					confirm adding"));
 	putchar('\n');
-	puts	("	--convert			convert address book files");
-	puts	("	options to use with --convert:");
-	puts	("	--informat	<format>	format for input file");
-	puts	("					(default: abook)");
-	puts	("	--infile	<file>		source file");
-	puts	("					(default: stdin)");
-	puts	("	--outformat	<format>	format for output file");
-	puts	("					(default: text)");
-	puts	("	--outfile	<file>		destination file");
-	puts	("					(default: stdout)");
-	puts	("	--formats			list available formats");
+	puts	(_("	--convert			convert address book files"));
+	puts	(_("	options to use with --convert:"));
+	puts	(_("	--informat	<format>	format for input file"));
+	puts	(_("					(default: abook)"));
+	puts	(_("	--infile	<file>		source file"));
+	puts	(_("					(default: stdin)"));
+	puts	(_("	--outformat	<format>	format for output file"));
+	puts	(_("					(default: text)"));
+	puts	(_("	--outfile	<file>		destination file"));
+	puts	(_("					(default: stdout)"));
+	puts	(_("	--formats			list available formats"));
 }
 
 /*
@@ -485,7 +490,7 @@ init_mutt_query()
 	load_opts(rcfile);
 
 	if( load_database(datafile) ) {
-		printf("Cannot open database\n");
+		printf(_("Cannot open database\n"));
 		quit_mutt_query(EXIT_FAILURE);
 		exit(EXIT_FAILURE);
 	}
@@ -611,14 +616,14 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	int ret=0;
 
 	if( !srcformat || !srcfile || !dstformat || !dstfile ) {
-		fprintf(stderr, "too few argumets to make conversion\n");
-		fprintf(stderr, "try --help\n");
+		fprintf(stderr, _("too few argumets to make conversion\n"));
+		fprintf(stderr, _("try --help\n"));
 	}
 
 #ifndef DEBUG
 	if( !strcasecmp(srcformat, dstformat) ) {
-		printf(	"input and output formats are the same\n"
-			"exiting...\n");
+		printf(	_("input and output formats are the same\n"
+			"exiting...\n"));
 		exit(EXIT_FAILURE);
 	}
 #endif
@@ -630,11 +635,11 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	switch(import_file(srcformat, srcfile)) {
 		case -1:
 			fprintf(stderr,
-				"input format %s not supported\n", srcformat);
+				_("input format %s not supported\n"), srcformat);
 			ret = 1;
 			break;
 		case 1:
-			fprintf(stderr, "cannot read file %s\n", srcfile);
+			fprintf(stderr, _("cannot read file %s\n"), srcfile);
 			ret = 1;
 			break;
 	}
@@ -643,13 +648,13 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 		switch(export_file(dstformat, dstfile)) {
 			case -1:
 				fprintf(stderr,
-					"output format %s not supported\n",
+					_("output format %s not supported\n"),
 					dstformat);
 				ret = 1;
 				break;
 			case 1:
 				fprintf(stderr,
-					"cannot write file %s\n", dstfile);
+					_("cannot write file %s\n"), dstfile);
 				ret = 1;
 				break;
 		}
@@ -670,12 +675,12 @@ quit_add_email()
 {
 	if(add_email_count > 0) {
 		if(save_database() < 0) {
-			fprintf(stderr, "cannot open %s\n", datafile);
+			fprintf(stderr, _("cannot open %s\n"), datafile);
 			exit(EXIT_FAILURE);
 		}
-		printf("%d item(s) added to %s\n", add_email_count, datafile);
+		printf(_("%d item(s) added to %s\n"), add_email_count, datafile);
 	} else {
-		puts("Valid sender address not found");
+		puts(_("Valid sender address not found"));
 	}
 
 	exit(EXIT_SUCCESS);
@@ -715,7 +720,7 @@ add_email_add_item(int quiet, char *name, char *email)
 		int search_fields[] = { EMAIL, -1 };
 		if(find_item(email, 0, search_fields) >= 0) {
 			if(!quiet)
-				printf("Address %s already in addressbook\n",
+				printf(_("Address %s already in addressbook\n"),
 						email);
 			return 0;
 		}
@@ -725,13 +730,14 @@ add_email_add_item(int quiet, char *name, char *email)
 		FILE *in = fopen("/dev/tty", "r");
 		char c;
 		if(!in) {
-			fprintf(stderr, "cannot open /dev/tty\n"
-				"you may want to use --add-email-quiet\n");
+			fprintf(stderr, _("cannot open /dev/tty\n"
+				"you may want to use --add-email-quiet\n"));
 			exit(EXIT_FAILURE);
 		}
 
 		do {
-			printf("Add ``%s <%s>'' to %s ? (y/n)\n",
+			/* TODO gettext: handle translated keypresses? */
+			printf(_("Add ``%s <%s>'' to %s ? (y/n)\n"),
 					name,
 					email,
 					datafile);
@@ -760,7 +766,7 @@ add_email(int quiet)
 	struct stat s;
 
 	if( (fstat(fileno(stdin), &s)) == -1 || S_ISDIR(s.st_mode) ) {
-		fprintf(stderr, "stdin is a directory or cannot stat stdin\n");
+		fprintf(stderr, _("stdin is a directory or cannot stat stdin\n"));
 		exit(EXIT_FAILURE);
 	}
 

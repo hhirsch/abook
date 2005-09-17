@@ -36,12 +36,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gettext.h"
 #include "xmalloc.h"
 
 static void
 xmalloc_default_error_handler(int err)
 {
-	fprintf(stderr, "Memory allocation failure: %s\n", strerror(err));
+	fprintf(stderr, _("Memory allocation failure: %s\n"), strerror(err));
 	exit(EXIT_FAILURE);
 }
 

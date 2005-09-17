@@ -14,6 +14,7 @@
 #include "ui.h"
 #include "database.h"
 #include "edit.h"
+#include "gettext.h"
 #include "list.h"
 #include "misc.h"
 #include "options.h"
@@ -164,10 +165,10 @@ list_headerline()
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_BOLD);
 #endif
-	mvaddstr(2, NAMEPOS, abook_fields[NAME].name);
-	mvaddstr(2, EMAILPOS, abook_fields[EMAIL].name);
+	mvaddstr(2, NAMEPOS, gettext(abook_fields[NAME].name));
+	mvaddstr(2, EMAILPOS, gettext(abook_fields[EMAIL].name));
 	if(extra_column > 0)
-		mvaddnstr(2, EXTRAPOS, abook_fields[extra_column].name,
+		mvaddnstr(2, EXTRAPOS, gettext(abook_fields[extra_column].name),
 				COLS-EXTRAPOS);
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_NORMAL);

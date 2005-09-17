@@ -7,11 +7,11 @@ abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		xmalloc.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
-		getopt.h abook_rl.h mbswidth.h \
+		getopt.h gettext.h abook_rl.h mbswidth.h \
 		xmalloc.h
 
-EXTRA_DIST = ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc abook.spec \
-	contrib
+EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
+		abook.spec contrib
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5
@@ -22,3 +22,7 @@ uninstall-local:
 	-rm -f $(DESTDIR)$(mandir)/man1/abook.1
 	-rm -f $(DESTDIR)$(mandir)/man5/abookrc.5
 
+
+SUBDIRS = intl po
+
+ACLOCAL_AMFLAGS = -I m4

@@ -18,6 +18,7 @@
 #include "ui.h"
 #include "edit.h"
 #include "database.h"
+#include "gettext.h"
 #include "list.h"
 #include "misc.h"
 #include "options.h"
@@ -141,10 +142,10 @@ init_ui()
 #endif
 	if( LINES < MIN_LINES || COLS < MIN_COLS ) {
 		clear(); refresh(); endwin();
-		fprintf(stderr, "Your terminal size is %dx%d\n", COLS, LINES);
-		fprintf(stderr, "Terminal is too small. Minium terminal size "
+		fprintf(stderr, _("Your terminal size is %dx%d\n"), COLS, LINES);
+		fprintf(stderr, _("Terminal is too small. Minium terminal size "
 				"for abook is "
-				"%dx%d\n", MIN_COLS, MIN_LINES);
+				"%dx%d\n"), MIN_COLS, MIN_LINES);
 		return 1;
 	}
 
@@ -174,7 +175,7 @@ close_ui()
 
 
 void
-headerline(char *str)
+headerline(const char *str)
 {
 	werase(top);
 
@@ -199,7 +200,7 @@ refresh_screen()
 	clear();
 
 	refresh_statusline();
-	headerline(MAIN_HELPLINE);
+	headerline(gettext(MAIN_HELPLINE));
 	list_headerline();
 
 	refresh_list();
@@ -207,7 +208,7 @@ refresh_screen()
 
 
 int
-statusline_msg(char *msg)
+statusline_msg(const char *msg)
 {
 	int c;
 
@@ -223,7 +224,7 @@ statusline_msg(char *msg)
 }
 
 void
-statusline_addstr(char *str)
+statusline_addstr(const char *str)
 {
 	mvwaddstr(bottom, 1, 0, str);
 	refresh();
@@ -334,16 +335,16 @@ display_help(int help)
 
 	helpw = newwin(LINES - 5, COLS - 6, 2, 3);
 	erase();
-	headerline("help");
+	headerline(_("help"));
 
 	for(i = 0; tbl[i] != NULL; i++) {
-		waddstr(helpw, tbl[i]);
+		waddstr(helpw, gettext(tbl[i]));
 		if( (!((i + 1) % (LINES - 8))) ||
 			(tbl[i + 1] == NULL) ) {
 			refresh();
 			wrefresh(helpw);
 			refresh_statusline();
-			if(statusline_msg("Press any key to continue...")
+			if(statusline_msg(_("Press any key to continue..."))
 					== 'q')
 				break;
 			wclear(helpw);
@@ -464,7 +465,7 @@ ui_remove_items()
 	if(list_is_empty())
 		return;
 
-	if(statusline_ask_boolean("Remove selected item(s)", TRUE))
+	if(statusline_ask_boolean(_("Remove selected item(s)"), TRUE))
 		remove_selected_items();
 
 	clear_statusline();
@@ -474,7 +475,7 @@ ui_remove_items()
 void
 ui_clear_database()
 {
-	if(statusline_ask_boolean("Clear WHOLE database", FALSE)) {
+	if(statusline_ask_boolean(_("Clear WHOLE database"), FALSE)) {
 		close_database();
 		refresh_list();
 	}
@@ -501,7 +502,7 @@ ui_find(int next)
 
 	if( (item = find_item(findstr, curitem + !!next, search_fields)) < 0 &&
 			(item = find_item(findstr, 0, search_fields)) >= 0)
-		statusline_addstr("Search hit bottom, continuing at top");
+		statusline_addstr(_("Search hit bottom, continuing at top"));
 
 	if(item >= 0) {
 		curitem = item;
@@ -524,8 +525,8 @@ void
 ui_read_database()
 {
 	if(items > 0)
-		if(!statusline_ask_boolean("Your current data will be lost - "
-				"Press 'y' to continue", FALSE))
+		if(!statusline_ask_boolean(_("Your current data will be lost - "
+				"Press 'y' to continue"), FALSE))
 			return;
 
 	load_database(datafile);
@@ -543,7 +544,7 @@ ui_print_database()
 	if(list_is_empty())
 		return;
 
-	statusline_addstr("Print All/Selected/Cancel (a/s/C)?");
+	statusline_addstr(_("Print All/Selected/Cancel (a/s/C)?"));
 
 	switch(tolower(getch())) {
 		case 'a':
@@ -551,7 +552,7 @@ ui_print_database()
 			break;
 		case 's':
 			if( !selected_items() ) {
-				statusline_msg("No selected items");
+				statusline_msg(_("No selected items"));
 				return;
 			}
 			mode = ENUM_SELECTED;
@@ -577,7 +578,7 @@ ui_open_datafile()
 {
 	char *filename;
 
-	filename = ask_filename("File to open: ");
+	filename = ask_filename(_("File to open: "));
 
 	if(!filename || ! *filename) {
 		free(filename);
@@ -587,7 +588,7 @@ ui_open_datafile()
 
 	if(opt_get_bool(BOOL_AUTOSAVE))
 		save_database();
-	else if(statusline_ask_boolean("Save current database", FALSE))
+	else if(statusline_ask_boolean(_("Save current database"), FALSE))
 		save_database();
 
 	close_database();
@@ -595,7 +596,7 @@ ui_open_datafile()
 	load_database(filename);
 
 	if(items == 0) {
-		statusline_msg("Sorry, that specified file appears not to be a valid abook addressbook");
+		statusline_msg(_("Sorry, that specified file appears not to be a valid abook addressbook"));
 		load_database(datafile);
 	} else {
 		free(datafile);

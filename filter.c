@@ -19,6 +19,7 @@
 #include "abook.h"
 #include "database.h"
 #include "edit.h"
+#include "gettext.h"
 #include "list.h"
 #include "misc.h"
 #include "options.h"
@@ -65,29 +66,29 @@ static int	spruce_export_database(FILE *out, struct db_enumerator e);
  */
 
 struct abook_input_filter i_filters[] = {
-	{ "abook", "abook native format", parse_database },
-	{ "ldif", "ldif / Netscape addressbook", ldif_parse_file },
-	{ "mutt", "mutt alias", mutt_parse_file },
-	{ "pine", "pine addressbook", pine_parse_file },
-	{ "csv", "comma separated values", csv_parse_file },
-	{ "allcsv", "comma separated all values", allcsv_parse_file },
-	{ "palmcsv", "Palm comma separated values", palmcsv_parse_file },
+	{ "abook", N_("abook native format"), parse_database },
+	{ "ldif", N_("ldif / Netscape addressbook"), ldif_parse_file },
+	{ "mutt", N_("mutt alias"), mutt_parse_file },
+	{ "pine", N_("pine addressbook"), pine_parse_file },
+	{ "csv", N_("comma separated values"), csv_parse_file },
+	{ "allcsv", N_("comma separated all values"), allcsv_parse_file },
+	{ "palmcsv", N_("Palm comma separated values"), palmcsv_parse_file },
 	{ "\0", NULL, NULL }
 };
 
 struct abook_output_filter e_filters[] = {
-	{ "abook", "abook native format", write_database },
-	{ "ldif", "ldif / Netscape addressbook (.4ld)", ldif_export_database },
-	{ "mutt", "mutt alias", mutt_alias_export },
-	{ "html", "html document", html_export_database },
-	{ "pine", "pine addressbook", pine_export_database },
-	{ "gcrd", "GnomeCard (VCard) addressbook", gcrd_export_database },
-	{ "csv", "comma separated values", csv_export_database },
-	{ "allcsv", "comma separated all values", allcsv_export_database },
-	{ "palmcsv", "Palm comma separated values", palm_export_database},
-	{ "elm", "elm alias", elm_alias_export },
-	{ "text", "plain text", text_export_database },
-	{ "spruce", "Spruce address book", spruce_export_database },
+	{ "abook", N_("abook native format"), write_database },
+	{ "ldif", N_("ldif / Netscape addressbook (.4ld)"), ldif_export_database },
+	{ "mutt", N_("mutt alias"), mutt_alias_export },
+	{ "html", N_("html document"), html_export_database },
+	{ "pine", N_("pine addressbook"), pine_export_database },
+	{ "gcrd", N_("GnomeCard (VCard) addressbook"), gcrd_export_database },
+	{ "csv", N_("comma separated values"), csv_export_database },
+	{ "allcsv", N_("comma separated all values"), allcsv_export_database },
+	{ "palmcsv", N_("Palm comma separated values"), palm_export_database},
+	{ "elm", N_("elm alias"), elm_alias_export },
+	{ "text", N_("plain text"), text_export_database },
+	{ "spruce", N_("Spruce address book"), spruce_export_database },
 	{ "\0", NULL, NULL }
 };
 
@@ -100,17 +101,17 @@ print_filters()
 {
 	int i;
 
-	puts("input:");
+	puts(_("input:"));
 	for(i=0; *i_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", i_filters[i].filtname,
-			i_filters[i].desc);
+			gettext(i_filters[i].desc));
 
 	putchar('\n');
 
-	puts("output:");
+	puts(_("output:"));
 	for(i=0; *e_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", e_filters[i].filtname,
-			e_filters[i].desc);
+			gettext(e_filters[i].desc));
 
 	putchar('\n');
 }
@@ -172,17 +173,17 @@ import_screen()
 	clear();
 
 	refresh_statusline();
-	headerline("import database");
+	headerline(_("import database"));
 
-	mvaddstr(3, 1, "please select a filter");
+	mvaddstr(3, 1, _("please select a filter"));
 
 
 	for(i=0; *i_filters[i].filtname ; i++)
 		mvprintw(5 + i, 6, "%c -\t%s\t%s\n", 'a' + i,
 			i_filters[i].filtname,
-			i_filters[i].desc);
+			gettext(i_filters[i].desc));
 
-	mvprintw(6 + i, 6, "x -\tcancel");
+	mvprintw(6 + i, 6, _("x -\tcancel"));
 }
 
 int
@@ -203,16 +204,16 @@ import_database()
 
 	mvaddstr(5+filter, 2, "->");
 
-	filename = ask_filename("Filename: ");
+	filename = ask_filename(_("Filename: "));
 	if(!filename) {
 		refresh_screen();
 		return 2;
 	}
 
 	if(i_read_file(filename, i_filters[filter].func ))
-		statusline_msg("Error occured while opening the file");
+		statusline_msg(_("Error occured while opening the file"));
 	else if(tmp == items)
-		statusline_msg("Hmm.., file seems not to be a valid file");
+		statusline_msg(_("Hmm.., file seems not to be a valid file"));
 
 	refresh_screen();
 	free(filename);
@@ -289,17 +290,17 @@ export_screen()
 
 
 	refresh_statusline();
-	headerline("export database");
+	headerline(_("export database"));
 
-	mvaddstr(3, 1, "please select a filter");
+	mvaddstr(3, 1, _("please select a filter"));
 
 
 	for(i = 0; *e_filters[i].filtname ; i++)
 		mvprintw(5 + i, 6, "%c -\t%s\t%s\n", 'a' + i,
 			e_filters[i].filtname,
-			e_filters[i].desc);
+			gettext(e_filters[i].desc));
 
-	mvprintw(6 + i, 6, "x -\tcancel");
+	mvprintw(6 + i, 6, _("x -\tcancel"));
 }
 
 int
@@ -321,7 +322,8 @@ export_database()
 	mvaddstr(5+filter, 2, "->");
 
 	if(selected_items()) {
-		statusline_addstr("Export All/Selected/Cancel (A/s/c)");
+		/* TODO gettext: handle translated keypresses? */
+		statusline_addstr(_("Export All/Selected/Cancel (A/s/c)"));
 		switch( tolower(getch()) ) {
 			case 's':
 				enum_mode = ENUM_SELECTED;
@@ -333,14 +335,14 @@ export_database()
 		clear_statusline();
 	}
 
-	filename = ask_filename("Filename: ");
+	filename = ask_filename(_("Filename: "));
 	if(!filename) {
 		refresh_screen();
 		return 2;
 	}
 
 	if( e_write_file(filename, e_filters[filter].func, enum_mode))
-		statusline_msg("Error occured while exporting");
+		statusline_msg(_("Error occured while exporting"));
 
 	refresh_screen();
 	free(filename);

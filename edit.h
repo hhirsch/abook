@@ -10,7 +10,7 @@ void		add_item();
 #define EDITW_TOP	2
 #define EDITW_X		3
 
-#define EDITOR_HELPLINE	"?:help c:contact a:address p:phone o:other"
+#define EDITOR_HELPLINE	N_("?:help c:contact a:address p:phone o:other")
 
 #define TABLINE		1
 

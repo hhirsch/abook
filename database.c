@@ -15,6 +15,7 @@
 #include "abook.h"
 #include <assert.h>
 #include "database.h"
+#include "gettext.h"
 #include "list.h"
 #include "misc.h"
 #include "options.h"
@@ -53,26 +54,26 @@ extern char *datafile;
  */
 
 struct abook_field abook_fields[ITEM_FIELDS] = {
-	{"Name",	"name",		TAB_CONTACT},/* NAME */
-	{"E-mails",	"email",	TAB_CONTACT},/* EMAIL */
-	{"Address",	"address",	TAB_ADDRESS},/* ADDRESS */
-	{"Address2",	"address2",	TAB_ADDRESS},/* ADDRESS2 */
-	{"City",	"city",		TAB_ADDRESS},/* CITY */
-	{"State/Province","state",	TAB_ADDRESS},/* STATE */
-	{"ZIP/Postal Code","zip",	TAB_ADDRESS},/* ZIP */
-	{"Country",	"country",	TAB_ADDRESS},/* COUNTRY */
-	{"Home Phone",	"phone",	TAB_PHONE},/* PHONE */
-	{"Work Phone",	"workphone",	TAB_PHONE},/* WORKPHONE */
-	{"Fax",		"fax",		TAB_PHONE},/* FAX */
-	{"Mobile",	"mobile",	TAB_PHONE},/* MOBILEPHONE */
-	{"Nickname/Alias", "nick",      TAB_OTHER},/* NICK */
-	{"URL",		"url",		TAB_OTHER},/* URL */
-	{"Notes",	"notes",	TAB_OTHER},/* NOTES */
-	{"Custom1",	"custom1",	TAB_CUSTOM},/* CUSTOM1 */
-	{"Custom2",	"custom2",	TAB_CUSTOM},/* CUSTOM2 */
-	{"Custom3",	"custom3",	TAB_CUSTOM},/* CUSTOM3 */
-	{"Custom4",	"custom4",	TAB_CUSTOM},/* CUSTOM4 */
-	{"Custom5",	"custom5",	TAB_CUSTOM},/* CUSTOM5 */
+	{N_("Name"),	"name",		TAB_CONTACT},/* NAME */
+	{N_("E-mails"),	"email",	TAB_CONTACT},/* EMAIL */
+	{N_("Address"),	"address",	TAB_ADDRESS},/* ADDRESS */
+	{N_("Address2"),	"address2",	TAB_ADDRESS},/* ADDRESS2 */
+	{N_("City"),	"city",		TAB_ADDRESS},/* CITY */
+	{N_("State/Province"),"state",	TAB_ADDRESS},/* STATE */
+	{N_("ZIP/Postal Code"),"zip",	TAB_ADDRESS},/* ZIP */
+	{N_("Country"),	"country",	TAB_ADDRESS},/* COUNTRY */
+	{N_("Home Phone"),	"phone",	TAB_PHONE},/* PHONE */
+	{N_("Work Phone"),	"workphone",	TAB_PHONE},/* WORKPHONE */
+	{N_("Fax"),		"fax",		TAB_PHONE},/* FAX */
+	{N_("Mobile"),	"mobile",	TAB_PHONE},/* MOBILEPHONE */
+	{N_("Nickname/Alias"), "nick",      TAB_OTHER},/* NICK */
+	{N_("URL"),		"url",		TAB_OTHER},/* URL */
+	{N_("Notes"),	"notes",	TAB_OTHER},/* NOTES */
+	{N_("Custom1"),	"custom1",	TAB_CUSTOM},/* CUSTOM1 */
+	{N_("Custom2"),	"custom2",	TAB_CUSTOM},/* CUSTOM2 */
+	{N_("Custom3"),	"custom3",	TAB_CUSTOM},/* CUSTOM3 */
+	{N_("Custom4"),	"custom4",	TAB_CUSTOM},/* CUSTOM4 */
+	{N_("Custom5"),	"custom5",	TAB_CUSTOM},/* CUSTOM5 */
 };
 
 
@@ -402,8 +403,8 @@ sort_by_field(int field)
 	if(field < 0) {
 		field = name2field(opt_get_str(STR_SORT_FIELD));
 		if(field < 0) {
-			statusline_msg("Not valid field value defined "
-				"in configuration");
+			statusline_msg(_("Not valid field value defined "
+				"in configuration"));
 			return;
 		}
 	}

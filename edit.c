@@ -14,8 +14,10 @@
 #include "ui.h"
 #include "abook.h"
 #include "database.h"
+#include "gettext.h"
 #include "list.h"
 #include "edit.h"
+#include <mbswidth.h>
 #include "misc.h"
 #include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
@@ -37,33 +39,44 @@ WINDOW *editw;
 static void
 editor_tab(const int tab)
 {
-	int i;
-	const int spacing = 12;
+	int i, j;
+	int sum = 2; /* current x pos */
 	static char *tab_names[] = {
-		"CONTACT",
-		"ADDRESS",
-		" PHONE ",
-		" OTHER ",
-		"CUSTOM "
+		N_("CONTACT"),
+		N_("ADDRESS"),
+		N_(" PHONE "),
+		N_(" OTHER "),
+		N_("CUSTOM ")
 	};
 
 	mvwhline(editw, TABLINE + 1, 0, UI_HLINE_CHAR, EDITW_COLS);
-	for(i = 0; i < TABS; i++) {
-		mvwaddch(editw,  TABLINE+1, spacing * i + 2,  UI_TEE_CHAR);
-		mvwaddch(editw,  TABLINE+1, spacing * i + 12, UI_TEE_CHAR);
-	}
 
 	for(i = 0; i < TABS; i++) {
-		mvwaddch(editw,  TABLINE, spacing * i + 2,  UI_ULCORNER_CHAR);
-		mvwaddch(editw,  TABLINE, spacing * i + 3,  UI_LBOXLINE_CHAR);
-		mvwaddstr(editw, TABLINE, spacing * i + 4,  tab_names[i]);
-		mvwaddch(editw,  TABLINE, spacing * i + 11, UI_RBOXLINE_CHAR);
-		mvwaddch(editw,  TABLINE, spacing * i + 12, UI_URCORNER_CHAR);
+		int width = mbswidth(gettext(tab_names[i]), 0) + 5;
+
+		if(sum + width + 1> EDITW_COLS) {
+			statusline_msg(_("Tab name too wide for screen"));
+			break;
+		}
+
+		mvwaddch(editw,  TABLINE+1, sum,  UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE+1, sum + width - 2, UI_TEE_CHAR);
+
+		mvwaddch(editw,  TABLINE, sum,  UI_ULCORNER_CHAR);
+		mvwaddch(editw,  TABLINE, sum + 1,  UI_LBOXLINE_CHAR);
+		mvwaddstr(editw, TABLINE, sum + 2,  gettext(tab_names[i]));
+		mvwaddch(editw,  TABLINE, sum + width - 3, UI_RBOXLINE_CHAR);
+		mvwaddch(editw,  TABLINE, sum + width - 2, UI_URCORNER_CHAR);
+
+		if(i == tab) {
+			mvwaddch(editw,  TABLINE+1, sum, UI_LRCORNER_CHAR);
+			for(j = 0; j < width - 3; j++)
+				mvwaddstr(editw,  TABLINE+1, sum + j + 1, " ");
+			mvwaddch(editw,  TABLINE+1, sum + width - 2, UI_LLCORNER_CHAR);
+		}
+		sum += width;
 	}
 
-	mvwaddch(editw,  TABLINE+1, spacing * tab + 2, UI_LRCORNER_CHAR);
-	mvwaddstr(editw, TABLINE+1, spacing * tab + 3, "         ");
-	mvwaddch(editw,  TABLINE+1, spacing * tab + 12, UI_LLCORNER_CHAR);
 }
 
 void
@@ -203,7 +216,7 @@ editor_print_data(int tab, int item)
 			split_emailstr(item, emails);
 			getyx(editw, y, x);
 			mvwaddstr(editw, y+1, FIELDS_START_X,
-					"E-mail addresses:");
+					_("E-mail addresses:"));
 			for(k = 0; k < MAX_EMAILS; k++) {
 				getyx(editw, y, x);
 				mvwprintw(editw, y+1, FIELDS_START_X,
@@ -222,7 +235,7 @@ editor_print_data(int tab, int item)
 
 		mvwprintw(editw, y, FIELDS_START_X, "%d - %s",
 				j,
-				abook_fields[i].name);
+				gettext(abook_fields[i].name));
 		mvwaddch(editw, y, TAB_COLON_POS, ':');
 		mvwaddstr(editw, y, TAB_COLON_POS + 2,
 				safe_str(database[item][i]));
@@ -370,7 +383,7 @@ edit_field(int tab, char c, int item)
 	if(j != n)
 		return 0;
 
-	str = mkstr("%s: ", abook_fields[i].name);
+	str = mkstr("%s: ", gettext(abook_fields[i].name));
 	change_field(str, &database[item][i]);
 
 	free(str);
@@ -385,7 +398,7 @@ edit_loop(int item)
 	int c;
 
 	werase(editw);
-	headerline(EDITOR_HELPLINE);
+	headerline(gettext(EDITOR_HELPLINE));
 	refresh_statusline();
 	print_editor_header(item);
 	editor_tab(tab);

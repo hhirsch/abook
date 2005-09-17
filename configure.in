@@ -1,10 +1,30 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.5.4)
+AM_INIT_AUTOMAKE(abook, 0.5.5pre1)
 AM_CONFIG_HEADER(config.h)
 
-AC_CANONICAL_HOST
+dnl ---------------
+dnl gettext support
+dnl ---------------
+
+AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION(0.14.1)
+
+localedir="$ac_default_prefix/share/locale"
+AC_ARG_WITH(localedir,
+	[  --with-localedir=PATH      Where the locale files are installed ])
+if test "x$with_localedir" != "x"; then
+	localedir="$with_localedir"
+elif test "x${prefix}" != "xNONE"; then
+	localedir="$prefix/share/locale"
+fi
+AC_DEFINE_UNQUOTED(LOCALEDIR, "$localedir", [locale directory])
+AC_SUBST(localedir)
+
+dnl ----------------------
+dnl end of gettext support
+dnl ----------------------
 
 AC_PROG_CC
 AC_ISC_POSIX
@@ -116,5 +136,5 @@ if test x$GCC = xyes; then
 	CFLAGS="-Wall $CFLAGS"
 fi
 
-AC_OUTPUT(Makefile abook.spec)
+AC_OUTPUT(Makefile abook.spec intl/Makefile po/Makefile.in)
 

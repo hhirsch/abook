@@ -15,6 +15,7 @@
 #include <assert.h>
 #include "options.h"
 #include "abook.h"
+#include "gettext.h"
 #include "misc.h"
 #include "xmalloc.h"
 
@@ -238,7 +239,7 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 
 	if(p[len - 1] == '\"' && *p == '\"') {
 		if(len < 3)
-			return "invalid value";
+			return _("invalid value");
 		p[len - 1] = 0;
 		p++;
 	}
@@ -257,7 +258,7 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 					!strcasecmp(p, "off"))
 				set_bool(opt -> data, FALSE);
 			else
-				return "invalid value";
+				return _("invalid value");
 			break;
 		default:
 			assert(0);
@@ -276,7 +277,7 @@ opt_parse_set(buffer *b)
 	if((p = strchr(b -> ptr, '=')))
 		*p++ = 0;
 	else
-		return "invalid value assignment";
+		return _("invalid value assignment");
 
 	strtrim(b -> ptr);
 
@@ -284,7 +285,7 @@ opt_parse_set(buffer *b)
 		if(!strcmp(abook_vars[i].option, b -> ptr))
 			return opt_set_set_option(b -> ptr, p, &abook_vars[i]);
 
-	return "unknown option";
+	return _("unknown option");
 }
 
 #include "database.h" /* needed for change_custom_field_name */
@@ -309,7 +310,7 @@ opt_parse_customfield(buffer *b)
 	find_token_start(b);
 
 	if(change_custom_field_name(b->ptr, n) == -1)
-		return "invalid custom field number";
+		return _("invalid custom field number");
 
 	return NULL;
 }
@@ -356,11 +357,11 @@ opt_parse_line(char *line, int n, char *fn)
 			break;
 		}
 
-	fprintf(stderr, "%s: parse error at line %d: ", fn, n);
+	fprintf(stderr, _("%s: parse error at line %d: "), fn, n);
 	if(err)
 		fprintf(stderr, "%s\n", err);
 	else
-		fprintf(stderr, "unknown token %s\n", token);
+		fprintf(stderr, _("unknown token %s\n"), token);
 
 	return TRUE;
 }

@@ -13,7 +13,7 @@ int		strcasecmp (const char *, const char *);
 int		strncasecmp (const char *, const char *, size_t);
 #endif
 
-#define MAIN_HELPLINE        "q:quit  ?:help  a:add  r:remove"
+#define MAIN_HELPLINE        N_("q:quit  ?:help  a:add  r:remove")
 
 #define Y_STATUSLINE   	(LINES - 2)
 
