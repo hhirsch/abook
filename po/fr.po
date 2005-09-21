@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-17 13:55+0300\n"
+"POT-Creation-Date: 2005-09-21 19:53+0300\n"
 "PO-Revision-Date: 2005-09-14 22:48+0200\n"
 "Last-Translator: YOUR NAME <E-MAIL@ADDRESS>\n"
 "Language-Team: french\n"
@@ -105,9 +105,10 @@ msgstr ""
 "\t\t\t\t\tl'expéditeur au carnet d'adresses"
 
 #: abook.c:408
+#, fuzzy
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
-"\t\t\t\t\tconfirm adding"
+"\t\t\t\t\trequire to confirm adding"
 msgstr ""
 "\t--add-email-quiet\t\tcomme --add-email mais sans confirmer\n"
 "\t\t\t\t\tl'ajout"
@@ -230,7 +231,7 @@ msgstr ""
 
 #: abook.c:740
 #, c-format
-msgid "Add ``%s <%s>'' to %s ? (y/n)\n"
+msgid "Add \"%s <%s>\" to %s? (y/n)\n"
 msgstr ""
 
 #: abook.c:769
@@ -323,7 +324,8 @@ msgid "Custom5"
 msgstr "Personnalisé5"
 
 #: database.c:406
-msgid "Not valid field value defined in configuration"
+#, fuzzy
+msgid "Invalid field value defined in configuration"
 msgstr "Valeur de champ invalide définie dans la configuration"
 
 #: edit.c:45
@@ -378,9 +380,10 @@ msgstr "carnet d'adresses pine"
 msgid "comma separated values"
 msgstr "valeurs délimitées par des virgules"
 
-#: filter.c:74 filter.c:87
-msgid "comma separated all values"
-msgstr "toutes valeurs délimitées par des virgules"
+#: filter.c:74
+#, fuzzy
+msgid "comma separated values (all fields)"
+msgstr "valeurs délimitées par des virgules"
 
 #: filter.c:75 filter.c:88
 msgid "Palm comma separated values"
@@ -397,6 +400,10 @@ msgstr "document html"
 #: filter.c:85
 msgid "GnomeCard (VCard) addressbook"
 msgstr "carnet d'adresses GnomCard (VCard)"
+
+#: filter.c:87
+msgid "comma separated all values"
+msgstr "toutes valeurs délimitées par des virgules"
 
 #: filter.c:89
 msgid "elm alias"
@@ -439,8 +446,11 @@ msgid "Error occured while opening the file"
 msgstr "Une erreur est survenue à l'ouverture du fichier"
 
 #: filter.c:216
-msgid "Hmm.., file seems not to be a valid file"
-msgstr "Hmm... ce fichier ne semble pas être valide"
+#, fuzzy
+msgid "File does not seem to be a valid addressbook"
+msgstr ""
+"Désolé, le fichier spécifier ne semble pas être un carnet d'adresses abook "
+"valide"
 
 #: filter.c:293
 msgid "export database"
@@ -448,7 +458,7 @@ msgstr "exporter la base de donnée"
 
 #: filter.c:326
 #, fuzzy
-msgid "Export All/Selected/Cancel (A/s/c)"
+msgid "Export All/Selected/Cancel (A/s/c)?"
 msgstr "Afficher tout/sélectionné/annuler (a/s/C)?"
 
 #: filter.c:345
@@ -468,7 +478,8 @@ msgid "\tQ\t\tquit without saving\n"
 msgstr "\tQ\t\tquitter sans sauvegarder\n"
 
 #: help.h:14
-msgid "\tP\t\tquit and print selected item(s) to stderr\n"
+#, fuzzy
+msgid "\tP\t\tquit and output selected item(s) to stderr\n"
 msgstr ""
 "\tP\t\tquitter et afficher les entrées sélectionnées\n"
 "\t\t\tsur la sortie d'erreur\n"
@@ -506,8 +517,9 @@ msgid "\t+\t\tselect all\n"
 msgstr "\t+\t\ttout sélectionner\n"
 
 #: help.h:25
-msgid "\t-\t\tselect none\n"
-msgstr "\t-\t\tne rien sélectionner\n"
+#, fuzzy
+msgid "\t-\t\tunselect all\n"
+msgstr "\t+\t\ttout sélectionner\n"
 
 #: help.h:26
 msgid "\t*\t\tinvert selection\n"
@@ -556,12 +568,12 @@ msgstr ""
 "\t\t\t(défini dans le fichier de configuration)\n"
 
 #: help.h:40
-msgid "\t/\t\tfind\n"
-msgstr "\t/\t\tchercher\n"
+msgid "\t/\t\tsearch\n"
+msgstr ""
 
 #: help.h:41
-msgid "\t\\\t\tfind next\n"
-msgstr "\t\\\t\tchercher l'occurence suivante\n"
+msgid "\t\\\t\tsearch next occurrence\n"
+msgstr ""
 
 #: help.h:43
 msgid "\tA\t\tmove current item up\n"
@@ -576,7 +588,8 @@ msgid "\tm\t\tsend mail with mutt\n"
 msgstr "\tm\t\tenvoyer un courrier électronique avec mutt\n"
 
 #: help.h:47
-msgid "\tu\t\tview URL with www browser\n"
+#, fuzzy
+msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tvisualiser l'URL avec un navigateur web\n"
 
 #: help.h:55
@@ -608,31 +621,32 @@ msgid "\tm\t\t\tsend mail with mutt\n"
 msgstr "\tm\t\t\tenvoyer un courrier électronique avec mutt\n"
 
 #: help.h:67
-msgid "\tv\t\t\tview url with WWW browser\n"
+#, fuzzy
+msgid "\tv\t\t\tview url with web browser\n"
 msgstr "\tv\t\t\tvisualiser l'URL avec un navigateur web\n"
 
-#: options.c:242 options.c:261
+#: options.c:240 options.c:259
 msgid "invalid value"
 msgstr ""
 
-#: options.c:280
+#: options.c:278
 msgid "invalid value assignment"
 msgstr ""
 
-#: options.c:288
+#: options.c:286
 msgid "unknown option"
 msgstr ""
 
-#: options.c:313
+#: options.c:311
 msgid "invalid custom field number"
 msgstr ""
 
-#: options.c:360
+#: options.c:358
 #, c-format
 msgid "%s: parse error at line %d: "
 msgstr ""
 
-#: options.c:364
+#: options.c:362
 #, fuzzy, c-format
 msgid "unknown token %s\n"
 msgstr "impossible d'ouvrir %s\n"
@@ -647,48 +661,60 @@ msgstr "La taille de votre terminal est de %dx%d\n"
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr "Terminal trop petit. Taille minimale de terminal pour abook: %dx%d\n"
 
-#: ui.c:338
+#: ui.c:336
 msgid "help"
 msgstr "aide"
 
-#: ui.c:347
+#: ui.c:345
 msgid "Press any key to continue..."
 msgstr "Pressez n'importe quelle touche pour continuer..."
 
-#: ui.c:468
+#: ui.c:466
 msgid "Remove selected item(s)"
 msgstr "supprimer les entrées sélectionnées"
 
-#: ui.c:478
+#: ui.c:476
 msgid "Clear WHOLE database"
 msgstr "effacer entièrement la base de données"
 
-#: ui.c:505
+#: ui.c:503
 msgid "Search hit bottom, continuing at top"
 msgstr "La recherche a atteint la fin, poursuite au début"
 
-#: ui.c:528
+#: ui.c:526
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr "Vos donnée actuelles seront perdues - Pressez 'y' pour continuer"
 
-#: ui.c:547
+#: ui.c:545
 msgid "Print All/Selected/Cancel (a/s/C)?"
 msgstr "Afficher tout/sélectionné/annuler (a/s/C)?"
 
-#: ui.c:555
+#: ui.c:553
 msgid "No selected items"
 msgstr "Pas d'entrée sélectionnée"
 
-#: ui.c:581
+#: ui.c:579
 msgid "File to open: "
 msgstr "Fichier à ouvrir: "
 
-#: ui.c:591
+#: ui.c:589
 msgid "Save current database"
 msgstr "Sauvegarder la base de donnée"
 
-#: ui.c:599
+#: ui.c:597
 msgid "Sorry, that specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Désolé, le fichier spécifier ne semble pas être un carnet d'adresses abook "
 "valide"
+
+#~ msgid "Hmm.., file seems not to be a valid file"
+#~ msgstr "Hmm... ce fichier ne semble pas être valide"
+
+#~ msgid "\t-\t\tselect none\n"
+#~ msgstr "\t-\t\tne rien sélectionner\n"
+
+#~ msgid "\t/\t\tfind\n"
+#~ msgstr "\t/\t\tchercher\n"
+
+#~ msgid "\t\\\t\tfind next\n"
+#~ msgstr "\t\\\t\tchercher l'occurence suivante\n"

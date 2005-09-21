@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-17 13:55+0300\n"
+"POT-Creation-Date: 2005-09-21 19:53+0300\n"
 "PO-Revision-Date: 2005-09-14 23:12+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -103,9 +103,10 @@ msgstr ""
 "\t\t\t\t\tlägg till avsändaren i adressboken"
 
 #: abook.c:408
+#, fuzzy
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
-"\t\t\t\t\tconfirm adding"
+"\t\t\t\t\trequire to confirm adding"
 msgstr ""
 "\t--add-email-quiet\t\tsamma som --add-email men utan\n"
 "\t\t\t\t\tanvändarbekräftelse"
@@ -228,7 +229,7 @@ msgstr ""
 
 #: abook.c:740
 #, c-format
-msgid "Add ``%s <%s>'' to %s ? (y/n)\n"
+msgid "Add \"%s <%s>\" to %s? (y/n)\n"
 msgstr ""
 
 #: abook.c:769
@@ -323,7 +324,8 @@ msgid "Custom5"
 msgstr "Egen5"
 
 #: database.c:406
-msgid "Not valid field value defined in configuration"
+#, fuzzy
+msgid "Invalid field value defined in configuration"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
 #: edit.c:45
@@ -378,9 +380,10 @@ msgstr "pine-adressbok"
 msgid "comma separated values"
 msgstr "kommaseparerade värden"
 
-#: filter.c:74 filter.c:87
-msgid "comma separated all values"
-msgstr "alla värden kommaseparerade"
+#: filter.c:74
+#, fuzzy
+msgid "comma separated values (all fields)"
+msgstr "kommaseparerade värden"
 
 #: filter.c:75 filter.c:88
 msgid "Palm comma separated values"
@@ -397,6 +400,10 @@ msgstr "html-dokument"
 #: filter.c:85
 msgid "GnomeCard (VCard) addressbook"
 msgstr "GnomeCard-adressbok (VCard)"
+
+#: filter.c:87
+msgid "comma separated all values"
+msgstr "alla värden kommaseparerade"
 
 #: filter.c:89
 msgid "elm alias"
@@ -439,8 +446,10 @@ msgid "Error occured while opening the file"
 msgstr "Fel vid öppnandet av filen"
 
 #: filter.c:216
-msgid "Hmm.., file seems not to be a valid file"
-msgstr "Hmm.., det verkar inte vara en giltig fil"
+#, fuzzy
+msgid "File does not seem to be a valid addressbook"
+msgstr ""
+"Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
 
 #: filter.c:293
 msgid "export database"
@@ -448,7 +457,7 @@ msgstr "exportera databasen"
 
 #: filter.c:326
 #, fuzzy
-msgid "Export All/Selected/Cancel (A/s/c)"
+msgid "Export All/Selected/Cancel (A/s/c)?"
 msgstr "Skriv ut Alla/Valda/Avbryt (a/s/C)?"
 
 #: filter.c:345
@@ -468,7 +477,8 @@ msgid "\tQ\t\tquit without saving\n"
 msgstr "\tQ\t\tavsluta utan att spara\n"
 
 #: help.h:14
-msgid "\tP\t\tquit and print selected item(s) to stderr\n"
+#, fuzzy
+msgid "\tP\t\tquit and output selected item(s) to stderr\n"
 msgstr "\tP\t\tavsluta och skriv ut valda post(er) till stderr\n"
 
 #: help.h:15
@@ -504,8 +514,9 @@ msgid "\t+\t\tselect all\n"
 msgstr "\t+\t\tvälj alla\n"
 
 #: help.h:25
-msgid "\t-\t\tselect none\n"
-msgstr "\t-\t\tvälj ingen post\n"
+#, fuzzy
+msgid "\t-\t\tunselect all\n"
+msgstr "\t+\t\tvälj alla\n"
 
 #: help.h:26
 msgid "\t*\t\tinvert selection\n"
@@ -552,12 +563,12 @@ msgid "\tF\t\tsort by field (defined in configuration file)\n"
 msgstr "\tF\t\tsortera efter fält (angivet i konfigurationsfilen)\n"
 
 #: help.h:40
-msgid "\t/\t\tfind\n"
-msgstr "\t/\t\tsök\n"
+msgid "\t/\t\tsearch\n"
+msgstr ""
 
 #: help.h:41
-msgid "\t\\\t\tfind next\n"
-msgstr "\t\\\t\tsök nästa\n"
+msgid "\t\\\t\tsearch next occurrence\n"
+msgstr ""
 
 #: help.h:43
 msgid "\tA\t\tmove current item up\n"
@@ -572,7 +583,8 @@ msgid "\tm\t\tsend mail with mutt\n"
 msgstr "\tm\t\tskicka post med mutt\n"
 
 #: help.h:47
-msgid "\tu\t\tview URL with www browser\n"
+#, fuzzy
+msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tvisa URL i webbläsare\n"
 
 #: help.h:55
@@ -604,31 +616,32 @@ msgid "\tm\t\t\tsend mail with mutt\n"
 msgstr "\tm\t\t\tskicka post med mutt\n"
 
 #: help.h:67
-msgid "\tv\t\t\tview url with WWW browser\n"
+#, fuzzy
+msgid "\tv\t\t\tview url with web browser\n"
 msgstr "\tv\t\t\tvisa URL i webbläsare\n"
 
-#: options.c:242 options.c:261
+#: options.c:240 options.c:259
 msgid "invalid value"
 msgstr ""
 
-#: options.c:280
+#: options.c:278
 msgid "invalid value assignment"
 msgstr ""
 
-#: options.c:288
+#: options.c:286
 msgid "unknown option"
 msgstr ""
 
-#: options.c:313
+#: options.c:311
 msgid "invalid custom field number"
 msgstr ""
 
-#: options.c:360
+#: options.c:358
 #, c-format
 msgid "%s: parse error at line %d: "
 msgstr ""
 
-#: options.c:364
+#: options.c:362
 #, fuzzy, c-format
 msgid "unknown token %s\n"
 msgstr "kan inte öppna %s\n"
@@ -645,47 +658,59 @@ msgstr ""
 "Terminalfönstret är alltför litet. Den minsta tillåtna storleken för abook "
 "är %dx%d\n"
 
-#: ui.c:338
+#: ui.c:336
 msgid "help"
 msgstr "hjälp"
 
-#: ui.c:347
+#: ui.c:345
 msgid "Press any key to continue..."
 msgstr "Tryck på en tangent för att fortsätta..."
 
-#: ui.c:468
+#: ui.c:466
 msgid "Remove selected item(s)"
 msgstr "Ta bort valda post(er)"
 
-#: ui.c:478
+#: ui.c:476
 msgid "Clear WHOLE database"
 msgstr "Nollställ HELA databasen"
 
-#: ui.c:505
+#: ui.c:503
 msgid "Search hit bottom, continuing at top"
 msgstr "Sök nådde slutet, fortsätter från början"
 
-#: ui.c:528
+#: ui.c:526
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr "Nuvarande data kommer att förloras - Tryck på 'y' för att fortsätta"
 
-#: ui.c:547
+#: ui.c:545
 msgid "Print All/Selected/Cancel (a/s/C)?"
 msgstr "Skriv ut Alla/Valda/Avbryt (a/s/C)?"
 
-#: ui.c:555
+#: ui.c:553
 msgid "No selected items"
 msgstr "Inga poster valda"
 
-#: ui.c:581
+#: ui.c:579
 msgid "File to open: "
 msgstr "Öppna fil: "
 
-#: ui.c:591
+#: ui.c:589
 msgid "Save current database"
 msgstr "Spara denna databas"
 
-#: ui.c:599
+#: ui.c:597
 msgid "Sorry, that specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
+
+#~ msgid "Hmm.., file seems not to be a valid file"
+#~ msgstr "Hmm.., det verkar inte vara en giltig fil"
+
+#~ msgid "\t-\t\tselect none\n"
+#~ msgstr "\t-\t\tvälj ingen post\n"
+
+#~ msgid "\t/\t\tfind\n"
+#~ msgstr "\t/\t\tsök\n"
+
+#~ msgid "\t\\\t\tfind next\n"
+#~ msgstr "\t\\\t\tsök nästa\n"

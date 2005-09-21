@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-17 13:55+0300\n"
+"POT-Creation-Date: 2005-09-21 19:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgstr ""
 #: abook.c:408
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
-"\t\t\t\t\tconfirm adding"
+"\t\t\t\t\trequire to confirm adding"
 msgstr ""
 
 #: abook.c:412
@@ -217,7 +217,7 @@ msgstr ""
 
 #: abook.c:740
 #, c-format
-msgid "Add ``%s <%s>'' to %s ? (y/n)\n"
+msgid "Add \"%s <%s>\" to %s? (y/n)\n"
 msgstr ""
 
 #: abook.c:769
@@ -310,7 +310,7 @@ msgid "Custom5"
 msgstr ""
 
 #: database.c:406
-msgid "Not valid field value defined in configuration"
+msgid "Invalid field value defined in configuration"
 msgstr ""
 
 #: edit.c:45
@@ -365,8 +365,8 @@ msgstr ""
 msgid "comma separated values"
 msgstr ""
 
-#: filter.c:74 filter.c:87
-msgid "comma separated all values"
+#: filter.c:74
+msgid "comma separated values (all fields)"
 msgstr ""
 
 #: filter.c:75 filter.c:88
@@ -383,6 +383,10 @@ msgstr ""
 
 #: filter.c:85
 msgid "GnomeCard (VCard) addressbook"
+msgstr ""
+
+#: filter.c:87
+msgid "comma separated all values"
 msgstr ""
 
 #: filter.c:89
@@ -426,7 +430,7 @@ msgid "Error occured while opening the file"
 msgstr ""
 
 #: filter.c:216
-msgid "Hmm.., file seems not to be a valid file"
+msgid "File does not seem to be a valid addressbook"
 msgstr ""
 
 #: filter.c:293
@@ -434,7 +438,7 @@ msgid "export database"
 msgstr ""
 
 #: filter.c:326
-msgid "Export All/Selected/Cancel (A/s/c)"
+msgid "Export All/Selected/Cancel (A/s/c)?"
 msgstr ""
 
 #: filter.c:345
@@ -454,7 +458,7 @@ msgid "\tQ\t\tquit without saving\n"
 msgstr ""
 
 #: help.h:14
-msgid "\tP\t\tquit and print selected item(s) to stderr\n"
+msgid "\tP\t\tquit and output selected item(s) to stderr\n"
 msgstr ""
 
 #: help.h:15
@@ -490,7 +494,7 @@ msgid "\t+\t\tselect all\n"
 msgstr ""
 
 #: help.h:25
-msgid "\t-\t\tselect none\n"
+msgid "\t-\t\tunselect all\n"
 msgstr ""
 
 #: help.h:26
@@ -538,11 +542,11 @@ msgid "\tF\t\tsort by field (defined in configuration file)\n"
 msgstr ""
 
 #: help.h:40
-msgid "\t/\t\tfind\n"
+msgid "\t/\t\tsearch\n"
 msgstr ""
 
 #: help.h:41
-msgid "\t\\\t\tfind next\n"
+msgid "\t\\\t\tsearch next occurrence\n"
 msgstr ""
 
 #: help.h:43
@@ -558,7 +562,7 @@ msgid "\tm\t\tsend mail with mutt\n"
 msgstr ""
 
 #: help.h:47
-msgid "\tu\t\tview URL with www browser\n"
+msgid "\tu\t\tview URL with web browser\n"
 msgstr ""
 
 #: help.h:55
@@ -590,31 +594,31 @@ msgid "\tm\t\t\tsend mail with mutt\n"
 msgstr ""
 
 #: help.h:67
-msgid "\tv\t\t\tview url with WWW browser\n"
+msgid "\tv\t\t\tview url with web browser\n"
 msgstr ""
 
-#: options.c:242 options.c:261
+#: options.c:240 options.c:259
 msgid "invalid value"
 msgstr ""
 
-#: options.c:280
+#: options.c:278
 msgid "invalid value assignment"
 msgstr ""
 
-#: options.c:288
+#: options.c:286
 msgid "unknown option"
 msgstr ""
 
-#: options.c:313
+#: options.c:311
 msgid "invalid custom field number"
 msgstr ""
 
-#: options.c:360
+#: options.c:358
 #, c-format
 msgid "%s: parse error at line %d: "
 msgstr ""
 
-#: options.c:364
+#: options.c:362
 #, c-format
 msgid "unknown token %s\n"
 msgstr ""
@@ -629,46 +633,46 @@ msgstr ""
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr ""
 
-#: ui.c:338
+#: ui.c:336
 msgid "help"
 msgstr ""
 
-#: ui.c:347
+#: ui.c:345
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ui.c:468
+#: ui.c:466
 msgid "Remove selected item(s)"
 msgstr ""
 
-#: ui.c:478
+#: ui.c:476
 msgid "Clear WHOLE database"
 msgstr ""
 
-#: ui.c:505
+#: ui.c:503
 msgid "Search hit bottom, continuing at top"
 msgstr ""
 
-#: ui.c:528
+#: ui.c:526
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr ""
 
-#: ui.c:547
+#: ui.c:545
 msgid "Print All/Selected/Cancel (a/s/C)?"
 msgstr ""
 
-#: ui.c:555
+#: ui.c:553
 msgid "No selected items"
 msgstr ""
 
-#: ui.c:581
+#: ui.c:579
 msgid "File to open: "
 msgstr ""
 
-#: ui.c:591
+#: ui.c:589
 msgid "Save current database"
 msgstr ""
 
-#: ui.c:599
+#: ui.c:597
 msgid "Sorry, that specified file appears not to be a valid abook addressbook"
 msgstr ""
