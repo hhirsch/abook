@@ -495,6 +495,7 @@ ui_find(int next)
 		char *s;
 		s = ui_readline("/", findstr, MAX_FIELD_LEN - 1, 0);
 		strncpy(findstr, s, MAX_FIELD_LEN);
+		free(s);
 		refresh_screen();
 	}
 
