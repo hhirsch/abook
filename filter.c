@@ -71,7 +71,7 @@ struct abook_input_filter i_filters[] = {
 	{ "mutt", N_("mutt alias"), mutt_parse_file },
 	{ "pine", N_("pine addressbook"), pine_parse_file },
 	{ "csv", N_("comma separated values"), csv_parse_file },
-	{ "allcsv", N_("comma separated all values"), allcsv_parse_file },
+	{ "allcsv", N_("comma separated values (all fields)"), allcsv_parse_file },
 	{ "palmcsv", N_("Palm comma separated values"), palmcsv_parse_file },
 	{ "\0", NULL, NULL }
 };
@@ -213,7 +213,7 @@ import_database()
 	if(i_read_file(filename, i_filters[filter].func ))
 		statusline_msg(_("Error occured while opening the file"));
 	else if(tmp == items)
-		statusline_msg(_("Hmm.., file seems not to be a valid file"));
+		statusline_msg(_("File does not seem to be a valid addressbook"));
 
 	refresh_screen();
 	free(filename);
@@ -323,7 +323,7 @@ export_database()
 
 	if(selected_items()) {
 		/* TODO gettext: handle translated keypresses? */
-		statusline_addstr(_("Export All/Selected/Cancel (A/s/c)"));
+		statusline_addstr(_("Export All/Selected/Cancel (A/s/c)?"));
 		switch( tolower(getch()) ) {
 			case 's':
 				enum_mode = ENUM_SELECTED;

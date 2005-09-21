@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-17 12:43+0300\n"
+"POT-Creation-Date: 2005-09-17 13:55+0300\n"
 "PO-Revision-Date: 2005-09-14 22:48+0200\n"
 "Last-Translator: YOUR NAME <E-MAIL@ADDRESS>\n"
 "Language-Team: french\n"
@@ -162,8 +162,8 @@ msgid "Cannot open database\n"
 msgstr "Impossible d'ouvrir la base de données\n"
 
 #: abook.c:619
-#, c-format
-msgid "too few argumets to make conversion\n"
+#, fuzzy, c-format
+msgid "too few arguments to make conversion\n"
 msgstr "trop peu de paramètres pour effectuer la conversion\n"
 
 #: abook.c:620

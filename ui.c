@@ -261,11 +261,9 @@ statusline_ask_boolean(char *msg, int def)
 
 	switch(tolower(getch())) {
 		case 'n':
-		case 'N':
 			ret = FALSE;
 			break;
 		case 'y':
-		case 'Y':
 			ret = TRUE;
 			break;
 		default:

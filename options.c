@@ -189,10 +189,8 @@ opt_line_remove_comments(char *p)
 	for(; *p; p++) {
 		switch(*p) {
 			case '\"':
-				if(!escape) {
+				if(!escape)
 					in_quote = !in_quote;
-					escape = FALSE;
-				}
 				break;
 			case '\\':
 				escape = TRUE;

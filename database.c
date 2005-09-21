@@ -403,7 +403,7 @@ sort_by_field(int field)
 	if(field < 0) {
 		field = name2field(opt_get_str(STR_SORT_FIELD));
 		if(field < 0) {
-			statusline_msg(_("Not valid field value defined "
+			statusline_msg(_("Invalid field value defined "
 				"in configuration"));
 			return;
 		}

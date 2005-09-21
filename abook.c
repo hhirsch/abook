@@ -407,7 +407,7 @@ show_usage()
 		"add the sender to the addressbook"));
 	puts	(_("	--add-email-quiet		"
 		"same as --add-email but doesn't\n"
-		"					confirm adding"));
+		"					require to confirm adding"));
 	putchar('\n');
 	puts	(_("	--convert			convert address book files"));
 	puts	(_("	options to use with --convert:"));
@@ -737,7 +737,7 @@ add_email_add_item(int quiet, char *name, char *email)
 
 		do {
 			/* TODO gettext: handle translated keypresses? */
-			printf(_("Add ``%s <%s>'' to %s ? (y/n)\n"),
+			printf(_("Add \"%s <%s>\" to %s? (y/n)\n"),
 					name,
 					email,
 					datafile);
