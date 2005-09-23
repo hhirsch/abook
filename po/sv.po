@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-23 18:38+0300\n"
-"PO-Revision-Date: 2005-09-14 23:12+0200\n"
-"Last-Translator: Automatically generated\n"
+"POT-Creation-Date: 2005-09-23 22:10+0200\n"
+"PO-Revision-Date: 2005-09-23 22:13+0200\n"
+"Last-Translator: Susanna Björverud <susanna.bjorverud@telia.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -103,7 +103,6 @@ msgstr ""
 "\t\t\t\t\tlägg till avsändaren i adressboken"
 
 #: abook.c:408
-#, fuzzy
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
 "\t\t\t\t\trequire to confirm adding"
@@ -161,9 +160,9 @@ msgid "Cannot open database\n"
 msgstr "Kan inte öppna databasen\n"
 
 #: abook.c:619
-#, fuzzy, c-format
+#, c-format
 msgid "too few arguments to make conversion\n"
-msgstr "Alltför få parametrar för att kunna konvertera\n"
+msgstr "alltför få parametrar för att kunna konvertera\n"
 
 #: abook.c:620
 #, c-format
@@ -230,7 +229,7 @@ msgstr ""
 #: abook.c:740
 #, c-format
 msgid "Add \"%s <%s>\" to %s? (y/n)\n"
-msgstr ""
+msgstr "Lägg till \"%s <%s>\" i %s? (j/n)\n"
 
 #: abook.c:769
 #, c-format
@@ -324,7 +323,6 @@ msgid "Custom5"
 msgstr "Egen5"
 
 #: database.c:406
-#, fuzzy
 msgid "Invalid field value defined in configuration"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
@@ -380,10 +378,9 @@ msgstr "pine-adressbok"
 msgid "comma separated values"
 msgstr "kommaseparerade värden"
 
-#: filter.c:74
-#, fuzzy
+#: filter.c:74 filter.c:87
 msgid "comma separated values (all fields)"
-msgstr "kommaseparerade värden"
+msgstr "kommaseparerade värden (alla fält)"
 
 #: filter.c:75 filter.c:88
 msgid "Palm comma separated values"
@@ -400,10 +397,6 @@ msgstr "html-dokument"
 #: filter.c:85
 msgid "GnomeCard (VCard) addressbook"
 msgstr "GnomeCard-adressbok (VCard)"
-
-#: filter.c:87
-msgid "comma separated all values"
-msgstr "alla värden kommaseparerade"
 
 #: filter.c:89
 msgid "elm alias"
@@ -446,19 +439,16 @@ msgid "Error occured while opening the file"
 msgstr "Fel vid öppnandet av filen"
 
 #: filter.c:216
-#, fuzzy
 msgid "File does not seem to be a valid addressbook"
-msgstr ""
-"Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
+msgstr "Den angivna filen verkar inte vara en giltig adressbok"
 
 #: filter.c:293
 msgid "export database"
 msgstr "exportera databasen"
 
 #: filter.c:326
-#, fuzzy
 msgid "Export All/Selected/Cancel (A/s/c)?"
-msgstr "Skriv ut Alla/Valda/Avbryt (a/s/C)?"
+msgstr "Exportera Alla/Valda/Avbryt (A/s/c)?"
 
 #: filter.c:345
 msgid "Error occured while exporting"
@@ -477,7 +467,6 @@ msgid "\tQ\t\tquit without saving\n"
 msgstr "\tQ\t\tavsluta utan att spara\n"
 
 #: help.h:14
-#, fuzzy
 msgid "\tP\t\tquit and output selected item(s) to stderr\n"
 msgstr "\tP\t\tavsluta och skriv ut valda post(er) till stderr\n"
 
@@ -514,9 +503,8 @@ msgid "\t+\t\tselect all\n"
 msgstr "\t+\t\tvälj alla\n"
 
 #: help.h:25
-#, fuzzy
 msgid "\t-\t\tunselect all\n"
-msgstr "\t+\t\tvälj alla\n"
+msgstr "\t+\tvmarkera alla\n"
 
 #: help.h:26
 msgid "\t*\t\tinvert selection\n"
@@ -564,11 +552,11 @@ msgstr "\tF\t\tsortera efter fält (angivet i konfigurationsfilen)\n"
 
 #: help.h:40
 msgid "\t/\t\tsearch\n"
-msgstr ""
+msgstr "\t/\t\tsök\n"
 
 #: help.h:41
 msgid "\t\\\t\tsearch next occurrence\n"
-msgstr ""
+msgstr "\t\\\t\tsök efter nästa förekomst\n"
 
 #: help.h:43
 msgid "\tA\t\tmove current item up\n"
@@ -583,7 +571,6 @@ msgid "\tm\t\tsend mail with mutt\n"
 msgstr "\tm\t\tskicka post med mutt\n"
 
 #: help.h:47
-#, fuzzy
 msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tvisa URL i webbläsare\n"
 
@@ -616,35 +603,34 @@ msgid "\tm\t\t\tsend mail with mutt\n"
 msgstr "\tm\t\t\tskicka post med mutt\n"
 
 #: help.h:67
-#, fuzzy
 msgid "\tv\t\t\tview url with web browser\n"
-msgstr "\tv\t\t\tvisa URL i webbläsare\n"
+msgstr "\tv\t\t\tvisa url i webbläsare\n"
 
 #: options.c:240 options.c:259
 msgid "invalid value"
-msgstr ""
+msgstr "ogiltigt värde"
 
 #: options.c:278
 msgid "invalid value assignment"
-msgstr ""
+msgstr "tilldelat ogiltigt värde"
 
 #: options.c:286
 msgid "unknown option"
-msgstr ""
+msgstr "okänd flagga"
 
 #: options.c:311
 msgid "invalid custom field number"
-msgstr ""
+msgstr "ogiltigt nummer på eget fält"
 
 #: options.c:358
 #, c-format
 msgid "%s: parse error at line %d: "
-msgstr ""
+msgstr "%s: parsning misslyckades på rad %d: "
 
 #: options.c:362
-#, fuzzy, c-format
+#, c-format
 msgid "unknown token %s\n"
-msgstr "kan inte öppna %s\n"
+msgstr "okänd symbol %s\n"
 
 #: ui.c:145
 #, c-format
@@ -660,19 +646,19 @@ msgstr ""
 
 #: ui.c:256
 msgid " (Y/n)?"
-msgstr ""
+msgstr "(J/n)"
 
 #: ui.c:256
 msgid " (y/N)?"
-msgstr ""
+msgstr "(j/N)"
 
 #: ui.c:265
 msgid "keybinding for no|n"
-msgstr ""
+msgstr "n"
 
 #: ui.c:267
 msgid "keybinding for yes|y"
-msgstr ""
+msgstr "j"
 
 #: ui.c:334
 msgid "help"
@@ -715,18 +701,9 @@ msgid "Save current database"
 msgstr "Spara denna databas"
 
 #: ui.c:596
-msgid "Sorry, that specified file appears not to be a valid abook addressbook"
+msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
 
-#~ msgid "Hmm.., file seems not to be a valid file"
-#~ msgstr "Hmm.., det verkar inte vara en giltig fil"
-
-#~ msgid "\t-\t\tselect none\n"
-#~ msgstr "\t-\t\tvälj ingen post\n"
-
-#~ msgid "\t/\t\tfind\n"
-#~ msgstr "\t/\t\tsök\n"
-
-#~ msgid "\t\\\t\tfind next\n"
-#~ msgstr "\t\\\t\tsök nästa\n"
+#~ msgid "comma separated all values"
+#~ msgstr "alla värden kommaseparerade"

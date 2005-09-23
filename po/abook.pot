@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-23 18:38+0300\n"
+"POT-Creation-Date: 2005-09-23 22:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -365,7 +365,7 @@ msgstr ""
 msgid "comma separated values"
 msgstr ""
 
-#: filter.c:74
+#: filter.c:74 filter.c:87
 msgid "comma separated values (all fields)"
 msgstr ""
 
@@ -383,10 +383,6 @@ msgstr ""
 
 #: filter.c:85
 msgid "GnomeCard (VCard) addressbook"
-msgstr ""
-
-#: filter.c:87
-msgid "comma separated all values"
 msgstr ""
 
 #: filter.c:89
@@ -690,5 +686,5 @@ msgid "Save current database"
 msgstr ""
 
 #: ui.c:596
-msgid "Sorry, that specified file appears not to be a valid abook addressbook"
+msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
