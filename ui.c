@@ -241,7 +241,7 @@ ui_readline(char *prompt, char *s, int limit, bool use_completion)
 
 	getyx(bottom, y, x);
 
-	ret = abook_readline(bottom, y, x, s, limit, use_completion);
+	ret = abook_readline(bottom, y, x, s, use_completion);
 
 	if(ret)
 		strtrim(ret);
@@ -450,7 +450,7 @@ get_commands()
 
 			case 'p': ui_print_database(); break;
 
-			case 'u': launch_wwwbrowser(list_current_item());
+			case 'v': launch_wwwbrowser(list_current_item());
 				  refresh_screen();
 				  break;
 		}
