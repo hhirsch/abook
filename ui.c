@@ -593,7 +593,7 @@ ui_open_datafile()
 	load_database(filename);
 
 	if(items == 0) {
-		statusline_msg(_("Sorry, that specified file appears not to be a valid abook addressbook"));
+		statusline_msg(_("Sorry, the specified file appears not to be a valid abook addressbook"));
 		load_database(datafile);
 	} else {
 		free(datafile);

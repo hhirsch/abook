@@ -84,7 +84,7 @@ struct abook_output_filter e_filters[] = {
 	{ "pine", N_("pine addressbook"), pine_export_database },
 	{ "gcrd", N_("GnomeCard (VCard) addressbook"), gcrd_export_database },
 	{ "csv", N_("comma separated values"), csv_export_database },
-	{ "allcsv", N_("comma separated all values"), allcsv_export_database },
+	{ "allcsv", N_("comma separated values (all fields)"), allcsv_export_database },
 	{ "palmcsv", N_("Palm comma separated values"), palm_export_database},
 	{ "elm", N_("elm alias"), elm_alias_export },
 	{ "text", N_("plain text"), text_export_database },
