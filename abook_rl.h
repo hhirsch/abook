@@ -3,7 +3,7 @@
 
 #include "abook_curses.h"
 
-char		*abook_readline(WINDOW *w, int y, int x, char *s, int limit,
+char		*abook_readline(WINDOW *w, int y, int x, char *s,
 		bool use_completion);
 
 #endif

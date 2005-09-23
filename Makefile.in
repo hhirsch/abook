@@ -76,8 +76,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_abook_OBJECTS = abook.$(OBJEXT) database.$(OBJEXT) filter.$(OBJEXT) \
 	list.$(OBJEXT) misc.$(OBJEXT) options.$(OBJEXT) edit.$(OBJEXT) \
 	ldif.$(OBJEXT) ui.$(OBJEXT) getname.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT) abook_rl.$(OBJEXT) mbswidth.$(OBJEXT) \
-	xmalloc.$(OBJEXT)
+	getopt1.$(OBJEXT) gettext.$(OBJEXT) abook_rl.$(OBJEXT) \
+	mbswidth.$(OBJEXT) xmalloc.$(OBJEXT)
 abook_OBJECTS = $(am_abook_OBJECTS)
 abook_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
@@ -223,7 +223,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		options.c edit.c ldif.c ui.c getname.c \
-		getopt.c getopt1.c abook_rl.c mbswidth.c \
+		getopt.c getopt1.c gettext.c abook_rl.c mbswidth.c \
 		xmalloc.c \
  		abook.h database.h filter.h list.h misc.h help.h \
 		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
@@ -335,6 +335,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getname.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gettext.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldif.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbswidth.Po@am__quote@

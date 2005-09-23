@@ -232,7 +232,7 @@ statusline_addstr(const char *str)
 }
 
 char *
-ui_readline(char *prompt, char *s, int limit, bool use_completion)
+ui_readline(char *prompt, char *s, size_t limit, bool use_completion)
 {
 	int y, x;
 	char *ret;
@@ -253,23 +253,21 @@ int
 statusline_ask_boolean(char *msg, int def)
 {
 	int ret;
-	char *msg2 = strconcat(msg,  def ? " (Y/n)?" : " (y/N)?", NULL);
+	char *msg2 = strconcat(msg,  def ? _(" (Y/n)?") : _(" (y/N)?"), NULL);
+	char ch;
 
 	statusline_addstr(msg2);
 
 	free(msg2);
 
-	switch(tolower(getch())) {
-		case 'n':
-			ret = FALSE;
-			break;
-		case 'y':
-			ret = TRUE;
-			break;
-		default:
-			ret = def;
-			break;
-	}
+	ch = tolower(getch());
+
+	if(ch == *(S_("keybinding for no|n")))
+		ret = FALSE;
+	else if(ch == *(S_("keybinding for yes|y")))
+		ret = TRUE;
+	else
+		ret = def;
 
 	clear_statusline();
 

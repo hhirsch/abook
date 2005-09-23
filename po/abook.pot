@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-21 19:53+0300\n"
+"POT-Creation-Date: 2005-09-23 18:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -633,46 +633,62 @@ msgstr ""
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr ""
 
-#: ui.c:336
+#: ui.c:256
+msgid " (Y/n)?"
+msgstr ""
+
+#: ui.c:256
+msgid " (y/N)?"
+msgstr ""
+
+#: ui.c:265
+msgid "keybinding for no|n"
+msgstr ""
+
+#: ui.c:267
+msgid "keybinding for yes|y"
+msgstr ""
+
+#: ui.c:334
 msgid "help"
 msgstr ""
 
-#: ui.c:345
+#: ui.c:343
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ui.c:466
+#: ui.c:464
 msgid "Remove selected item(s)"
 msgstr ""
 
-#: ui.c:476
+#: ui.c:474
 msgid "Clear WHOLE database"
 msgstr ""
 
-#: ui.c:503
+#: ui.c:502
 msgid "Search hit bottom, continuing at top"
 msgstr ""
 
-#: ui.c:526
+#: ui.c:525
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr ""
 
-#: ui.c:545
+#: ui.c:544
 msgid "Print All/Selected/Cancel (a/s/C)?"
 msgstr ""
 
-#: ui.c:553
+#: ui.c:552
 msgid "No selected items"
 msgstr ""
 
-#: ui.c:579
+#: ui.c:578
 msgid "File to open: "
 msgstr ""
 
-#: ui.c:589
+#: ui.c:588
 msgid "Save current database"
 msgstr ""
 
-#: ui.c:597
+#: ui.c:596
 msgid "Sorry, that specified file appears not to be a valid abook addressbook"
 msgstr ""

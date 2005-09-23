@@ -166,7 +166,7 @@ abook_rl_init(bool use_completion)
 }
 
 char *
-abook_readline(WINDOW *w, int y, int x, char *s, int limit, bool use_completion)
+abook_readline(WINDOW *w, int y, int x, char *s, bool use_completion)
 {
 	char *ret;
 

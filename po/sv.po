@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-21 19:53+0300\n"
+"POT-Creation-Date: 2005-09-23 18:38+0300\n"
 "PO-Revision-Date: 2005-09-14 23:12+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -658,47 +658,63 @@ msgstr ""
 "Terminalfönstret är alltför litet. Den minsta tillåtna storleken för abook "
 "är %dx%d\n"
 
-#: ui.c:336
+#: ui.c:256
+msgid " (Y/n)?"
+msgstr ""
+
+#: ui.c:256
+msgid " (y/N)?"
+msgstr ""
+
+#: ui.c:265
+msgid "keybinding for no|n"
+msgstr ""
+
+#: ui.c:267
+msgid "keybinding for yes|y"
+msgstr ""
+
+#: ui.c:334
 msgid "help"
 msgstr "hjälp"
 
-#: ui.c:345
+#: ui.c:343
 msgid "Press any key to continue..."
 msgstr "Tryck på en tangent för att fortsätta..."
 
-#: ui.c:466
+#: ui.c:464
 msgid "Remove selected item(s)"
 msgstr "Ta bort valda post(er)"
 
-#: ui.c:476
+#: ui.c:474
 msgid "Clear WHOLE database"
 msgstr "Nollställ HELA databasen"
 
-#: ui.c:503
+#: ui.c:502
 msgid "Search hit bottom, continuing at top"
 msgstr "Sök nådde slutet, fortsätter från början"
 
-#: ui.c:526
+#: ui.c:525
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr "Nuvarande data kommer att förloras - Tryck på 'y' för att fortsätta"
 
-#: ui.c:545
+#: ui.c:544
 msgid "Print All/Selected/Cancel (a/s/C)?"
 msgstr "Skriv ut Alla/Valda/Avbryt (a/s/C)?"
 
-#: ui.c:553
+#: ui.c:552
 msgid "No selected items"
 msgstr "Inga poster valda"
 
-#: ui.c:579
+#: ui.c:578
 msgid "File to open: "
 msgstr "Öppna fil: "
 
-#: ui.c:589
+#: ui.c:588
 msgid "Save current database"
 msgstr "Spara denna databas"
 
-#: ui.c:597
+#: ui.c:596
 msgid "Sorry, that specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
