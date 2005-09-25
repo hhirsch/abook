@@ -243,10 +243,11 @@ ui_readline(char *prompt, char *s, size_t limit, bool use_completion)
 
 	ret = abook_readline(bottom, y, x, s, use_completion);
 
-	/* XXX: check that string doesn't exceed limit */
-
-	if(ret)
+	if(ret) {
 		strtrim(ret);
+		if(strlen(ret) > limit && limit > 0)
+			ret[limit] = '\0';
+	}
 
 	return ret;
 }
