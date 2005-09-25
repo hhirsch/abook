@@ -54,13 +54,13 @@ editor_tab(const int tab)
 	for(i = 0; i < TABS; i++) {
 		int width = mbswidth(gettext(tab_names[i]), 0) + 5;
 
-		if(sum + width + 1> EDITW_COLS) {
+		if(sum + width + 1 > EDITW_COLS) {
 			statusline_msg(_("Tab name too wide for screen"));
 			break;
 		}
 
-		mvwaddch(editw,  TABLINE+1, sum,  UI_TEE_CHAR);
-		mvwaddch(editw,  TABLINE+1, sum + width - 2, UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE + 1, sum,  UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE + 1, sum + width - 2, UI_TEE_CHAR);
 
 		mvwaddch(editw,  TABLINE, sum,  UI_ULCORNER_CHAR);
 		mvwaddch(editw,  TABLINE, sum + 1,  UI_LBOXLINE_CHAR);
@@ -72,11 +72,11 @@ editor_tab(const int tab)
 			mvwaddch(editw,  TABLINE+1, sum, UI_LRCORNER_CHAR);
 			for(j = 0; j < width - 3; j++)
 				mvwaddstr(editw,  TABLINE+1, sum + j + 1, " ");
-			mvwaddch(editw,  TABLINE+1, sum + width - 2, UI_LLCORNER_CHAR);
+			mvwaddch(editw,  TABLINE + 1, sum + width - 2,
+				UI_LLCORNER_CHAR);
 		}
 		sum += width;
 	}
-
 }
 
 void
