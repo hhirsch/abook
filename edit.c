@@ -17,7 +17,6 @@
 #include "gettext.h"
 #include "list.h"
 #include "edit.h"
-#include <mbswidth.h>
 #include "misc.h"
 #include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
@@ -40,7 +39,7 @@ static void
 editor_tab(const int tab)
 {
 	int i, j;
-	int sum = 2; /* current x pos */
+	int x_pos = 2; /* current x pos */
 	static char *tab_names[] = {
 		N_("CONTACT"),
 		N_("ADDRESS"),
@@ -52,30 +51,31 @@ editor_tab(const int tab)
 	mvwhline(editw, TABLINE + 1, 0, UI_HLINE_CHAR, EDITW_COLS);
 
 	for(i = 0; i < TABS; i++) {
-		int width = mbswidth(gettext(tab_names[i]), 0) + 5;
+		int width = strwidth(gettext(tab_names[i])) + 5;
 
-		if(sum + width + 1 > EDITW_COLS) {
+		if(x_pos + width + 1 > EDITW_COLS) {
 			statusline_msg(_("Tab name too wide for screen"));
 			break;
 		}
 
-		mvwaddch(editw,  TABLINE + 1, sum,  UI_TEE_CHAR);
-		mvwaddch(editw,  TABLINE + 1, sum + width - 2, UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE + 1, x_pos,  UI_TEE_CHAR);
+		mvwaddch(editw,  TABLINE + 1, x_pos + width - 2, UI_TEE_CHAR);
 
-		mvwaddch(editw,  TABLINE, sum,  UI_ULCORNER_CHAR);
-		mvwaddch(editw,  TABLINE, sum + 1,  UI_LBOXLINE_CHAR);
-		mvwaddstr(editw, TABLINE, sum + 2,  gettext(tab_names[i]));
-		mvwaddch(editw,  TABLINE, sum + width - 3, UI_RBOXLINE_CHAR);
-		mvwaddch(editw,  TABLINE, sum + width - 2, UI_URCORNER_CHAR);
+		mvwaddch(editw,  TABLINE, x_pos,  UI_ULCORNER_CHAR);
+		mvwaddch(editw,  TABLINE, x_pos + 1,  UI_LBOXLINE_CHAR);
+		mvwaddstr(editw, TABLINE, x_pos + 2,  gettext(tab_names[i]));
+		mvwaddch(editw,  TABLINE, x_pos + width - 3, UI_RBOXLINE_CHAR);
+		mvwaddch(editw,  TABLINE, x_pos + width - 2, UI_URCORNER_CHAR);
 
 		if(i == tab) {
-			mvwaddch(editw,  TABLINE+1, sum, UI_LRCORNER_CHAR);
+			mvwaddch(editw,  TABLINE + 1, x_pos, UI_LRCORNER_CHAR);
 			for(j = 0; j < width - 3; j++)
-				mvwaddstr(editw,  TABLINE+1, sum + j + 1, " ");
-			mvwaddch(editw,  TABLINE + 1, sum + width - 2,
+				mvwaddstr(editw,
+					TABLINE + 1, x_pos + j + 1, " ");
+			mvwaddch(editw,  TABLINE + 1, x_pos + width - 2,
 				UI_LLCORNER_CHAR);
 		}
-		sum += width;
+		x_pos += width;
 	}
 }
 
@@ -91,7 +91,7 @@ get_first_email(char *str, int item)
 
 	strncpy(str, database[item][EMAIL], MAX_EMAIL_LEN);
 	if( (tmp = strchr(str, ',')) )
-		*tmp=0;
+		*tmp = 0;
 	else
 		str[MAX_EMAIL_LEN-1] = 0;
 }
@@ -107,7 +107,7 @@ roll_emails(int item)
 	if( !(p = strchr(tmp, ',')) )
 		return;
 	else
-		*p=0;
+		*p = 0;
 
 	strcpy(database[item][EMAIL], p+1);
 	strcat(database[item][EMAIL], ",");
