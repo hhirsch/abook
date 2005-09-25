@@ -2,13 +2,12 @@ Summary:	Text-based addressbook program
 Name:		@PACKAGE@
 Version:	@VERSION@
 Release:	1
-Copyright:	GPL
+License:	GPL
 Group:		Utilities
 Source:		http://prdownloads.sourceforge.net/abook/%{name}-%{version}.tar.gz
 URL:		http://abook.sourceforge.net/
 BuildPreReq:	ncurses-devel readline-devel gettext
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
-
 
 %description
 Abook is a text-based addressbook program designed to
@@ -27,12 +26,14 @@ make %{_smp_mflags}
 %install
 %makeinstall
 
+%find_lang %{name}
+
 
 %clean
-[ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf -- "%{buildroot}"
+rm -rf -- "%{buildroot}"
 
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc AUTHORS BUGS COPYING ChangeLog FAQ NEWS README THANKS TODO sample.abookrc
 %{_bindir}/abook
