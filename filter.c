@@ -329,7 +329,7 @@ export_database()
 				enum_mode = ENUM_SELECTED;
 				break;
 			case 'c':
-				clear_statusline();
+				refresh_screen();
 				return 1;
 		}
 		clear_statusline();
