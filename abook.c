@@ -740,14 +740,14 @@ add_email_add_item(int quiet, char *name, char *email)
 					name,
 					email,
 					datafile,
-					*_("keybinding for yes|y"),
-					*_("keybinding for no|n"));
+					*S_("keybinding for yes|y"),
+					*S_("keybinding for no|n"));
 			c = tolower(getc(in));
-			if(c == *_("keybinding for no|n")) {
+			if(c == *S_("keybinding for no|n")) {
 				fclose(in);
 				return 0;
 			}
-		} while(c != *_("keybinding for yes|y"));
+		} while(c != *S_("keybinding for yes|y"));
 		fclose(in);
 	}
 
