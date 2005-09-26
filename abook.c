@@ -736,17 +736,18 @@ add_email_add_item(int quiet, char *name, char *email)
 		}
 
 		do {
-			/* TODO gettext: handle translated keypresses? */
-			printf(_("Add \"%s <%s>\" to %s? (y/n)\n"),
+			printf(_("Add \"%s <%s>\" to %s? (%c/%c)\n"),
 					name,
 					email,
-					datafile);
-			c = getc(in);
-			if(c == 'n' || c == 'N') {
+					datafile,
+					*_("keybinding for yes|y"),
+					*_("keybinding for no|n"));
+			c = tolower(getc(in));
+			if(c == *_("keybinding for no|n")) {
 				fclose(in);
 				return 0;
 			}
-		} while(c != 'y' && c != 'Y');
+		} while(c != *_("keybinding for yes|y"));
 		fclose(in);
 	}
 
