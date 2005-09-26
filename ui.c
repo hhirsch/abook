@@ -15,6 +15,7 @@
 #include <signal.h>
 #include <ctype.h>
 #include "abook.h"
+#include <assert.h>
 #include "ui.h"
 #include "edit.h"
 #include "database.h"
@@ -229,6 +230,80 @@ statusline_addstr(const char *str)
 	mvwaddstr(bottom, 1, 0, str);
 	refresh();
 	wrefresh(bottom);
+}
+
+/* Same as statusline_addstr(), but hilight "<str>" sequences if the terminal
+ * supports it */
+static void
+statusline_addhlstr(const char *str)
+{
+#if defined(A_BOLD) && defined(A_NORMAL)
+	const char *p = str, *start = str;
+	char *tmp;
+	int pos = 0;
+
+	while(1) {
+		if(!*p || strchr("<>", *p)) {
+			if(p - start > 0) {
+				wattrset(bottom, (*p == '>') ? A_UNDERLINE : A_NORMAL);
+				tmp = xstrndup(start, p - start);
+				mvwaddstr(bottom, 1, pos, tmp);
+				free(tmp);
+				pos += p - start;
+			}
+			if(*p) {
+				start = p + 1;
+#if 0
+				/* show tag markers */
+				wattrset(bottom, A_DIM);
+				mvwaddch(bottom, 1, pos++, *p);
+#endif
+			}
+		}
+
+		if(!*p) {
+			wattrset(bottom, A_NORMAL);
+			break;
+		}
+
+		p++;
+	}
+#else
+	mvwaddstr(bottom, 1, 0, str);
+#endif
+
+	refresh();
+	wrefresh(bottom);
+}
+
+int
+statusline_askchoice(const char *msg, const char *choices, short dflt)
+{
+	char *s;
+	int ch;
+
+	assert((dflt < 0) || (dflt > strlen(choices)));
+
+	if(dflt) {
+		s = mkstr("%s [%c]", msg, choices[dflt - 1]);
+		statusline_addhlstr(s);
+		free(s);
+	} else
+		statusline_addhlstr(msg);
+
+	while(1)
+	{
+		ch = tolower(getch());
+
+		if(ch == 7) /* ctrl+G */
+			return 0;
+
+		if(dflt && (ch == '\r')) /* default choice */
+			return dflt;
+
+		if((s = strchr(choices, ch)))
+			return (s - choices + 1);
+	}
 }
 
 char *
@@ -544,13 +619,11 @@ ui_print_database()
 	if(list_is_empty())
 		return;
 
-	statusline_addstr(_("Print All/Selected/Cancel (a/s/C)?"));
-
-	switch(tolower(getch())) {
-		case 'a':
+	switch(statusline_askchoice(_("Print <a>ll, print <s>elected, or <c>ancel?"), S_("keybindings:all/selected/cancel|asc"), 3)) {
+		case 1:
 			mode = ENUM_ALL;
 			break;
-		case 's':
+		case 2:
 			if( !selected_items() ) {
 				statusline_msg(_("No selected items"));
 				return;
@@ -558,7 +631,7 @@ ui_print_database()
 			mode = ENUM_SELECTED;
 			break;
 		default:
-			clear_statusline();
+			refresh_screen();
 			return;
 	}
 

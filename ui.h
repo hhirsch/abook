@@ -15,6 +15,7 @@ void		close_ui();
 void		headerline(const char *str);
 void            refresh_screen();
 int		statusline_msg(const char *msg);
+int 		statusline_askchoice(const char *msg, const char *choices, short dflt);
 char		*ask_filename(char *prompt);
 int		statusline_ask_boolean(char *msg, int def);
 void            clear_statusline();

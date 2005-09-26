@@ -23,6 +23,7 @@
 #include "list.h"
 #include "misc.h"
 #include "options.h"
+#include "ui.h"
 #include "xmalloc.h"
 #include <assert.h>
 
@@ -322,13 +323,14 @@ export_database()
 	mvaddstr(5+filter, 2, "->");
 
 	if(selected_items()) {
-		/* TODO gettext: handle translated keypresses? */
-		statusline_addstr(_("Export All/Selected/Cancel (A/s/c)?"));
-		switch( tolower(getch()) ) {
-			case 's':
+		switch(statusline_askchoice(_("Export <a>ll, export <s>elected, or <c>ancel?"), S_("keybindings:all/selected/cancel|asc"), 3)) {
+			case 1:
+				break;
+			case 2:
 				enum_mode = ENUM_SELECTED;
 				break;
-			case 'c':
+			case 0:
+			case 3:
 				refresh_screen();
 				return 1;
 		}

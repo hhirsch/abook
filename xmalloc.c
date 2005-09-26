@@ -149,3 +149,21 @@ xstrdup(const char *s)
 	return (char *)memcpy(new, s, len + 1);
 }
 
+char *
+xstrndup(const char *s, size_t len)
+{
+	char *new;
+	size_t n = strlen(s);
+
+	if(n > len)
+		n = len;
+
+	new = xmalloc_inc(n, 1);
+	if(new == NULL)
+		return NULL;
+
+	memcpy(new, s, n);
+	new[n] = '\0';
+
+	return new;
+}
