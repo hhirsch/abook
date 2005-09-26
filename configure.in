@@ -11,15 +11,23 @@ dnl ---------------
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION(0.14.1)
 
-localedir="$ac_default_prefix/share/locale"
+AC_DEFUN([ABOOK_EXPAND_PREFIX], [
+	$1=$2
+	$1=`(	test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+		eval echo \""[$]$1"\"	)`
+])
+
+ABOOK_EXPAND_PREFIX(abook_localedir, "$datadir/locale")
+localedir="\$(datadir)/locale"
+
 AC_ARG_WITH(localedir,
 	[  --with-localedir=PATH      Where the locale files are installed ])
 if test "x$with_localedir" != "x"; then
+	abook_localedir="$with_localedir"
 	localedir="$with_localedir"
-elif test "x${prefix}" != "xNONE"; then
-	localedir="$prefix/share/locale"
 fi
-AC_DEFINE_UNQUOTED(LOCALEDIR, "$localedir", [locale directory])
+
+AC_DEFINE_UNQUOTED(LOCALEDIR, "$abook_localedir", [locale directory])
 AC_SUBST(localedir)
 
 dnl ----------------------
