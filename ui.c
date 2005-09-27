@@ -245,7 +245,7 @@ statusline_addhlstr(const char *str)
 	while(1) {
 		if(!*p || strchr("<>", *p)) {
 			if(p - start > 0) {
-				wattrset(bottom, (*p == '>') ? A_UNDERLINE : A_NORMAL);
+				wattrset(bottom, (*p == '>') ? A_BOLD : A_NORMAL);
 				tmp = xstrndup(start, p - start);
 				mvwaddstr(bottom, 1, pos, tmp);
 				free(tmp);
@@ -253,11 +253,10 @@ statusline_addhlstr(const char *str)
 			}
 			if(*p) {
 				start = p + 1;
-#if 0
+
 				/* show tag markers */
 				wattrset(bottom, A_DIM);
 				mvwaddch(bottom, 1, pos++, *p);
-#endif
 			}
 		}
 
