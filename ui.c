@@ -237,7 +237,7 @@ statusline_addstr(const char *str)
 static void
 statusline_addhlstr(const char *str)
 {
-#if defined(A_BOLD) && defined(A_NORMAL)
+#if defined(A_BOLD) && defined(A_NORMAL) && defined(A_DIM)
 	const char *p = str, *start = str;
 	char *tmp;
 	int pos = 0;
