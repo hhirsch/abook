@@ -10189,7 +10189,15 @@ _ACEOF
 
 
 
-localedir="$ac_default_prefix/share/locale"
+
+
+
+	abook_localedir="$datadir/locale"
+	abook_localedir=`(	test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+		eval echo \""$abook_localedir"\"	)`
+
+localedir="\$(datadir)/locale"
+
 
 # Check whether --with-localedir or --without-localedir was given.
 if test "${with_localedir+set}" = set; then
@@ -10197,13 +10205,13 @@ if test "${with_localedir+set}" = set; then
 
 fi;
 if test "x$with_localedir" != "x"; then
+	abook_localedir="$with_localedir"
 	localedir="$with_localedir"
-elif test "x${prefix}" != "xNONE"; then
-	localedir="$prefix/share/locale"
 fi
 
+
 cat >>confdefs.h <<_ACEOF
-#define LOCALEDIR "$localedir"
+#define LOCALEDIR "$abook_localedir"
 _ACEOF
 
 

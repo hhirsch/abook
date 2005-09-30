@@ -320,10 +320,12 @@ export_database()
 		return 1;
 	}
 
-	mvaddstr(5+filter, 2, "->");
+	mvaddstr(5 + filter, 2, "->");
 
 	if(selected_items()) {
-		switch(statusline_askchoice(_("Export <a>ll, export <s>elected, or <c>ancel?"), S_("keybindings:all/selected/cancel|asc"), 3)) {
+		switch(statusline_askchoice(
+			_("Export <a>ll, export <s>elected, or <c>ancel?"),
+			S_("keybindings:all/selected/cancel|asc"), 3)) {
 			case 1:
 				break;
 			case 2:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-23 22:10+0200\n"
+"POT-Creation-Date: 2005-09-27 11:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,199 +16,199 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: abook.c:90
+#: abook.c:91
 #, c-format
 msgid "Cannot create directory %s\n"
 msgstr ""
 
-#: abook.c:96
+#: abook.c:97
 #, c-format
 msgid "%s is not a directory\n"
 msgstr ""
 
-#: abook.c:114
+#: abook.c:115
 #, c-format
 msgid "Memory allocation failure: %s\n"
 msgstr ""
 
-#: abook.c:125
+#: abook.c:126
 #, c-format
 msgid "Press enter to continue...\n"
 msgstr ""
 
-#: abook.c:137
+#: abook.c:138
 #, c-format
 msgid "File %s is not writeable"
 msgstr ""
 
-#: abook.c:142
+#: abook.c:143
 msgid "If you continue all changes will be lost. Do you want to continue?"
 msgstr ""
 
-#: abook.c:161
+#: abook.c:162
 msgid "Save database"
 msgstr ""
 
-#: abook.c:163
+#: abook.c:164
 msgid "Quit without saving"
 msgstr ""
 
-#: abook.c:217
+#: abook.c:218
 #, c-format
 msgid "%s is not a valid HOME directory\n"
 msgstr ""
 
-#: abook.c:248
+#: abook.c:249
 #, c-format
 msgid ""
 "Cannot combine options --mutt-query, --convert, --add-email or --add-email-"
 "quiet\n"
 msgstr ""
 
-#: abook.c:279
+#: abook.c:280
 #, c-format
 msgid "please use option --%s after --convert option\n"
 msgstr ""
 
-#: abook.c:378
+#: abook.c:379
 #, c-format
 msgid "%s: unrecognized arguments on command line\n"
 msgstr ""
 
-#: abook.c:400
+#: abook.c:401
 msgid "     -h\t--help\t\t\t\tshow usage"
 msgstr ""
 
-#: abook.c:401
+#: abook.c:402
 msgid "     -C\t--config\t<file>\t\tuse an alternative configuration file"
 msgstr ""
 
-#: abook.c:402
+#: abook.c:403
 msgid "\t--datafile\t<file>\t\tuse an alternative addressbook file"
 msgstr ""
 
-#: abook.c:403
+#: abook.c:404
 msgid "\t--mutt-query\t<string>\tmake a query for mutt"
 msgstr ""
 
-#: abook.c:404
+#: abook.c:405
 msgid ""
 "\t--add-email\t\t\tread an e-mail message from stdin and\n"
 "\t\t\t\t\tadd the sender to the addressbook"
 msgstr ""
 
-#: abook.c:408
+#: abook.c:409
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
 "\t\t\t\t\trequire to confirm adding"
 msgstr ""
 
-#: abook.c:412
+#: abook.c:413
 msgid "\t--convert\t\t\tconvert address book files"
 msgstr ""
 
-#: abook.c:413
+#: abook.c:414
 msgid "\toptions to use with --convert:"
 msgstr ""
 
-#: abook.c:414
+#: abook.c:415
 msgid "\t--informat\t<format>\tformat for input file"
 msgstr ""
 
-#: abook.c:415
+#: abook.c:416
 msgid "\t\t\t\t\t(default: abook)"
 msgstr ""
 
-#: abook.c:416
+#: abook.c:417
 msgid "\t--infile\t<file>\t\tsource file"
 msgstr ""
 
-#: abook.c:417
+#: abook.c:418
 msgid "\t\t\t\t\t(default: stdin)"
 msgstr ""
 
-#: abook.c:418
+#: abook.c:419
 msgid "\t--outformat\t<format>\tformat for output file"
 msgstr ""
 
-#: abook.c:419
+#: abook.c:420
 msgid "\t\t\t\t\t(default: text)"
 msgstr ""
 
-#: abook.c:420
+#: abook.c:421
 msgid "\t--outfile\t<file>\t\tdestination file"
 msgstr ""
 
-#: abook.c:421
+#: abook.c:422
 msgid "\t\t\t\t\t(default: stdout)"
 msgstr ""
 
-#: abook.c:422
+#: abook.c:423
 msgid "\t--formats\t\t\tlist available formats"
 msgstr ""
 
-#: abook.c:493
+#: abook.c:494
 #, c-format
 msgid "Cannot open database\n"
 msgstr ""
 
-#: abook.c:619
+#: abook.c:620
 #, c-format
 msgid "too few arguments to make conversion\n"
 msgstr ""
 
-#: abook.c:620
+#: abook.c:621
 #, c-format
 msgid "try --help\n"
 msgstr ""
 
-#: abook.c:625
+#: abook.c:626
 #, c-format
 msgid ""
 "input and output formats are the same\n"
 "exiting...\n"
 msgstr ""
 
-#: abook.c:638
+#: abook.c:639
 #, c-format
 msgid "input format %s not supported\n"
 msgstr ""
 
-#: abook.c:642
+#: abook.c:643
 #, c-format
 msgid "cannot read file %s\n"
 msgstr ""
 
-#: abook.c:651
+#: abook.c:652
 #, c-format
 msgid "output format %s not supported\n"
 msgstr ""
 
-#: abook.c:657
+#: abook.c:658
 #, c-format
 msgid "cannot write file %s\n"
 msgstr ""
 
-#: abook.c:678
+#: abook.c:679
 #, c-format
 msgid "cannot open %s\n"
 msgstr ""
 
-#: abook.c:681
+#: abook.c:682
 #, c-format
 msgid "%d item(s) added to %s\n"
 msgstr ""
 
-#: abook.c:683
+#: abook.c:684
 msgid "Valid sender address not found"
 msgstr ""
 
-#: abook.c:723
+#: abook.c:724
 #, c-format
 msgid "Address %s already in addressbook\n"
 msgstr ""
 
-#: abook.c:733
+#: abook.c:734
 #, c-format
 msgid ""
 "cannot open /dev/tty\n"
@@ -217,10 +217,18 @@ msgstr ""
 
 #: abook.c:740
 #, c-format
-msgid "Add \"%s <%s>\" to %s? (y/n)\n"
+msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr ""
 
-#: abook.c:769
+#: abook.c:744 abook.c:751 ui.c:345
+msgid "keybinding for yes|y"
+msgstr ""
+
+#: abook.c:745 abook.c:747 ui.c:343
+msgid "keybinding for no|n"
+msgstr ""
+
+#: abook.c:771
 #, c-format
 msgid "stdin is a directory or cannot stat stdin\n"
 msgstr ""
@@ -313,27 +321,27 @@ msgstr ""
 msgid "Invalid field value defined in configuration"
 msgstr ""
 
-#: edit.c:45
+#: edit.c:44
 msgid "CONTACT"
 msgstr ""
 
-#: edit.c:46
+#: edit.c:45
 msgid "ADDRESS"
 msgstr ""
 
-#: edit.c:47
+#: edit.c:46
 msgid " PHONE "
 msgstr ""
 
-#: edit.c:48
+#: edit.c:47
 msgid " OTHER "
 msgstr ""
 
-#: edit.c:49
+#: edit.c:48
 msgid "CUSTOM "
 msgstr ""
 
-#: edit.c:58
+#: edit.c:57
 msgid "Tab name too wide for screen"
 msgstr ""
 
@@ -345,99 +353,103 @@ msgstr ""
 msgid "?:help c:contact a:address p:phone o:other"
 msgstr ""
 
-#: filter.c:69 filter.c:80
+#: filter.c:70 filter.c:81
 msgid "abook native format"
 msgstr ""
 
-#: filter.c:70
+#: filter.c:71
 msgid "ldif / Netscape addressbook"
 msgstr ""
 
-#: filter.c:71 filter.c:82
+#: filter.c:72 filter.c:83
 msgid "mutt alias"
 msgstr ""
 
-#: filter.c:72 filter.c:84
+#: filter.c:73 filter.c:85
 msgid "pine addressbook"
 msgstr ""
 
-#: filter.c:73 filter.c:86
+#: filter.c:74 filter.c:87
 msgid "comma separated values"
 msgstr ""
 
-#: filter.c:74 filter.c:87
+#: filter.c:75 filter.c:88
 msgid "comma separated values (all fields)"
 msgstr ""
 
-#: filter.c:75 filter.c:88
+#: filter.c:76 filter.c:89
 msgid "Palm comma separated values"
 msgstr ""
 
-#: filter.c:81
+#: filter.c:82
 msgid "ldif / Netscape addressbook (.4ld)"
 msgstr ""
 
-#: filter.c:83
+#: filter.c:84
 msgid "html document"
 msgstr ""
 
-#: filter.c:85
+#: filter.c:86
 msgid "GnomeCard (VCard) addressbook"
 msgstr ""
 
-#: filter.c:89
+#: filter.c:90
 msgid "elm alias"
 msgstr ""
 
-#: filter.c:90
+#: filter.c:91
 msgid "plain text"
 msgstr ""
 
-#: filter.c:91
+#: filter.c:92
 msgid "Spruce address book"
 msgstr ""
 
-#: filter.c:104
+#: filter.c:105
 msgid "input:"
 msgstr ""
 
-#: filter.c:111
+#: filter.c:112
 msgid "output:"
 msgstr ""
 
-#: filter.c:176
+#: filter.c:177
 msgid "import database"
 msgstr ""
 
-#: filter.c:178 filter.c:295
+#: filter.c:179 filter.c:296
 msgid "please select a filter"
 msgstr ""
 
-#: filter.c:186 filter.c:303
+#: filter.c:187 filter.c:304
 msgid "x -\tcancel"
 msgstr ""
 
-#: filter.c:207 filter.c:338
+#: filter.c:208 filter.c:340
 msgid "Filename: "
 msgstr ""
 
-#: filter.c:214
+#: filter.c:215
 msgid "Error occured while opening the file"
 msgstr ""
 
-#: filter.c:216
+#: filter.c:217
 msgid "File does not seem to be a valid addressbook"
 msgstr ""
 
-#: filter.c:293
+#: filter.c:294
 msgid "export database"
 msgstr ""
 
 #: filter.c:326
-msgid "Export All/Selected/Cancel (A/s/c)?"
+msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:345
+#: filter.c:326 ui.c:622
+msgid "keybindings:all/selected/cancel|asc"
+msgstr ""
+
+#: filter.c:347
 msgid "Error occured while exporting"
 msgstr ""
 
@@ -619,72 +631,64 @@ msgstr ""
 msgid "unknown token %s\n"
 msgstr ""
 
-#: ui.c:145
+#: ui.c:146
 #, c-format
 msgid "Your terminal size is %dx%d\n"
 msgstr ""
 
-#: ui.c:146
+#: ui.c:147
 #, c-format
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr ""
 
-#: ui.c:256
+#: ui.c:334
 msgid " (Y/n)?"
 msgstr ""
 
-#: ui.c:256
+#: ui.c:334
 msgid " (y/N)?"
 msgstr ""
 
-#: ui.c:265
-msgid "keybinding for no|n"
-msgstr ""
-
-#: ui.c:267
-msgid "keybinding for yes|y"
-msgstr ""
-
-#: ui.c:334
+#: ui.c:412
 msgid "help"
 msgstr ""
 
-#: ui.c:343
+#: ui.c:421
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ui.c:464
+#: ui.c:542
 msgid "Remove selected item(s)"
 msgstr ""
 
-#: ui.c:474
+#: ui.c:552
 msgid "Clear WHOLE database"
 msgstr ""
 
-#: ui.c:502
+#: ui.c:580
 msgid "Search hit bottom, continuing at top"
 msgstr ""
 
-#: ui.c:525
+#: ui.c:603
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr ""
 
-#: ui.c:544
-msgid "Print All/Selected/Cancel (a/s/C)?"
+#: ui.c:622
+msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:552
+#: ui.c:628
 msgid "No selected items"
 msgstr ""
 
-#: ui.c:578
+#: ui.c:654
 msgid "File to open: "
 msgstr ""
 
-#: ui.c:588
+#: ui.c:664
 msgid "Save current database"
 msgstr ""
 
-#: ui.c:596
+#: ui.c:672
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
