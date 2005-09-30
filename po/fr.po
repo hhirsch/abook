@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-27 11:31+0300\n"
+"POT-Creation-Date: 2005-09-30 19:27+0300\n"
 "PO-Revision-Date: 2005-09-14 22:48+0200\n"
 "Last-Translator: YOUR NAME <E-MAIL@ADDRESS>\n"
 "Language-Team: french\n"
@@ -234,11 +234,11 @@ msgstr ""
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr ""
 
-#: abook.c:744 abook.c:751 ui.c:345
+#: abook.c:744 abook.c:751 ui.c:344
 msgid "keybinding for yes|y"
 msgstr ""
 
-#: abook.c:745 abook.c:747 ui.c:343
+#: abook.c:745 abook.c:747 ui.c:342
 msgid "keybinding for no|n"
 msgstr ""
 
@@ -441,7 +441,7 @@ msgstr "veuiller choisir un filtre"
 msgid "x -\tcancel"
 msgstr "x - \tannuler"
 
-#: filter.c:208 filter.c:340
+#: filter.c:208 filter.c:342
 msgid "Filename: "
 msgstr "Nom de fichier: "
 
@@ -460,15 +460,15 @@ msgstr ""
 msgid "export database"
 msgstr "exporter la base de donnée"
 
-#: filter.c:326
+#: filter.c:327
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:326 ui.c:622
+#: filter.c:328 ui.c:621
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:347
+#: filter.c:349
 msgid "Error occured while exporting"
 msgstr "Une erreur est survenue lors de l'exportation"
 
@@ -668,55 +668,55 @@ msgstr "La taille de votre terminal est de %dx%d\n"
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr "Terminal trop petit. Taille minimale de terminal pour abook: %dx%d\n"
 
-#: ui.c:334
+#: ui.c:333
 msgid " (Y/n)?"
 msgstr ""
 
-#: ui.c:334
+#: ui.c:333
 msgid " (y/N)?"
 msgstr ""
 
-#: ui.c:412
+#: ui.c:411
 msgid "help"
 msgstr "aide"
 
-#: ui.c:421
+#: ui.c:420
 msgid "Press any key to continue..."
 msgstr "Pressez n'importe quelle touche pour continuer..."
 
-#: ui.c:542
+#: ui.c:541
 msgid "Remove selected item(s)"
 msgstr "supprimer les entrées sélectionnées"
 
-#: ui.c:552
+#: ui.c:551
 msgid "Clear WHOLE database"
 msgstr "effacer entièrement la base de données"
 
-#: ui.c:580
+#: ui.c:579
 msgid "Search hit bottom, continuing at top"
 msgstr "La recherche a atteint la fin, poursuite au début"
 
-#: ui.c:603
+#: ui.c:602
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr "Vos donnée actuelles seront perdues - Pressez 'y' pour continuer"
 
-#: ui.c:622
+#: ui.c:621
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:628
+#: ui.c:627
 msgid "No selected items"
 msgstr "Pas d'entrée sélectionnée"
 
-#: ui.c:654
+#: ui.c:653
 msgid "File to open: "
 msgstr "Fichier à ouvrir: "
 
-#: ui.c:664
+#: ui.c:663
 msgid "Save current database"
 msgstr "Sauvegarder la base de donnée"
 
-#: ui.c:672
+#: ui.c:671
 #, fuzzy
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""

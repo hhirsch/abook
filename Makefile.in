@@ -231,7 +231,7 @@ abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		xmalloc.h
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
-		abook.spec contrib doc
+		abook.spec contrib doc/HOWTO.translating_abook
 
 SUBDIRS = intl po
 ACLOCAL_AMFLAGS = -I m4
@@ -482,7 +482,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/intl $(distdir)/m4 $(distdir)/po
+	$(mkdir_p) $(distdir)/. $(distdir)/doc $(distdir)/intl $(distdir)/m4 $(distdir)/po
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

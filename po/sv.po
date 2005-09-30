@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-27 11:31+0300\n"
+"POT-Creation-Date: 2005-09-30 19:27+0300\n"
 "PO-Revision-Date: 2005-09-23 22:13+0200\n"
 "Last-Translator: Susanna Björverud <susanna.bjorverud@telia.com>\n"
 "Language-Team: none\n"
@@ -231,11 +231,11 @@ msgstr ""
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr "Lägg till \"%s <%s>\" i %s? (j/n)\n"
 
-#: abook.c:744 abook.c:751 ui.c:345
+#: abook.c:744 abook.c:751 ui.c:344
 msgid "keybinding for yes|y"
 msgstr "j"
 
-#: abook.c:745 abook.c:747 ui.c:343
+#: abook.c:745 abook.c:747 ui.c:342
 msgid "keybinding for no|n"
 msgstr "n"
 
@@ -438,7 +438,7 @@ msgstr "var god och välj filter"
 msgid "x -\tcancel"
 msgstr "x -\tavbryt"
 
-#: filter.c:208 filter.c:340
+#: filter.c:208 filter.c:342
 msgid "Filename: "
 msgstr "Filnamn:"
 
@@ -454,15 +454,15 @@ msgstr "Den angivna filen verkar inte vara en giltig adressbok"
 msgid "export database"
 msgstr "exportera databasen"
 
-#: filter.c:326
+#: filter.c:327
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:326 ui.c:622
+#: filter.c:328 ui.c:621
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:347
+#: filter.c:349
 msgid "Error occured while exporting"
 msgstr "Fel vid export"
 
@@ -656,55 +656,55 @@ msgstr ""
 "Terminalfönstret är alltför litet. Den minsta tillåtna storleken för abook "
 "är %dx%d\n"
 
-#: ui.c:334
+#: ui.c:333
 msgid " (Y/n)?"
 msgstr "(J/n)"
 
-#: ui.c:334
+#: ui.c:333
 msgid " (y/N)?"
 msgstr "(j/N)"
 
-#: ui.c:412
+#: ui.c:411
 msgid "help"
 msgstr "hjälp"
 
-#: ui.c:421
+#: ui.c:420
 msgid "Press any key to continue..."
 msgstr "Tryck på en tangent för att fortsätta..."
 
-#: ui.c:542
+#: ui.c:541
 msgid "Remove selected item(s)"
 msgstr "Ta bort valda post(er)"
 
-#: ui.c:552
+#: ui.c:551
 msgid "Clear WHOLE database"
 msgstr "Nollställ HELA databasen"
 
-#: ui.c:580
+#: ui.c:579
 msgid "Search hit bottom, continuing at top"
 msgstr "Sök nådde slutet, fortsätter från början"
 
-#: ui.c:603
+#: ui.c:602
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr "Nuvarande data kommer att förloras - Tryck på 'y' för att fortsätta"
 
-#: ui.c:622
+#: ui.c:621
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:628
+#: ui.c:627
 msgid "No selected items"
 msgstr "Inga poster valda"
 
-#: ui.c:654
+#: ui.c:653
 msgid "File to open: "
 msgstr "Öppna fil: "
 
-#: ui.c:664
+#: ui.c:663
 msgid "Save current database"
 msgstr "Spara denna databas"
 
-#: ui.c:672
+#: ui.c:671
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"

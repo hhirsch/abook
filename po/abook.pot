@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-27 11:31+0300\n"
+"POT-Creation-Date: 2005-09-30 19:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,11 +220,11 @@ msgstr ""
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr ""
 
-#: abook.c:744 abook.c:751 ui.c:345
+#: abook.c:744 abook.c:751 ui.c:344
 msgid "keybinding for yes|y"
 msgstr ""
 
-#: abook.c:745 abook.c:747 ui.c:343
+#: abook.c:745 abook.c:747 ui.c:342
 msgid "keybinding for no|n"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgstr ""
 msgid "x -\tcancel"
 msgstr ""
 
-#: filter.c:208 filter.c:340
+#: filter.c:208 filter.c:342
 msgid "Filename: "
 msgstr ""
 
@@ -441,15 +441,15 @@ msgstr ""
 msgid "export database"
 msgstr ""
 
-#: filter.c:326
+#: filter.c:327
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:326 ui.c:622
+#: filter.c:328 ui.c:621
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:347
+#: filter.c:349
 msgid "Error occured while exporting"
 msgstr ""
 
@@ -641,54 +641,54 @@ msgstr ""
 msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
 msgstr ""
 
-#: ui.c:334
+#: ui.c:333
 msgid " (Y/n)?"
 msgstr ""
 
-#: ui.c:334
+#: ui.c:333
 msgid " (y/N)?"
 msgstr ""
 
-#: ui.c:412
+#: ui.c:411
 msgid "help"
 msgstr ""
 
-#: ui.c:421
+#: ui.c:420
 msgid "Press any key to continue..."
 msgstr ""
 
-#: ui.c:542
+#: ui.c:541
 msgid "Remove selected item(s)"
 msgstr ""
 
-#: ui.c:552
+#: ui.c:551
 msgid "Clear WHOLE database"
 msgstr ""
 
-#: ui.c:580
+#: ui.c:579
 msgid "Search hit bottom, continuing at top"
 msgstr ""
 
-#: ui.c:603
+#: ui.c:602
 msgid "Your current data will be lost - Press 'y' to continue"
 msgstr ""
 
-#: ui.c:622
+#: ui.c:621
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:628
+#: ui.c:627
 msgid "No selected items"
 msgstr ""
 
-#: ui.c:654
+#: ui.c:653
 msgid "File to open: "
 msgstr ""
 
-#: ui.c:664
+#: ui.c:663
 msgid "Save current database"
 msgstr ""
 
-#: ui.c:672
+#: ui.c:671
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""

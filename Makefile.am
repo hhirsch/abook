@@ -11,7 +11,7 @@ abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 		xmalloc.h
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
-		abook.spec contrib doc
+		abook.spec contrib doc/HOWTO.translating_abook
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5
