@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-30 19:27+0300\n"
+"POT-Creation-Date: 2005-10-03 00:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,7 +220,7 @@ msgstr ""
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr ""
 
-#: abook.c:744 abook.c:751 ui.c:344
+#: abook.c:744 abook.c:751 ui.c:344 ui.c:606
 msgid "keybinding for yes|y"
 msgstr ""
 
@@ -445,7 +445,7 @@ msgstr ""
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:328 ui.c:621
+#: filter.c:328 ui.c:629
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
@@ -669,26 +669,27 @@ msgstr ""
 msgid "Search hit bottom, continuing at top"
 msgstr ""
 
-#: ui.c:602
-msgid "Your current data will be lost - Press 'y' to continue"
+#: ui.c:604
+#, c-format
+msgid "Your current data will be lost - Press '%c' to continue"
 msgstr ""
 
-#: ui.c:621
+#: ui.c:629
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:627
+#: ui.c:635
 msgid "No selected items"
 msgstr ""
 
-#: ui.c:653
+#: ui.c:661
 msgid "File to open: "
 msgstr ""
 
-#: ui.c:663
+#: ui.c:671
 msgid "Save current database"
 msgstr ""
 
-#: ui.c:671
+#: ui.c:679
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""

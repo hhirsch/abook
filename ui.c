@@ -598,10 +598,18 @@ ui_print_number_of_items()
 void
 ui_read_database()
 {
-	if(items > 0)
-		if(!statusline_ask_boolean(_("Your current data will be lost - "
-				"Press 'y' to continue"), FALSE))
+	char *msg;
+
+	if(items > 0) {
+		msg = mkstr(_("Your current data will be lost - "
+				"Press '%c' to continue"),
+				*(S_("keybinding for yes|y")));
+		if(!statusline_ask_boolean(msg, FALSE)) {
+			free(msg);
 			return;
+		}
+		free(msg);
+	}
 
 	load_database(datafile);
 	refresh_list();
