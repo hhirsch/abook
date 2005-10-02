@@ -144,8 +144,8 @@ init_ui()
 	if( LINES < MIN_LINES || COLS < MIN_COLS ) {
 		clear(); refresh(); endwin();
 		fprintf(stderr, _("Your terminal size is %dx%d\n"), COLS, LINES);
-		fprintf(stderr, _("Terminal is too small. Minium terminal size "
-				"for abook is "
+		fprintf(stderr, _("Terminal is too small. Minimum terminal "
+				"size for abook is "
 				"%dx%d\n"), MIN_COLS, MIN_LINES);
 		return 1;
 	}

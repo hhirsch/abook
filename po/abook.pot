@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-10-03 00:06+0200\n"
+"POT-Creation-Date: 2005-10-03 00:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -638,7 +638,7 @@ msgstr ""
 
 #: ui.c:147
 #, c-format
-msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
+msgid "Terminal is too small. Minimum terminal size for abook is %dx%d\n"
 msgstr ""
 
 #: ui.c:333
