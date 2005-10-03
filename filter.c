@@ -1818,7 +1818,6 @@ spruce_export_database (FILE *out, struct db_enumerator e)
 
 /*
  * wanderlust addressbook export filter
- *
  */
 
 static int
@@ -1826,7 +1825,7 @@ wl_export_database(FILE *out, struct db_enumerator e)
 {
 	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
 
-	fprintf (out, "# Wanderlust address book written by 'abook'\n\n");
+	fprintf (out, "# Wanderlust address book written by %s\n\n", PACKAGE);
 	db_enumerate_items(e) {
 		split_emailstr(e.item, emails);
 		if (**emails) {
