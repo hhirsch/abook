@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
 "POT-Creation-Date: 2005-10-03 10:25+0200\n"
-"PO-Revision-Date: 2005-10-03 10:45+0200\n"
+"PO-Revision-Date: 2005-10-03 10:53+0200\n"
 "Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
@@ -698,7 +698,7 @@ msgstr "Vos données actuelles seront perdues - Appuyez sur '%c' pour continuer"
 
 #: ui.c:629
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
-msgstr "Imprimer <t>out, imprimer les entrées <s>électionnées, ou annuler ?"
+msgstr "Imprimer <t>out, imprimer les entrées <s>électionnées, ou <a>nnuler ?"
 
 #: ui.c:635
 msgid "No selected items"
