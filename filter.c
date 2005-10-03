@@ -61,6 +61,7 @@ static int	mutt_alias_export(FILE *out, struct db_enumerator e);
 static int	elm_alias_export(FILE *out, struct db_enumerator e);
 static int	text_export_database(FILE *out, struct db_enumerator e);
 static int	spruce_export_database(FILE *out, struct db_enumerator e);
+static int	wl_export_database(FILE *out, struct db_enumerator e);
 
 /*
  * end of function declarations
@@ -89,6 +90,7 @@ struct abook_output_filter e_filters[] = {
 	{ "palmcsv", N_("Palm comma separated values"), palm_export_database},
 	{ "elm", N_("elm alias"), elm_alias_export },
 	{ "text", N_("plain text"), text_export_database },
+	{ "wl", N_("Wanderlust address book"), wl_export_database },
 	{ "spruce", N_("Spruce address book"), spruce_export_database },
 	{ "\0", NULL, NULL }
 };
@@ -1812,5 +1814,37 @@ spruce_export_database (FILE *out, struct db_enumerator e)
 
 /*
  * end of Spruce export filter
+ */
+
+/*
+ * wanderlust addressbook export filter
+ *
+ */
+
+static int
+wl_export_database(FILE *out, struct db_enumerator e)
+{
+	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
+
+	fprintf (out, "# Wanderlust address book written by 'abook'\n\n");
+	db_enumerate_items(e) {
+		split_emailstr(e.item, emails);
+		if (**emails) {
+			fprintf(out,
+				"%s\t\"%s\"\t\"%s\"\n",
+				*emails,
+				safe_str(database[e.item][NICK]),
+				safe_str(database[e.item][NAME])
+			);
+		}
+	}
+
+	fprintf (out, "\n# End of address book file.\n");
+
+	return 0;
+}
+
+/*
+ * end of wanderlust addressbook export filter
  */
 
