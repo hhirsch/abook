@@ -248,8 +248,8 @@ statusline_addhlstr(const char *str)
 				wattrset(bottom, (*p == '>') ? A_BOLD : A_NORMAL);
 				tmp = xstrndup(start, p - start);
 				mvwaddstr(bottom, 1, pos, tmp);
+				pos += strwidth(tmp);
 				free(tmp);
-				pos += p - start;
 			}
 			if(*p) {
 				start = p + 1;
