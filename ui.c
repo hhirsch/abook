@@ -284,7 +284,7 @@ statusline_askchoice(const char *msg, const char *choices, short dflt)
 	assert((dflt < 0) || (dflt > strlen(choices)));
 
 	if(dflt) {
-		s = mkstr("%s [%c]", msg, choices[dflt - 1]);
+		s = strdup_printf("%s [%c]", msg, choices[dflt - 1]);
 		statusline_addhlstr(s);
 		free(s);
 	} else
@@ -588,7 +588,7 @@ ui_find(int next)
 void
 ui_print_number_of_items()
 {
-	char *str = mkstr("     " "|%3d/%3d", selected_items(), items);
+	char *str = strdup_printf("     " "|%3d/%3d", selected_items(), items);
 
 	mvaddstr(0, COLS-strlen(str), str);
 
@@ -601,7 +601,7 @@ ui_read_database()
 	char *msg;
 
 	if(items > 0) {
-		msg = mkstr(_("Your current data will be lost - "
+		msg = strdup_printf(_("Your current data will be lost - "
 				"Press '%c' to continue"),
 				*(S_("keybinding for yes|y")));
 		if(!statusline_ask_boolean(msg, FALSE)) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-09-30 19:27+0300\n"
+"POT-Creation-Date: 2005-10-03 00:16+0200\n"
 "PO-Revision-Date: 2005-09-23 22:13+0200\n"
 "Last-Translator: Susanna Björverud <susanna.bjorverud@telia.com>\n"
 "Language-Team: none\n"
@@ -231,7 +231,7 @@ msgstr ""
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr "Lägg till \"%s <%s>\" i %s? (j/n)\n"
 
-#: abook.c:744 abook.c:751 ui.c:344
+#: abook.c:744 abook.c:751 ui.c:344 ui.c:606
 msgid "keybinding for yes|y"
 msgstr "j"
 
@@ -458,7 +458,7 @@ msgstr "exportera databasen"
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:328 ui.c:621
+#: filter.c:328 ui.c:629
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
@@ -650,8 +650,8 @@ msgid "Your terminal size is %dx%d\n"
 msgstr "Storleken på ditt terminalfönster är %dx%d\n"
 
 #: ui.c:147
-#, c-format
-msgid "Terminal is too small. Minium terminal size for abook is %dx%d\n"
+#, fuzzy, c-format
+msgid "Terminal is too small. Minimum terminal size for abook is %dx%d\n"
 msgstr ""
 "Terminalfönstret är alltför litet. Den minsta tillåtna storleken för abook "
 "är %dx%d\n"
@@ -684,27 +684,28 @@ msgstr "Nollställ HELA databasen"
 msgid "Search hit bottom, continuing at top"
 msgstr "Sök nådde slutet, fortsätter från början"
 
-#: ui.c:602
-msgid "Your current data will be lost - Press 'y' to continue"
+#: ui.c:604
+#, fuzzy, c-format
+msgid "Your current data will be lost - Press '%c' to continue"
 msgstr "Nuvarande data kommer att förloras - Tryck på 'y' för att fortsätta"
 
-#: ui.c:621
+#: ui.c:629
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:627
+#: ui.c:635
 msgid "No selected items"
 msgstr "Inga poster valda"
 
-#: ui.c:653
+#: ui.c:661
 msgid "File to open: "
 msgstr "Öppna fil: "
 
-#: ui.c:663
+#: ui.c:671
 msgid "Save current database"
 msgstr "Spara denna databas"
 
-#: ui.c:671
+#: ui.c:679
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"

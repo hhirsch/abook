@@ -80,7 +80,7 @@ strtrim(char *s)
 #endif
 
 char *
-mkstr (const char *format, ... )
+strdup_printf (const char *format, ... )
 {
 	MY_VA_LOCAL_DECL;
 	size_t size = 100;

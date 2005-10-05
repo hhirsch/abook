@@ -135,7 +135,7 @@ init_abook()
 	umask(DEFAULT_UMASK);
 
 	if(!datafile_writeable()) {
-		char *s = mkstr(_("File %s is not writeable"), datafile);
+		char *s = strdup_printf(_("File %s is not writeable"), datafile);
 		refresh_screen();
 		statusline_msg(s);
 		free(s);
@@ -503,12 +503,12 @@ make_mailstr(int item)
 {
 	char email[MAX_EMAIL_LEN];
 	char *ret;
-	char *name = mkstr("\"%s\"", database[item][NAME]);
+	char *name = strdup_printf("\"%s\"", database[item][NAME]);
 
 	get_first_email(email, item);
 
 	ret = *database[item][EMAIL] ?
-		mkstr("%s <%s>", name, email) :
+		strdup_printf("%s <%s>", name, email) :
 		xstrdup(name);
 
 	free(name);
@@ -578,7 +578,7 @@ launch_wwwbrowser(int item)
 		return;
 
 	if( database[item][URL] )
-		cmd = mkstr("%s '%s'",
+		cmd = strdup_printf("%s '%s'",
 				opt_get_str(STR_WWW_COMMAND),
 				safe_str(database[item][URL]));
 	else

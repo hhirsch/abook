@@ -383,7 +383,7 @@ edit_field(int tab, char c, int item)
 	if(j != n)
 		return 0;
 
-	str = mkstr("%s: ", gettext(abook_fields[i].name));
+	str = strdup_printf("%s: ", gettext(abook_fields[i].name));
 	change_field(str, &database[item][i]);
 
 	free(str);

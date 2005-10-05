@@ -6,8 +6,8 @@ char		*strupper(char *str);
 char		*strlower(char *str);
 char		*strtrim(char *);
 
-char		*mkstr (const char *format, ... );
-char		*strconcat (const char *str, ...);
+char		*strdup_printf(const char *format, ... );
+char		*strconcat(const char *str, ...);
 
 int		safe_strcmp(const char *s1, const char *s2);
 int		safe_strcoll(const char *s1, const char *s2);

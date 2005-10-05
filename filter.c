@@ -795,7 +795,7 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 		int j;
 		get_first_email(email, e.item);
 
-		tmp = mkstr("cn=%s,mail=%s", database[e.item][NAME], email);
+		tmp = strdup_printf("cn=%s,mail=%s", database[e.item][NAME], email);
 		ldif_fput_type_and_value(out, "dn", tmp);
 		free(tmp);
 
