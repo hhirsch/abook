@@ -1,0 +1,704 @@
+# abook ja.po
+# This file is distributed under the same license as the abook package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.5.5\n"
+"Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
+"POT-Creation-Date: 2005-10-17 13:34+0300\n"
+"PO-Revision-Date: 2005-10-18 18:10+0200\n"
+"Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
+"Language-Team: japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=euc-jp\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: abook.c:91
+#, c-format
+msgid "Cannot create directory %s\n"
+msgstr "ディレクトリ %s が作成できません\n"
+
+#: abook.c:97
+#, c-format
+msgid "%s is not a directory\n"
+msgstr "%s はディレクトリではありません\n"
+
+#: abook.c:115
+#, c-format
+msgid "Memory allocation failure: %s\n"
+msgstr "メモリ取得に失敗しました: %s\n"
+
+#: abook.c:126
+#, c-format
+msgid "Press enter to continue...\n"
+msgstr "続けるには Enter キーを...\n"
+
+#: abook.c:138
+#, c-format
+msgid "File %s is not writeable"
+msgstr "ファイル %s は書き込み不可能です"
+
+#: abook.c:143
+msgid "If you continue all changes will be lost. Do you want to continue?"
+msgstr "このままだと変更点がすべて消えてしまいますが、続けてもよろしいですか?"
+
+#: abook.c:162
+msgid "Save database"
+msgstr "データベースを保存"
+
+#: abook.c:164
+msgid "Quit without saving"
+msgstr "保存せずに終了"
+
+#: abook.c:218
+#, c-format
+msgid "%s is not a valid HOME directory\n"
+msgstr "%s は正しい HOME ディレクトリではありません\n"
+
+#: abook.c:249
+#, c-format
+msgid ""
+"Cannot combine options --mutt-query, --convert, --add-email or --add-email-"
+"quiet\n"
+msgstr "次のオプションを同時に複数使用することはできません: --mutt-query, --convert, --add-email, --add-email-quiet\n"
+
+#: abook.c:280
+#, c-format
+msgid "please use option --%s after --convert option\n"
+msgstr "--%s オプションは --convert オプションの後に指定してください\n"
+
+#: abook.c:379
+#, c-format
+msgid "%s: unrecognized arguments on command line\n"
+msgstr "%s: 認識できないコマンドライン引数です\n"
+
+#: abook.c:401
+msgid "     -h\t--help\t\t\t\tshow usage"
+msgstr "     -h\t--help\t\t\t\t使用方法"
+
+#: abook.c:402
+msgid "     -C\t--config\t<file>\t\tuse an alternative configuration file"
+msgstr "     -C\t--config\t<ファイル>\t\t通常の場所以外にある設定ファイルを使う"
+
+
+#: abook.c:403
+msgid "\t--datafile\t<file>\t\tuse an alternative addressbook file"
+msgstr "\t--datafile\t<ファイル>\t\t通常の場所以外にあるアドレス帳ファイルを使う"
+
+#: abook.c:404
+msgid "\t--mutt-query\t<string>\tmake a query for mutt"
+msgstr "\t--mutt-query\t<文字列>\t問い合わせに対して mutt 用に整形出力する"
+
+
+#: abook.c:405
+msgid ""
+"\t--add-email\t\t\tread an e-mail message from stdin and\n"
+"\t\t\t\t\tadd the sender to the addressbook"
+msgstr ""
+"\t--add-email\t\t\tメールを標準入力から読み出して\n"
+"\t\t\t\t\tその差出人をアドレス帳に追加する"
+
+#: abook.c:409
+msgid ""
+"\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
+"\t\t\t\t\trequire to confirm adding"
+msgstr ""
+"\t--add-email-quiet\t\t--add-email と同じ。ただし\n"
+"\t\t\t\t\t追加する前に確認を求めない"
+
+#: abook.c:413
+msgid "\t--convert\t\t\tconvert address book files"
+msgstr "\t--convert\t\t\tアドレス帳ファイルを他形式へ変換する"
+
+#: abook.c:414
+msgid "\toptions to use with --convert:"
+msgstr "\t--convert で使うオプション:"
+
+#: abook.c:415
+msgid "\t--informat\t<format>\tformat for input file"
+msgstr "\t--informat\t<形式>\t変換元ファイルの形式"
+
+#: abook.c:416
+msgid "\t\t\t\t\t(default: abook)"
+msgstr "\t\t\t\t\t(既定値: abook)"
+
+#: abook.c:417
+msgid "\t--infile\t<file>\t\tsource file"
+msgstr "\t--infile\t<ファイル>\t\t変換元ファイル"
+
+#: abook.c:418
+msgid "\t\t\t\t\t(default: stdin)"
+msgstr "\t\t\t\t\t(既定値: 標準入力)"
+
+#: abook.c:419
+msgid "\t--outformat\t<format>\tformat for output file"
+msgstr "\t--outformat\t<形式>\t出力先ファイルの形式"
+
+#: abook.c:420
+msgid "\t\t\t\t\t(default: text)"
+msgstr "\t\t\t\t\t(既定値: text)"
+
+#: abook.c:421
+msgid "\t--outfile\t<file>\t\tdestination file"
+msgstr "\t--outfile\t<ファイル>\t\t出力先ファイル"
+
+#: abook.c:422
+msgid "\t\t\t\t\t(default: stdout)"
+msgstr "\t\t\t\t\t(既定値: 標準出力)"
+
+#: abook.c:423
+msgid "\t--formats\t\t\tlist available formats"
+msgstr "\t--formats\t\t\t利用可能な形式一覧を表示する"
+
+#: abook.c:494
+#, c-format
+msgid "Cannot open database\n"
+msgstr "データベースが開けません\n"
+
+#: abook.c:620
+#, c-format
+msgid "too few arguments to make conversion\n"
+msgstr "変換に必要なオプションが指定されていません\n"
+
+#: abook.c:621
+#, c-format
+msgid "try --help\n"
+msgstr "--help をご覧ください\n"
+
+#: abook.c:626
+#, c-format
+msgid ""
+"input and output formats are the same\n"
+"exiting...\n"
+msgstr "入力と出力の形式が同じです\n"
+"終了します\n"
+
+#: abook.c:639
+#, c-format
+msgid "input format %s not supported\n"
+msgstr "入力形式として %s はご利用いただけません\n"
+
+#: abook.c:643
+#, c-format
+msgid "cannot read file %s\n"
+msgstr "ファイル %s が読み出せません\n"
+
+#: abook.c:652
+#, c-format
+msgid "output format %s not supported\n"
+msgstr "出力形式として %s はご利用いただけません\n"
+
+#: abook.c:658
+#, c-format
+msgid "cannot write file %s\n"
+msgstr "ファイル %s に書き込めません\n"
+
+#: abook.c:679
+#, c-format
+msgid "cannot open %s\n"
+msgstr "%s が開けません\n"
+
+#: abook.c:682
+#, c-format
+msgid "%d item(s) added to %s\n"
+msgstr "%d 個の項目を %s に追加しました\n"
+
+#: abook.c:684
+msgid "Valid sender address not found"
+msgstr "認識可能な差出人アドレスがありませんでした"
+
+#: abook.c:724
+#, c-format
+msgid "Address %s already in addressbook\n"
+msgstr "アドレス %s は既にアドレス帳に入っています\n"
+
+#: abook.c:734
+#, c-format
+msgid ""
+"cannot open /dev/tty\n"
+"you may want to use --add-email-quiet\n"
+msgstr "/dev/tty が開けません\n"
+"--add-email-quiet をご利用になった方が良いかもしれません\n"
+
+#: abook.c:740
+#, c-format
+msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
+msgstr "\"%s <%s>\" を %s に追加しますか? (%c/%c)\n"
+
+#: abook.c:744 abook.c:751 ui.c:344 ui.c:606
+msgid "keybinding for yes|y"
+msgstr "y"
+
+#: abook.c:745 abook.c:747 ui.c:342
+msgid "keybinding for no|n"
+msgstr "n"
+
+#: abook.c:771
+#, c-format
+msgid "stdin is a directory or cannot stat stdin\n"
+msgstr "標準入力がディレクトリか、stat 不可能です\n"
+
+#: abook.h:16
+msgid "q:quit  ?:help  a:add  r:remove"
+msgstr "q:終了  ?:ヘルプ  a:追加  r:削除"
+
+#: database.c:57
+msgid "Name"
+msgstr "氏名"
+
+#: database.c:58
+msgid "E-mails"
+msgstr "アドレス"
+
+#: database.c:59
+msgid "Address"
+msgstr "住所"
+
+#: database.c:60
+msgid "Address2"
+msgstr "住所2"
+
+#: database.c:61
+msgid "City"
+msgstr "市町村"
+
+#: database.c:62
+msgid "State/Province"
+msgstr "都道府県"
+
+#: database.c:63
+msgid "ZIP/Postal Code"
+msgstr "郵便番号"
+
+#: database.c:64
+msgid "Country"
+msgstr "国"
+
+#: database.c:65
+msgid "Home Phone"
+msgstr "自宅電話"
+
+#: database.c:66
+msgid "Work Phone"
+msgstr "職場電話"
+
+#: database.c:67
+msgid "Fax"
+msgstr "Fax"
+
+#: database.c:68
+msgid "Mobile"
+msgstr "携帯電話"
+
+#: database.c:69
+msgid "Nickname/Alias"
+msgstr "別名・略号"
+
+#: database.c:70
+msgid "URL"
+msgstr "URL"
+
+#: database.c:71
+msgid "Notes"
+msgstr "メモ"
+
+#: database.c:72
+msgid "Custom1"
+msgstr "拡張情報1"
+
+#: database.c:73
+msgid "Custom2"
+msgstr "拡張情報2"
+
+#: database.c:74
+msgid "Custom3"
+msgstr "拡張情報3"
+
+#: database.c:75
+msgid "Custom4"
+msgstr "拡張情報4"
+
+#: database.c:76
+msgid "Custom5"
+msgstr "拡張情報5"
+
+#: database.c:406
+msgid "Invalid field value defined in configuration"
+msgstr "不正な項目名が設定されています"
+
+#: edit.c:44
+msgid "CONTACT"
+msgstr "連絡先"
+
+#: edit.c:45
+msgid "ADDRESS"
+msgstr " 住所 "
+
+#: edit.c:46
+msgid " PHONE "
+msgstr " 電話 "
+
+#: edit.c:47
+msgid " OTHER "
+msgstr "その他"
+
+#: edit.c:48
+msgid "CUSTOM "
+msgstr " 拡張 "
+
+#: edit.c:57
+msgid "Tab name too wide for screen"
+msgstr "タブ名が画面からはみ出ます"
+
+#: edit.c:219
+msgid "E-mail addresses:"
+msgstr "メールアドレス: "
+
+#: edit.h:13
+msgid "?:help c:contact a:address p:phone o:other"
+msgstr "?:ヘルプ c:連絡先 a:住所 p:電話 o:その他"
+
+#: filter.c:71 filter.c:82
+msgid "abook native format"
+msgstr "abook 独自形式"
+
+#: filter.c:72
+msgid "ldif / Netscape addressbook"
+msgstr "ldif / Netscape アドレス帳"
+
+#: filter.c:73 filter.c:84
+msgid "mutt alias"
+msgstr "mutt alias"
+
+#: filter.c:74 filter.c:86
+msgid "pine addressbook"
+msgstr "pine アドレス帳"
+
+#: filter.c:75 filter.c:88
+msgid "comma separated values"
+msgstr "コンマ区切りテキスト"
+
+#: filter.c:76 filter.c:89
+msgid "comma separated values (all fields)"
+msgstr "コンマ区切りテキスト (全項目)"
+
+#: filter.c:77 filter.c:90
+msgid "Palm comma separated values"
+msgstr "Palm 用コンマ区切りテキスト"
+
+#: filter.c:83
+msgid "ldif / Netscape addressbook (.4ld)"
+msgstr "ldif / Netscape アドレス帳 (.4ld)"
+
+#: filter.c:85
+msgid "html document"
+msgstr "HTML 文書"
+
+#: filter.c:87
+msgid "GnomeCard (VCard) addressbook"
+msgstr "GnomeCard (vCard) アドレス帳"
+
+#: filter.c:91
+msgid "elm alias"
+msgstr "elm alias"
+
+#: filter.c:92
+msgid "plain text"
+msgstr "プレーンテキスト"
+
+#: filter.c:93
+msgid "Wanderlust address book"
+msgstr "Wanderlust アドレス帳"
+
+#: filter.c:94
+msgid "Spruce address book"
+msgstr "Spruce アドレス帳"
+
+#: filter.c:107
+msgid "input:"
+msgstr "入力:"
+
+#: filter.c:114
+msgid "output:"
+msgstr "出力:"
+
+#: filter.c:179
+msgid "import database"
+msgstr "データベースの取り込み"
+
+#: filter.c:181 filter.c:298
+msgid "please select a filter"
+msgstr "形式を選んでください"
+
+#: filter.c:189 filter.c:306
+msgid "x -\tcancel"
+msgstr "x -\t中止"
+
+#: filter.c:210 filter.c:344
+msgid "Filename: "
+msgstr "ファイル名: "
+
+#: filter.c:217
+msgid "Error occured while opening the file"
+msgstr "ファイルを開く際にエラーが発生しました"
+
+#: filter.c:219
+msgid "File does not seem to be a valid addressbook"
+msgstr "ファイルが正しいアドレス帳ではないようです"
+
+#: filter.c:296
+msgid "export database"
+msgstr "データベースの出力"
+
+#: filter.c:329
+msgid "Export <a>ll, export <s>elected, or <c>ancel?"
+msgstr "出力対象  a:すべて  s:選択部分のみ  c:中止?"
+
+#: filter.c:330 ui.c:629
+msgid "keybindings:all/selected/cancel|asc"
+msgstr "asc"
+
+#: filter.c:351
+msgid "Error occured while exporting"
+msgstr "出力中にエラーが発生しました"
+
+#: help.h:11
+msgid "\t?\t\thelp\n"
+msgstr "\t?\t\tヘルプ\n"
+
+#: help.h:12
+msgid "\tq\t\tquit\n"
+msgstr "\tq\t\t終了\n"
+
+#: help.h:13
+msgid "\tQ\t\tquit without saving\n"
+msgstr "\tQ\t\t保存せずに終了\n"
+
+#: help.h:14
+msgid "\tP\t\tquit and output selected item(s) to stderr\n"
+msgstr "\tP\t\t終了して選択項目を標準エラーへ出力\n"
+
+#: help.h:15
+msgid "\t^L\t\trefresh screen\n"
+msgstr "\t^L\t\t画面再描画\n"
+
+#: help.h:17
+msgid "\tarrows / j,k\tscroll list\n"
+msgstr "\t矢印キー / j,k\t上下移動\n"
+
+#: help.h:18
+msgid "\tenter\t\tview/edit item\n"
+msgstr "\tEnter\t\t項目の表示/編集\n"
+
+#: help.h:19
+msgid "\ta\t\tadd item\n"
+msgstr "\ta\t\t項目の追加\n"
+
+#: help.h:20
+msgid "\tr / del\t\tremove selected items\n"
+msgstr "\tr / Del\t\t選択項目の削除\n"
+
+#: help.h:21
+msgid "\tD\t\tduplicate item\n"
+msgstr "\tD\t\t項目の複製\n"
+
+#: help.h:23
+msgid "\tspace\t\tselect item\n"
+msgstr "\tスペースキー\t項目の選択\n"
+
+#: help.h:24
+msgid "\t+\t\tselect all\n"
+msgstr "\t+\t\tすべて選択\n"
+
+#: help.h:25
+msgid "\t-\t\tunselect all\n"
+msgstr "\t-\t\tすべて選択解除\n"
+
+#: help.h:26
+msgid "\t*\t\tinvert selection\n"
+msgstr "\t*\t\t選択を反転\n"
+
+#: help.h:28
+msgid "\tw\t\twrite database to disk\n"
+msgstr "\tw\t\tデータベースをディスクへ書き込み\n"
+
+#: help.h:29
+msgid "\tl\t\tread database from disk\n"
+msgstr "\tl\t\tディスクからデータベースを読み出し\n"
+
+#: help.h:30
+msgid "\tC\t\tclear whole database\n"
+msgstr "\tC\t\tデータベースの全消去\n"
+
+#: help.h:31
+msgid "\ti\t\timport database\n"
+msgstr "\ti\t\tデータベースの取り込み\n"
+
+#: help.h:32
+msgid "\te\t\texport database\n"
+msgstr "\te\t\tデータベースの出力\n"
+
+#: help.h:33
+msgid "\tp\t\tprint database\n"
+msgstr "\tp\t\tデータベースの印刷\n"
+
+#: help.h:34
+msgid "\to\t\topen database\n"
+msgstr "\to\t\tデータベースを開く\n"
+
+#: help.h:36
+msgid "\ts\t\tsort database\n"
+msgstr "\ts\t\tデータベースの整列\n"
+
+#: help.h:37
+msgid "\tS\t\t\"surname sort\"\n"
+msgstr "\tS\t\t下の名前で整列\n"
+
+#: help.h:38
+msgid "\tF\t\tsort by field (defined in configuration file)\n"
+msgstr "\tF\t\t設定ファイルで指定した項目による整列\n"
+
+#: help.h:40
+msgid "\t/\t\tsearch\n"
+msgstr "\t/\t\t検索\n"
+
+#: help.h:41
+msgid "\t\\\t\tsearch next occurrence\n"
+msgstr "\t\\\t\t次を検索\n"
+
+#: help.h:43
+msgid "\tA\t\tmove current item up\n"
+msgstr "\tA\t\t項目を上に移動\n"
+
+#: help.h:44
+msgid "\tZ\t\tmove current item down\n"
+msgstr "\tZ\t\t項目を下に移動\n"
+
+#: help.h:46
+msgid "\tm\t\tsend mail with mutt\n"
+msgstr "\tm\t\tMutt でメールを送る\n"
+
+#: help.h:47
+msgid "\tu\t\tview URL with web browser\n"
+msgstr "\tu\t\tURL をブラウザで閲覧する\n"
+
+#: help.h:55
+msgid "\ta,c,p,o,C/arrows/h,l\tchange tab\n"
+msgstr "\ta,c,p,o,C/矢印/h,l\tタブの変更\n"
+
+#: help.h:57
+msgid "\t1 - 5\t\t\tedit fields\n"
+msgstr "\t1 - 5\t\t\t項目の編集\n"
+
+#: help.h:59
+msgid "\tk or <\t\t\tprevious item\n"
+msgstr "\tk,<\t\t\t前の項目\n"
+
+#: help.h:60
+msgid "\tj or >\t\t\tnext item\n"
+msgstr "\tj,>\t\t\t次の項目\n"
+
+#: help.h:62
+msgid "\tr\t\t\troll e-mail addresses\n"
+msgstr "\tr\t\t\tメールアドレスの順番を変える\n"
+
+#: help.h:64
+msgid "\tu\t\t\tundo\n"
+msgstr "\tu\t\t\tアンドゥ (一つ前の状態に戻す)\n"
+
+#: help.h:66
+msgid "\tm\t\t\tsend mail with mutt\n"
+msgstr "\tm\t\t\tMutt でメールを送る\n"
+
+#: help.h:67
+msgid "\tv\t\t\tview url with web browser\n"
+msgstr "\tv\t\t\tURL をブラウザで閲覧\n"
+
+#: options.c:240 options.c:259
+msgid "invalid value"
+msgstr "不正な値です"
+
+#: options.c:278
+msgid "invalid value assignment"
+msgstr "不正な代入です"
+
+#: options.c:286
+msgid "unknown option"
+msgstr "不明なオプションです"
+
+#: options.c:311
+msgid "invalid custom field number"
+msgstr "不正な拡張項目番号です"
+
+#: options.c:358
+#, c-format
+msgid "%s: parse error at line %d: "
+msgstr "%s: 文法エラーが %d 行目にあります: "
+
+#: options.c:362
+#, c-format
+msgid "unknown token %s\n"
+msgstr "%s は不明な設定コマンドです\n"
+
+#: ui.c:146
+#, c-format
+msgid "Your terminal size is %dx%d\n"
+msgstr "画面サイズは %dx%d です\n"
+
+#: ui.c:147
+#, c-format
+msgid "Terminal is too small. Minimum terminal size for abook is %dx%d\n"
+msgstr "画面が小さすぎます。少なくとも %dx%d は必要です\n"
+
+#: ui.c:333
+msgid " (Y/n)?"
+msgstr " (Y/n)?"
+
+#: ui.c:333
+msgid " (y/N)?"
+msgstr " (y/N)?"
+
+#: ui.c:411
+msgid "help"
+msgstr "ヘルプ"
+
+#: ui.c:420
+msgid "Press any key to continue..."
+msgstr "何かキーを押してください..."
+
+#: ui.c:541
+msgid "Remove selected item(s)"
+msgstr "選択項目を削除しますか"
+
+#: ui.c:551
+msgid "Clear WHOLE database"
+msgstr "データベース全体を消去しますか"
+
+#: ui.c:579
+msgid "Search hit bottom, continuing at top"
+msgstr "最後まで検索しました。最初からも検索しています"
+
+#: ui.c:604
+#, c-format
+msgid "Your current data will be lost - Press '%c' to continue"
+msgstr "現在のデータは消えてしまいます。よろしければ '%c' で続けてください"
+
+#: ui.c:629
+msgid "Print <a>ll, print <s>elected, or <c>ancel?"
+msgstr "印刷対象  a:すべて  s:選択項目のみ  c:中止?"
+
+#: ui.c:635
+msgid "No selected items"
+msgstr "何も選択されていません"
+
+#: ui.c:661
+msgid "File to open: "
+msgstr "開くファイル: "
+
+#: ui.c:671
+msgid "Save current database"
+msgstr "現在のデータベースを保存しますか"
+
+#: ui.c:679
+msgid "Sorry, the specified file appears not to be a valid abook addressbook"
+msgstr "申し訳ありませんが、ご指定のファイルは正規の abook アドレス帳ではないようです"
