@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.5pre1\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-10-03 00:16+0200\n"
+"POT-Creation-Date: 2005-10-17 13:34+0300\n"
 "PO-Revision-Date: 2005-10-03 00:56+0200\n"
 "Last-Translator: Johannes Weißl <jargon@molb.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -371,104 +371,109 @@ msgstr "E-Mail-Adressen:"
 msgid "?:help c:contact a:address p:phone o:other"
 msgstr "?:Hilfe c:Kontakt a:Adresse p:Telefon o:Andere"
 
-#: filter.c:70 filter.c:81
+#: filter.c:71 filter.c:82
 msgid "abook native format"
 msgstr "abooks eigenes Format"
 
-#: filter.c:71
+#: filter.c:72
 msgid "ldif / Netscape addressbook"
 msgstr "ldif / Netscape Adressbuch"
 
-#: filter.c:72 filter.c:83
+#: filter.c:73 filter.c:84
 msgid "mutt alias"
 msgstr "mutt alias"
 
-#: filter.c:73 filter.c:85
+#: filter.c:74 filter.c:86
 msgid "pine addressbook"
 msgstr "pine Adressbuch"
 
-#: filter.c:74 filter.c:87
+#: filter.c:75 filter.c:88
 msgid "comma separated values"
 msgstr "komma-separierte Werte"
 
-#: filter.c:75 filter.c:88
+#: filter.c:76 filter.c:89
 msgid "comma separated values (all fields)"
 msgstr "komma-separierte Werte (alle Felder)"
 
-#: filter.c:76 filter.c:89
+#: filter.c:77 filter.c:90
 msgid "Palm comma separated values"
 msgstr "Palm komma-separierte Werte"
 
-#: filter.c:82
+#: filter.c:83
 msgid "ldif / Netscape addressbook (.4ld)"
 msgstr "ldif / Netscape Adressbuch (.4ld)"
 
-#: filter.c:84
+#: filter.c:85
 msgid "html document"
 msgstr "HTML Dokument"
 
-#: filter.c:86
+#: filter.c:87
 msgid "GnomeCard (VCard) addressbook"
 msgstr "GnomeCard (VCard) Adressbuch"
 
-#: filter.c:90
+#: filter.c:91
 msgid "elm alias"
 msgstr "elm alias"
 
-#: filter.c:91
+#: filter.c:92
 msgid "plain text"
 msgstr "Klartext"
 
-#: filter.c:92
+#: filter.c:93
+#, fuzzy
+msgid "Wanderlust address book"
+msgstr "pine Adressbuch"
+
+#: filter.c:94
 msgid "Spruce address book"
 msgstr "Spruce Adressbuch"
 
-#: filter.c:105
+#: filter.c:107
 msgid "input:"
 msgstr "Eingabe:"
 
-#: filter.c:112
+#: filter.c:114
 msgid "output:"
 msgstr "Ausgabe:"
 
-#: filter.c:177
+#: filter.c:179
 msgid "import database"
 msgstr "importiere Datenbank"
 
-#: filter.c:179 filter.c:296
+#: filter.c:181 filter.c:298
 msgid "please select a filter"
 msgstr "Bitte Filter auswählen"
 
-#: filter.c:187 filter.c:304
+#: filter.c:189 filter.c:306
 msgid "x -\tcancel"
 msgstr "x -\tabbrechen"
 
-#: filter.c:208 filter.c:342
+#: filter.c:210 filter.c:344
 msgid "Filename: "
 msgstr "Dateiname: "
 
-#: filter.c:215
+#: filter.c:217
 msgid "Error occured while opening the file"
 msgstr "Fehler beim Öffnen der Datei"
 
-#: filter.c:217
+#: filter.c:219
 msgid "File does not seem to be a valid addressbook"
 msgstr "Die Datei scheint kein gültiges Adressbuch zu sein"
 
-#: filter.c:294
+#: filter.c:296
 msgid "export database"
 msgstr "exportiere Datenbank"
 
 # instead: Exportiere alle (a), exportiere ausgewählte (s), oder abbrechen (c)?
-#: filter.c:327
+#: filter.c:329
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr "Exportiere <a>lle, exportiere au<s>gewählte, oder bri<c>h ab?"
 
-#: filter.c:328 ui.c:629
+#: filter.c:330 ui.c:629
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:349
+#: filter.c:351
 msgid "Error occured while exporting"
 msgstr "Fehler beim Exportieren aufgetreten"
 

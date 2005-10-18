@@ -14,6 +14,7 @@ void		xmalloc_set_error_handler(void (*)(int));
 void *		xmalloc(size_t);
 void *		xmalloc0(size_t);
 void *		xmalloc_inc(size_t, size_t);
+void *		xmalloc0_inc(size_t, size_t);
 void *		xrealloc(void *, size_t);
 void *		xrealloc_inc(void *, size_t, size_t);
 char *		xstrdup(const char *s);
