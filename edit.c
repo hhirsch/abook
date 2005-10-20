@@ -129,11 +129,12 @@ enum {
 	CLEAR_UNDO
 };
 
-static void
+static int
 edit_undo(int item, int mode)
 {
 	int i;
 	static list_item *backup = NULL;
+	static int backed_up_item = -1;
 
 	switch(mode) {
 		case CLEAR_UNDO:
@@ -154,17 +155,21 @@ edit_undo(int item, int mode)
 				else
 					backup[0][i] =
 						xstrdup(database[item][i]);
+			backed_up_item = item;
 			break;
 		case RESTORE_ITEM:
 			if(backup) {
-				free_list_item(database[item]);
-				itemcpy(database[item], backup[0]);
+				free_list_item(database[backed_up_item]);
+				itemcpy(database[backed_up_item], backup[0]);
 				xfree(backup);
+				return backed_up_item;
 			}
 			break;
 		default:
 			assert(0);
 	}
+
+	return item;
 }
 
 
@@ -428,7 +433,7 @@ edit_loop(int item)
 		case 'j': if(is_valid_item(item + 1)) item++; break;
 		case 'r': roll_emails(item); break;
 		case '?': display_help(HELP_EDITOR); break;
-		case 'u': edit_undo(item, RESTORE_ITEM); break;
+		case 'u': item = edit_undo(item, RESTORE_ITEM); break;
 		case 'm': launch_mutt(item); clearok(stdscr, 1); break;
 		case 'v': launch_wwwbrowser(item); clearok(stdscr, 1); break;
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
