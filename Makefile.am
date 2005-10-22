@@ -13,6 +13,8 @@ abook_SOURCES = abook.c database.c filter.c list.c misc.c \
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
 		abook.spec contrib doc/HOWTO.translating_abook
 
+abook_LDADD = @LIBINTL@
+
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5
 	$(INSTALL_DATA) $(srcdir)/abook.1 $(DESTDIR)$(mandir)/man1/
@@ -26,3 +28,7 @@ uninstall-local:
 SUBDIRS = intl po
 
 ACLOCAL_AMFLAGS = -I m4
+
+if USE_INCLUDED_INTL_H
+AM_CPPFLAGS = -Iintl
+endif

@@ -30,6 +30,8 @@ fi
 AC_DEFINE_UNQUOTED(LOCALEDIR, "$abook_localedir", [locale directory])
 AC_SUBST(localedir)
 
+AM_CONDITIONAL(USE_INCLUDED_INTL_H, test x$USE_INCLUDED_LIBINTL = xyes)
+
 dnl ----------------------
 dnl end of gettext support
 dnl ----------------------
