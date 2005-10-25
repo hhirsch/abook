@@ -1,4 +1,4 @@
-.TH ABOOKRC 5 "Jun 4, 2003"
+.TH ABOOKRC 5 "Oct 25, 2005"
 .nh
 .SH NAME
 \fB$HOME/.abook/abookrc\fP \- configuration file for abook address book program
@@ -27,11 +27,60 @@ Comments in
 .B abookrc
 are on lines beginning with '#'.
 
+.SH COMMANDS
+
+.TP
+\fBset\fP \fIoption\fP = \fIvalue\fP
+
+.TP
+\fBfield\fP \fIidentifier\fP = \fIhuman_readable_name\fP [ , \fItype\fP ]
+Defines a new custom field. \fItype\fP can be one of 'string' (default)
+, 'emails', 'list', or 'day'.
+
+.TP
+\fBview\fP \fIview name\fP = \fIfield1\fP [ , \fIfield2\fP, ... ]
+Defines a view/tab, with \fIfieldN\fP being the identifier of a field
+declared with the \fBfield\fP command, or the identifier of a standard field.
+.IP
+Standard fields:
+.br
+	name, email,
+.br
+	address, address2, city, state, zip, country,
+.br
+	phone, workphone, fax, mobile,
+.br
+	nick, url, notes, anniversary
+.IP
+Note: if you don't define any view, abook will use a default display based
+on the above standard fields.
+
+
 .SH VARIABLES
 
 .TP
 \fBautosave\fP=[true|false]
 Defines whether the addressbook is automatically saved on exit. Default is true.
+
+.TP
+\fBpreserve_fields\fP=[all|standard|none]
+Specifies how fields not declared with the \fBfield\fP command nor in a view
+should be preserved while loading an abook database.
+.RS
+.TP
+.B all
+preserve any completely unknown field.
+.TP
+.B standard
+only preserve the standard fields (see a list in the
+  description of the \fBview\fP command) and the legacy
+  'custom[1-5]' fields.
+.TP
+.B none
+discards any unknown field.
+.IP
+Default is \fIstandard\fP.
+.RE
 
 .TP
 \fBshow_all_emails\fP=[true|false]
@@ -44,7 +93,7 @@ Defines the screen column on the main list where the email address is to begin. 
 .TP
 \fBextra_column\fP=field
 Defines the field to display in the extra (third) column on the main list. Default is "phone" (Home Phone).
-.br
+.IP
 \fIfield\fP can be any of the following:
 .br
 -1			disabled
@@ -113,6 +162,21 @@ Defines if the cursor is visible in main display. Default is false.
 # sample abook configuration file
 #
 
+# Declare a few custom fields
+field pager = Pager
+field address_lines = Address, list
+field birthday = Birthday, day
+
+# Define how fields should be displayed in tabs
+view CONTACT = name, email
+view ADDRESS = address_lines, city, state, zip, country
+view PHONE = phone, workphone, pager, mobile, fax
+view OTHER = url, birthday
+
+
+# Preserve any unknown field while loading an abook database
+set preserve_fields=all
+
 # Automatically save database on exit
 set autosave=true
 
@@ -171,8 +235,9 @@ set show_cursor=false
 .SH SEE ALSO
 .BR abook (1).
 .br
-.SH AUTHOR
-This manual page was written by Alan Ford <alan@whirlnet.co.uk>.
+.SH AUTHORS
+This manual page was written by Alan Ford <alan@whirlnet.co.uk> and
+expanded by Cedric Duval <cedricduval@free.fr>.
 
 .br
 .B abook

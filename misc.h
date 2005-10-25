@@ -1,6 +1,16 @@
 #ifndef _MISC_H
 #define _MISC_H
 
+typedef struct abook_list_t {
+	char *data;
+	struct abook_list_t *next;
+} abook_list;
+
+enum rotate_dir {
+	ROTATE_LEFT,
+	ROTATE_RIGHT
+};
+
 char		*revstr(char *str);
 char		*strupper(char *str);
 char		*strlower(char *str);
@@ -20,6 +30,16 @@ int		strwidth(const char *s);
 int		bytes2width(const char *s, int width);
 
 
+void		abook_list_append(abook_list **list, char *str);
+void		abook_list_free(abook_list **list);
+char		*abook_list_to_csv(abook_list *list);
+abook_list	*csv_to_abook_list(char *str);
+void		abook_list_rotate(abook_list **list, enum rotate_dir dir);
+void		abook_list_replace(abook_list **list, int index, char *str);
+abook_list	*abook_list_get(abook_list *list, int index);
+#define	abook_list_delete(list, index) abook_list_replace(list, index, NULL)
+
+
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -34,3 +54,6 @@ int vsnprintf (char *str, size_t count, const char *fmt, va_list arg);
 #endif
 
 #endif
+
+
+

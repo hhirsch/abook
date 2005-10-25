@@ -20,8 +20,6 @@
 #include "options.h"
 #include "xmalloc.h"
 
-#define MIN_EXTRA_COLUMN	ADDRESS /* 2 */
-#define MAX_EXTRA_COLUMN	LAST_FIELD
 
 int curitem = -1;
 int first_list_item = -1;
@@ -31,29 +29,24 @@ int extra_column = -1;
 int extra_alternative = -1;
 
 extern int items;
-extern list_item *database;
-extern struct abook_field abook_fields[];
+extern abook_field_list *fields_list;
 
 static WINDOW *list = NULL;
 
-static int
+
+int
 init_extra_field(enum str_opts option)
 {
-	int i, ret = -1;
+	int ret = -1;
 	char *option_str;
 
 	option_str = opt_get_str(option);
 
 	if(option_str && *option_str) {
-		for(i = 0; i < ITEM_FIELDS; i++) {
-			if(!strcasecmp(option_str, abook_fields[i].key)) {
-				ret = i;
-				break;
-			}
-		}
-		if(ret < MIN_EXTRA_COLUMN || ret > MAX_EXTRA_COLUMN) {
+		find_field_number(option_str, &ret);
+
+		if(!strcmp(option_str, "name") || !strcmp(option_str, "email"))
 			ret = -1;
-		}
 	}
 
 	return ret;
@@ -135,41 +128,47 @@ print_list_line(int i, int line, int highlight)
 	if(selected[i])
 		mvwaddch(list, line, 0, '*' );
 
-	mvwaddnstr(list, line, NAMEPOS, database[i][NAME],
-		bytes2width(database[i][NAME], NAMELEN));
+	mvwaddnstr(list, line, NAMEPOS, db_name_get(i),
+		bytes2width(db_name_get(i), NAMELEN));
+
 	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS))
-		mvwaddnstr(list, line, EMAILPOS, database[i][EMAIL],
-				bytes2width(database[i][EMAIL], real_emaillen));
+		mvwaddnstr(list, line, EMAILPOS, db_email_get(i),
+				bytes2width(db_email_get(i), real_emaillen));
 	else {
 		get_first_email(tmp, i);
 		mvwaddnstr(list, line, EMAILPOS, tmp,
-			bytes2width(tmp, real_emaillen));
+				bytes2width(tmp, real_emaillen));
 	}
 
-	if(extra < 0 || !database[i][extra])
+	if(extra < 0 || !db_fget_byid(i, extra))
 		extra = extra_alternative;
 	if(extra >= 0)
 		mvwaddnstr(list, line, EXTRAPOS,
-			safe_str(database[i][extra]),
-			bytes2width(safe_str(database[i][extra]), EXTRALEN));
+			safe_str(db_fget_byid(i, extra)),
+			bytes2width(safe_str(db_fget_byid(i, extra)),
+			EXTRALEN));
 
 	scrollok(list, TRUE);
 	if(highlight)
 		wstandend(list);
 }
 
-
 void
 list_headerline()
 {
+	char *str = NULL;
+
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_BOLD);
 #endif
-	mvaddstr(2, NAMEPOS, gettext(abook_fields[NAME].name));
-	mvaddstr(2, EMAILPOS, gettext(abook_fields[EMAIL].name));
-	if(extra_column > 0)
-		mvaddnstr(2, EXTRAPOS, gettext(abook_fields[extra_column].name),
-				COLS-EXTRAPOS);
+
+	mvaddstr(2, NAMEPOS, find_field("name", NULL)->name);
+	mvaddstr(2, EMAILPOS, find_field("email", NULL)->name);
+	if(extra_column > 0) {
+		get_field_keyname(extra_column, NULL, &str);
+		mvaddnstr(2, EXTRAPOS, str, COLS - EXTRAPOS);
+	}
+
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_NORMAL);
 #endif
@@ -243,25 +242,31 @@ move_curitem(int direction)
         if( curitem < 0 || curitem > LAST_ITEM )
                 return;
 
-        itemcpy(tmp, database[curitem]);
+	tmp = item_create();
+	item_copy(tmp, db_item_get(curitem));
 
-        switch(direction) {
-                case MOVE_ITEM_UP:
-                        if( curitem < 1 )
-                                return;
-                        itemcpy(database[curitem], database[curitem - 1]);
-                        itemcpy(database[curitem-1], tmp);
-                        scroll_up();
-                        break;
+	switch(direction) {
+		case MOVE_ITEM_UP:
+			if( curitem < 1 )
+				goto out_move;
+			item_copy(db_item_get(curitem),
+					db_item_get(curitem - 1));
+			item_copy(db_item_get(curitem-1), tmp);
+			scroll_up();
+			break;
 
-                case MOVE_ITEM_DOWN:
-                        if( curitem >= LAST_ITEM )
-                                return;
-                        itemcpy(database[curitem], database[curitem + 1]);
-                        itemcpy(database[curitem+1], tmp);
-                        scroll_down();
-                        break;
-        }
+		case MOVE_ITEM_DOWN:
+			if( curitem >= LAST_ITEM )
+				goto out_move;
+			item_copy(db_item_get(curitem),
+					db_item_get(curitem + 1));
+			item_copy(db_item_get(curitem + 1), tmp);
+			scroll_down();
+			break;
+	}
+
+out_move:
+	item_free(&tmp);
 }
 
 void
@@ -281,7 +286,6 @@ goto_end()
 
 	refresh_list();
 }
-
 
 void
 highlight_line(WINDOW *win, int line)
@@ -349,18 +353,18 @@ list_is_empty()
 int
 duplicate_item()
 {
-	int i;
 	list_item item;
-
+	
 	if(curitem < 0)
 		return 1;
 
-	for(i = 0; i < ITEM_FIELDS; i++)
-		item[i] = database[curitem][i] ? xstrdup(database[curitem][i]) :
-			NULL;
-
-	if(add_item2database(item))
+	item = item_create();
+	item_duplicate(item, db_item_get(curitem));
+	if(add_item2database(item)) {
+		item_free(&item);
 		return 1;
+	}
+	item_free(&item);
 
 	curitem = LAST_ITEM;
 	refresh_list();

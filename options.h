@@ -8,9 +8,16 @@ typedef int bool;
 #endif
 
 /*
- * bool options
+ * token parsing options
  */
 
+#define TOKEN_ALLOC (1<<1) /* allocate memory for the token */
+#define TOKEN_EQUAL (1<<2) /* left hand value of assignment */
+#define TOKEN_COMMA (1<<3) /* comma is a separator */
+
+/*
+ * bool options
+ */
 
 enum bool_opts {
 	BOOL_AUTOSAVE,
@@ -43,6 +50,7 @@ enum str_opts {
 	STR_PRINT_COMMAND,
 	STR_WWW_COMMAND,
 	STR_ADDRESS_STYLE,
+	STR_PRESERVE_FIELDS,
 	STR_SORT_FIELD,
 	STR_MAX
 };

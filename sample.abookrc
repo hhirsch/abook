@@ -1,8 +1,74 @@
 # sample abook configuration file
 # see abookrc(5) for detailed explanation
 
+##
+##  Commands
+## ==========
+
+
+#  Setting a variable
+# --------------------
+#
+# syntax: set <option> = <value>
+# 
+# See below for the list of available variables.
+
+
+#  Defining a new custom field
+# -----------------------------
+#
+# syntax: field <identifier> = <human readable name> [ , <type> ]
+#
+# with <type> being one of 'string' (default), 'emails', 'list', or 'day'
+#
+# Example of field definitions:
+field pager = Pager
+field address_lines = Address, list
+field birthday = Birthday, day
+
+
+#  Defining a view/tab
+# ---------------------
+#
+# view <view name> = <field1> [ , <field2>, ... ]
+#
+# with <fieldN> being the identifier of a field declared with the 'field'
+# command, or the identifier of a standard field.
+#
+# Standard fields:
+#    name, email,
+#    address, address2, city, state, zip, country,
+#    phone, workphone, fax, mobile,
+#    nick, url, notes, anniversary
+#
+# Note: if you don't define any view, abook will use a default display based
+#       on the above standard fields.
+#
+# Example of views:
+view CONTACT = name, email
+view ADDRESS = address_lines, city, state, zip, country
+view PHONE = phone, workphone, pager, mobile, fax
+view OTHER = url, birthday
+
+
+
+##
+##  Variables
+## ===========
+
 # Automatically save database on exit
 set autosave=true
+
+# Specify how fields not declared with the 'field' command nor
+# in a view should be preserved while loading an abook database.
+#
+# It must be one of 'all', 'standard' (default), or 'none'.
+#   * 'all': preserve any completely unknown field.
+#   * 'standard': only preserve the standard fields (see a list in the
+#                 description of the 'view' command) and the legacy
+#                 'custom[1-5]' fields.
+#   * 'none': discards any unknown field.
+set preserve_fields=standard
 
 # Show all email addresses in list
 set show_all_emails=true
@@ -54,12 +120,4 @@ set sort_field=nick
 
 # show cursor in main display
 set show_cursor=false
-
-# custom fields
-
-#customfield 1 Name1
-#customfield 2 Name2
-#customfield 3 Name3
-#customfield 4 Name4
-#customfield 5 Name5
 

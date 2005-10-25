@@ -38,6 +38,8 @@ void		ui_open_datafile();
 
 #define UI_HLINE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
 					'-' : ACS_HLINE
+#define UI_VLINE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
+					'|' : ACS_VLINE
 #define UI_TEE_CHAR		opt_get_bool(BOOL_USE_ASCII_ONLY) ? \
 					'-' : ACS_BTEE
 #define UI_LBOXLINE_CHAR	opt_get_bool(BOOL_USE_ASCII_ONLY) ? \

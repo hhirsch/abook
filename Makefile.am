@@ -1,19 +1,21 @@
 
 bin_PROGRAMS = abook
 
-abook_SOURCES = abook.c database.c filter.c list.c misc.c \
-		options.c edit.c ldif.c ui.c getname.c \
-		getopt.c getopt1.c gettext.c abook_rl.c mbswidth.c \
-		xmalloc.c \
- 		abook.h database.h filter.h list.h misc.h help.h \
-		options.h edit.h ldif.h abook_curses.h ui.h getname.h \
-		getopt.h gettext.h abook_rl.h mbswidth.h \
-		xmalloc.h
+abook_SOURCES = abook.c abook_rl.c database.c edit.c \
+		filter.c getname.c getopt.c getopt1.c gettext.c \
+		ldif.c list.c mbswidth.c misc.c options.c \
+		ui.c views.c xmalloc.c \
+		\
+ 		abook.h abook_curses.h abook_rl.h database.h edit.h \
+		filter.h getname.h getopt.h gettext.h \
+		help.h list.h ldif.h mbswidth.h misc.h options.h \
+		ui.h views.h xmalloc.h
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
 		abook.spec contrib doc/HOWTO.translating_abook
 
 abook_LDADD = @LIBINTL@
+
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5

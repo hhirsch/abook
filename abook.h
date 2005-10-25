@@ -49,6 +49,8 @@ int		strncasecmp (const char *, const char *, size_t);
 
 #define ISSPACE(c)	isspace((unsigned char)c)
 
+#define SKIPWS(c)	while(*(c) && ISSPACE(*(c))) c++
+
 #ifndef DEBUG
 #	define NDEBUG	1
 #else

@@ -1,14 +1,13 @@
 #ifndef _DATABASE_H
 #define _DATABASE_H
 
-
-#define MAX_EMAILS		4
+#define MAX_LIST_ITEMS		9
 #define MAX_EMAIL_LEN		80
-#define MAX_EMAILSTR_LEN	(MAX_EMAILS*MAX_EMAIL_LEN + MAX_EMAILS + 1)
+#define MAX_EMAILSTR_LEN	(MAX_LIST_ITEMS * (MAX_EMAIL_LEN + 1) + 1)
 #define MAX_FIELD_LEN		81
 
 enum {
-	NAME,
+	NAME = 0, /* important */
 	EMAIL,
 	ADDRESS,
         ADDRESS2,
@@ -23,27 +22,28 @@ enum {
 	NICK,
 	URL,
 	NOTES,
-	CUSTOM1,
-	CUSTOM2,
-	CUSTOM3,
-	CUSTOM4,
-	CUSTOM5,
+	ANNIVERSARY,
 	ITEM_FIELDS /* this is the last */
 };
 
-#define LAST_FIELD		(ITEM_FIELDS - 1)
-
-#define CUSTOM_MIN		CUSTOM1
-#define CUSTOM_MAX		CUSTOM5
-
-typedef char *list_item[ITEM_FIELDS];
-
-#define	MAX_FIELDNAME_LEN	21
-
-struct abook_field {
-	char *name;
+typedef struct {
 	char *key;
-	int tab;
+	char *name;
+	int type;
+} abook_field;
+
+typedef struct abook_field_list_t {
+	abook_field *field;
+	struct abook_field_list_t *next;
+} abook_field_list;
+
+typedef char **list_item;
+
+enum {
+	FIELD_STRING = 1,
+	FIELD_EMAILS,
+	FIELD_LIST,
+	FIELD_DAY,
 };
 
 enum {
@@ -56,48 +56,88 @@ struct db_enumerator {
 	int mode; /* warning: read only */
 };
 
-int		find_field(const char *field);
-int		parse_database(FILE *in);
-int		write_database(FILE *out, struct db_enumerator e);
-int		load_database(char *filename);
-int		save_database();
-void		close_database();
-int		add_item2database(list_item item);
-void		free_list_item(list_item item);
-void		remove_selected_items();
-void		sort_surname();
-void		sort_by_field(int field);
-char		*get_surname(char *s);
-int		find_item(char *str, int start, int search_fields[]);
-int		is_selected(int item);
-int		is_valid_item(int item);
 
-int		real_db_enumerate_items(struct db_enumerator e);
-struct db_enumerator	init_db_enumerator(int mode);
-int		change_custom_field_name(const char *name, int n);
+/*
+ * Field operations
+ */
+inline int field_id(int i);
+abook_field *find_standard_field(char *key, int do_declare);
+abook_field *real_find_field(char *key, abook_field_list *list, int *nb);
+#define find_field(key, list)		real_find_field(key, list, NULL)
+#define find_field_number(key, pt_nb)	real_find_field(key, NULL, pt_nb)
+#define find_declared_field(key)	find_field(key,NULL)
+void get_field_keyname(int i, char **key, char **name);
+void add_field(abook_field_list **list, abook_field *f);
+char *declare_new_field(char *key, char *name, char *type, int accept_standard);
+void init_standard_fields();
 
-#define LAST_ITEM	(items - 1)
+/*
+ * Various database operations
+ */
+void prepare_database_internals();
+int parse_database(FILE *in);
+int load_database(char *filename);
+int write_database(FILE *out, struct db_enumerator e);
+int save_database();
+void remove_selected_items();
+void sort_surname();
+void sort_by_field(char *field);
+void close_database();
+int add_item2database(list_item item);
+char *get_surname(char *s);
+int find_item(char *str, int start, int search_fields[]);
+int is_selected(int item);
+int is_valid_item(int item);
 
-#define itemcpy(dest, src)	memmove(dest, src, sizeof(list_item))
-
-#define split_emailstr(item, emails) do {\
-	int _i,_j,_k,len; \
-	memset(&emails, 0, sizeof(emails) ); \
-	len = strlen(database[item][EMAIL]); \
-	for( _i=0,_j=0, _k=0; _i < len && _j < MAX_EMAILS; _i++ ) { \
-		if( database[item][EMAIL][_i] ==',' ) { \
-			_j++; \
-			_k = 0; \
-		} else \
-			if( _k < MAX_EMAIL_LEN -1 ) \
-				emails[_j][_k++] = database[item][EMAIL][_i]; \
-	} \
-} while(0)
-
-#define have_multiple_emails(item) \
-	strchr(database[item][EMAIL], ',')
-
+int real_db_enumerate_items(struct db_enumerator e);
+struct db_enumerator init_db_enumerator(int mode);
 #define db_enumerate_items(e) \
 	while( -1 != (e.item = real_db_enumerate_items(e)))
 
-#endif
+/*
+ * item manipulation
+ */
+list_item item_create();
+void item_empty(list_item item);
+void item_free(list_item *item);
+void item_copy(list_item dest, list_item src);
+void item_duplicate(list_item dest, list_item src);
+
+int item_fput(list_item item, int i, char *val);
+char *item_fget(list_item item, int i);
+
+/*
+ * database field read
+ */
+char *real_db_field_get(int item, int i, int std);
+#define db_fget(item, i)		real_db_field_get(item, i, 1)
+#define db_fget_byid(item, i)		real_db_field_get(item, i, 0)
+#define db_name_get(item)		db_fget(item, NAME)
+#define db_email_get(item)		db_fget(item, EMAIL)
+
+/*
+ * database field write
+ */
+int real_db_field_put(int item, int i, int std, char *val);
+#define db_fput(item, i, val) \
+			real_db_field_put(item, i, 1, val)
+#define db_fput_byid(item, i, val) \
+			real_db_field_put(item, i, 0, val)
+
+/*
+ * database item read
+ */
+list_item db_item_get(int i);
+
+
+/*
+ * Various macros
+ */
+
+#define LAST_ITEM (items - 1)
+
+#define have_multiple_emails(item) \
+	strchr(db_email_get(item), ',')
+
+#endif /* _DATABASE_H */
+

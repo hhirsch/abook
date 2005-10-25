@@ -38,7 +38,8 @@
  * external variables
  */
 
-extern int items, curitem;
+extern int curitem;
+extern int items;
 extern char *datafile;
 
 extern bool alternative_datafile;
@@ -281,7 +282,7 @@ statusline_askchoice(const char *msg, const char *choices, short dflt)
 	char *s;
 	int ch;
 
-	assert((dflt < 0) || (dflt > strlen(choices)));
+	assert((dflt >= 0) && (dflt <= strlen(choices)));
 
 	if(dflt) {
 		s = strdup_printf("%s [%c]", msg, choices[dflt - 1]);
@@ -491,9 +492,9 @@ get_commands()
 
 			case 'o': ui_open_datafile();	break;
 
-			case 's': sort_by_field(NAME);	break;
+			case 's': sort_by_field("name");break;
 			case 'S': sort_surname();	break;
-			case 'F': sort_by_field(-1);	break;
+			case 'F': sort_by_field(NULL);	break;
 
 			case '/': ui_find(0);		break;
 			case '\\': ui_find(1);		break;
@@ -583,7 +584,6 @@ ui_find(int next)
 		refresh_list();
 	}
 }
-
 
 void
 ui_print_number_of_items()

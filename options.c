@@ -17,6 +17,7 @@
 #include "abook.h"
 #include "gettext.h"
 #include "misc.h"
+#include "views.h"
 #include "xmalloc.h"
 
 #ifndef FALSE
@@ -67,6 +68,7 @@ static struct option abook_vars[] = {
 	{ "use_ascii_only", OT_BOOL, BOOL_USE_ASCII_ONLY, FALSE },
 
 	{ "add_email_prevent_duplicates", OT_BOOL, BOOL_ADD_EMAIL_PREVENT_DUPLICATES, FALSE },
+	{ "preserve_fields", OT_STR, STR_PRESERVE_FIELDS, UL "standard" },
 	{ "sort_field", OT_STR, STR_SORT_FIELD, UL "nick" },
 	{ "show_cursor", OT_BOOL, BOOL_SHOW_CURSOR, FALSE },
 
@@ -206,28 +208,78 @@ opt_line_remove_comments(char *p)
 	}
 }
 
-void
-find_token_start(buffer *b)
+/* After calling,
+ * - b->data points to the found token, or NULL is end of parsing
+ * - b->ptr  points to the begining of next token
+ *
+ * If the TOKEN_ALLOC option is used, the original string is not mangled
+ * and memory is allocated for the token.
+ */
+static char *
+get_token(buffer *b, int options)
 {
+	char quote = 0, c;
+	char *end = NULL;
+
 	assert(b);
 
-	for(; ISSPACE(*b -> ptr); b -> ptr ++);
-}
+	SKIPWS(b->ptr);
+	if(*b->ptr && strchr("\"'", *b->ptr))
+		quote = *(b->ptr++);
+	b->data = b->ptr;
 
-void
-find_token_end(buffer *b)
-{
-	assert(b);
-
-	for(find_token_start(b); *(b -> ptr); b -> ptr ++) {
-		if(ISSPACE(*(b -> ptr))) {
+	while(1) {
+		if(!(c = *b->ptr)) {
+			end = b->ptr;
 			break;
 		}
+
+		if(!quote && (
+				ISSPACE(c) ||
+				((options & TOKEN_EQUAL) && (c == '=')) ||
+				((options & TOKEN_COMMA) && (c == ',')))
+				) {
+			end = b->ptr;
+			break;
+		} else if(c == quote) {
+			quote = 0;
+			end = b->ptr++;
+			break;
+		}
+
+		b->ptr++;
 	}
+
+	if(quote)
+		return _("quote mismatch");
+
+	if(options & (TOKEN_EQUAL | TOKEN_COMMA))
+		SKIPWS(b->ptr); /* whitespaces can precede the sign */
+
+	if((options & TOKEN_EQUAL) && (*b->ptr != '='))
+		return _("no assignment character found");
+
+	if((options & TOKEN_COMMA) && *b->ptr && (*b->ptr != ','))
+		return _("error in comma separated list");
+
+	if(b->ptr == b->data) {
+		b->data = NULL;
+		return NULL; /* no error, just end of parsing */
+	}
+
+	if(options & TOKEN_ALLOC) /* freeing is the caller's responsibility */
+		b->data = xstrndup(b->data, end - b->data);
+	else
+		*end = 0;
+
+	b->ptr++; /* advance to next token */
+	SKIPWS(b->ptr);
+
+	return NULL;
 }
 
 static char *
-opt_set_set_option(char *var, char *p, struct option *opt)
+opt_set_set_option(char *p, struct option *opt)
 {
 	int len;
 
@@ -266,59 +318,139 @@ opt_set_set_option(char *var, char *p, struct option *opt)
 }
 
 static char *
-opt_parse_set(buffer *b)
+opt_set_option(char *var, char *p)
 {
 	int i;
-	char *p;
 
-	find_token_start(b);
-	if((p = strchr(b -> ptr, '=')))
-		*p++ = 0;
-	else
-		return _("invalid value assignment");
-
-	strtrim(b -> ptr);
-
-	for(i = 0;abook_vars[i].option; i++)
-		if(!strcmp(abook_vars[i].option, b -> ptr))
-			return opt_set_set_option(b -> ptr, p, &abook_vars[i]);
+	for(i = 0; abook_vars[i].option; i++)
+		if(!strcmp(abook_vars[i].option, var))
+			return opt_set_set_option(p, &abook_vars[i]);
 
 	return _("unknown option");
 }
 
-#include "database.h" /* needed for change_custom_field_name */
+static int
+check_options()
+{
+	char *str;
+	int err = 0;
+
+	str = opt_get_str(STR_PRESERVE_FIELDS);
+	if(strcasecmp(str, "all") && strcasecmp(str, "none") &&
+			strcasecmp(str, "standard")) {
+		fprintf(stderr, _("valid values for the 'preserve_fields' "
+					"option are 'all', 'standard' "
+					"(default), and 'none'\n"));
+		restore_default(&abook_vars[STR_PRESERVE_FIELDS]);
+		err++;
+	}
+	str = opt_get_str(STR_ADDRESS_STYLE);
+	if(strcasecmp(str, "eu") && strcasecmp(str, "uk") &&
+			strcasecmp(str, "us")) {
+		fprintf(stderr, _("valid values for the 'address_style' "
+					"option are 'eu' (default), 'uk', "
+					"and 'us'\n"));
+		restore_default(&abook_vars[STR_ADDRESS_STYLE]);
+		err++;
+	}
+
+	return err;
+}
+
+/*
+ * syntax: set <option> = <value>
+ */
+static char *
+opt_parse_set(buffer *b)
+{
+	char *var, *err;
+
+	if((err = get_token(b, TOKEN_EQUAL)))
+		return err;
+
+	if((var = b->data) == NULL)
+		return _("invalid value assignment");
+
+	return opt_set_option(var, b->ptr);
+}
 
 static char *
 opt_parse_customfield(buffer *b)
 {
-	char *p, num[5];
-	int n;
-	size_t len;
+	return _("customfield: obsolete command - please use the "
+			"'field' and 'view' commands instead");
+}
 
-	find_token_start(b);
-	p = b -> ptr;
-	find_token_end(b);
+#include "views.h" /* needed for add_field_to_view */
 
-	memset(num, 0, sizeof(num));
+/*
+ * syntax: view <tab name> = <field1> [ , <field2>, ... ]
+ */
+static char *
+opt_parse_view(buffer *b)
+{
+	char *err, *view;
 
-	len = (b -> ptr - p);
-	strncpy(num, p, min(sizeof(num) - 1, len));
-	n = safe_atoi(num);
+	if((err = get_token(b, TOKEN_EQUAL)))
+		return err;
 
-	find_token_start(b);
+	if((view = b->data) == NULL)
+		return _("no view name provided");
 
-	if(change_custom_field_name(b->ptr, n) == -1)
-		return _("invalid custom field number");
+	while(1) {
+		if((err = get_token(b, TOKEN_COMMA)))
+			return err;
+
+		if(b->data == NULL)
+			break;
+
+		if((err = add_field_to_view(view, b->data)))
+			return err;
+	}
 
 	return NULL;
 }
+
+#include "database.h" /* needed for declare_new_field */
+
+/*
+ * syntax: field <identifier> = <human readable name> [ , <type> ]
+ */
+static char *
+opt_parse_field(buffer *b)
+{
+	char *err, *field, *name;
+
+	if((err = get_token(b, TOKEN_EQUAL)))
+		return err;
+
+	if((field = b->data) == NULL)
+		return _("no field identifier provided");
+
+	if((err = get_token(b, TOKEN_COMMA)))
+		return err;
+
+	if((name = b->data) == NULL)
+		return _("no field name provided");
+
+	if((err = declare_new_field(field,
+					name,
+					b->ptr,
+					0 /* reject "standard" fields */)))
+		return err;
+
+	return NULL;
+}
+
 
 static struct {
 	char *token;
 	char * (*func) (buffer *line);
 } opt_parsers[] = {
 	{ "set", opt_parse_set },
-	{ "customfield", opt_parse_customfield },
+	{ "customfield", opt_parse_customfield }, /* obsolete */
+	{ "view", opt_parse_view },
+	{ "field", opt_parse_field },
 	{ NULL }
 };
 
@@ -334,12 +466,12 @@ opt_parse_line(char *line, int n, char *fn)
 
 	b.ptr = line;
 
-	find_token_start(&b);
-	b.data = b.ptr;
-	find_token_end(&b);
-	*b.ptr++ = 0;
+	if((err = get_token(&b, 0))) {
+		fprintf(stderr, "%s\n", err);
+		return FALSE;
+	}
 
-	if(!*line)
+	if(b.data == NULL)
 		return FALSE;
 
 	strtrim(b.data);
@@ -375,7 +507,6 @@ load_opts(char *filename)
 	if((in = fopen(filename, "r")) == NULL)
 		return -1;
 
-
 	for(n = 1;!feof(in); n++) {
 		line = getaline(in);
 
@@ -393,6 +524,11 @@ load_opts(char *filename)
 	}
 
 	free(line);
+
+	/* post-initialization */
+	err += check_options();
+	if(!strcasecmp(opt_get_str(STR_PRESERVE_FIELDS), "standard"))
+		init_standard_fields();
 
 	return err;
 }

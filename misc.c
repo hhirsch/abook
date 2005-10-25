@@ -19,6 +19,7 @@
 #	include "config.h"
 #endif
 #include <mbswidth.h>
+#include "abook.h"
 #include "misc.h"
 #include "xmalloc.h"
 
@@ -1076,3 +1077,189 @@ int main (void)
 #endif /* SNPRINTF_TEST */
 
 #endif /* !HAVE_SNPRINTF */
+
+
+
+
+/*
+ * List handling functions
+ */
+
+void
+abook_list_append(abook_list **list, char *str)
+{
+	abook_list *tmp;
+
+	if(!str)
+		return;
+
+	for(tmp = *list; tmp && tmp->next; tmp = tmp->next)
+		;
+
+	if(tmp) {
+		tmp->next = xmalloc(sizeof(abook_list));
+		tmp = tmp->next;
+	} else
+		tmp = *list = xmalloc(sizeof(abook_list));
+
+	tmp->data = xstrdup(str);
+	tmp->next = NULL;
+}
+
+void
+abook_list_free(abook_list **list)
+{
+	abook_list *prev = NULL, *tmp = *list;
+
+	if(!list)
+		return;
+
+	while(tmp) {
+		xfree(tmp->data);
+		prev = tmp;
+		tmp = tmp->next;
+		xfree(prev);
+	}
+
+	*list = NULL;
+}
+
+abook_list *
+csv_to_abook_list(char *str)
+{
+	char *start, *p = str, *end;
+	abook_list *list = NULL;
+
+	if(!str)
+		return NULL;
+
+	SKIPWS(p);
+	start = end = p;
+
+	while(*p) {
+		if(!strchr(", ", *p)) {
+			end = ++p;
+			continue;
+		}
+
+		if((*p == ',') && (end - start)) {
+			abook_list_append(&list, xstrndup(start, end - start));
+			p++;
+			SKIPWS(p);
+			start = end = p;
+			continue;
+		}
+
+		p++;
+	}
+	if(end - start)
+		abook_list_append(&list, xstrndup(start, end - start));
+
+	return list;
+}
+
+char *
+abook_list_to_csv(abook_list *list)
+{
+	abook_list *tmp;
+	char *res = NULL;
+
+	for(tmp = list; tmp; tmp = tmp->next) {
+		if(tmp == list)
+			res = xstrdup(tmp->data);
+		else {
+			res = xrealloc(res, strlen(res)+strlen(tmp->data)+2);
+			strcat(res, ",");
+			strcat(res, tmp->data);
+		}
+	}
+
+	return res;
+}
+
+void
+abook_list_rotate(abook_list **list, enum rotate_dir dir)
+{
+	abook_list *tmp = *list;
+
+	if(!tmp || !tmp->next)
+		return;
+
+	switch(dir) {
+		case ROTATE_LEFT:
+			for(; tmp && tmp->next; tmp = tmp->next)
+				;
+
+			tmp->next = *list;
+			tmp = *list;
+			*list = (*list)->next;
+			tmp->next = NULL;
+			break;
+		case ROTATE_RIGHT:
+			for(; tmp && tmp->next && tmp->next->next;
+					tmp = tmp->next)
+				;
+
+			tmp->next->next = *list;
+			*list = tmp->next;
+			tmp->next = NULL;
+			break;
+		default:
+			assert(0);
+	}
+}
+
+/* if str == NULL, deleting the list element */
+void
+abook_list_replace(abook_list **list, int index, char *str)
+{
+	abook_list *cur, *prev;
+	int i = 0;
+
+	cur = prev = *list;
+
+	if((index == 0) && !str) {
+		*list = cur->next;
+		free(cur->data);
+		free(cur);
+		return;
+	}
+	
+	while(1) {
+		if(!cur)
+			return;
+
+		if(i == index)
+			break;
+
+		prev = cur;
+		cur = cur->next;
+		i++;
+	}
+
+	if(str) {
+		free(cur->data);
+		cur->data = xstrdup(str);
+	} else {
+		prev->next = cur->next;
+		free(cur->data);
+		free(cur);
+	}
+}
+
+abook_list *
+abook_list_get(abook_list *list, int index)
+{
+	int i = 0;
+
+	while(1) {
+		if(!list)
+			return NULL;
+
+		if(i == index)
+			return list;
+
+		i++;
+		list = list->next;
+	}
+}

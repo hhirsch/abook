@@ -10,26 +10,15 @@ void		add_item();
 #define EDITW_TOP	2
 #define EDITW_X		3
 
-#define EDITOR_HELPLINE	N_("?:help c:contact a:address p:phone o:other")
+#define EDITOR_HELPLINE	N_("?:help q:quit editor")
 
 #define TABLINE		1
 
-#define MAX_TAB_FIELDS	7
-
 #define TAB_COLON_POS	28
+#define FIELDNAME_MAX_WIDTH	20
+#define FIELD_MAX_WIDTH	(EDITW_COLS - TAB_COLON_POS - FIELDS_START_X - 2)
+
 #define FIELDS_START_Y	4
 #define FIELDS_START_X	4
-
-enum {
-	TAB_CONTACT,
-	TAB_ADDRESS,
-	TAB_PHONE,
-	TAB_OTHER,
-	TAB_CUSTOM
-};
-
-#define MAX_TAB		TAB_CUSTOM
-
-#define TABS		(MAX_TAB+1)
 
 #endif

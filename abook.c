@@ -33,6 +33,7 @@
 #include "options.h"
 #include "getname.h"
 #include "getopt.h"
+#include "views.h"
 #include "xmalloc.h"
 
 static void             init_abook();
@@ -51,6 +52,7 @@ static char *rcfile = NULL;
 
 bool alternative_datafile = FALSE;
 bool alternative_rcfile = FALSE;
+
 
 static int
 datafile_writeable()
@@ -126,6 +128,7 @@ init_abook()
 		printf(_("Press enter to continue...\n"));
 		fgetc(stdin);
 	}
+	init_default_views();
 
 	signal(SIGTERM, quit_abook_sig);
 
@@ -189,6 +192,8 @@ main(int argc, char **argv)
 	textdomain(PACKAGE);
 
 	xmalloc_set_error_handler(xmalloc_error_handler);
+
+	prepare_database_internals();
 
 	parse_command_line(argc, argv);
 
@@ -375,7 +380,7 @@ parse_command_line(int argc, char **argv)
 		}
 	}
 
-	if (optind < argc) {
+	if(optind < argc) {
 		fprintf(stderr, _("%s: unrecognized arguments on command line\n"),
 				argv[0]);
 		exit(EXIT_FAILURE);
@@ -427,7 +432,6 @@ show_usage()
  * end of CLI
  */
 
-extern list_item *database;
 
 static void
 quit_mutt_query(int status)
@@ -441,19 +445,18 @@ quit_mutt_query(int status)
 static void
 muttq_print_item(FILE *file, int item)
 {
-	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
-	int i;
+	abook_list *emails, *e;
 
-	split_emailstr(item, emails);
+	emails = csv_to_abook_list(db_email_get(item));
 
-	for(i = 0; i < (opt_get_bool(BOOL_MUTT_RETURN_ALL_EMAILS) ?
-			MAX_EMAILS : 1) ; i++)
-		if( *emails[i] )
-			fprintf(file, "%s\t%s\t%s\n", emails[i],
-				database[item][NAME],
-				database[item][NOTES] == NULL ? " " :
-					database[item][NOTES]
+	for(e = emails; e; e = e->next) {
+		fprintf(file, "%s\t%s\t%s\n", e->data, db_name_get(item),
+				!db_fget(item, NOTES) ?" " :db_fget(item, NOTES)
 				);
+		if(!opt_get_bool(BOOL_MUTT_RETURN_ALL_EMAILS))
+			break;
+	}
+	abook_list_free(&emails);
 }
 
 static void
@@ -503,11 +506,11 @@ make_mailstr(int item)
 {
 	char email[MAX_EMAIL_LEN];
 	char *ret;
-	char *name = strdup_printf("\"%s\"", database[item][NAME]);
+	char *name = strdup_printf("\"%s\"", db_name_get(item));
 
 	get_first_email(email, item);
 
-	ret = *database[item][EMAIL] ?
+	ret = *db_email_get(item) ?
 		strdup_printf("%s <%s>", name, email) :
 		xstrdup(name);
 
@@ -577,10 +580,10 @@ launch_wwwbrowser(int item)
 	if( !is_valid_item(item) )
 		return;
 
-	if( database[item][URL] )
+	if(db_fget(item, URL))
 		cmd = strdup_printf("%s '%s'",
 				opt_get_str(STR_WWW_COMMAND),
-				safe_str(database[item][URL]));
+				safe_str(db_fget(item, URL)));
 	else
 		return;
 
@@ -632,6 +635,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
 	set_filenames();
 	init_opts();
 	load_opts(rcfile);
+	init_standard_fields();
 
 	switch(import_file(srcformat, srcfile)) {
 		case -1:
@@ -752,10 +756,11 @@ add_email_add_item(int quiet, char *name, char *email)
 		fclose(in);
 	}
 
-	memset(item, 0, sizeof(item));
-	item[NAME] = xstrdup(name);
-	item[EMAIL] = xstrdup(email);
+	item = item_create();
+	item_fput(item, NAME, xstrdup(name));
+	item_fput(item, EMAIL, xstrdup(email));
 	add_item2database(item);
+	item_free(&item);
 
 	return 1;
 }

@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <assert.h>
 #include "abook_curses.h"
 #include "ui.h"
@@ -18,6 +19,7 @@
 #include "list.h"
 #include "edit.h"
 #include "misc.h"
+#include "views.h"
 #include "xmalloc.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
@@ -27,34 +29,32 @@
  * some extern variables
  */
 
-extern struct abook_field abook_fields[];
 
-extern list_item *database;
 extern int curitem;
+extern int views_count;
 extern int items;
 
 WINDOW *editw;
+
 
 static void
 editor_tab(const int tab)
 {
 	int i, j;
 	int x_pos = 2; /* current x pos */
-	static char *tab_names[] = {
-		N_("CONTACT"),
-		N_("ADDRESS"),
-		N_(" PHONE "),
-		N_(" OTHER "),
-		N_("CUSTOM ")
-	};
+	char *tab_name;
 
 	mvwhline(editw, TABLINE + 1, 0, UI_HLINE_CHAR, EDITW_COLS);
 
-	for(i = 0; i < TABS; i++) {
-		int width = strwidth(gettext(tab_names[i])) + 5;
+	for(i = 0; i < views_count; i++) {
+		view_info(i, &tab_name, NULL);
+		int width = strwidth(tab_name) + 5;
 
 		if(x_pos + width + 1 > EDITW_COLS) {
 			statusline_msg(_("Tab name too wide for screen"));
+			/* Disabling this field */
+			/* TODO should be recomputed on window resize */
+			views_count--;
 			break;
 		}
 
@@ -63,7 +63,7 @@ editor_tab(const int tab)
 
 		mvwaddch(editw,  TABLINE, x_pos,  UI_ULCORNER_CHAR);
 		mvwaddch(editw,  TABLINE, x_pos + 1,  UI_LBOXLINE_CHAR);
-		mvwaddstr(editw, TABLINE, x_pos + 2,  gettext(tab_names[i]));
+		mvwaddstr(editw, TABLINE, x_pos + 2,  tab_name);
 		mvwaddch(editw,  TABLINE, x_pos + width - 3, UI_RBOXLINE_CHAR);
 		mvwaddch(editw,  TABLINE, x_pos + width - 2, UI_URCORNER_CHAR);
 
@@ -84,34 +84,30 @@ get_first_email(char *str, int item)
 {
 	char *tmp;
 
-	if(database[item][EMAIL] == NULL) {
+	if(!db_email_get(item)) {
 		*str = 0;
 		return;
 	}
 
-	strncpy(str, database[item][EMAIL], MAX_EMAIL_LEN);
+	strncpy(str, db_email_get(item), MAX_EMAIL_LEN);
 	if( (tmp = strchr(str, ',')) )
 		*tmp = 0;
 	else
-		str[MAX_EMAIL_LEN-1] = 0;
+		str[MAX_EMAIL_LEN - 1] = 0;
 }
 
 static void
-roll_emails(int item)
+roll_emails(int item, enum rotate_dir dir)
 {
-	char tmp[MAX_EMAILSTR_LEN];
-	char *p;
+	abook_list *emails = csv_to_abook_list(db_email_get(item));
 
-	strcpy(tmp, database[item][EMAIL]);
-
-	if( !(p = strchr(tmp, ',')) )
+	if(!emails)
 		return;
-	else
-		*p = 0;
 
-	strcpy(database[item][EMAIL], p+1);
-	strcat(database[item][EMAIL], ",");
-	strcat(database[item][EMAIL], tmp);
+	free(db_email_get(item));
+	abook_list_rotate(&emails, dir);
+	db_fput(item, EMAIL, abook_list_to_csv(emails));
+	abook_list_free(&emails);
 }
 
 static void
@@ -119,6 +115,7 @@ init_editor()
 {
 	clear();
 	editw = newwin(EDITW_LINES, EDITW_COLS, EDITW_TOP, EDITW_X);
+	notimeout(editw, TRUE); /* handling of escape key */
 
 	refresh_statusline();
 }
@@ -132,46 +129,38 @@ enum {
 static int
 edit_undo(int item, int mode)
 {
-	int i;
-	static list_item *backup = NULL;
+	static list_item backup = NULL;
 	static int backed_up_item = -1;
 
 	switch(mode) {
 		case CLEAR_UNDO:
 			if(backup) {
-				free_list_item(backup[0]);
-				xfree(backup);
+				item_empty(backup);
+				item_free(&backup);
 			}
 			break;
 		case BACKUP_ITEM:
 			if(backup) {
-				free_list_item(backup[0]);
-				xfree(backup);
+				item_empty(backup);
+				item_free(&backup);
 			}
-			backup = xmalloc(sizeof(list_item));
-			for(i = 0; i < ITEM_FIELDS; i++)
-				if(database[item][i] == NULL)
-					backup[0][i] = NULL;
-				else
-					backup[0][i] =
-						xstrdup(database[item][i]);
+			backup = item_create();
+			item_duplicate(backup, db_item_get(item));
 			backed_up_item = item;
 			break;
 		case RESTORE_ITEM:
 			if(backup) {
-				free_list_item(database[backed_up_item]);
-				itemcpy(database[backed_up_item], backup[0]);
-				xfree(backup);
+				item_empty(db_item_get(backed_up_item));
+				item_copy(db_item_get(backed_up_item), backup);
+				item_free(&backup);
 				return backed_up_item;
 			}
 			break;
 		default:
 			assert(0);
 	}
-
 	return item;
 }
-
 
 static void
 close_editor()
@@ -192,15 +181,14 @@ print_editor_header(int item)
 
 	get_first_email(email, item);
 
-	if(*database[item][EMAIL])
+	if(*db_email_get(item))
 		snprintf(header, EDITW_COLS, "%s <%s>",
-				database[item][NAME],
+				db_name_get(item),
 				email);
 	else
-		snprintf(header, EDITW_COLS, "%s", database[item][NAME]);
+		snprintf(header, EDITW_COLS, "%s", db_name_get(item));
 
-	mvwaddstr(editw, 0, (EDITW_COLS - strwidth(header)) / 2,
-			header);
+	mvwaddstr(editw, 0, (EDITW_COLS - strwidth(header)) / 2, header);
 
 	free(header);
 }
@@ -208,29 +196,14 @@ print_editor_header(int item)
 static void
 editor_print_data(int tab, int item)
 {
-	int i, j;
+	int j = 1, nb;
 	int y, x;
+	abook_field_list *cur;
+	char *str;
 
-	for(i = 0, j = 1; i < ITEM_FIELDS; i++) {
-		if(abook_fields[i].tab != tab)
-			continue;
+	view_info(tab, NULL, &cur);
 
-		if(i == EMAIL) { /* special field */
-			int k;
-			char emails[MAX_EMAILS][MAX_EMAIL_LEN];
-			split_emailstr(item, emails);
-			getyx(editw, y, x);
-			mvwaddstr(editw, y+1, FIELDS_START_X,
-					_("E-mail addresses:"));
-			for(k = 0; k < MAX_EMAILS; k++) {
-				getyx(editw, y, x);
-				mvwprintw(editw, y+1, FIELDS_START_X,
-				"%c -", '2' + k);
-				mvwprintw(editw, y +1, TAB_COLON_POS,
-						": %s", emails[k]);
-			}
-			continue;
-		}
+	for(; cur; cur = cur->next) {
 
 		if(j > 1) {
 			getyx(editw, y, x);
@@ -238,12 +211,43 @@ editor_print_data(int tab, int item)
 		} else
 			y = FIELDS_START_Y;
 
-		mvwprintw(editw, y, FIELDS_START_X, "%d - %s",
-				j,
-				gettext(abook_fields[i].name));
+		mvwprintw(editw, y, FIELDS_START_X, "%c - ",
+				(j < 10) ? '0' + j : 'A' + j - 10);
+		mvwaddnstr(editw, y, FIELDS_START_X + 4, cur->field->name,
+				bytes2width(cur->field->name,
+					FIELDNAME_MAX_WIDTH));
 		mvwaddch(editw, y, TAB_COLON_POS, ':');
-		mvwaddstr(editw, y, TAB_COLON_POS + 2,
-				safe_str(database[item][i]));
+
+		if((cur->field->type == FIELD_EMAILS) ||
+				(cur->field->type == FIELD_LIST)) {
+			abook_list *emails, *e;
+			
+			find_field_number(cur->field->key, &nb);
+			emails = csv_to_abook_list(db_fget_byid(item, nb));
+
+			for(e = emails; e; e = e->next) {
+				getyx(editw, y, x);
+				mvwaddnstr(editw, y + 1, TAB_COLON_POS + 2,
+						e->data,
+						bytes2width(e->data,
+							FIELD_MAX_WIDTH));
+				mvwaddch(editw, y + 1, TAB_COLON_POS,
+						UI_VLINE_CHAR);
+			}
+			if(emails) {
+				mvwaddch(editw, y + 2, TAB_COLON_POS,
+						UI_LLCORNER_CHAR);
+				mvwhline(editw, y + 2, TAB_COLON_POS + 1,
+						UI_HLINE_CHAR,
+						EDITW_COLS - TAB_COLON_POS - 2);
+			}
+			abook_list_free(&emails);
+		} else {
+			find_field_number(cur->field->key, &nb);
+			str = safe_str(db_fget_byid(item, nb));
+			mvwaddnstr(editw, y, TAB_COLON_POS + 2, str,
+				bytes2width(str, FIELD_MAX_WIDTH));
+		}
 
 		j++;
 	}
@@ -258,21 +262,18 @@ editor_print_data(int tab, int item)
  *  (char **field)
  *   a pointer to a pointer which will point a new string. if the latter
  *   pointer != NULL it will be freed (if user doesn't cancel)
+ *  (size_t max_len)
+ *   maximum length of field to read from user
  *
  * returns (int)
  *  a nonzero value if user has cancelled and zero if user has typed a
  *  valid string
  */
-
 static int
-change_field(char *msg, char **field)
+change_field(char *msg, char **field, int max_len)
 {
-	int max_len = MAX_FIELD_LEN;
 	char *old;
 	int ret = 0;
-
-	if(!strncmp("E-mail", msg, 6))
-		max_len = MAX_EMAIL_LEN;
 
 	old = *field;
 
@@ -293,13 +294,14 @@ change_field(char *msg, char **field)
 	return ret;
 }
 
-static void
-change_name_field(char **field)
+static int
+change_name_field(char *msg, char **field, int max_len)
 {
 	char *tmp;
+	int ret;
 
 	tmp = xstrdup(*field);
-	change_field("Name: ", field);
+	ret = change_field(msg, field, max_len);
 
 	if(*field == NULL || ! **field) {
 		xfree(*field);
@@ -307,6 +309,8 @@ change_name_field(char **field)
 	}
 
 	xfree(tmp);
+
+	return ret;
 }
 
 static void
@@ -317,83 +321,133 @@ fix_email_str(char *str)
 }
 
 static void
-edit_emails(char c, int item)
+edit_list(int item, int nb, int isemail)
 {
-	char *field;
-	char emails[MAX_EMAILS][MAX_EMAIL_LEN];
-	char tmp[MAX_EMAILSTR_LEN] = "";
-	int i, len;
-	int email_num = c - '2';
+	char *field, *msg, *keys;
+	abook_list *list, *e;
+	int choice = 1, elem_count;
 
-	split_emailstr(item, emails);
-	field = xstrdup(emails[email_num]);
+	list = csv_to_abook_list(db_fget_byid(item, nb));
 
-	if(change_field("E-mail: ", &field))
+	for(e = list, elem_count = 0; e; e = e->next, elem_count++)
+		;
+
+	if(elem_count) {
+		keys = xstrndup(S_("keybindings_new_123456789|n123456789"),
+				elem_count + 1);
+		msg = strdup_printf(_("Choose %s to modify (<1>%s%c%s%s."),
+				isemail ? _("email") : _("item"),
+				(elem_count > 1) ? "-<" : "",
+				(elem_count > 1) ?  '0' + elem_count : ')',
+				(elem_count > 1) ? ">)" : "",
+				(elem_count < MAX_LIST_ITEMS) ?
+					_(" or <n>ew") : ""
+				);
+		choice = statusline_askchoice(
+				msg,
+				keys,
+				(elem_count < MAX_LIST_ITEMS) ? 1 : 2
+				);
+		free(keys);
+		free(msg);
+	}
+
+	if(choice == 0)
+		return;
+
+	field = (choice > 1) ?
+		xstrdup(abook_list_get(list, choice - 2)->data) :
+		NULL;
+
+	if(change_field(isemail ? _("E-mail: ") : _("Item: "),
+				&field, MAX_EMAIL_LEN))
 		return; /* user cancelled ( C-g ) */
 
-	if(field) {
-		strncpy(emails[email_num], field, MAX_EMAIL_LEN);
-		fix_email_str(emails[email_num]);
-	} else
-		*emails[email_num] = 0;
+	/* TODO if list item contains commas, sjould use quotes instead */
+	if(field)
+		fix_email_str(field);
 
-	xfree(database[item][EMAIL]);
+	if(choice == 1)
+		abook_list_append(&list, field);
+	else
+		abook_list_replace(&list, choice - 2, field);
 
-	for(i = 0; i < MAX_EMAILS; i++) {
-		if( *emails[i] ) {
-			strcat(tmp, emails[i]);
-			strcat(tmp, ",");
-		}
-	}
+	if(field)
+		xfree(field);
 
-	len = strlen(tmp);
-	if(tmp[len -1] == ',')
-		tmp[len-1] =0;
-
-	database[item][EMAIL] = xstrdup(tmp);
+	field = abook_list_to_csv(list);
+	db_fput_byid(item, nb, field ? field : xstrdup(""));
+	abook_list_free(&list);
 }
 
+
+/* input range: 1-9A-Z
+ * output range: 0-34 */
 static int
-edit_field(int tab, char c, int item)
+key_to_field_number(char c)
 {
-	int i, j;
-	int n = c - '1' + 1;
-	char *str;
+	int n = c - '1';
+	if(n >= 0 && n < 9)
+		return n;
 
-	if(n < 1 || n > MAX_TAB_FIELDS)
-		return 0;
+	n = c - 'A' + 9;
+	if(n > 8 && n < 35)
+		return n;
 
-	edit_undo(item, BACKUP_ITEM);
+	return -1;
+}
 
-	if(tab == TAB_CONTACT) {
-		switch(c) {
-			case '1': change_name_field(&database[item][NAME]);
-				  break;
-			case '2':
-			case '3':
-			case '4':
-			case '5': edit_emails(c, item); break;
-			default: return 0;
-		}
-		return 1;
-	}
+static void
+edit_field(int tab, char c, int item_number)
+{
+	int i = 0, number, idx;
+	char *msg;
+	abook_field_list *f;
+	list_item item;
 
-	for(i = 0, j = 0; i< ITEM_FIELDS; i++) {
-		if(abook_fields[i].tab == tab)
-			j++;
-		if(j==n)
+	if((number = key_to_field_number(c)) < 0)
+		return;
+
+	edit_undo(item_number, BACKUP_ITEM);
+
+	view_info(tab, NULL, &f);
+
+	while(1) {
+		if(!f)
+			return;
+
+		if(i == number)
 			break;
+
+		f = f->next;
+		i++;
 	}
 
-	if(j != n)
-		return 0;
-
-	str = strdup_printf("%s: ", gettext(abook_fields[i].name));
-	change_field(str, &database[item][i]);
-
-	free(str);
-
-	return 1;
+	find_field_number(f->field->key, &idx);
+	
+	switch(f->field->type) {
+		case FIELD_STRING:
+			msg = strdup_printf("%s: ", f->field->name);
+			item = db_item_get(item_number);
+			if(strcmp(f->field->key, "name") == 0)
+				change_name_field(msg,&item[idx],MAX_FIELD_LEN);
+			else
+				change_field(msg,&item[idx],MAX_FIELD_LEN);
+			free(msg);
+			break;
+		case FIELD_LIST:
+			edit_list(item_number, idx, 0);
+			break;
+		case FIELD_EMAILS:
+			edit_list(item_number, idx, 1);
+			break;
+		case FIELD_DAY:
+			statusline_msg(_("sorry, input for this field type is "
+						"not yet implemented"));
+			return;
+		default:
+			assert(0);
+	}
 }
 
 static int
@@ -413,31 +467,44 @@ edit_loop(int item)
 	refresh();
 	wrefresh(editw);
 
-	switch((c = getch())) {
-		case 'c': tab = TAB_CONTACT; break;
-		case 'a': tab = TAB_ADDRESS; break;
-		case 'p': tab = TAB_PHONE; break;
-		case 'o': tab = TAB_OTHER; break;
-		case 'C': tab = TAB_CUSTOM; break;
+	c = getch();
+	if(c == '\033') {
+		statusline_addstr("ESC-");
+		c = getch();
+		clear_statusline();
+
+		/* Escaped bindings */
+		switch(c) {
+			case 'r': roll_emails(item, ROTATE_RIGHT); break;
+			default: break;
+		}
+
+		return item;
+	}
+
+	/* No uppercase nor numeric key should be used in this menu,
+	 * as they are reserved for field selection */
+	switch(c) {
 		case 'h':
-		case KEY_LEFT: tab = tab == 0 ? MAX_TAB : tab - 1;
+		case KEY_LEFT: tab = tab == 0 ? views_count - 1 : tab - 1;
 			       break;
 		case 'l':
-		case KEY_RIGHT: tab = tab == MAX_TAB ? 0 : tab + 1;
+		case KEY_RIGHT: tab = tab == views_count - 1 ? 0 : tab + 1;
 				break;
 		case KEY_UP:
 		case '<':
-		case 'k': if(is_valid_item(item-1)) item--; break;
+		case 'k': if(is_valid_item(item - 1)) item--; break;
 		case KEY_DOWN:
 		case '>':
 		case 'j': if(is_valid_item(item + 1)) item++; break;
-		case 'r': roll_emails(item); break;
+		case 'r': roll_emails(item, ROTATE_LEFT); break;
 		case '?': display_help(HELP_EDITOR); break;
 		case 'u': item = edit_undo(item, RESTORE_ITEM); break;
 		case 'm': launch_mutt(item); clearok(stdscr, 1); break;
 		case 'v': launch_wwwbrowser(item); clearok(stdscr, 1); break;
 		case 12 : clearok(stdscr, 1); break; /* ^L (refresh screen) */
-		default:  return edit_field(tab, c, item) ? item : -1;
+		case 'q': return -1;
+		default: edit_field(tab, c, item);
 	}
 
 	return item;
@@ -465,18 +532,17 @@ void
 add_item()
 {
 	char *field = NULL;
-	list_item item;
+	list_item item = item_create();
 
-	change_field("Name: ", &field);
+	change_field("Name: ", &field, MAX_FIELD_LEN);
 
 	if( field == NULL )
 		return;
 
-	memset(item, 0, sizeof(item));
-
-	item[NAME] = field;
+	item_fput(item, NAME, field);
 
 	add_item2database(item);
+	item_free(&item);
 
 	curitem = LAST_ITEM;
 

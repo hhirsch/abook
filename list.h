@@ -4,6 +4,7 @@
 #include "ui.h"
 
 void		init_list();
+int		init_extra_field(enum str_opts option);
 void		close_list();
 void            refresh_list();
 void		print_list_line(int i, int line, int highlight);
@@ -40,9 +41,9 @@ enum {
 #define EMAILPOS        opt_get_int(INT_EMAILPOS)
 #define EXTRAPOS	opt_get_int(INT_EXTRAPOS)
 
-#define NAMELEN		(EMAILPOS-NAMEPOS -1)
-#define EMAILLEN        (EXTRAPOS-EMAILPOS -1)
-#define EXTRALEN	(COLS-EXTRAPOS)
+#define NAMELEN		(EMAILPOS - NAMEPOS - 1)
+#define EMAILLEN        (EXTRAPOS - EMAILPOS - 1)
+#define EXTRALEN	(COLS - EXTRAPOS)
 
 #define LAST_LIST_ITEM	( first_list_item + LIST_LINES - 1 )
 

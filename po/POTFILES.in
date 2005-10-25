@@ -9,3 +9,4 @@ help.h
 list.c
 options.c
 ui.c
+views.c
