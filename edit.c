@@ -51,10 +51,7 @@ editor_tab(const int tab)
 		int width = strwidth(tab_name) + 5;
 
 		if(x_pos + width + 1 > EDITW_COLS) {
-			statusline_msg(_("Tab name too wide for screen"));
-			/* Disabling this field */
-			/* TODO should be recomputed on window resize */
-			views_count--;
+			statusline_addstr(_("Tab name too wide for screen"));
 			break;
 		}
 
