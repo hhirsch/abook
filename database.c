@@ -345,23 +345,41 @@ int
 save_database()
 {
 	FILE *out;
+	int ret = 0;
 	struct db_enumerator e = init_db_enumerator(ENUM_ALL);
+	char *datafile_new = strconcat(datafile, ".new", NULL);
+	char *datafile_old = strconcat(datafile, "~", NULL);
 
-	if( (out = abook_fopen(datafile, "w")) == NULL )
-		return -1;
+	if( (out = abook_fopen(datafile_new, "w")) == NULL ) {
+		ret = -1;
+		goto out;
+	}
 
 	if(list_is_empty()) {
 		fclose(out);
 		unlink(datafile);
-		return 1;
+		ret = 1;
+		goto out;
 	}
 
-
+	/*
+	 * Possibly should check if write_database failed.
+	 * Currently it returns always zero.
+	 */
 	write_database(out, e);
-
 	fclose(out);
 
-	return 0;
+	if(access(datafile, F_OK) == 0 &&
+			(rename(datafile, datafile_old)) == -1)
+		ret = -1;
+	
+	if((rename(datafile_new, datafile)) == -1)
+		ret = -1;
+
+out:
+	free(datafile_new);
+	free(datafile_old);
+	return ret;
 }
 
 static void
