@@ -28,7 +28,6 @@ char *selected = NULL;
 int extra_column = -1;
 int extra_alternative = -1;
 
-extern int items;
 extern abook_field_list *fields_list;
 
 static WINDOW *list = NULL;
@@ -99,8 +98,9 @@ refresh_list()
 	else if(curitem > LAST_LIST_ITEM)
 		first_list_item = max(curitem - LIST_LINES + 1, 0);
 
-        for( line = 0, i = first_list_item ; i <= LAST_LIST_ITEM && i < items;
-			line++, i++ ) {
+        for(line = 0, i = first_list_item;
+			i <= LAST_LIST_ITEM && i < db_n_items();
+			line++, i++) {
 
 		print_list_line(i, line, i == curitem);
         }
@@ -188,7 +188,7 @@ scroll_up()
 void
 scroll_down()
 {
-	if(curitem > items - 2)
+	if(curitem > db_n_items() - 2)
 		return;
 
 	curitem++;
@@ -212,12 +212,15 @@ page_up()
 void
 page_down()
 {
-	if(curitem > items - 2)
+	if(curitem > db_n_items() - 2)
 		return;
 
-	curitem = curitem == LAST_LIST_ITEM ?
-		((curitem += LIST_LINES) > LAST_ITEM ? LAST_ITEM : curitem) :
-		min(LAST_LIST_ITEM, LAST_ITEM);
+	if(curitem == LAST_LIST_ITEM) {
+		if((curitem += LIST_LINES) > last_item())
+			curitem = last_item();
+	} else {
+		curitem = min(LAST_LIST_ITEM, last_item());
+	}
 
 	refresh_list();
 }
@@ -225,13 +228,29 @@ page_down()
 void
 select_none()
 {
-        memset(selected, 0, items);
+        memset(selected, 0, db_n_items());
 }
 
 void
 select_all()
 {
-        memset(selected, 1, items);
+        memset(selected, 1, db_n_items());
+}
+
+void
+list_set_selection(int item, int value)
+{
+	assert(is_valid_item(item));
+
+	selected[item] = !!value;
+}
+
+void
+list_invert_curitem_selection()
+{
+	assert(is_valid_item(curitem));
+
+	selected[curitem] = !selected[curitem];
 }
 
 void
@@ -239,7 +258,7 @@ move_curitem(int direction)
 {
         list_item tmp;
 
-        if( curitem < 0 || curitem > LAST_ITEM )
+        if(curitem < 0 || curitem > last_item())
                 return;
 
 	tmp = item_create();
@@ -256,7 +275,7 @@ move_curitem(int direction)
 			break;
 
 		case MOVE_ITEM_DOWN:
-			if( curitem >= LAST_ITEM )
+			if(curitem >= last_item())
 				goto out_move;
 			item_copy(db_item_get(curitem),
 					db_item_get(curitem + 1));
@@ -272,7 +291,7 @@ out_move:
 void
 goto_home()
 {
-	if(items > 0)
+	if(db_n_items() > 0)
 		curitem = 0;
 
 	refresh_list();
@@ -281,8 +300,8 @@ goto_home()
 void
 goto_end()
 {
-	if(items > 0)
-		curitem = LAST_ITEM;
+	if(db_n_items() > 0)
+		curitem = last_item();
 
 	refresh_list();
 }
@@ -319,7 +338,7 @@ selected_items()
 {
 	int i, n = 0;
 
-	for(i = 0; i < items; i++)
+	for(i = 0; i < db_n_items(); i++)
 		if(selected[i])
 			n++;
 
@@ -331,23 +350,29 @@ invert_selection()
 {
 	int i;
 
-	if(items < 1)
+	if(list_is_empty())
 		return;
 
-	for(i = 0; i < items; i++)
+	for(i = 0; i < db_n_items(); i++)
 		selected[i] = !selected[i];
-}
-
-int
-list_current_item()
-{
-	return curitem;
 }
 
 int
 list_is_empty()
 {
-	return items < 1;
+	return db_n_items() < 1;
+}
+
+int
+list_get_curitem()
+{
+	return curitem;
+}
+
+void
+list_set_curitem(int i)
+{
+	curitem = i;
 }
 
 int
@@ -366,7 +391,7 @@ duplicate_item()
 	}
 	item_free(&item);
 
-	curitem = LAST_ITEM;
+	curitem = last_item();
 	refresh_list();
 
 	return 0;

@@ -88,6 +88,8 @@ char *get_surname(char *s);
 int find_item(char *str, int start, int search_fields[]);
 int is_selected(int item);
 int is_valid_item(int item);
+int last_item();
+int db_n_items();
 
 int real_db_enumerate_items(struct db_enumerator e);
 struct db_enumerator init_db_enumerator(int mode);
@@ -133,8 +135,6 @@ list_item db_item_get(int i);
 /*
  * Various macros
  */
-
-#define LAST_ITEM (items - 1)
 
 #define have_multiple_emails(item) \
 	strchr(db_email_get(item), ',')

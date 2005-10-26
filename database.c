@@ -26,9 +26,10 @@ abook_field_list *fields_list = NULL;
 int fields_count = 0;
 
 list_item *database = NULL;
-int items = 0;
+static int items = 0;
 
 #define ITEM_SIZE (fields_count * sizeof(char *))
+#define LAST_ITEM (items - 1)
 
 #define INITIAL_LIST_CAPACITY	30
 static int list_capacity = 0;
@@ -660,6 +661,17 @@ is_valid_item(int item)
 	return item <= LAST_ITEM && item >= 0;
 }
 
+int
+last_item()
+{
+	return LAST_ITEM;
+}
+
+int
+db_n_items()
+{
+	return items;
+}
 
 int
 real_db_enumerate_items(struct db_enumerator e)

@@ -38,8 +38,6 @@
  * external variables
  */
 
-extern int curitem;
-extern int items;
 extern char *datafile;
 
 extern bool alternative_datafile;
@@ -434,7 +432,6 @@ display_help(int help)
  */
 
 extern char *selected;
-extern int curitem;
 
 void
 get_commands()
@@ -455,7 +452,7 @@ get_commands()
 			case 'q': return;
 			case 'Q': quit_abook(QUIT_DONTSAVE);	break;
 			case 'P': print_stderr(selected_items() ?
-						  -1 : list_current_item());
+						  -1 : list_get_curitem());
 				  return;
 			case '?':
 				  display_help(HELP_MAIN);
@@ -499,8 +496,8 @@ get_commands()
 			case '/': ui_find(0);		break;
 			case '\\': ui_find(1);		break;
 
-			case ' ': if(curitem >= 0) {
-				   selected[curitem] = !selected[curitem];
+			case ' ': if(list_get_curitem() >= 0) {
+				   list_invert_curitem_selection();
 				   ui_print_number_of_items();
 				   refresh_list();
 				  }
@@ -520,13 +517,13 @@ get_commands()
 				break;
 
 			case 'm': launch_mutt(selected_items() ?
-						  -1 : list_current_item());
+						  -1 : list_get_curitem());
 				  refresh_screen();
 				  break;
 
 			case 'p': ui_print_database(); break;
 
-			case 'v': launch_wwwbrowser(list_current_item());
+			case 'v': launch_wwwbrowser(list_get_curitem());
 				  refresh_screen();
 				  break;
 		}
@@ -575,12 +572,13 @@ ui_find(int next)
 		refresh_screen();
 	}
 
-	if( (item = find_item(findstr, curitem + !!next, search_fields)) < 0 &&
+	if( (item = find_item(findstr, list_get_curitem() + !!next,
+			search_fields)) < 0 &&
 			(item = find_item(findstr, 0, search_fields)) >= 0)
 		statusline_addstr(_("Search hit bottom, continuing at top"));
 
 	if(item >= 0) {
-		curitem = item;
+		list_set_curitem(item);
 		refresh_list();
 	}
 }
@@ -588,7 +586,8 @@ ui_find(int next)
 void
 ui_print_number_of_items()
 {
-	char *str = strdup_printf("     " "|%3d/%3d", selected_items(), items);
+	char *str = strdup_printf("     " "|%3d/%3d",
+		selected_items(), db_n_items());
 
 	mvaddstr(0, COLS-strlen(str), str);
 
@@ -600,7 +599,7 @@ ui_read_database()
 {
 	char *msg;
 
-	if(items > 0) {
+	if(!list_is_empty()) {
 		msg = strdup_printf(_("Your current data will be lost - "
 				"Press '%c' to continue"),
 				*(S_("keybinding for yes|y")));
@@ -675,7 +674,7 @@ ui_open_datafile()
 
 	load_database(filename);
 
-	if(items == 0) {
+	if(list_is_empty()) {
 		statusline_msg(_("Sorry, the specified file appears not to be a valid abook addressbook"));
 		load_database(datafile);
 	} else {

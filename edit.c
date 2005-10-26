@@ -29,10 +29,7 @@
  * some extern variables
  */
 
-
-extern int curitem;
 extern int views_count;
-extern int items;
 
 WINDOW *editw;
 
@@ -510,17 +507,17 @@ edit_loop(int item)
 void
 edit_item(int item)
 {
-	if( item < 0 ) {
-		if( curitem < 0 )
+	if(item < 0) {
+		if(list_get_curitem() < 0)
 			return;
 		else
-			item = curitem;
+			item = list_get_curitem();
 	}
 
 	init_editor();
 
 	while((item = edit_loop(item)) >= 0)
-		curitem = item; /* hmm, this is not very clean way to go */
+		list_set_curitem(item); /* this is not very clean way to go */
 
 	close_editor();
 }
@@ -541,8 +538,8 @@ add_item()
 	add_item2database(item);
 	item_free(&item);
 
-	curitem = LAST_ITEM;
+	list_set_curitem(last_item());
 
-	edit_item(LAST_ITEM);
+	edit_item(last_item());
 }
 

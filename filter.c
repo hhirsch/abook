@@ -27,7 +27,6 @@
 #include "xmalloc.h"
 #include <assert.h>
 
-extern int items;
 extern abook_field_list *fields_list;
 extern int fields_count;
 
@@ -194,7 +193,7 @@ import_database()
 {
 	int filter;
 	char *filename;
-	int tmp = items;
+	int tmp = db_n_items();
 
 	import_screen();
 
@@ -215,7 +214,7 @@ import_database()
 
 	if(i_read_file(filename, i_filters[filter].func ))
 		statusline_msg(_("Error occured while opening the file"));
-	else if(tmp == items)
+	else if(tmp == db_n_items())
 		statusline_msg(_("File does not seem to be a valid addressbook"));
 
 	refresh_screen();
@@ -246,7 +245,7 @@ int
 import_file(char filtname[FILTNAME_LEN], char *filename)
 {
 	int i;
-	int tmp = items;
+	int tmp = db_n_items();
 	int ret = 0;
 
 	for(i=0;; i++) {
@@ -271,7 +270,7 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 	} else
 		ret =  i_read_file(filename, i_filters[i].func);
 
-	if(tmp == items)
+	if(tmp == db_n_items())
 		ret = 1;
 
 	return ret;
@@ -842,7 +841,7 @@ html_export_database(FILE *out, struct db_enumerator e)
 	char tmp[MAX_EMAILSTR_LEN];
 	int extra_column;
 
-	if(items < 1)
+	if(list_is_empty())
 		return 2;
 
 	extra_column = init_extra_field(STR_EXTRA_COLUMN);
