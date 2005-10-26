@@ -6,6 +6,9 @@
  - use better common code for csv filters (Marc Tardif)
  - translation HOWTO (Cedric Duval)
  - wanderlust export filter (Josef Schugt)
+ - create a backup at save time
+ - editor undo fix
+ - ui_readline limit fix
 
 0.5.4
  - add show_cursor config option (idea from Cheryl Homiak)
