@@ -203,7 +203,7 @@ declare_unknown_field(char *key)
 	if(!database)
 		return;
 
-	for(i = 0; i < fields_count; i++)
+	for(i = 0; i < items; i++)
 		if(database[i]) {
 			database[i] = xrealloc(database[i], ITEM_SIZE);
 			database[i][fields_count - 1] = NULL;
