@@ -1503,7 +1503,7 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 	abook_list *emails, *em;
 
 	db_enumerate_items(e) {
-		fprintf(out, "BEGIN:VCARD\nFN:%s\n",
+		fprintf(out, "BEGIN:VCARD\r\nFN:%s\r\n",
 				safe_str(db_name_get(e.item)));
 
 		name = get_surname(db_name_get(e.item));
@@ -1511,7 +1511,7 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 	                if((db_name_get(e.item))[j] == ' ')
 	                        break;
 	        }
-		fprintf(out, "N:%s;%.*s\n",
+		fprintf(out, "N:%s;%.*s\r\n",
 			safe_str(name),
 			j,
 			safe_str(db_name_get(e.item))
@@ -1520,7 +1520,7 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 		free(name);
 
 		if(db_fget(e.item, ADDRESS))
-			fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\n",
+			fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\r\n",
 				safe_str(db_fget(e.item, ADDRESS)),
 				safe_str(db_fget(e.item, ADDRESS2)),
 				safe_str(db_fget(e.item, CITY)),
@@ -1530,35 +1530,35 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 				);
 
 		if(db_fget(e.item, PHONE))
-			fprintf(out, "TEL;HOME:%s\n",
+			fprintf(out, "TEL;HOME:%s\r\n",
 					db_fget(e.item, PHONE));
 		if(db_fget(e.item, WORKPHONE))
-			fprintf(out, "TEL;WORK:%s\n",
+			fprintf(out, "TEL;WORK:%s\r\n",
 					db_fget(e.item, WORKPHONE));
 		if(db_fget(e.item, FAX))
-			fprintf(out, "TEL;FAX:%s\n",
+			fprintf(out, "TEL;FAX:%s\r\n",
 					db_fget(e.item, FAX));
 		if(db_fget(e.item, MOBILEPHONE))
-			fprintf(out, "TEL;CELL:%s\n",
+			fprintf(out, "TEL;CELL:%s\r\n",
 					db_fget(e.item, MOBILEPHONE));
 
 		if(*db_email_get(e.item)) {
 			emails = csv_to_abook_list(db_email_get(e.item));
 
 			for(em = emails; em; em = em->next)
-				fprintf(out, "EMAIL;INTERNET:%s\n", em->data);
+				fprintf(out, "EMAIL;INTERNET:%s\r\n", em->data);
 
 			abook_list_free(&emails);
 		}
 
 		if(db_fget(e.item, NOTES))
-			fprintf(out, "NOTE:%s\n",
+			fprintf(out, "NOTE:%s\r\n",
 					db_fget(e.item, NOTES));
 		if(db_fget(e.item, URL))
-			fprintf(out, "URL:%s\n",
+			fprintf(out, "URL:%s\r\n",
 					db_fget(e.item, URL));
 
-		fprintf(out, "END:VCARD\n\n");
+		fprintf(out, "END:VCARD\r\n\r\n");
 
 	}
 

@@ -1,4 +1,5 @@
 0.5.5
+ - fixed gcrd export format (Marc Tardif)
  - i18n support (Cedric Duval)
  - French translation (Cedric Duval)
  - Swedish translation (Susanna Björverud)
