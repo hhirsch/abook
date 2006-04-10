@@ -278,7 +278,7 @@ get_token(buffer *b, int options)
 	return NULL;
 }
 
-static char *
+static const char *
 opt_set_set_option(char *p, struct option *opt)
 {
 	int len;
@@ -360,7 +360,7 @@ check_options()
 /*
  * syntax: set <option> = <value>
  */
-static char *
+static const char *
 opt_parse_set(buffer *b)
 {
 	char *var, *err;
@@ -374,7 +374,7 @@ opt_parse_set(buffer *b)
 	return opt_set_option(var, b->ptr);
 }
 
-static char *
+static const char *
 opt_parse_customfield(buffer *b)
 {
 	return _("customfield: obsolete command - please use the "
@@ -445,7 +445,7 @@ opt_parse_field(buffer *b)
 
 static struct {
 	char *token;
-	char * (*func) (buffer *line);
+	const char * (*func) (buffer *line);
 } opt_parsers[] = {
 	{ "set", opt_parse_set },
 	{ "customfield", opt_parse_customfield }, /* obsolete */
@@ -458,7 +458,7 @@ static bool
 opt_parse_line(char *line, int n, char *fn)
 {
 	int i;
-	char *err = NULL;
+	const char *err = NULL;
 	char *token;
 	buffer b;
 

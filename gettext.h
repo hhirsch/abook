@@ -1,15 +1,14 @@
 #ifndef _GETTEXT_H
 #define _GETTEXT_H
 
+const char *sgettext(const char *msgid); /* Strip context prefix */
+
 # if ENABLE_NLS
 #  include <libintl.h>
-char *sgettext(const char *msgid); /* Strip context prefix */
 # else
 #  define gettext(Msgid) ((const char *) (Msgid))
-#  define sgettext(Msgid) ((const char *) (Msgid))
-
-#  define textdomain(Domainname) ((const char *) (Domainname))
-#  define bindtextdomain(Domainname, Dirname) ((const char *) (Dirname))
+#  define textdomain(Domainname) do {} while(0)
+#  define bindtextdomain(Domainname, Dirname) do {} while(0)
 # endif /* ENABLE_NLS */
 
 # define _(String) gettext (String)

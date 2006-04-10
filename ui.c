@@ -305,7 +305,7 @@ statusline_askchoice(const char *msg, const char *choices, short dflt)
 }
 
 char *
-ui_readline(char *prompt, char *s, size_t limit, bool use_completion)
+ui_readline(const char *prompt, char *s, size_t limit, bool use_completion)
 {
 	int y, x;
 	char *ret;
@@ -326,7 +326,7 @@ ui_readline(char *prompt, char *s, size_t limit, bool use_completion)
 }
 
 int
-statusline_ask_boolean(char *msg, int def)
+statusline_ask_boolean(const char *msg, int def)
 {
 	int ret;
 	char *msg2 = strconcat(msg,  def ? _(" (Y/n)?") : _(" (y/N)?"), NULL);
@@ -362,7 +362,7 @@ refresh_statusline()
 }
 
 char *
-ask_filename(char *prompt)
+ask_filename(const char *prompt)
 {
 	char *buf = NULL;
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.5pre1\n"
 "Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-10-17 13:34+0300\n"
+"POT-Creation-Date: 2005-11-29 10:08+0200\n"
 "PO-Revision-Date: 2005-10-03 00:56+0200\n"
 "Last-Translator: Johannes Weißl <jargon@molb.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,49 +17,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # Difficulties: how to translate tab, item, custom, comma separated values
-#: abook.c:91
+#: abook.c:93
 #, c-format
 msgid "Cannot create directory %s\n"
 msgstr "Kann Verzeichnis %s nicht anlegen\n"
 
-#: abook.c:97
+#: abook.c:99
 #, c-format
 msgid "%s is not a directory\n"
 msgstr "%s ist kein Verzeichnis\n"
 
-#: abook.c:115
+#: abook.c:117
 #, c-format
 msgid "Memory allocation failure: %s\n"
 msgstr "Fehler beim Anfordern von Hauptspeicher: %s\n"
 
-#: abook.c:126
+#: abook.c:128
 #, c-format
 msgid "Press enter to continue...\n"
 msgstr "Eingabetaste drücken, um fortzufahren...\n"
 
-#: abook.c:138
+#: abook.c:141
 #, c-format
 msgid "File %s is not writeable"
 msgstr "Datei %s ist nicht beschreibbar"
 
-#: abook.c:143
+#: abook.c:146
 msgid "If you continue all changes will be lost. Do you want to continue?"
 msgstr "Beim Fortfahren gehen alle Änderungen verloren. Fortfahren?"
 
-#: abook.c:162
+#: abook.c:165
 msgid "Save database"
 msgstr "Speichere Datenbank"
 
-#: abook.c:164
+#: abook.c:167
 msgid "Quit without saving"
 msgstr "Beenden ohne zu speichern"
 
-#: abook.c:218
+#: abook.c:223
 #, c-format
 msgid "%s is not a valid HOME directory\n"
 msgstr "%s ist kein gültiges HOME Verzeichnis\n"
 
-#: abook.c:249
+#: abook.c:254
 #, c-format
 msgid ""
 "Cannot combine options --mutt-query, --convert, --add-email or --add-email-"
@@ -68,33 +68,33 @@ msgstr ""
 "Die Optionen --mutt-query, --convert, --add-email und --add-email-"
 "quietkönnen nicht kombiniert werden\n"
 
-#: abook.c:280
+#: abook.c:285
 #, c-format
 msgid "please use option --%s after --convert option\n"
 msgstr "Bitte die Option --%s nach der Option --convert angeben\n"
 
-#: abook.c:379
+#: abook.c:384
 #, c-format
 msgid "%s: unrecognized arguments on command line\n"
 msgstr "%s: unbekannte Argumente auf der Kommandozeile\n"
 
-#: abook.c:401
+#: abook.c:406
 msgid "     -h\t--help\t\t\t\tshow usage"
 msgstr "     -h\t--help\t\t\t\tHilfe anzeigen"
 
-#: abook.c:402
+#: abook.c:407
 msgid "     -C\t--config\t<file>\t\tuse an alternative configuration file"
 msgstr "     -C\t--config\t<datei>\t\tAlternative Config-Datei verwenden"
 
-#: abook.c:403
+#: abook.c:408
 msgid "\t--datafile\t<file>\t\tuse an alternative addressbook file"
 msgstr "\t--datafile\t<datei>\t\tAlternative Adressbuch-Datei verwenden"
 
-#: abook.c:404
+#: abook.c:409
 msgid "\t--mutt-query\t<string>\tmake a query for mutt"
 msgstr "\t--mutt-query\t<string>\tMutt-Anfrage durchführen"
 
-#: abook.c:405
+#: abook.c:410
 msgid ""
 "\t--add-email\t\t\tread an e-mail message from stdin and\n"
 "\t\t\t\t\tadd the sender to the addressbook"
@@ -102,7 +102,7 @@ msgstr ""
 "\t--add-email\t\t\tE-Mail-Adresse von stdin lesen und\n"
 "\t\t\t\t\tAbsender zum Adressbuch hinzufügen"
 
-#: abook.c:409
+#: abook.c:414
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
 "\t\t\t\t\trequire to confirm adding"
@@ -110,67 +110,67 @@ msgstr ""
 "\t--add-email-quiet\t\twie --add-email, aber man muss\n"
 "\t\t\t\t\tdas Hinzufügen nicht bestätigen"
 
-#: abook.c:413
+#: abook.c:418
 msgid "\t--convert\t\t\tconvert address book files"
 msgstr "\t--convert\t\t\tAdressbuch-Dateien konvertieren"
 
-#: abook.c:414
+#: abook.c:419
 msgid "\toptions to use with --convert:"
 msgstr "\tOptionen in Verbindung mit --convert:"
 
-#: abook.c:415
+#: abook.c:420
 msgid "\t--informat\t<format>\tformat for input file"
 msgstr "\t--informat\t<format>\tFormat für Eingabedatei"
 
-#: abook.c:416
+#: abook.c:421
 msgid "\t\t\t\t\t(default: abook)"
 msgstr "\t\t\t\t\t(Standard: abook)"
 
-#: abook.c:417
+#: abook.c:422
 msgid "\t--infile\t<file>\t\tsource file"
 msgstr "\t--infile\t<datei>\t\tQuelldatei"
 
-#: abook.c:418
+#: abook.c:423
 msgid "\t\t\t\t\t(default: stdin)"
 msgstr "\t\t\t\t\t(Standard: stdin)"
 
-#: abook.c:419
+#: abook.c:424
 msgid "\t--outformat\t<format>\tformat for output file"
 msgstr "\t--outformat\t<format>\tFormat für Ausgabedatei"
 
-#: abook.c:420
+#: abook.c:425
 msgid "\t\t\t\t\t(default: text)"
 msgstr "\t\t\t\t\t(Standard: text)"
 
-#: abook.c:421
+#: abook.c:426
 msgid "\t--outfile\t<file>\t\tdestination file"
 msgstr "\t--outfile\t<datei>\t\tZieldatei"
 
-#: abook.c:422
+#: abook.c:427
 msgid "\t\t\t\t\t(default: stdout)"
 msgstr "\t\t\t\t\t(Standard: stdout)"
 
-#: abook.c:423
+#: abook.c:428
 msgid "\t--formats\t\t\tlist available formats"
 msgstr "\t--formats\t\t\tVerfügbare Formate auflisten"
 
-#: abook.c:494
+#: abook.c:497
 #, c-format
 msgid "Cannot open database\n"
 msgstr "Kann die Datenbank nicht öffnen\n"
 
-#: abook.c:620
+#: abook.c:623
 #, c-format
 msgid "too few arguments to make conversion\n"
 msgstr "zu wenig Argumente um die Konvertierung durchzuführen\n"
 
-#: abook.c:621
+#: abook.c:624
 #, c-format
 msgid "try --help\n"
 msgstr "versuche einmal --help\n"
 
 # I think "Abbruch" is better than e.g. "Beenden"
-#: abook.c:626
+#: abook.c:629
 #, c-format
 msgid ""
 "input and output formats are the same\n"
@@ -179,47 +179,47 @@ msgstr ""
 "Eingabe- und Ausgabedatei sind identisch\n"
 "Abbruch...\n"
 
-#: abook.c:639
+#: abook.c:643
 #, c-format
 msgid "input format %s not supported\n"
 msgstr "Eingabeformat %s wird nicht unterstützt\n"
 
-#: abook.c:643
+#: abook.c:647
 #, c-format
 msgid "cannot read file %s\n"
 msgstr "kann die Datei %s nicht lesen\n"
 
-#: abook.c:652
+#: abook.c:656
 #, c-format
 msgid "output format %s not supported\n"
 msgstr "Ausgabeformat %s wird nicht unterstützt\n"
 
-#: abook.c:658
+#: abook.c:662
 #, c-format
 msgid "cannot write file %s\n"
 msgstr "kann die Datei %s nicht schreiben\n"
 
-#: abook.c:679
+#: abook.c:683
 #, c-format
 msgid "cannot open %s\n"
 msgstr "kann %s nicht öffnen\n"
 
-#: abook.c:682
+#: abook.c:686
 #, c-format
 msgid "%d item(s) added to %s\n"
 msgstr "%d Element(e) zu %s hinzugefügt\n"
 
-#: abook.c:684
+#: abook.c:688
 msgid "Valid sender address not found"
 msgstr "Keine gültige Absender-Adresse gefunden"
 
-#: abook.c:724
+#: abook.c:728
 #, c-format
 msgid "Address %s already in addressbook\n"
 msgstr "Adresse %s befindet sich bereits im Adressbuch\n"
 
 # I don't want to translate 'you' with 'du'
-#: abook.c:734
+#: abook.c:738
 #, c-format
 msgid ""
 "cannot open /dev/tty\n"
@@ -228,20 +228,20 @@ msgstr ""
 "kann /dev/tty nicht öffnen\n"
 "versuche es einmal mit --add-email-quiet\n"
 
-#: abook.c:740
+#: abook.c:744
 #, c-format
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr "Füge \"%s <%s>\" zu %s hinzu? (%c/%c)\n"
 
-#: abook.c:744 abook.c:751 ui.c:344 ui.c:606
+#: abook.c:748 abook.c:755 ui.c:343 ui.c:605
 msgid "keybinding for yes|y"
 msgstr "j"
 
-#: abook.c:745 abook.c:747 ui.c:342
+#: abook.c:749 abook.c:751 ui.c:341
 msgid "keybinding for no|n"
 msgstr "n"
 
-#: abook.c:771
+#: abook.c:776
 #, c-format
 msgid "stdin is a directory or cannot stat stdin\n"
 msgstr ""
@@ -252,228 +252,242 @@ msgstr ""
 msgid "q:quit  ?:help  a:add  r:remove"
 msgstr "q:Ende  ?:Hilfe  a:Hinzufügen  r:Entfernen"
 
-#: database.c:57
+#: database.c:45
 msgid "Name"
 msgstr "Name"
 
-#: database.c:58
-msgid "E-mails"
-msgstr "E-Mails"
+#: database.c:46
+#, fuzzy
+msgid "E-mail addresses"
+msgstr "E-Mail-Adressen:"
 
-#: database.c:59
+#: database.c:47
 msgid "Address"
 msgstr "Adresse"
 
-#: database.c:60
+#: database.c:48
 msgid "Address2"
 msgstr "Adresse2"
 
-#: database.c:61
+#: database.c:49
 msgid "City"
 msgstr "Ort"
 
 # better translation?
-#: database.c:62
+#: database.c:50
 msgid "State/Province"
 msgstr "Bundesland"
 
-#: database.c:63
+#: database.c:51
 msgid "ZIP/Postal Code"
 msgstr "Postleitzahl"
 
-#: database.c:64
+#: database.c:52
 msgid "Country"
 msgstr "Land"
 
 # better translation?
-#: database.c:65
+#: database.c:53
 msgid "Home Phone"
 msgstr "Telefon (priv.)"
 
 # better translation?
-#: database.c:66
+#: database.c:54
 msgid "Work Phone"
 msgstr "Telefon (dienstl.)"
 
-#: database.c:67
+#: database.c:55
 msgid "Fax"
 msgstr "Fax"
 
-#: database.c:68
+#: database.c:56
 msgid "Mobile"
 msgstr "Mobiltelefon"
 
-#: database.c:69
+#: database.c:57
 msgid "Nickname/Alias"
 msgstr "Spitzname/Alias"
 
-#: database.c:70
+#: database.c:58
 msgid "URL"
 msgstr "URL"
 
-#: database.c:71
+#: database.c:59
 msgid "Notes"
 msgstr "Bemerkung"
 
-#: database.c:72
-msgid "Custom1"
-msgstr "Benutzer1"
+#: database.c:60
+msgid "Anniversary day"
+msgstr ""
 
-#: database.c:73
-msgid "Custom2"
-msgstr "Benutzer2"
+#: database.c:164
+msgid "field already defined"
+msgstr ""
 
-#: database.c:74
-msgid "Custom3"
-msgstr "Benutzer3"
+#: database.c:168
+msgid "standard field does not need to be declared"
+msgstr ""
 
-#: database.c:75
-msgid "Custom4"
-msgstr "Benutzer4"
+#: database.c:183
+#, fuzzy
+msgid "unknown type"
+msgstr "unbekannte Option"
 
-#: database.c:76
-msgid "Custom5"
-msgstr "Benutzer5"
-
-#: database.c:406
+#: database.c:589
 msgid "Invalid field value defined in configuration"
 msgstr "Ungültiger Feld-Wert in der Konfiguration festgelegt"
 
-#: edit.c:44
-msgid "CONTACT"
-msgstr "KONTAKT"
+#: database.c:592
+#, fuzzy
+msgid "Invalid field value for sorting"
+msgstr "Ungültiger Feld-Wert in der Konfiguration festgelegt"
 
-#: edit.c:45
-msgid "ADDRESS"
-msgstr "ADRESSE"
-
-#: edit.c:46
-msgid " PHONE "
-msgstr "TELEFON"
-
-#: edit.c:47
-msgid " OTHER "
-msgstr "ANDERE"
-
-#: edit.c:48
-msgid "CUSTOM "
-msgstr "BENUTZER"
-
-#: edit.c:57
+#: edit.c:51
 msgid "Tab name too wide for screen"
 msgstr "Kartei-Name zu breit für den Bildschirm"
 
-#: edit.c:219
-msgid "E-mail addresses:"
-msgstr "E-Mail-Adressen:"
+#: edit.c:330
+msgid "keybindings_new_123456789|n123456789"
+msgstr ""
+
+#: edit.c:332
+#, c-format
+msgid "Choose %s to modify (<1>%s%c%s%s."
+msgstr ""
+
+#: edit.c:333
+#, fuzzy
+msgid "email"
+msgstr "E-Mails"
+
+#: edit.c:333
+msgid "item"
+msgstr ""
+
+#: edit.c:338
+msgid " or <n>ew"
+msgstr ""
+
+#: edit.c:356
+#, fuzzy
+msgid "E-mail: "
+msgstr "E-Mails"
+
+#: edit.c:356
+msgid "Item: "
+msgstr ""
+
+#: edit.c:439
+msgid "sorry, input for this field type is not yet implemented"
+msgstr ""
 
 #: edit.h:13
-msgid "?:help c:contact a:address p:phone o:other"
-msgstr "?:Hilfe c:Kontakt a:Adresse p:Telefon o:Andere"
+msgid "?:help q:quit editor"
+msgstr ""
 
-#: filter.c:71 filter.c:82
+#: filter.c:70 filter.c:81
 msgid "abook native format"
 msgstr "abooks eigenes Format"
 
-#: filter.c:72
+#: filter.c:71
 msgid "ldif / Netscape addressbook"
 msgstr "ldif / Netscape Adressbuch"
 
-#: filter.c:73 filter.c:84
+#: filter.c:72 filter.c:83
 msgid "mutt alias"
 msgstr "mutt alias"
 
-#: filter.c:74 filter.c:86
+#: filter.c:73 filter.c:85
 msgid "pine addressbook"
 msgstr "pine Adressbuch"
 
-#: filter.c:75 filter.c:88
+#: filter.c:74 filter.c:87
 msgid "comma separated values"
 msgstr "komma-separierte Werte"
 
-#: filter.c:76 filter.c:89
+#: filter.c:75 filter.c:88
 msgid "comma separated values (all fields)"
 msgstr "komma-separierte Werte (alle Felder)"
 
-#: filter.c:77 filter.c:90
+#: filter.c:76 filter.c:89
 msgid "Palm comma separated values"
 msgstr "Palm komma-separierte Werte"
 
-#: filter.c:83
+#: filter.c:82
 msgid "ldif / Netscape addressbook (.4ld)"
 msgstr "ldif / Netscape Adressbuch (.4ld)"
 
-#: filter.c:85
+#: filter.c:84
 msgid "html document"
 msgstr "HTML Dokument"
 
-#: filter.c:87
+#: filter.c:86
 msgid "GnomeCard (VCard) addressbook"
 msgstr "GnomeCard (VCard) Adressbuch"
 
-#: filter.c:91
+#: filter.c:90
 msgid "elm alias"
 msgstr "elm alias"
 
-#: filter.c:92
+#: filter.c:91
 msgid "plain text"
 msgstr "Klartext"
 
-#: filter.c:93
+#: filter.c:92
 #, fuzzy
 msgid "Wanderlust address book"
 msgstr "pine Adressbuch"
 
-#: filter.c:94
+#: filter.c:93
 msgid "Spruce address book"
 msgstr "Spruce Adressbuch"
 
-#: filter.c:107
+#: filter.c:106
 msgid "input:"
 msgstr "Eingabe:"
 
-#: filter.c:114
+#: filter.c:113
 msgid "output:"
 msgstr "Ausgabe:"
 
-#: filter.c:179
+#: filter.c:178
 msgid "import database"
 msgstr "importiere Datenbank"
 
-#: filter.c:181 filter.c:298
+#: filter.c:180 filter.c:297
 msgid "please select a filter"
 msgstr "Bitte Filter auswählen"
 
-#: filter.c:189 filter.c:306
+#: filter.c:188 filter.c:305
 msgid "x -\tcancel"
 msgstr "x -\tabbrechen"
 
-#: filter.c:210 filter.c:344
+#: filter.c:209 filter.c:343
 msgid "Filename: "
 msgstr "Dateiname: "
 
-#: filter.c:217
+#: filter.c:216
 msgid "Error occured while opening the file"
 msgstr "Fehler beim Öffnen der Datei"
 
-#: filter.c:219
+#: filter.c:218
 msgid "File does not seem to be a valid addressbook"
 msgstr "Die Datei scheint kein gültiges Adressbuch zu sein"
 
-#: filter.c:296
+#: filter.c:295
 msgid "export database"
 msgstr "exportiere Datenbank"
 
 # instead: Exportiere alle (a), exportiere ausgewählte (s), oder abbrechen (c)?
-#: filter.c:329
+#: filter.c:328
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr "Exportiere <a>lle, exportiere au<s>gewählte, oder bri<c>h ab?"
 
-#: filter.c:330 ui.c:629
+#: filter.c:329 ui.c:628
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:351
+#: filter.c:350
 msgid "Error occured while exporting"
 msgstr "Fehler beim Exportieren aufgetreten"
 
@@ -603,127 +617,242 @@ msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tURL mit Web-Browser anzeigen\n"
 
 #: help.h:55
-msgid "\ta,c,p,o,C/arrows/h,l\tchange tab\n"
+#, fuzzy
+msgid "\tarrows/h,l\t\tchange tab\n"
 msgstr "\ta,c,p,o,C/Pfeilt./h,l\tTab wechseln\n"
 
 #: help.h:57
-msgid "\t1 - 5\t\t\tedit fields\n"
-msgstr "\t1 - 5\t\t\tFelder bearbeiten\n"
+#, fuzzy
+msgid "\tq\t\t\tquit to main screen\n"
+msgstr "\tQ\t\tBeenden ohne zu speichern\n"
 
 #: help.h:59
+#, fuzzy
+msgid "\t1 - 5 A - Z\t\tedit fields\n"
+msgstr "\t1 - 5\t\t\tFelder bearbeiten\n"
+
+#: help.h:61
 msgid "\tk or <\t\t\tprevious item\n"
 msgstr "\tk or <\t\t\tVorheriges Element\n"
 
-#: help.h:60
+#: help.h:62
 msgid "\tj or >\t\t\tnext item\n"
 msgstr "\tj or >\t\t\tNächstes Element\n"
 
-#: help.h:62
-msgid "\tr\t\t\troll e-mail addresses\n"
+#: help.h:64
+#, fuzzy
+msgid "\tr\t\t\troll e-mail addresses up\n"
 msgstr "\tr\t\t\tE-Mail-Adressen rotieren\n"
 
-#: help.h:64
+#: help.h:65
+#, fuzzy
+msgid "\tESC-r\t\t\troll e-mail addresses down\n"
+msgstr "\tr\t\t\tE-Mail-Adressen rotieren\n"
+
+#: help.h:67
 msgid "\tu\t\t\tundo\n"
 msgstr "\tu\t\t\tRückgängig\n"
 
-#: help.h:66
+#: help.h:69
 msgid "\tm\t\t\tsend mail with mutt\n"
 msgstr "\tm\t\t\tE-Mail mit Mutt senden\n"
 
-#: help.h:67
+#: help.h:70
 msgid "\tv\t\t\tview url with web browser\n"
 msgstr "\tv\t\t\tURL mit Web-Browser anzeigen\n"
 
-#: options.c:240 options.c:259
+#: options.c:254
+msgid "quote mismatch"
+msgstr ""
+
+#: options.c:260
+msgid "no assignment character found"
+msgstr ""
+
+#: options.c:263
+#, fuzzy
+msgid "error in comma separated list"
+msgstr "komma-separierte Werte"
+
+#: options.c:292 options.c:311
 msgid "invalid value"
 msgstr "ungültiger Wert"
 
-#: options.c:278
-msgid "invalid value assignment"
-msgstr "ungültige Wertzuweisung"
-
-#: options.c:286
+#: options.c:329
 msgid "unknown option"
 msgstr "unbekannte Option"
 
-#: options.c:311
-msgid "invalid custom field number"
-msgstr "ungültige benutzerdefinierte Feldnummer"
+#: options.c:341
+#, c-format
+msgid ""
+"valid values for the 'preserve_fields' option are 'all', "
+"'standard' (default), and 'none'\n"
+msgstr ""
 
-#: options.c:358
+#: options.c:350
+#, c-format
+msgid ""
+"valid values for the 'address_style' option are 'eu' (default), 'uk', and "
+"'us'\n"
+msgstr ""
+
+#: options.c:372
+msgid "invalid value assignment"
+msgstr "ungültige Wertzuweisung"
+
+#: options.c:380
+msgid ""
+"customfield: obsolete command - please use the 'field' and 'view' commands "
+"instead"
+msgstr ""
+
+#: options.c:398
+msgid "no view name provided"
+msgstr ""
+
+#: options.c:428
+msgid "no field identifier provided"
+msgstr ""
+
+#: options.c:434
+msgid "no field name provided"
+msgstr ""
+
+#: options.c:490
 #, c-format
 msgid "%s: parse error at line %d: "
 msgstr "%s: Fehler beim Parsen in Zeile %d: "
 
-#: options.c:362
+#: options.c:494
 #, c-format
 msgid "unknown token %s\n"
 msgstr "unbekanntes Symbol %s\n"
 
-#: ui.c:146
+#: ui.c:145
 #, c-format
 msgid "Your terminal size is %dx%d\n"
 msgstr "Die Größe des Terminals ist %dx%d.\n"
 
-#: ui.c:147
+#: ui.c:146
 #, c-format
 msgid "Terminal is too small. Minimum terminal size for abook is %dx%d\n"
 msgstr "Das Terminal ist zu klein. Die minimale Größe für abook ist %dx%d.\n"
 
-#: ui.c:333
+#: ui.c:332
 msgid " (Y/n)?"
 msgstr " (J/n)?"
 
-#: ui.c:333
+#: ui.c:332
 msgid " (y/N)?"
 msgstr " (j/N)?"
 
-#: ui.c:411
+#: ui.c:410
 msgid "help"
 msgstr "Hilfe"
 
-#: ui.c:420
+#: ui.c:419
 msgid "Press any key to continue..."
 msgstr "Taste drücken, um fortzufahren..."
 
 # "Lösche ausgewählte(s) Element(e)" sounds silly ... plural form is ok.
-#: ui.c:541
+#: ui.c:539
 msgid "Remove selected item(s)"
 msgstr "Lösche ausgewählte Elemente"
 
-#: ui.c:551
+#: ui.c:549
 msgid "Clear WHOLE database"
 msgstr "Lösche GESAMTE Datenbank"
 
-#: ui.c:579
+#: ui.c:578
 msgid "Search hit bottom, continuing at top"
 msgstr "Suche hat das Ende erreicht, weiter am Anfang"
 
 # Why 'y', and not 'j'?
 # c-format
-#: ui.c:604
+#: ui.c:603
 #, c-format
 msgid "Your current data will be lost - Press '%c' to continue"
 msgstr "Die aktuellen Daten sind verloren - Drücke '%c' um fortzufahren"
 
 # instead: Drucke alle (a), drucke ausgewählte (s), oder abbrechen (c)?
-#: ui.c:629
+#: ui.c:628
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr "Drucke <a>lle, drucke au<s>gewählte oder bri<c>h ab?"
 
-#: ui.c:635
+#: ui.c:634
 msgid "No selected items"
 msgstr "Keine Elemente ausgewählt"
 
-#: ui.c:661
+#: ui.c:660
 msgid "File to open: "
 msgstr "Öffne Datei: "
 
-#: ui.c:671
+#: ui.c:670
 msgid "Save current database"
 msgstr "Speichere aktuelle Datenbank"
 
-#: ui.c:679
+#: ui.c:678
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Die angegebene Datei scheint leider kein gültiges abook Adressbuch zu sein"
+
+#: views.c:87
+msgid "undeclared field"
+msgstr ""
+
+#: views.c:92
+msgid "maximal number of fields per view reached"
+msgstr ""
+
+#: views.c:95
+msgid "field already in this view"
+msgstr ""
+
+#: views.c:139
+msgid "CONTACT"
+msgstr "KONTAKT"
+
+#: views.c:140
+msgid "ADDRESS"
+msgstr "ADRESSE"
+
+#: views.c:142
+#, fuzzy
+msgid "PHONE"
+msgstr "TELEFON"
+
+#: views.c:143
+#, fuzzy
+msgid "OTHER"
+msgstr "ANDERE"
+
+#: views.c:165 views.c:166 views.c:167 views.c:168 views.c:169
+#, fuzzy
+msgid "CUSTOM"
+msgstr "BENUTZER"
+
+#: views.c:165
+msgid "Custom1"
+msgstr "Benutzer1"
+
+#: views.c:166
+msgid "Custom2"
+msgstr "Benutzer2"
+
+#: views.c:167
+msgid "Custom3"
+msgstr "Benutzer3"
+
+#: views.c:168
+msgid "Custom4"
+msgstr "Benutzer4"
+
+#: views.c:169
+msgid "Custom5"
+msgstr "Benutzer5"
+
+#~ msgid "?:help c:contact a:address p:phone o:other"
+#~ msgstr "?:Hilfe c:Kontakt a:Adresse p:Telefon o:Andere"
+
+#~ msgid "invalid custom field number"
+#~ msgstr "ungültige benutzerdefinierte Feldnummer"

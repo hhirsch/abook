@@ -1,8 +1,14 @@
+0.5.6
+ - translation fixes
+ - fixed gcrd export format (\r\n line endings according to RFC, Marc Tardif)
+ - fix localized keybindings with --disable-nls
+
 0.5.5
  - fixed gcrd export format (Marc Tardif)
  - i18n support (Cedric Duval)
  - French translation (Cedric Duval)
  - Swedish translation (Susanna Björverud)
+ - Japanese translation (Takahashi Tamotsu)
  - palmcsv import filter (Marc Tardif)
  - use better common code for csv filters (Marc Tardif)
  - translation HOWTO (Cedric Duval)

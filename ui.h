@@ -15,13 +15,15 @@ void		close_ui();
 void		headerline(const char *str);
 void            refresh_screen();
 int		statusline_msg(const char *msg);
-int 		statusline_askchoice(const char *msg, const char *choices, short dflt);
-char		*ask_filename(char *prompt);
-int		statusline_ask_boolean(char *msg, int def);
+int 		statusline_askchoice(const char *msg, const char *choices,
+			short dflt);
+char		*ask_filename(const char *prompt);
+int		statusline_ask_boolean(const char *msg, int def);
 void            clear_statusline();
 void		display_help(int help);
 void		statusline_addstr(const char *str);
-char *		ui_readline(char *prompt, char *s, size_t limit, bool use_completion);
+char *		ui_readline(const char *prompt, char *s, size_t limit,
+			bool use_completion);
 void		refresh_statusline();
 void		get_commands();
 void		ui_remove_items();
