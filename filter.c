@@ -916,7 +916,7 @@ pine_fixbuf(char *buf)
 {
 	int i,j;
 
-	for(i=0,j=0; j < (int)strlen(buf); i++, j++)
+	for(i = 0,j = 0; j < (int)strlen(buf); i++, j++)
 		buf[i] = buf[j] == '\n' ? buf[++j] : buf[j];
 }
 
@@ -929,15 +929,15 @@ pine_convert_emails(char *s)
 	if(s == NULL || *s != '(')
 		return;
 
-	for(i=0; s[i]; i++ )
-		s[i] = s[i+1];
+	for(i = 0; s[i]; i++)
+		s[i] = s[i + 1];
 
 	if( ( tmp = strchr(s,')')) )
-		*tmp=0;
+		*tmp = '\0';
 
 	for(i = 1; ( tmp = strchr(s, ',') ) != NULL ; i++, s = tmp + 1)
 		if(i > MAX_LIST_ITEMS - 1) {
-			*tmp = 0;
+			*tmp = '\0';
 			break;
 		}
 
