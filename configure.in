@@ -17,8 +17,8 @@ AC_DEFUN([ABOOK_EXPAND_PREFIX], [
 		eval echo \""[$]$1"\"	)`
 ])
 
-ABOOK_EXPAND_PREFIX(abook_localedir, "$datadir/locale")
-localedir="\$(datadir)/locale"
+ABOOK_EXPAND_PREFIX(abook_localedir, "$datarootdir/locale")
+localedir="\$(datarootdir)/locale"
 
 AC_ARG_WITH(localedir,
 	[  --with-localedir=PATH      Where the locale files are installed ])
