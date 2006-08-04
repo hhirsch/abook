@@ -1,3 +1,5 @@
+ - Italian translation (Claudio Stazzone)
+
 0.5.6
  - translation fixes
  - fixed gcrd export format (\r\n line endings according to RFC, Marc Tardif)
@@ -9,6 +11,7 @@
  - French translation (Cedric Duval)
  - Swedish translation (Susanna Björverud)
  - Japanese translation (Takahashi Tamotsu)
+ - German translation (Johannes Weißl)
  - palmcsv import filter (Marc Tardif)
  - use better common code for csv filters (Marc Tardif)
  - translation HOWTO (Cedric Duval)
