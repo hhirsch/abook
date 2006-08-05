@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
-"POT-Creation-Date: 2005-11-29 10:08+0200\n"
+"POT-Creation-Date: 2006-08-05 14:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -313,11 +313,11 @@ msgstr ""
 msgid "unknown type"
 msgstr ""
 
-#: database.c:589
+#: database.c:591
 msgid "Invalid field value defined in configuration"
 msgstr ""
 
-#: database.c:592
+#: database.c:594
 msgid "Invalid field value for sorting"
 msgstr ""
 
@@ -356,6 +356,10 @@ msgstr ""
 
 #: edit.c:439
 msgid "sorry, input for this field type is not yet implemented"
+msgstr ""
+
+#: edit.c:531
+msgid "Name: "
 msgstr ""
 
 #: edit.h:13

@@ -528,7 +528,7 @@ add_item()
 	char *field = NULL;
 	list_item item = item_create();
 
-	change_field("Name: ", &field, MAX_FIELD_LEN);
+	change_field(_("Name: "), &field, MAX_FIELD_LEN);
 
 	if( field == NULL )
 		return;

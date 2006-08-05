@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.5.5\n"
-"Report-Msgid-Bugs-To: <cedricduval+abook@free.fr>\n"
-"POT-Creation-Date: 2005-11-29 10:08+0200\n"
+"Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
+"POT-Creation-Date: 2006-08-05 14:17+0200\n"
 "PO-Revision-Date: 2005-10-18 18:10+0200\n"
 "Last-Translator: TAKAHASHI Tamotsu <ttakah@lapis.plala.or.jp>\n"
 "Language-Team: japanese\n"
@@ -324,11 +324,11 @@ msgstr ""
 msgid "unknown type"
 msgstr "不明なオプションです"
 
-#: database.c:589
+#: database.c:591
 msgid "Invalid field value defined in configuration"
 msgstr "不正な項目名が設定されています"
 
-#: database.c:592
+#: database.c:594
 #, fuzzy
 msgid "Invalid field value for sorting"
 msgstr "不正な項目名が設定されています"
@@ -371,6 +371,11 @@ msgstr ""
 #: edit.c:439
 msgid "sorry, input for this field type is not yet implemented"
 msgstr ""
+
+#: edit.c:531
+#, fuzzy
+msgid "Name: "
+msgstr "氏名"
 
 #: edit.h:13
 msgid "?:help q:quit editor"
