@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-05 14:17+0200\n"
-"PO-Revision-Date: 2006-08-05 14:08+0200\n"
+"PO-Revision-Date: 2006-08-05 15:10+0200\n"
 "Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
@@ -255,7 +255,6 @@ msgid "Name"
 msgstr "Nom"
 
 #: database.c:46
-#, fuzzy
 msgid "E-mail addresses"
 msgstr "Adresses email:"
 
@@ -313,29 +312,27 @@ msgstr "Notes"
 
 #: database.c:60
 msgid "Anniversary day"
-msgstr ""
+msgstr "Date d'anniversaire"
 
 #: database.c:164
 msgid "field already defined"
-msgstr ""
+msgstr "champ déjà défini"
 
 #: database.c:168
 msgid "standard field does not need to be declared"
-msgstr ""
+msgstr "les champs standard n'ont pas besoin d'être déclarés"
 
 #: database.c:183
-#, fuzzy
 msgid "unknown type"
-msgstr "option inconnue"
+msgstr "type inconnu"
 
 #: database.c:591
 msgid "Invalid field value defined in configuration"
 msgstr "Valeur de champ invalide définie dans la configuration"
 
 #: database.c:594
-#, fuzzy
 msgid "Invalid field value for sorting"
-msgstr "Valeur de champ invalide définie dans la configuration"
+msgstr "Valeur de champ invalide pour le classement"
 
 # Comment traduire 'tab' ?
 #: edit.c:51
@@ -344,38 +341,36 @@ msgstr "Intitulé de \"tab\" trop large pour l'écran"
 
 #: edit.c:330
 msgid "keybindings_new_123456789|n123456789"
-msgstr ""
+msgstr "keybindings_new_123456789|n123456789"
 
 #: edit.c:332
 #, c-format
 msgid "Choose %s to modify (<1>%s%c%s%s."
-msgstr ""
+msgstr "Choisir %s à modifier (<1>%s%c%s%s."
 
 #: edit.c:333
-#, fuzzy
 msgid "email"
-msgstr "Emails"
+msgstr "email"
 
 #: edit.c:333
 msgid "item"
-msgstr ""
+msgstr "entrée"
 
 #: edit.c:338
 msgid " or <n>ew"
-msgstr ""
+msgstr " ou <n>nouveau"
 
 #: edit.c:356
-#, fuzzy
 msgid "E-mail: "
-msgstr "Emails"
+msgstr "Emails: "
 
 #: edit.c:356
 msgid "Item: "
-msgstr ""
+msgstr "Entrée: "
 
 #: edit.c:439
 msgid "sorry, input for this field type is not yet implemented"
-msgstr ""
+msgstr "désolé, l'entrée pour ce type de champ n'est pas encore implémentée"
 
 #: edit.c:531
 msgid "Name: "
@@ -383,7 +378,7 @@ msgstr "Nom: "
 
 #: edit.h:13
 msgid "?:help q:quit editor"
-msgstr ""
+msgstr "?:aide q:quitter l'éditeur"
 
 #: filter.c:70 filter.c:81
 msgid "abook native format"
@@ -614,19 +609,16 @@ msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tvisualiser l'URL avec un navigateur web\n"
 
 #: help.h:55
-#, fuzzy
 msgid "\tarrows/h,l\t\tchange tab\n"
-msgstr "\ta,c,p,o,C/flèches/h,l\tchanger de \"tab\"\n"
+msgstr "\tflèches/h,l\tchanger de \"tab\"\n"
 
 #: help.h:57
-#, fuzzy
 msgid "\tq\t\t\tquit to main screen\n"
-msgstr "\tQ\t\tquitter sans sauvegarder\n"
+msgstr "\tq\t\tretourner à l'écran principal\n"
 
 #: help.h:59
-#, fuzzy
 msgid "\t1 - 5 A - Z\t\tedit fields\n"
-msgstr "\t1 - 5\t\t\téditer les champs\n"
+msgstr "\t1 - 5 A - Z\t\t\téditer les champs\n"
 
 #: help.h:61
 msgid "\tk or <\t\t\tprevious item\n"
@@ -637,14 +629,12 @@ msgid "\tj or >\t\t\tnext item\n"
 msgstr "\tj ou >\t\t\tentrée suivante\n"
 
 #: help.h:64
-#, fuzzy
 msgid "\tr\t\t\troll e-mail addresses up\n"
-msgstr "\tr\t\t\tenrouler les adresses email\n"
+msgstr "\tr\t\t\trotation des adresses email vers le haut\n"
 
 #: help.h:65
-#, fuzzy
 msgid "\tESC-r\t\t\troll e-mail addresses down\n"
-msgstr "\tr\t\t\tenrouler les adresses email\n"
+msgstr "\tESC-r\t\t\trotation des adresses email vers le bas\n"
 
 #: help.h:67
 msgid "\tu\t\t\tundo\n"
@@ -660,16 +650,15 @@ msgstr "\tv\t\t\tvisualiser l'URL avec un navigateur web\n"
 
 #: options.c:254
 msgid "quote mismatch"
-msgstr ""
+msgstr "problème de correspondance de caractère de quotation"
 
 #: options.c:260
 msgid "no assignment character found"
-msgstr ""
+msgstr "pas de caractère assignation trouvé"
 
 #: options.c:263
-#, fuzzy
 msgid "error in comma separated list"
-msgstr "valeurs délimitées par des virgules"
+msgstr "erreur dans la liste de valeurs délimitées par des virgules"
 
 #: options.c:292 options.c:311
 msgid "invalid value"
@@ -685,6 +674,8 @@ msgid ""
 "valid values for the 'preserve_fields' option are 'all', "
 "'standard' (default), and 'none'\n"
 msgstr ""
+"les valeurs correctes pour 'preserve_fields' sont 'all', "
+"'standard' (défaut), et 'none'\n"
 
 #: options.c:350
 #, c-format
@@ -692,6 +683,8 @@ msgid ""
 "valid values for the 'address_style' option are 'eu' (default), 'uk', and "
 "'us'\n"
 msgstr ""
+"les valeurs correctes pour 'address_style' sont 'eu' (défaut), 'uk', et "
+"'us'\n"
 
 #: options.c:372
 msgid "invalid value assignment"
@@ -702,18 +695,20 @@ msgid ""
 "customfield: obsolete command - please use the 'field' and 'view' commands "
 "instead"
 msgstr ""
+"customfield: commande obsolète - veuillez utiliser les commandes 'field' "
+"et 'view'"
 
 #: options.c:398
 msgid "no view name provided"
-msgstr ""
+msgstr "aucun nom de vue donné"
 
 #: options.c:428
 msgid "no field identifier provided"
-msgstr ""
+msgstr "aucun identifieur de champ donné"
 
 #: options.c:434
 msgid "no field name provided"
-msgstr ""
+msgstr "aucun nom de champ donné"
 
 #: options.c:490
 #, c-format
@@ -791,15 +786,15 @@ msgstr ""
 
 #: views.c:87
 msgid "undeclared field"
-msgstr ""
+msgstr "champ non déclaré"
 
 #: views.c:92
 msgid "maximal number of fields per view reached"
-msgstr ""
+msgstr "nombre maximal de champs par vue atteint"
 
 #: views.c:95
 msgid "field already in this view"
-msgstr ""
+msgstr "ce champ est déjà dans cette vue"
 
 #: views.c:139
 msgid "CONTACT"
@@ -810,17 +805,14 @@ msgid "ADDRESS"
 msgstr "ADRESSE"
 
 #: views.c:142
-#, fuzzy
 msgid "PHONE"
 msgstr "TÉLÉPHONE"
 
 #: views.c:143
-#, fuzzy
 msgid "OTHER"
 msgstr "AUTRE"
 
 #: views.c:165 views.c:166 views.c:167 views.c:168 views.c:169
-#, fuzzy
 msgid "CUSTOM"
 msgstr "PERSONNALISÉ"
 
