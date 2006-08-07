@@ -149,7 +149,7 @@ init_default_views()
 			if(default_views[i].fields[j] == -1)
 				break;
 			str = standard_fields[default_views[i].fields[j]].key;
-			add_field_to_view(default_views[i].name, str);
+			add_field_to_view(gettext(default_views[i].name), str);
 		}
 	}
 out:
