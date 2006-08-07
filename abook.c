@@ -446,8 +446,10 @@ static void
 muttq_print_item(FILE *file, int item)
 {
 	abook_list *emails, *e;
+	char *tmp = db_email_get(item);
 
-	emails = csv_to_abook_list(db_email_get(item));
+	emails = csv_to_abook_list(tmp);
+	free(tmp);
 
 	for(e = emails; e; e = e->next) {
 		fprintf(file, "%s\t%s\t%s\n", e->data, db_name_get(item),
@@ -510,7 +512,7 @@ make_mailstr(int item)
 
 	get_first_email(email, item);
 
-	ret = *db_email_get(item) ?
+	ret = *email ?
 		strdup_printf("%s <%s>", name, email) :
 		xstrdup(name);
 

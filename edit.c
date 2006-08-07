@@ -76,29 +76,33 @@ editor_tab(const int tab)
 void
 get_first_email(char *str, int item)
 {
-	char *tmp;
+	char *tmp, *emails = db_email_get(item);
 
-	if(!db_email_get(item)) {
+	if(!*emails) {
 		*str = 0;
 		return;
 	}
 
-	strncpy(str, db_email_get(item), MAX_EMAIL_LEN);
+	strncpy(str, emails, MAX_EMAIL_LEN);
+	free(emails);
 	if( (tmp = strchr(str, ',')) )
 		*tmp = 0;
 	else
 		str[MAX_EMAIL_LEN - 1] = 0;
 }
 
+/* This only rolls emails from the 'email' field, not emails from any
+ * field of type FIELD_EMAILS.
+ * TODO: expand to ask for which field to roll if several are present? */
 static void
 roll_emails(int item, enum rotate_dir dir)
 {
-	abook_list *emails = csv_to_abook_list(db_email_get(item));
+	abook_list *emails = csv_to_abook_list(db_fget(item, EMAIL));
 
 	if(!emails)
 		return;
 
-	free(db_email_get(item));
+	free(db_fget(item, EMAIL));
 	abook_list_rotate(&emails, dir);
 	db_fput(item, EMAIL, abook_list_to_csv(emails));
 	abook_list_free(&emails);
@@ -175,7 +179,7 @@ print_editor_header(int item)
 
 	get_first_email(email, item);
 
-	if(*db_email_get(item))
+	if(*email)
 		snprintf(header, EDITW_COLS, "%s <%s>",
 				db_name_get(item),
 				email);

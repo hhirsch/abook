@@ -838,7 +838,7 @@ static void            html_export_write_tail(FILE *out);
 static int
 html_export_database(FILE *out, struct db_enumerator e)
 {
-	char tmp[MAX_EMAILSTR_LEN];
+	char tmp[MAX_EMAILSTR_LEN], *emails;
 	int extra_column;
 
 	if(list_is_empty())
@@ -858,7 +858,9 @@ html_export_database(FILE *out, struct db_enumerator e)
 		else
 		    fprintf(out, "<tr>\n<td>%s</td>\n", db_name_get(e.item));
 
-		fprintf(out, "<td>%s</td>\n", db_email_get(e.item));
+		emails = db_email_get(e.item);
+		fprintf(out, "<td>%s</td>\n", emails);
+		free(emails);
 		if(extra_column >= 0)
 			fprintf(out, "<td>%s</td>\n",
 				safe_str(db_fget_byid(e.item, extra_column)));
@@ -1035,14 +1037,18 @@ pine_parse_file(FILE *in)
 static int
 pine_export_database(FILE *out, struct db_enumerator e)
 {
+	char *emails;
+
 	db_enumerate_items(e) {
-		fprintf(out, have_multiple_emails(e.item) ?
+		emails = db_email_get(e.item);
+		fprintf(out, strchr(emails, ',') /* multiple addresses? */ ?
 				"%s\t%s\t(%s)\t\t%s\n" : "%s\t%s\t%s\t\t%s\n",
 				safe_str(db_fget(e.item, NICK)),
 				safe_str(db_name_get(e.item)),
-				safe_str(db_email_get(e.item)),
+				emails,
 				safe_str(db_fget(e.item, NOTES))
 				);
+		free(emails);
 	}
 
 	return 0;
@@ -1499,7 +1505,7 @@ static int
 gcrd_export_database(FILE *out, struct db_enumerator e)
 {
 	int j;
-	char *name;
+	char *name, *tmp;
 	abook_list *emails, *em;
 
 	db_enumerate_items(e) {
@@ -1542,14 +1548,16 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 			fprintf(out, "TEL;CELL:%s\r\n",
 					db_fget(e.item, MOBILEPHONE));
 
-		if(*db_email_get(e.item)) {
-			emails = csv_to_abook_list(db_email_get(e.item));
+		tmp = db_email_get(e.item);
+		if(*tmp) {
+			emails = csv_to_abook_list(tmp);
 
 			for(em = emails; em; em = em->next)
 				fprintf(out, "EMAIL;INTERNET:%s\r\n", em->data);
 
 			abook_list_free(&emails);
 		}
+		free(tmp);
 
 		if(db_fget(e.item, NOTES))
 			fprintf(out, "NOTE:%s\r\n",
@@ -1689,7 +1697,7 @@ text_export_database(FILE * out, struct db_enumerator e)
 {
 	abook_list *emails, *em;
 	int j;
-	char *realname = get_real_name(), *str = NULL;
+	char *realname = get_real_name(), *str = NULL, *tmp;
 	char *style = opt_get_str(STR_ADDRESS_STYLE);
 
 	fprintf(out,
@@ -1706,8 +1714,9 @@ text_export_database(FILE * out, struct db_enumerator e)
 			fprintf(out, "\n(%s)", db_fget(e.item, NICK));
 		fprintf(out, "\n");
 
-		if(*db_email_get(e.item)) {
-			emails = csv_to_abook_list(db_email_get(e.item));
+		tmp = db_email_get(e.item);
+		if(*tmp) {
+			emails = csv_to_abook_list(tmp);
 
 			fprintf(out, "\n");
 			for(em = emails; em; em = em->next)
@@ -1715,6 +1724,7 @@ text_export_database(FILE * out, struct db_enumerator e)
 
 			abook_list_free(&emails);
 		}
+		free(tmp);
 		/* Print address */
 		if(db_fget(e.item, ADDRESS)) {
 			if(!safe_strcmp(style, "us"))	/* US like */
@@ -1795,8 +1805,8 @@ spruce_export_database (FILE *out, struct db_enumerator e)
 	fprintf(out, "# This is a generated file made by abook for the Spruce e-mail client.\n\n");
 
 	db_enumerate_items(e) {
-		if(strcmp(safe_str(db_email_get(e.item)), "")) {
-			get_first_email(email, e.item);
+		get_first_email(email, e.item);
+		if(strcmp(email, "")) {
 			fprintf(out, "# Address %d\nName: %s\nEmail: %s\nMemo: %s\n\n",
 					e.item,
 					db_name_get(e.item),
@@ -1822,19 +1832,19 @@ spruce_export_database (FILE *out, struct db_enumerator e)
 static int
 wl_export_database(FILE *out, struct db_enumerator e)
 {
-	abook_list *emails;
+	char email[MAX_EMAIL_LEN];
 
 	fprintf(out, "# Wanderlust address book written by %s\n\n", PACKAGE);
 	db_enumerate_items(e) {
-		if((emails = csv_to_abook_list(db_email_get(e.item))) != NULL) {
+		get_first_email(email, e.item);
+		if(*email) {
 			fprintf(out,
 				"%s\t\"%s\"\t\"%s\"\n",
-				emails->data,
+				email,
 				safe_str(db_fget(e.item, NICK)),
 				safe_str(db_name_get(e.item))
 			);
 		}
-		abook_list_free(&emails);
 	}
 
 	fprintf (out, "\n# End of address book file.\n");

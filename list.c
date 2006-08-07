@@ -117,7 +117,7 @@ void
 print_list_line(int i, int line, int highlight)
 {
 	int extra = extra_column;
-	char tmp[MAX_EMAILSTR_LEN];
+	char tmp[MAX_EMAILSTR_LEN], *emails;
 	int real_emaillen = (extra_column > 0 || extra_alternative > 0) ?
 		EMAILLEN : COLS - EMAILPOS;
 
@@ -131,10 +131,12 @@ print_list_line(int i, int line, int highlight)
 	mvwaddnstr(list, line, NAMEPOS, db_name_get(i),
 		bytes2width(db_name_get(i), NAMELEN));
 
-	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS))
-		mvwaddnstr(list, line, EMAILPOS, db_email_get(i),
-				bytes2width(db_email_get(i), real_emaillen));
-	else {
+	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS)) {
+		emails = db_email_get(i);
+		mvwaddnstr(list, line, EMAILPOS, emails,
+				bytes2width(emails, real_emaillen));
+		free(emails);
+	} else {
 		get_first_email(tmp, i);
 		mvwaddnstr(list, line, EMAILPOS, tmp,
 				bytes2width(tmp, real_emaillen));

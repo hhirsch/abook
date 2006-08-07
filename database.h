@@ -115,7 +115,7 @@ char *real_db_field_get(int item, int i, int std);
 #define db_fget(item, i)		real_db_field_get(item, i, 1)
 #define db_fget_byid(item, i)		real_db_field_get(item, i, 0)
 #define db_name_get(item)		db_fget(item, NAME)
-#define db_email_get(item)		db_fget(item, EMAIL)
+char *db_email_get(int item); /* memory has to be freed by the caller */
 
 /*
  * database field write
@@ -131,13 +131,6 @@ int real_db_field_put(int item, int i, int std, char *val);
  */
 list_item db_item_get(int i);
 
-
-/*
- * Various macros
- */
-
-#define have_multiple_emails(item) \
-	strchr(db_email_get(item), ',')
 
 #endif /* _DATABASE_H */
 

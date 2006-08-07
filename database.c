@@ -837,3 +837,22 @@ db_item_get(int i)
 	return database[i];
 }
 
+/* Fetch addresses from all fields of FIELD_EMAILS type */
+/* Memory has to be freed by the caller */
+char *
+db_email_get(int item)
+{
+	int i;
+	char *res;
+	abook_field_list *cur;
+	abook_list *emails = NULL;
+
+	for(cur = fields_list, i = 0; cur; cur = cur->next, i++)
+		if(cur->field->type == FIELD_EMAILS && *database[item][i])
+			abook_list_append(&emails, database[item][i]);
+
+	res = abook_list_to_csv(emails);
+	abook_list_free(&emails);
+	return res ? res : xstrdup("");
+}
+
