@@ -317,7 +317,7 @@ opt_set_set_option(char *p, struct option *opt)
 	return NULL;
 }
 
-static char *
+static const char *
 opt_set_option(char *var, char *p)
 {
 	int i;
@@ -386,7 +386,7 @@ opt_parse_customfield(buffer *b)
 /*
  * syntax: view <tab name> = <field1> [ , <field2>, ... ]
  */
-static char *
+static const char *
 opt_parse_view(buffer *b)
 {
 	char *err, *view;
@@ -416,7 +416,7 @@ opt_parse_view(buffer *b)
 /*
  * syntax: field <identifier> = <human readable name> [ , <type> ]
  */
-static char *
+static const char *
 opt_parse_field(buffer *b)
 {
 	char *err, *field, *name;
