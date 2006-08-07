@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-05 14:17+0200\n"
-"PO-Revision-Date: 2006-08-05 15:10+0200\n"
+"PO-Revision-Date: 2006-08-07 16:51+0200\n"
 "Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
@@ -341,7 +341,7 @@ msgstr "Intitulé de \"tab\" trop large pour l'écran"
 
 #: edit.c:330
 msgid "keybindings_new_123456789|n123456789"
-msgstr "keybindings_new_123456789|n123456789"
+msgstr "n123456789"
 
 #: edit.c:332
 #, c-format
@@ -695,8 +695,8 @@ msgid ""
 "customfield: obsolete command - please use the 'field' and 'view' commands "
 "instead"
 msgstr ""
-"customfield: commande obsolète - veuillez utiliser les commandes 'field' "
-"et 'view'"
+"customfield: commande obsolète - veuillez utiliser les commandes 'field' et "
+"'view'"
 
 #: options.c:398
 msgid "no view name provided"
