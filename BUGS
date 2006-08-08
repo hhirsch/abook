@@ -17,6 +17,20 @@ known bugs in abook
 
 * file format is not tolerant for character set changes
 
+--
+[25]
+name=Lastname, Firstname
+email="Lastname, Firstname" <firstname.lastname@example.com>
+
+but the command "abook --mutt-query lastname" returns two email addresses
+
+"Lastname       Lastname, Firstname
+Firstname" <firstname.lastname@example.com>     Lastname, Firstname
+
+In other words, the mutt-query doesn't treat the comma as protected by the
+quotes, although the conversion from pine format did.
+--
+
 Filters:
 * mutt / elm / pine export filters allow to create a file with duplicate
   aliases
