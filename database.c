@@ -543,9 +543,6 @@ surnamecmp(const void *i1, const void *i2)
 	int ret, idx = field_id(NAME);
 	char *n1, *n2, *s1, *s2;
 
-	if(idx == 0)
-		return 0; /* no 'name' field */
-
 	n1 = (*(list_item *)i1)[idx];
 	n2 = (*(list_item *)i2)[idx];
 	
