@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-05 14:17+0200\n"
-"PO-Revision-Date: 2006-08-07 16:51+0200\n"
+"PO-Revision-Date: 2006-08-09 23:57+0200\n"
 "Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
@@ -536,7 +536,7 @@ msgstr "\t+\t\ttout sélectionner\n"
 
 #: help.h:25
 msgid "\t-\t\tunselect all\n"
-msgstr "\t+\t\ttout désélectionner\n"
+msgstr "\t-\t\ttout désélectionner\n"
 
 #: help.h:26
 msgid "\t*\t\tinvert selection\n"
@@ -576,7 +576,7 @@ msgstr "\ts\t\tclasser la base de données\n"
 
 #: help.h:37
 msgid "\tS\t\t\"surname sort\"\n"
-msgstr "\ts\t\tclassement par nom de famille\n"
+msgstr "\tS\t\tclassement par nom de famille\n"
 
 #: help.h:38
 msgid "\tF\t\tsort by field (defined in configuration file)\n"
