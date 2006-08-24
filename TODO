@@ -1,3 +1,7 @@
+0.6
+ - input for data type should be implemented
+
+generic:
  - grouping
  - new file format (xml?)
  - custom views, keybindings

@@ -10,12 +10,17 @@ known bugs in abook
     ftp://ftp.gnu.org/gnu/readline/readline-4.3-patches/readline43-001
 
 * cursor disappears in some cases with abook_readline() on Solaris. If
-  you have problems it is recommended to use the ncurses library
+  you have problems it is recommended to use the GNU ncurses library
 
 * terminal state is not restored correctly on exit with certain ncurses and
   readline combination (more information is needed on this)
 
 * file format is not tolerant for character set changes
+
+* datafile is always removed and rewritten from scratch (symlinks don't work,
+  timestamp is always updated, comments are removed)
+
+* comma (,) is not allowed in lists and is converted to _
 
 --
 [25]

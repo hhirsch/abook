@@ -1,3 +1,6 @@
+0.6.0
+ - configurable views (Cedric Duval)
+ - new field types, lists and improved custom field support (Cedric Duval)
  - Italian translation (Claudio Stazzone)
 
 0.5.6
