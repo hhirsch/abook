@@ -361,7 +361,7 @@ edit_list(int item, int nb, int isemail)
 				&field, MAX_EMAIL_LEN))
 		return; /* user cancelled ( C-g ) */
 
-	/* TODO if list item contains commas, sjould use quotes instead */
+	/* TODO if list item contains commas, should use quotes instead */
 	if(field)
 		fix_email_str(field);
 

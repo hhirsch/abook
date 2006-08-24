@@ -358,18 +358,13 @@ save_database()
 		goto out;
 	}
 
-	if(list_is_empty()) {
-		fclose(out);
-		unlink(datafile);
-		ret = 1;
-		goto out;
-	}
+	if(!list_is_empty())
+		/*
+		 * Possibly should check if write_database failed.
+		 * Currently it returns always zero.
+		 */
+		write_database(out, e);
 
-	/*
-	 * Possibly should check if write_database failed.
-	 * Currently it returns always zero.
-	 */
-	write_database(out, e);
 	fclose(out);
 
 	if(access(datafile, F_OK) == 0 &&
