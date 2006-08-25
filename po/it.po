@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook 0.5.5\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-05 14:17+0200\n"
-"PO-Revision-Date: 2006-08-05 14:08+0200\n"
+"PO-Revision-Date: 2006-08-26 01:26+0200\n"
 "Last-Translator: Claudio Stazzone <c.stazzo@jumpy.it>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -255,9 +255,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: database.c:46
-#, fuzzy
 msgid "E-mail addresses"
-msgstr "Indirizzi e-mail:"
+msgstr "Indirizzi e-mail"
 
 #: database.c:47
 msgid "Address"
@@ -313,29 +312,27 @@ msgstr "Note"
 
 #: database.c:60
 msgid "Anniversary day"
-msgstr ""
+msgstr "Anniversario"
 
 #: database.c:164
 msgid "field already defined"
-msgstr ""
+msgstr "campo già definito"
 
 #: database.c:168
 msgid "standard field does not need to be declared"
-msgstr ""
+msgstr "campo standard non necessita dichiarazione"
 
 #: database.c:183
-#, fuzzy
 msgid "unknown type"
-msgstr "opzione sconosciuta"
+msgstr "tipo sconosciuto"
 
 #: database.c:591
 msgid "Invalid field value defined in configuration"
 msgstr "Valore di campo errato nella configurazione"
 
 #: database.c:594
-#, fuzzy
 msgid "Invalid field value for sorting"
-msgstr "Valore di campo errato nella configurazione"
+msgstr "Valore di campo errato per l'ordinamento"
 
 #: edit.c:51
 msgid "Tab name too wide for screen"
@@ -343,38 +340,36 @@ msgstr "Nome etichetta troppo largo per lo schermo"
 
 #: edit.c:330
 msgid "keybindings_new_123456789|n123456789"
-msgstr ""
+msgstr "keybindings_new_123456789|n123456789"
 
 #: edit.c:332
 #, c-format
 msgid "Choose %s to modify (<1>%s%c%s%s."
-msgstr ""
+msgstr "Scegli %s per modificare (<1>%s%c%s%s."
 
 #: edit.c:333
-#, fuzzy
 msgid "email"
-msgstr "E-mails"
+msgstr "email"
 
 #: edit.c:333
 msgid "item"
-msgstr ""
+msgstr "oggetto"
 
 #: edit.c:338
 msgid " or <n>ew"
-msgstr ""
+msgstr "o <n>uovo"
 
 #: edit.c:356
-#, fuzzy
 msgid "E-mail: "
-msgstr "E-mails"
+msgstr "E-mails:"
 
 #: edit.c:356
 msgid "Item: "
-msgstr ""
+msgstr "Oggetto:"
 
 #: edit.c:439
 msgid "sorry, input for this field type is not yet implemented"
-msgstr ""
+msgstr "mi dispiace, questo tipo di campo non e' ancora stato implementato"
 
 #: edit.c:531
 msgid "Name: "
@@ -382,7 +377,7 @@ msgstr "Nome: "
 
 #: edit.h:13
 msgid "?:help q:quit editor"
-msgstr ""
+msgstr "?:aiuto q:esci editor"
 
 #: filter.c:70 filter.c:81
 msgid "abook native format"
@@ -613,19 +608,16 @@ msgid "\tu\t\tview URL with web browser\n"
 msgstr "\tu\t\tmostra URL con browser html\n"
 
 #: help.h:55
-#, fuzzy
 msgid "\tarrows/h,l\t\tchange tab\n"
-msgstr "\ta,c,p,o,C/frecce/h,l\tcambia tab\n"
+msgstr "\tfrecce/h,l\tcambia tab\n"
 
 #: help.h:57
-#, fuzzy
 msgid "\tq\t\t\tquit to main screen\n"
-msgstr "\tQ\t\tesci senza salvare\n"
+msgstr "\tq\t\t\tvai allo schermo principale\n"
 
 #: help.h:59
-#, fuzzy
 msgid "\t1 - 5 A - Z\t\tedit fields\n"
-msgstr "\t1 - 5\t\t\tmodifica campi\n"
+msgstr "\t1 - 5 A - Z\t\tmodifica campi\n"
 
 #: help.h:61
 msgid "\tk or <\t\t\tprevious item\n"
@@ -636,14 +628,12 @@ msgid "\tj or >\t\t\tnext item\n"
 msgstr "\tj or >\t\t\toggetto successivo\n"
 
 #: help.h:64
-#, fuzzy
 msgid "\tr\t\t\troll e-mail addresses up\n"
-msgstr "\tr\t\t\truota indirizzi e-mail\n"
+msgstr "\tr\t\t\tporta verso l'alto indirizzi e-mail\n"
 
 #: help.h:65
-#, fuzzy
 msgid "\tESC-r\t\t\troll e-mail addresses down\n"
-msgstr "\tr\t\t\truota indirizzi e-mail\n"
+msgstr "\tESC-r\t\t\tporta verso il basso indirizzi e-mail\n"
 
 #: help.h:67
 msgid "\tu\t\t\tundo\n"
@@ -659,16 +649,15 @@ msgstr "\tv\t\t\tmostra url con browser html\n"
 
 #: options.c:254
 msgid "quote mismatch"
-msgstr ""
+msgstr "manca una virgoletta"
 
 #: options.c:260
 msgid "no assignment character found"
-msgstr ""
+msgstr "errore di assegnamento"
 
 #: options.c:263
-#, fuzzy
 msgid "error in comma separated list"
-msgstr "valori separati da virgole"
+msgstr "errore nei valori separati da virgole"
 
 #: options.c:292 options.c:311
 msgid "invalid value"
@@ -684,6 +673,8 @@ msgid ""
 "valid values for the 'preserve_fields' option are 'all', "
 "'standard' (default), and 'none'\n"
 msgstr ""
+"valori validi per l'opzione 'preserved_fields' sono 'all', "
+"'standard' (predefinito), e  'none'\n"
 
 #: options.c:350
 #, c-format
@@ -691,6 +682,8 @@ msgid ""
 "valid values for the 'address_style' option are 'eu' (default), 'uk', and "
 "'us'\n"
 msgstr ""
+"valori validi per l'opzione 'address_style' sono 'eu' (predefinito), 'uk', e "
+"'us'\n"
 
 #: options.c:372
 msgid "invalid value assignment"
@@ -700,19 +693,19 @@ msgstr "assegnazione di valore errata"
 msgid ""
 "customfield: obsolete command - please use the 'field' and 'view' commands "
 "instead"
-msgstr ""
+msgstr "customfield: comando obsoleto - usare i comandi 'field' e 'view'"
 
 #: options.c:398
 msgid "no view name provided"
-msgstr ""
+msgstr "nessun nome della vista fornito"
 
 #: options.c:428
 msgid "no field identifier provided"
-msgstr ""
+msgstr "nessun identificatore di campo fornito"
 
 #: options.c:434
 msgid "no field name provided"
-msgstr ""
+msgstr "nome campo non fornito"
 
 #: options.c:490
 #, c-format
@@ -790,15 +783,15 @@ msgstr "Mi dispiace, il file selezionato non è una rubrica valida per Abook"
 
 #: views.c:87
 msgid "undeclared field"
-msgstr ""
+msgstr "campo non dichiarato"
 
 #: views.c:92
 msgid "maximal number of fields per view reached"
-msgstr ""
+msgstr "raggiunto numero massimo di campi per vista"
 
 #: views.c:95
 msgid "field already in this view"
-msgstr ""
+msgstr "campo già presente in questa vista"
 
 #: views.c:139
 msgid "CONTACT"
@@ -809,17 +802,14 @@ msgid "ADDRESS"
 msgstr "INDIRIZZO"
 
 #: views.c:142
-#, fuzzy
 msgid "PHONE"
 msgstr "TELEFONO"
 
 #: views.c:143
-#, fuzzy
 msgid "OTHER"
 msgstr "ALTRO"
 
 #: views.c:165 views.c:166 views.c:167 views.c:168 views.c:169
-#, fuzzy
 msgid "CUSTOM"
 msgstr "PERSONALIZZATO"
 
