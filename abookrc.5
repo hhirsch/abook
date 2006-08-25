@@ -35,7 +35,7 @@ are on lines beginning with '#'.
 .TP
 \fBfield\fP \fIidentifier\fP = \fIhuman_readable_name\fP [ , \fItype\fP ]
 Defines a new custom field. \fItype\fP can be one of 'string' (default)
-, 'emails', 'list', or 'day'.
+, 'emails', 'list', or 'date'.
 
 .TP
 \fBview\fP \fIview name\fP = \fIfield1\fP [ , \fIfield2\fP, ... ]
@@ -165,7 +165,7 @@ Defines if the cursor is visible in main display. Default is false.
 # Declare a few custom fields
 field pager = Pager
 field address_lines = Address, list
-field birthday = Birthday, day
+field birthday = Birthday, date
 
 # Define how fields should be displayed in tabs
 view CONTACT = name, email

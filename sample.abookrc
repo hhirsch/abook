@@ -19,12 +19,12 @@
 #
 # syntax: field <identifier> = <human readable name> [ , <type> ]
 #
-# with <type> being one of 'string' (default), 'emails', 'list', or 'day'
+# with <type> being one of 'string' (default), 'emails', 'list', or 'date'
 #
 # Example of field definitions:
 field pager = Pager
 field address_lines = Address, list
-field birthday = Birthday, day
+field birthday = Birthday, date
 
 
 #  Defining a view/tab

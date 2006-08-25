@@ -57,7 +57,7 @@ abook_field standard_fields[] = {
 	{"nick",	N_("Nickname/Alias"),	FIELD_STRING}, /* NICK */
 	{"url",		N_("URL"),		FIELD_STRING}, /* URL */
 	{"notes",	N_("Notes"),		FIELD_STRING}, /* NOTES */
-	{"anniversary",	N_("Anniversary day"),	FIELD_DAY},    /* ANNIVERSARY */
+	{"anniversary",	N_("Anniversary day"),	FIELD_DATE},   /* ANNIVERSARY */
 	{0} /* ITEM_FIELDS */
 };
 
@@ -177,8 +177,8 @@ declare_new_field(char *key, char *name, char *type, int accept_standard)
 		f->type = FIELD_EMAILS;
 	else if(0 == strcasecmp("list", type))
 		f->type = FIELD_LIST;
-	else if(0 == strcasecmp("day", type))
-		f->type = FIELD_DAY;
+	else if(0 == strcasecmp("date", type))
+		f->type = FIELD_DATE;
 	else
 		return _("unknown type");
 
@@ -428,7 +428,7 @@ validate_item(list_item item)
 			case FIELD_STRING:
 				max_field_len = MAX_FIELD_LEN;
 				break;
-			case FIELD_DAY:
+			case FIELD_DATE:
 				break;
 			default:
 				assert(0);

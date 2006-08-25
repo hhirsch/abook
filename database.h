@@ -43,7 +43,7 @@ enum {
 	FIELD_STRING = 1,
 	FIELD_EMAILS,
 	FIELD_LIST,
-	FIELD_DAY,
+	FIELD_DATE,
 };
 
 enum {

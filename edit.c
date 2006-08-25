@@ -33,6 +33,8 @@ extern int views_count;
 
 WINDOW *editw;
 
+static int parse_date_string(char *s, int *day, int *month, int *year);
+
 
 static void
 editor_tab(const int tab)
@@ -240,6 +242,22 @@ editor_print_data(int tab, int item)
 						EDITW_COLS - TAB_COLON_POS - 2);
 			}
 			abook_list_free(&emails);
+		} else if(cur->field->type == FIELD_DATE) {
+			int day, month, year;
+			char buf[12];
+
+			find_field_number(cur->field->key, &nb);
+			if((str = db_fget_byid(item, nb)) != NULL)
+				strncpy(buf, str, sizeof(buf));
+
+			if(str && parse_date_string(buf, &day, &month, &year)) {
+				str = strdup_printf(year ? " %04d-%02d-%02d" :
+					"%c%02d-%02d", year ? year : ' ',
+					month, day);
+				mvwaddnstr(editw, y, TAB_COLON_POS + 2, str,
+					bytes2width(str, FIELD_MAX_WIDTH));
+				free(str);
+			}
 		} else {
 			find_field_number(cur->field->key, &nb);
 			str = safe_str(db_fget_byid(item, nb));
@@ -378,6 +396,113 @@ edit_list(int item, int nb, int isemail)
 	abook_list_free(&list);
 }
 
+static int is_valid_date(const int day, const int month, const int year)
+{
+	int valid = 1;
+	int month_length[13] =
+		{ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+	/*
+	 * leap year
+	 */
+	if ((!(year % 4)) && ((year % 100) || !(year % 400)))
+		month_length[2] = 29;
+
+	if (month < 1 || month > 12)
+		valid = 0;
+	else if (day < 1 || day > month_length[month])
+		valid = 0;
+	else if (year < 0) /* we don't accept negative year numbers */
+		valid = 0;
+
+	return valid;
+}
+
+static int
+parse_date_string(char *s, int *day, int *month, int *year)
+{
+	int i = 0;
+	char *p = s;
+	assert(s && day && month && year);
+
+	if(*s == '-' && *s++ == '-') { /* omitted year */
+		*year = 0;
+		p = ++s;
+		i++;
+	}
+
+	while(*s) {
+		if(isdigit(*s)) {
+			s++;
+			continue;
+		} else if(*s == '-') {
+			if(++i > 3)
+				return FALSE;
+			*s++ = '\0';
+			switch(i) {
+				case 1: *year = atoi(p); break;
+				case 2: *month = atoi(p); break;
+			}
+			p = s;
+		} else
+		return FALSE;
+	}
+
+	if (i != 2 || !*p)
+		return FALSE;
+
+	*day = atoi(p);
+
+	return is_valid_date(*day, *month, *year);
+}
+
+static int
+is_number(char *s)
+{
+	char *p;
+
+	for(p = s; *p; p++)
+		if(!isdigit(*p))
+			return FALSE;
+	return TRUE;
+}
+
+static void
+edit_date(int item, int nb)
+{
+	int i, date[3], old = FALSE;
+	char buf[12], *s = db_fget_byid(item, nb);
+	char *field[] = { N_("Day: "), N_("Month: "), N_("Year (optional): ") };
+
+	if(s) {
+		strncpy(buf, s, sizeof(buf));
+		old = parse_date_string(buf, &date[0], &date[1], &date[2]);
+	}
+
+	for(i = 0; i < 3; i++) {
+		s = (old && date[i]) ? strdup_printf("%d", date[i]) : NULL;
+		if(change_field(gettext(field[i]), &s, 5))
+			return; /* user aborted with ^G */
+
+		date[i] = (s && is_number(s)) ? atoi(s) : 0;
+
+		if(!s) {
+			switch(i) {
+				case 0:	db_fput_byid(item, nb, NULL); /*delete*/
+				case 1: /* fall through */ return;
+			}
+		} else
+			xfree(s);
+	}
+
+	/* ISO 8601 date, of the YYYY-MM-DD or --MM-DD format */
+	if(is_valid_date(date[0], date[1], date[2])) {
+		s = strdup_printf(date[2] ? "%04d-%02d-%02d" : "%c-%02d-%02d",
+			date[2] ? date[2] : '-', date[1], date[0]);
+		db_fput_byid(item, nb, xstrdup(s));
+	} else
+		statusline_msg(_("Invalid date"));
+}
 
 /* input range: 1-9A-Z
  * output range: 0-34 */
@@ -439,9 +564,8 @@ edit_field(int tab, char c, int item_number)
 		case FIELD_EMAILS:
 			edit_list(item_number, idx, 1);
 			break;
-		case FIELD_DAY:
-			statusline_msg(_("sorry, input for this field type is "
-						"not yet implemented"));
+		case FIELD_DATE:
+			edit_date(item_number, idx);
 			return;
 		default:
 			assert(0);
