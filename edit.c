@@ -500,8 +500,12 @@ edit_date(int item, int nb)
 
 	/* ISO 8601 date, of the YYYY-MM-DD or --MM-DD format */
 	if(is_valid_date(date[0], date[1], date[2])) {
-		s = strdup_printf(date[2] ? "%04d-%02d-%02d" : "%c-%02d-%02d",
-			date[2] ? date[2] : '-', date[1], date[0]);
+		if(date[2])
+			s = strdup_printf("%04d-%02d-%02d",
+				date[2], date[1], date[0]);
+		else
+			s = strdup_printf("--%02d-%02d", date[1], date[0]);
+
 		db_fput_byid(item, nb, xstrdup(s));
 	} else
 		statusline_msg(_("Invalid date"));
