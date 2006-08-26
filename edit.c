@@ -251,9 +251,12 @@ editor_print_data(int tab, int item)
 				strncpy(buf, str, sizeof(buf));
 
 			if(str && parse_date_string(buf, &day, &month, &year)) {
-				str = strdup_printf(year ? " %04d-%02d-%02d" :
-					"%c%02d-%02d", year ? year : ' ',
-					month, day);
+				if(year)
+					str = strdup_printf("%04d-%02d-%02d",
+						year, month, day);
+				else
+					str = strdup_printf("--%02d-%02d",
+						month, day);
 				mvwaddnstr(editw, y, TAB_COLON_POS + 2, str,
 					bytes2width(str, FIELD_MAX_WIDTH));
 				free(str);
@@ -440,8 +443,8 @@ parse_date_string(char *s, int *day, int *month, int *year)
 				return FALSE;
 			*s++ = '\0';
 			switch(i) {
-				case 1: *year = atoi(p); break;
-				case 2: *month = atoi(p); break;
+				case 1: *year = safe_atoi(p); break;
+				case 2: *month = safe_atoi(p); break;
 			}
 			p = s;
 		} else
