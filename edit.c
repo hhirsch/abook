@@ -289,7 +289,7 @@ editor_print_data(int tab, int item)
  *  valid string
  */
 static int
-change_field(char *msg, char **field, int max_len)
+change_field(char *msg, char **field, size_t max_len)
 {
 	char *old;
 	int ret = 0;
@@ -314,7 +314,7 @@ change_field(char *msg, char **field, int max_len)
 }
 
 static int
-change_name_field(char *msg, char **field, int max_len)
+change_name_field(char *msg, char **field, size_t max_len)
 {
 	char *tmp;
 	int ret;
