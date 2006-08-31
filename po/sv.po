@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
-"POT-Creation-Date: 2006-08-05 14:17+0200\n"
+"POT-Creation-Date: 2006-08-31 08:12+0300\n"
 "PO-Revision-Date: 2006-08-05 14:20+0200\n"
 "Last-Translator: Susanna Björverud <susanna.bjorverud@telia.com>\n"
 "Language-Team: none\n"
@@ -154,22 +154,22 @@ msgstr "\t\t\t\t\t(förvalt: stdout)"
 msgid "\t--formats\t\t\tlist available formats"
 msgstr "\t--formats\t\t\tlista tillgängliga format"
 
-#: abook.c:497
+#: abook.c:499
 #, c-format
 msgid "Cannot open database\n"
 msgstr "Kan inte öppna databasen\n"
 
-#: abook.c:623
+#: abook.c:625
 #, c-format
 msgid "too few arguments to make conversion\n"
 msgstr "alltför få parametrar för att kunna konvertera\n"
 
-#: abook.c:624
+#: abook.c:626
 #, c-format
 msgid "try --help\n"
 msgstr "prova --help\n"
 
-#: abook.c:629
+#: abook.c:631
 #, c-format
 msgid ""
 "input and output formats are the same\n"
@@ -178,46 +178,46 @@ msgstr ""
 "input- och outputformat är identiska\n"
 "avslutar...\n"
 
-#: abook.c:643
+#: abook.c:645
 #, c-format
 msgid "input format %s not supported\n"
 msgstr "inputformater %s stöds ej\n"
 
-#: abook.c:647
+#: abook.c:649
 #, c-format
 msgid "cannot read file %s\n"
 msgstr "kan inte läsa filen %s\n"
 
-#: abook.c:656
+#: abook.c:658
 #, c-format
 msgid "output format %s not supported\n"
 msgstr "outputformatet %s stöds ej\n"
 
-#: abook.c:662
+#: abook.c:664
 #, c-format
 msgid "cannot write file %s\n"
 msgstr "kan inte skriva till filen %s\n"
 
-#: abook.c:683
+#: abook.c:685
 #, c-format
 msgid "cannot open %s\n"
 msgstr "kan inte öppna %s\n"
 
-#: abook.c:686
+#: abook.c:688
 #, c-format
 msgid "%d item(s) added to %s\n"
 msgstr "%d post(er) har lagts till i %s\n"
 
-#: abook.c:688
+#: abook.c:690
 msgid "Valid sender address not found"
 msgstr "Kunde inte hitta en giltig avsändaradress"
 
-#: abook.c:728
+#: abook.c:730
 #, c-format
 msgid "Address %s already in addressbook\n"
 msgstr "Addressen %s finns redan i adressboken\n"
 
-#: abook.c:738
+#: abook.c:740
 #, c-format
 msgid ""
 "cannot open /dev/tty\n"
@@ -226,20 +226,20 @@ msgstr ""
 "kan inte öppna /dev/tty\n"
 "du bör kanske använda --add-email-quiet\n"
 
-#: abook.c:744
+#: abook.c:746
 #, fuzzy, c-format
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr "Lägg till \"%s <%s>\" i %s? (j/n)\n"
 
-#: abook.c:748 abook.c:755 ui.c:343 ui.c:605
+#: abook.c:750 abook.c:757 ui.c:343 ui.c:605
 msgid "keybinding for yes|y"
 msgstr "j"
 
-#: abook.c:749 abook.c:751 ui.c:341
+#: abook.c:751 abook.c:753 ui.c:341
 msgid "keybinding for no|n"
 msgstr "n"
 
-#: abook.c:776
+#: abook.c:778
 #, c-format
 msgid "stdin is a directory or cannot stat stdin\n"
 msgstr ""
@@ -328,55 +328,68 @@ msgstr ""
 msgid "unknown type"
 msgstr "okänd flagga"
 
-#: database.c:591
+#: database.c:583
 msgid "Invalid field value defined in configuration"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
-#: database.c:594
+#: database.c:586
 #, fuzzy
 msgid "Invalid field value for sorting"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
-#: edit.c:51
+#: edit.c:53
 msgid "Tab name too wide for screen"
 msgstr "Flikrubrik för bred för skärmen"
 
-#: edit.c:330
+#: edit.c:355
 msgid "keybindings_new_123456789|n123456789"
 msgstr ""
 
-#: edit.c:332
+#: edit.c:357
 #, c-format
 msgid "Choose %s to modify (<1>%s%c%s%s."
 msgstr ""
 
-#: edit.c:333
+#: edit.c:358
 #, fuzzy
 msgid "email"
 msgstr "Ebrev"
 
-#: edit.c:333
+#: edit.c:358
 msgid "item"
 msgstr ""
 
-#: edit.c:338
+#: edit.c:363
 msgid " or <n>ew"
 msgstr ""
 
-#: edit.c:356
+#: edit.c:381
 #, fuzzy
 msgid "E-mail: "
 msgstr "Ebrev"
 
-#: edit.c:356
+#: edit.c:381
 msgid "Item: "
 msgstr ""
 
-#: edit.c:439
-msgid "sorry, input for this field type is not yet implemented"
+#: edit.c:478
+msgid "Day: "
 msgstr ""
 
-#: edit.c:531
+#: edit.c:478
+msgid "Month: "
+msgstr ""
+
+#: edit.c:478
+msgid "Year (optional): "
+msgstr ""
+
+#: edit.c:511
+#, fuzzy
+msgid "Invalid date"
+msgstr "ogiltigt värde"
+
+#: edit.c:666
 msgid "Name: "
 msgstr "Namn: "
 
@@ -606,8 +619,8 @@ msgid "\tm\t\tsend mail with mutt\n"
 msgstr "\tm\t\tskicka post med mutt\n"
 
 #: help.h:47
-msgid "\tu\t\tview URL with web browser\n"
-msgstr "\tu\t\tvisa URL i webbläsare\n"
+msgid "\tv\t\tview URL with web browser\n"
+msgstr "\tv\t\tvisa URL i webbläsare\n"
 
 #: help.h:55
 #, fuzzy

@@ -44,7 +44,7 @@ N_("	A		move current item up\n"),
 N_("	Z		move current item down\n"),
 "\n",
 N_("	m		send mail with mutt\n"),
-N_("	u		view URL with web browser\n"),
+N_("	v		view URL with web browser\n"),
 NULL
 
 };
