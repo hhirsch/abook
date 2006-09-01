@@ -13,12 +13,16 @@ AM_GNU_GETTEXT_VERSION(0.14.1)
 
 AC_DEFUN([ABOOK_EXPAND_PREFIX], [
 	$1=$2
+	dnl expanding twice, since from autoconf 2.60 on, $datadir refers to
+	dnl $datarootdir which in turn refers to $prefix
 	$1=`(	test "x$prefix" = xNONE && prefix="$ac_default_prefix"
-		eval echo \""[$]$1"\"	)`
+		eval tmp_abook_prefix=\""[$]$1"\"
+		eval echo $tmp_abook_prefix
+		)`
 ])
 
-ABOOK_EXPAND_PREFIX(abook_localedir, "$datarootdir/locale")
-localedir="\$(datarootdir)/locale"
+ABOOK_EXPAND_PREFIX(abook_localedir, "$datadir/locale")
+localedir="\$(datadir)/locale"
 
 AC_ARG_WITH(localedir,
 	[  --with-localedir=PATH      Where the locale files are installed ])
