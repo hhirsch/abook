@@ -50,10 +50,6 @@ static struct option abook_vars[] = {
 	{ "autosave", OT_BOOL, BOOL_AUTOSAVE, TRUE },
 
 	{ "show_all_emails", OT_BOOL, BOOL_SHOW_ALL_EMAILS, TRUE },
-	{ "emailpos", OT_INT, INT_EMAILPOS, 25 },
-	{ "extra_column", OT_STR, STR_EXTRA_COLUMN, UL "phone" },
-	{ "extra_alternative", OT_STR, STR_EXTRA_ALTERNATIVE, UL "-1" },
-	{ "extrapos", OT_INT, INT_EXTRAPOS, 65 },
 	{ "index_format", OT_STR, STR_INDEX_FORMAT, UL " {name:22} {email:40} {phone:12|workphone|mobile}" },
 	{ "mutt_command", OT_STR, STR_MUTT_COMMAND, UL "mutt" },
 	{ "mutt_return_all_emails", OT_BOOL, BOOL_MUTT_RETURN_ALL_EMAILS,
