@@ -2,13 +2,14 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the abook package.
 # Johannes Weißl <jargon@molb.org>, 2005.
+# Gerfried Fuchs <alfie@ist.org>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.5pre1\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-31 08:12+0300\n"
-"PO-Revision-Date: 2006-08-05 14:12+0200\n"
+"PO-Revision-Date: 2006-09-04 21:00+0200\n"
 "Last-Translator: Johannes Weißl <jargon@molb.org>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -257,9 +258,8 @@ msgid "Name"
 msgstr "Name"
 
 #: database.c:46
-#, fuzzy
 msgid "E-mail addresses"
-msgstr "E-Mail-Adressen:"
+msgstr "E-Mail-Adressen"
 
 #: database.c:47
 msgid "Address"
@@ -322,16 +322,15 @@ msgstr ""
 
 #: database.c:164
 msgid "field already defined"
-msgstr ""
+msgstr "Feld bereits definiert"
 
 #: database.c:168
 msgid "standard field does not need to be declared"
 msgstr ""
 
 #: database.c:183
-#, fuzzy
 msgid "unknown type"
-msgstr "unbekannte Option"
+msgstr "unbekannter Typ"
 
 #: database.c:583
 msgid "Invalid field value defined in configuration"
@@ -348,7 +347,7 @@ msgstr "Kartei-Name zu breit für den Bildschirm"
 
 #: edit.c:355
 msgid "keybindings_new_123456789|n123456789"
-msgstr ""
+msgstr "n123456789"
 
 #: edit.c:357
 #, c-format
@@ -356,26 +355,24 @@ msgid "Choose %s to modify (<1>%s%c%s%s."
 msgstr ""
 
 #: edit.c:358
-#, fuzzy
 msgid "email"
-msgstr "E-Mails"
+msgstr "E-Mail"
 
 #: edit.c:358
 msgid "item"
-msgstr ""
+msgstr "Element"
 
 #: edit.c:363
 msgid " or <n>ew"
-msgstr ""
+msgstr " oder <n>eu"
 
 #: edit.c:381
-#, fuzzy
 msgid "E-mail: "
-msgstr "E-Mails"
+msgstr "E-Mails: "
 
 #: edit.c:381
 msgid "Item: "
-msgstr ""
+msgstr "Element: "
 
 #: edit.c:478
 msgid "Day: "
@@ -400,7 +397,7 @@ msgstr "Name: "
 
 #: edit.h:13
 msgid "?:help q:quit editor"
-msgstr ""
+msgstr "?:Hilfe q:Editor beenden"
 
 #: filter.c:70 filter.c:81
 msgid "abook native format"
@@ -687,9 +684,8 @@ msgid "no assignment character found"
 msgstr ""
 
 #: options.c:263
-#, fuzzy
 msgid "error in comma separated list"
-msgstr "komma-separierte Werte"
+msgstr "Fehler in komma-separierter Liste"
 
 #: options.c:292 options.c:311
 msgid "invalid value"
@@ -834,17 +830,14 @@ msgid "ADDRESS"
 msgstr "ADRESSE"
 
 #: views.c:142
-#, fuzzy
 msgid "PHONE"
 msgstr "TELEFON"
 
 #: views.c:143
-#, fuzzy
 msgid "OTHER"
 msgstr "ANDERE"
 
 #: views.c:165 views.c:166 views.c:167 views.c:168 views.c:169
-#, fuzzy
 msgid "CUSTOM"
 msgstr "BENUTZER"
 
@@ -867,9 +860,3 @@ msgstr "Benutzer4"
 #: views.c:169
 msgid "Custom5"
 msgstr "Benutzer5"
-
-#~ msgid "?:help c:contact a:address p:phone o:other"
-#~ msgstr "?:Hilfe c:Kontakt a:Adresse p:Telefon o:Andere"
-
-#~ msgid "invalid custom field number"
-#~ msgstr "ungültige benutzerdefinierte Feldnummer"
