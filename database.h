@@ -66,7 +66,7 @@ abook_field *real_find_field(char *key, abook_field_list *list, int *nb);
 #define find_field(key, list)		real_find_field(key, list, NULL)
 #define find_field_number(key, pt_nb)	real_find_field(key, NULL, pt_nb)
 #define find_declared_field(key)	find_field(key,NULL)
-void get_field_keyname(int i, char **key, char **name);
+void get_field_info(int i, char **key, char **name, int *type);
 void add_field(abook_field_list **list, abook_field *f);
 char *declare_new_field(char *key, char *name, char *type, int accept_standard);
 void init_standard_fields();

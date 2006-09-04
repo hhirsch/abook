@@ -832,39 +832,56 @@ ldif_export_database(FILE *out, struct db_enumerator e)
  * html export filter
  */
 
-static void            html_export_write_head(FILE *out, int extra_column);
+static void            html_export_write_head(FILE *out);
 static void            html_export_write_tail(FILE *out);
+
+extern struct index_elem *index_elements;
+
+static void
+html_print_emails(FILE *out, struct list_field *f)
+{
+	abook_list *l = csv_to_abook_list(f->data);
+
+	for(; l; l = l->next) {
+		fprintf(out, "<a href=\"mailto:%s\">%s</a>", l->data, l->data);
+		if(l->next)
+			fprintf(out, ", ");
+	}
+
+	abook_list_free(&l);
+}
 
 static int
 html_export_database(FILE *out, struct db_enumerator e)
 {
-	char tmp[MAX_EMAILSTR_LEN], *emails;
-	int extra_column;
+	struct list_field f;
+	struct index_elem *cur;
 
 	if(list_is_empty())
 		return 2;
 
-	extra_column = init_extra_field(STR_EXTRA_COLUMN);
-	html_export_write_head(out, extra_column);
+	init_index();
+
+	html_export_write_head(out);
 
 	db_enumerate_items(e) {
-		get_first_email(tmp, e.item);
-		if (*tmp)
-		    fprintf(out, "<tr>\n<td>"
-				    "<a href=\"mailto:%s\">%s</a>"
-				    "</td>\n",
-			    tmp,
-			    db_name_get(e.item));
-		else
-		    fprintf(out, "<tr>\n<td>%s</td>\n", db_name_get(e.item));
+		fprintf(out, "<tr>");
+		for(cur = index_elements; cur; cur = cur->next) {
+			if(cur->type != INDEX_FIELD)
+				continue;
 
-		emails = db_email_get(e.item);
-		fprintf(out, "<td>%s</td>\n", emails);
-		free(emails);
-		if(extra_column >= 0)
-			fprintf(out, "<td>%s</td>\n",
-				safe_str(db_fget_byid(e.item, extra_column)));
-		fprintf(out, "</tr>\n\n");
+			get_list_field(e.item, cur, &f);
+
+			if(f.type == FIELD_EMAILS) {
+				fprintf(out, "<td>");
+				html_print_emails(out, &f);
+				fprintf(out, "</td>");
+				continue;
+			} else {
+				fprintf(out, "<td>%s</td>", safe_str(f.data));
+			}
+		}
+		fprintf(out, "</tr>\n");
 	}
 
 	html_export_write_tail(out);
@@ -873,9 +890,10 @@ html_export_database(FILE *out, struct db_enumerator e)
 }
 
 static void
-html_export_write_head(FILE *out, int extra_column)
+html_export_write_head(FILE *out)
 {
-	char *realname = get_real_name(), *extra_column_name = NULL;
+	char *realname = get_real_name(), *str;
+	struct index_elem *cur;
 
 	fprintf(out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
 	fprintf(out, "<html>\n<head>\n <title>%s's addressbook</title>",
@@ -884,11 +902,13 @@ html_export_write_head(FILE *out, int extra_column)
 	fprintf(out, "\n<h2>%s's addressbook</h2>\n", realname );
 	fprintf(out, "<br><br>\n\n");
 
-	fprintf(out, "<table border=\"1\" align=\"center\">\n");
-	fprintf(out, "\n<tr><th>Name</th><th>E-mail address(es)</th>");
-	if(extra_column >= 0) {
-		get_field_keyname(extra_column, NULL, &extra_column_name);
-		fprintf(out, "<th>%s</th>", safe_str(extra_column_name));
+	fprintf(out, "<table border=\"1\" align=\"center\">\n<tr>");
+	for(cur = index_elements; cur; cur = cur->next) {
+		if(cur->type != INDEX_FIELD)
+			continue;
+
+		get_field_info(cur->d.field.id, NULL, &str, NULL);
+		fprintf(out, "<th>%s</th>", str);
 	}
 	fprintf(out, "</tr>\n\n");
 
@@ -1744,8 +1764,8 @@ text_export_database(FILE * out, struct db_enumerator e)
 			fprintf(out, "\n");
 			for(j = PHONE; j <= MOBILEPHONE; j++)
 				if(db_fget(e.item, j)) {
-					get_field_keyname(field_id(j),
-							NULL, &str);
+					get_field_info(field_id(j),
+							NULL, &str, NULL);
 					fprintf(out, "%s: %s\n", str,
 						db_fget(e.item, j));
 				}

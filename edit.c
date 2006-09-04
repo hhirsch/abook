@@ -459,17 +459,6 @@ parse_date_string(char *s, int *day, int *month, int *year)
 	return is_valid_date(*day, *month, *year);
 }
 
-static int
-is_number(char *s)
-{
-	char *p;
-
-	for(p = s; *p; p++)
-		if(!isdigit(*p))
-			return FALSE;
-	return TRUE;
-}
-
 static void
 edit_date(int item, int nb)
 {

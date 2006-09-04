@@ -1,0 +1,32 @@
+This file lists major changes affecting abook's behavior.
+Please read this file carefully when upgrading abook.
+A more comprehensive list of changes can be found in the ChangeLog file.
+
+--
+
+0.6.0pre2:
+  * The four following configuration options have been deprecated and will
+    no longer be accepted by abook:
+      * emailpos
+      * extra_column
+      * extra_alternative
+      * extrapos
+
+    They have been replaced with a single more flexible option:
+    index_format.
+
+    This option is a string defining the format of a line in the main list.
+    It allows displaying of as many fields as desired, with optional
+    width limit, as well as an arbitrary number of alternative fields.
+
+0.6.0pre1 (2006-08-30):
+  * The 'customfield' command has been obsoleted by a more flexible set
+    of commands: 'field' and 'view'.
+
+    Those two commands make it possible to define fields and organize
+    them within tabs as you see fit.
+
+    Not using these commands, the look and feel of previous releases
+    will mostly be kept the same. Also see the related 'preserve_fields'
+    configuration variable.
+

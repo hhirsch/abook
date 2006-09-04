@@ -78,51 +78,41 @@ only preserve the standard fields (see a list in the
 .TP
 .B none
 discards any unknown field.
+.RE
 .IP
 Default is \fIstandard\fP.
+
+.TP
+\fBindex_format\fP=format_string
+Defines the way entries are displayed in the main list. This is a string containing field names enclosed between braces, with an optional width limit specified by a number (right alignment if negative) after the field name and a colon, and an arbitrary number of alternative fields (first with non empty content is to be displayed) separated by vertical bars. For instance:
+.RS
+.TP
+\fI{name:22}\fP
+displays the \fIname\fP field with a maximal width of 22 characters.
+.TP
+\fI{phone:-13|workphone|mobile}\fP
+displays (right aligned within a width of 13 characters), either the \fIphone\fP, \fIworkphone\fP or \fImobile\fP field, whichever being the first to be non-empty.
 .RE
+.IP
+Default is \fI" {name:22} {email:40} {phone:12|workphone|mobile}"\fP
 
 .TP
 \fBshow_all_emails\fP=[true|false]
-Defines whether all email addresses for a contact are shown in the main list view. Default is true
+Defines whether all email addresses for a contact are shown in the main list view. Default is true.
 
 .TP
-\fBemailpos\fP=column
-Defines the screen column on the main list where the email address is to begin. Default is 25.
-
+.PD 0
+\fBemailpos\fP
 .TP
-\fBextra_column\fP=field
-Defines the field to display in the extra (third) column on the main list. Default is "phone" (Home Phone).
-.IP
-\fIfield\fP can be any of the following:
-.br
--1			disabled
-.br
-phone		Home Phone
-.br
-workphone		Work Phone
-.br
-fax			Fax
-.br
-mobile		Mobile Phone
-.br
-nick			Nickname/Alias
-.br
-url			URL
-.br
-notes		Notes
-
+.PD 0
+\fBextra_column\fP
 .TP
-\fBextra_alternative\fP=field
-This is an optional setting that allows you to specify an alternative field to be displayed in the extra (third) column if there is no data for the field specified in extra_column for a particular item. The strings for the fields are the same as above. Please note that the data shown where the alternative field has been used will NOT be marked differently in any way from the rest of the extra column. There is no default.
-
+.PD 0
+\fBextra_alternative\fP
 .TP
-\fBextrapos\fP=column
-Defines the screen column on the main list where the extra field is to begin. Default is 65.
-
-.TP
-\fBmutt_command\fP=command
-Defines the command to start mutt. Default is "mutt".
+.PD
+\fBextrapos\fP
+Obsoleted by \fBindex_format\fP.
 
 .TP
 \fBmutt_return_all_emails\fP=[true|false]
@@ -180,28 +170,11 @@ set preserve_fields=all
 # Automatically save database on exit
 set autosave=true
 
+# Format of entries lines in list
+set index_format=" {name:22} {email:40} {phone:12|workphone|mobile}"
+
 # Show all email addresses in list
 set show_all_emails=true
-
-# Screen column for email field to start
-set emailpos=25
-
-# Field to be used in the extra column
-set extra_column=phone
-# frequently used values:
-#	-1          disabled
-#	phone       Home Phone
-#	workphone   Work Phone
-#	fax         Fax
-#	mobile      Mobile Phone
-#	nick        Nickname/Alias
-#	url         URL
-
-#
-set extra_alternative=-1
-
-# Screen column for the extra field to start
-set extrapos=65
 
 # Command used to start mutt
 set mutt_command=mutt
@@ -215,19 +188,19 @@ set print_command=lpr
 # Command used to start the web browser
 set www_command=lynx
 
-# address style [eu|us|uk]
+# Address style [eu|us|uk]
 set address_style=eu
 
-# use ASCII characters only
+# Use ASCII characters only
 set use_ascii_only=false
 
 # Prevent double entry
 set add_email_prevent_duplicates=false
 
-# field to be used with "sort by field" command
+# Field to be used with "sort by field" command
 set sort_field=nick
 
-# show cursor in main display
+# Show cursor in main display
 set show_cursor=false
 
 .fi

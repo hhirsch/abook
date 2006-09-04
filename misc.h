@@ -16,6 +16,8 @@ char		*strupper(char *str);
 char		*strlower(char *str);
 char		*strtrim(char *);
 
+int		is_number(char *s);
+
 char		*strdup_printf(const char *format, ... );
 char		*strconcat(const char *str, ...);
 

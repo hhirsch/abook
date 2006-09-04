@@ -121,7 +121,7 @@ real_find_field(char *key, abook_field_list *list, int *number)
 }
 
 void
-get_field_keyname(int i, char **key, char **name)
+get_field_info(int i, char **key, char **name, int *type)
 {
 	abook_field_list *cur = fields_list;
 	int j;
@@ -135,6 +135,8 @@ get_field_keyname(int i, char **key, char **name)
 		*key = (i < 0) ? NULL : cur->field->key;
 	if(name)
 		*name = (i < 0) ? NULL : cur->field->name;
+	if(type)
+		*type = (i < 0) ? -1 : cur->field->type;
 }
 
 void

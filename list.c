@@ -25,30 +25,103 @@ int curitem = -1;
 int first_list_item = -1;
 char *selected = NULL;
 
-int extra_column = -1;
-int extra_alternative = -1;
-
 extern abook_field_list *fields_list;
+struct index_elem *index_elements = NULL;
 
 static WINDOW *list = NULL;
 
 
-int
-init_extra_field(enum str_opts option)
+static void
+index_elem_add(int type, char *a, char *b)
 {
-	int ret = -1;
-	char *option_str;
+	struct index_elem *tmp = NULL, *cur, *cur2;
+	int field, len = 0;
 
-	option_str = opt_get_str(option);
+	if(!a || !*a)
+		return;
 
-	if(option_str && *option_str) {
-		find_field_number(option_str, &ret);
+	switch(type) {
+		case INDEX_TEXT:
+			tmp = xmalloc(sizeof(struct index_elem));
+			tmp->d.text = xstrdup(a);
+			break;
+		case INDEX_FIELD: /* fall through */
+		case INDEX_ALT_FIELD:
+			find_field_number(a, &field);
+			if(field == -1)
+				return;
+			len = (b && *b && is_number(b)) ? atoi(b) : 0;
+			tmp = xmalloc(sizeof(struct index_elem));
+			tmp->d.field.id = field;
+			tmp->d.field.len = len;
+			break;
+		default:
+			assert(0);
+	}
+	tmp->type = type;
+	tmp->next = NULL;
+	tmp->d.field.next = NULL;
 
-		if(!strcmp(option_str, "name") || !strcmp(option_str, "email"))
-			ret = -1;
+	if(!index_elements) { /* first element */
+		index_elements = tmp;
+		return;
 	}
 
-	return ret;
+	for(cur = index_elements; cur->next; cur = cur->next)
+		;
+	if(type != INDEX_ALT_FIELD)
+		cur->next = tmp;
+	else { /* add as an alternate field */
+		tmp->d.field.len = cur->d.field.len;
+		for(cur2 = cur; cur2->d.field.next; cur2 = cur2->d.field.next)
+			;
+		cur2->d.field.next = tmp;
+	}
+}
+
+static void
+parse_index_format(char *s)
+{
+	char *p, *start, *lstart = NULL;
+	int in_field = 0, in_alternate = 0, in_length = 0, type;
+
+	p = start = s;
+
+	while(*p) {
+		if(*p == '{' && !in_field) {
+			*p = 0;
+			index_elem_add(INDEX_TEXT, start, NULL);
+			start = ++p;
+			in_field = 1;
+		} else if(*p == ':' && in_field && !in_alternate) {
+			*p = 0;
+			lstart = ++p;
+			in_length = 1;
+		} else if(*p == '|' && in_field) {
+			*p = 0;
+			type = in_alternate ? INDEX_ALT_FIELD : INDEX_FIELD;
+			index_elem_add(type, start, in_length ? lstart : NULL);
+			start = ++p;
+			in_length = 0;
+			in_alternate = 1;
+		} else if(*p == '}' && in_field) {
+			*p = 0;
+			type = in_alternate ? INDEX_ALT_FIELD : INDEX_FIELD;
+			index_elem_add(type, start, in_length ? lstart : NULL);
+			start = ++p;
+			in_field = in_alternate = in_length = 0;
+		} else
+			p++;
+	}
+	if(!in_field)
+		index_elem_add(INDEX_TEXT, start, NULL);
+}
+
+void
+init_index()
+{
+	assert(!index_elements);
+	parse_index_format(opt_get_str(STR_INDEX_FORMAT));
 }
 
 void
@@ -56,13 +129,6 @@ init_list()
 {
 	list = newwin(LIST_LINES, LIST_COLS, LIST_TOP, 0);
 	scrollok(list, TRUE);
-
-	/*
-	 * init extra_column and extra alternative
-	 */
-
-	extra_column = init_extra_field(STR_EXTRA_COLUMN);
-	extra_alternative = init_extra_field(STR_EXTRA_ALTERNATIVE);
 }
 
 void
@@ -70,6 +136,90 @@ close_list()
 {
 	delwin(list);
 	list = NULL;
+}
+
+void
+get_list_field(int item, struct index_elem *e, struct list_field *res)
+{
+	char *s;
+
+	res->data = s = NULL;
+
+	do { /* find first non-empty field data in the alternate fields list */
+		s = db_fget_byid(item, e->d.field.id);
+	} while(!(s && *s) && ((e = e->d.field.next) != NULL));
+
+	if(!e || !s || !*s)
+		return;
+
+	res->data = s;
+	get_field_info(e->d.field.id, NULL, NULL, &res->type);
+}
+
+static void
+print_list_field(int item, int line, int *x_pos, struct index_elem *e)
+{
+	char *s, *p;
+	int width, x_start, mustfree = FALSE, len = abs(e->d.field.len);
+	struct list_field f;
+
+	get_list_field(item, e, &f);
+	s = f.data;
+
+	if(!s || !*s) {
+		*x_pos += len;
+		return;
+	}
+	
+	if(f.type == FIELD_EMAILS && !opt_get_bool(BOOL_SHOW_ALL_EMAILS))
+		if((p = strchr(s, ',')) != NULL) {
+			s = xstrndup(s, p - s);
+			mustfree = TRUE;
+		}
+
+	width = len ? bytes2width(s, len) : strwidth(s);
+	x_start = *x_pos + ((e->d.field.len < 0) ? len - width : 0);
+	if(width + x_start >= COLS)
+		width = COLS - x_start;
+
+	if(width)
+		mvwaddnstr(list, line, x_start, s, width);
+
+	if(mustfree)
+		free(s);
+		
+	*x_pos += len ? len : width;
+}
+
+static void
+print_list_line(int item, int line, int highlight)
+{
+	struct index_elem *cur;
+	int x_pos = 1;
+
+	scrollok(list, FALSE);
+	if(highlight)
+		highlight_line(list, line);
+
+	if(selected[item])
+		mvwaddch(list, line, 0, '*' );
+
+	for(cur = index_elements; cur; cur = cur->next)
+		switch(cur->type) {
+			case INDEX_TEXT:
+				mvwaddstr(list, line, x_pos, cur->d.text);
+				x_pos += strwidth(cur->d.text);
+				break;
+			case INDEX_FIELD:
+				print_list_field(item, line, &x_pos, cur);
+				break;
+			default:
+				assert(0);
+		}
+
+	scrollok(list, TRUE);
+	if(highlight)
+		wstandend(list);
 }
 
 void
@@ -114,62 +264,26 @@ refresh_list()
 }
 
 void
-print_list_line(int i, int line, int highlight)
-{
-	int extra = extra_column;
-	char tmp[MAX_EMAILSTR_LEN], *emails;
-	int real_emaillen = (extra_column > 0 || extra_alternative > 0) ?
-		EMAILLEN : COLS - EMAILPOS;
-
-	scrollok(list, FALSE);
-	if(highlight)
-		highlight_line(list, line);
-
-	if(selected[i])
-		mvwaddch(list, line, 0, '*' );
-
-	mvwaddnstr(list, line, NAMEPOS, db_name_get(i),
-		bytes2width(db_name_get(i), NAMELEN));
-
-	if(opt_get_bool(BOOL_SHOW_ALL_EMAILS)) {
-		emails = db_email_get(i);
-		mvwaddnstr(list, line, EMAILPOS, emails,
-				bytes2width(emails, real_emaillen));
-		free(emails);
-	} else {
-		get_first_email(tmp, i);
-		mvwaddnstr(list, line, EMAILPOS, tmp,
-				bytes2width(tmp, real_emaillen));
-	}
-
-	if(extra < 0 || !db_fget_byid(i, extra))
-		extra = extra_alternative;
-	if(extra >= 0)
-		mvwaddnstr(list, line, EXTRAPOS,
-			safe_str(db_fget_byid(i, extra)),
-			bytes2width(safe_str(db_fget_byid(i, extra)),
-			EXTRALEN));
-
-	scrollok(list, TRUE);
-	if(highlight)
-		wstandend(list);
-}
-
-void
 list_headerline()
 {
+	struct index_elem *e;
+	int x_pos = 1, width;
 	char *str = NULL;
 
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_BOLD);
 #endif
 
-	mvaddstr(2, NAMEPOS, find_field("name", NULL)->name);
-	mvaddstr(2, EMAILPOS, find_field("email", NULL)->name);
-	if(extra_column > 0) {
-		get_field_keyname(extra_column, NULL, &str);
-		mvaddnstr(2, EXTRAPOS, str, COLS - EXTRAPOS);
-	}
+	for(e = index_elements; e; e = e->next)
+		if(e->type == INDEX_TEXT)
+			x_pos += strwidth(e->d.text);
+		else if(e->type == INDEX_FIELD) {
+			get_field_info(e->d.field.id, NULL, &str, NULL);
+			width = e->d.field.len ? abs(e->d.field.len) : strwidth(str);
+			mvaddnstr(2, x_pos, str, width);
+			x_pos += width;
+		} else
+			assert(0);
 
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_NORMAL);

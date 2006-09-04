@@ -64,6 +64,19 @@ strtrim(char *s)
 	return s;
 }
 
+int
+is_number(char *p)
+{
+	if(!p || !*p || (*p == '-' && !*++p))
+		return 0;
+
+	for(; *p; p++)
+		if(!isdigit(*p))
+			return 0;
+
+	return 1;
+}
+
 
 #ifdef HAVE_CONFIG_H
 #	include "config.h"

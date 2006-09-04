@@ -3,11 +3,34 @@
 
 #include "ui.h"
 
+#define INDEX_TEXT  1
+#define INDEX_FIELD 2
+#define INDEX_ALT_FIELD 3
+
+struct index_elem {
+	int type;
+	union {
+		char *text;
+		struct {
+			int id;
+			int len;
+			struct index_elem *next;
+		} field;
+	} d;
+	struct index_elem *next;
+};
+
+struct list_field {
+	char *data;
+	int type;
+};
+
+void		init_index();
 void		init_list();
 int		init_extra_field(enum str_opts option);
 void		close_list();
 void            refresh_list();
-void		print_list_line(int i, int line, int highlight);
+void	get_list_field(int item, struct index_elem *e, struct list_field *res);
 void		list_headerline();
 void            scroll_up();
 void            scroll_down();
@@ -35,18 +58,10 @@ enum {
 };
 
 #define LIST_TOP        3
-#define LIST_BOTTOM     (LINES-2)
+#define LIST_BOTTOM     (LINES - 2)
 
-#define LIST_LINES	(LIST_BOTTOM-LIST_TOP)
+#define LIST_LINES	(LIST_BOTTOM - LIST_TOP)
 #define LIST_COLS	COLS
-
-#define NAMEPOS		2
-#define EMAILPOS        opt_get_int(INT_EMAILPOS)
-#define EXTRAPOS	opt_get_int(INT_EXTRAPOS)
-
-#define NAMELEN		(EMAILPOS - NAMEPOS - 1)
-#define EMAILLEN        (EXTRAPOS - EMAILPOS - 1)
-#define EXTRALEN	(COLS - EXTRAPOS)
 
 #define LAST_LIST_ITEM	(first_list_item + LIST_LINES - 1)
 

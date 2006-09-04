@@ -73,27 +73,14 @@ set preserve_fields=standard
 # Show all email addresses in list
 set show_all_emails=true
 
-# Screen column for email field to start
-set emailpos=25
-
-# Field to be used in the extra column
-set extra_column=phone
-# frequently used values:
-#	-1		disabled
-#	phone		Home Phone
-#	workphone	Work Phone
-#	fax		Fax
-#	mobile		Mobile Phone
-#	nick		Nick / Alias
-#	url		URL
-
-# Specify an alternative field to be displayed in the extra
-# column if there is no data for the field specified in
-# extra_column for a particular item.  
-set extra_alternative=-1
-
-# Screen column for the extra field to start
-set extrapos=65
+# Format of an entry's line in the main abook screen
+#
+# The below example displays:
+#  * the content of the 'name' field (with a maximum of 22 characters)
+#  * the first of the 'phone', 'workphone' or 'mobile' fields
+#    happening not to be empty (right aligned within 12 characters)
+#  * the 'anniversary' field, with no length limit
+set index_format=" {name:25} {phone:-12|workphone|mobile} {anniversary}"
 
 # Command used to start mutt
 set mutt_command=mutt
