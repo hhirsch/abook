@@ -1,7 +1,7 @@
 dnl abook configure.in
 
 AC_INIT(abook.c)
-AM_INIT_AUTOMAKE(abook, 0.6.0pre1)
+AM_INIT_AUTOMAKE(abook, 0.6.0pre2)
 AM_CONFIG_HEADER(config.h)
 
 dnl ---------------

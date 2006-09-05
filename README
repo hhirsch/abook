@@ -6,7 +6,7 @@ Abook is an addressbook program with mutt mail client support.
 
 COMPILATION
 
-To compile abook you must have ncurses developement libraries installed.
+To compile abook you must have ncurses development libraries installed.
 Starting from version 0.4.10 abook is known to compile with the native curses
 library of SUN Solaris and OpenBSD. Since version 0.5.0 GNU readline is
 required. Please note that other readline implementations don't work.
@@ -16,8 +16,8 @@ to somewhere. (for example abook 2> debug or abook 2> /dev/null) Abook has
 been compiled and tested successfully on following platforms:
 (NOTE: All versions of abook haven't been tested on all platforms.)
 
-Linux (Debian GNU/Linux, RedHat Linux, all other distributions with GNU ncurses
-       and GNU readline should work)
+Linux (distributions with moderately new GNU ncurses and GNU readline libraries
+       should work)
 Darwin
 Solaris
 FreeBSD
@@ -43,8 +43,12 @@ After this you can make queries from mutt using the query command ('Q')
 and add sender e-mail addresses to the addressbook from pager using 'A'
 command. (Of course you can choose another keybinding if you like.)
 
-It's also recommeded to set pipe_decode variable in mutt configuration.
+It's also recommended to set pipe_decode variable in mutt configuration.
 See the mutt manual for details.
+
+UPGRADING FROM VERSION 0.5
+
+See RELEASE_NOTES .
 
 UPGRADING FROM VERSION 0.4
 
@@ -70,8 +74,8 @@ LICENSE
 All files in this distribution are released under GNU GENERAL PUBLIC LICENSE.
 See COPYING for details.
 
-CONTACT AUTHOR
+CONTACT AUTHORS
 
-Send bugreports, fixes, wishes etc. to Jaakko Heinonen
-<jheinonen@users.sourceforge.net> or use the mailing list.
+Send bugreports, fixes, wishes etc. to abook mailing list:
+https://lists.sourceforge.net/lists/listinfo/abook-devel
 

@@ -12,7 +12,7 @@ abook_SOURCES = abook.c abook_rl.c database.c edit.c \
 		ui.h views.h xmalloc.h
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
-		abook.spec contrib doc/HOWTO.translating_abook
+		abook.spec contrib doc/HOWTO.translating_abook RELEASE_NOTES
 
 abook_LDADD = @LIBINTL@
 
