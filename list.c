@@ -192,6 +192,33 @@ print_list_field(int item, int line, int *x_pos, struct index_elem *e)
 }
 
 static void
+highlight_line(WINDOW *win, int line)
+{
+	wstandout(win);
+
+	/*
+	 * this is a tricky one
+	 */
+#if 0
+/*#ifdef mvwchgat*/
+	mvwchgat(win, line, 0, -1,  A_STANDOUT, 0, NULL);
+#else
+	/*
+	 * buggy function: FIXME
+	 */
+	scrollok(win, FALSE);
+	{
+		int i;
+		wmove(win, line, 0);
+		for(i = 0; i < COLS; i++)
+			waddch(win, ' ');
+	/*wattrset(win, 0);*/
+	}
+	scrollok(win, TRUE);
+#endif
+}
+
+static void
 print_list_line(int item, int line, int highlight)
 {
 	struct index_elem *cur;
@@ -420,33 +447,6 @@ goto_end()
 		curitem = last_item();
 
 	refresh_list();
-}
-
-static void
-highlight_line(WINDOW *win, int line)
-{
-	wstandout(win);
-
-	/*
-	 * this is a tricky one
-	 */
-#if 0
-/*#ifdef mvwchgat*/
-	mvwchgat(win, line, 0, -1,  A_STANDOUT, 0, NULL);
-#else
-	/*
-	 * buggy function: FIXME
-	 */
-	scrollok(win, FALSE);
-	{
-		int i;
-		wmove(win, line, 0);
-		for(i = 0; i < COLS; i++)
-			waddch(win, ' ');
-	/*wattrset(win, 0);*/
-	}
-	scrollok(win, TRUE);
-#endif
 }
 
 int
