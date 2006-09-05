@@ -43,7 +43,6 @@ void		list_invert_curitem_selection();
 void            move_curitem(int direction);
 void		goto_home();
 void		goto_end();
-void		highlight_line(WINDOW *win, int line);
 int		selected_items();
 void		invert_selection();
 int		list_is_empty();

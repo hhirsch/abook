@@ -422,7 +422,7 @@ goto_end()
 	refresh_list();
 }
 
-void
+static void
 highlight_line(WINDOW *win, int line)
 {
 	wstandout(win);
