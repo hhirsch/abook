@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-08-31 08:12+0300\n"
-"PO-Revision-Date: 2006-08-09 23:57+0200\n"
+"PO-Revision-Date: 2006-09-05 11:42+0200\n"
 "Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Impossible d'écrire dans le fichier %s"
 #: abook.c:146
 msgid "If you continue all changes will be lost. Do you want to continue?"
 msgstr ""
-"En continuant vos modifications seront perdues. Voulez-vous continuer ?"
+"Si vous continuez, vos modifications seront perdues. Voulez-vous continuer ?"
 
 #: abook.c:165
 msgid "Save database"
@@ -79,13 +79,12 @@ msgstr "%s: paramètres de ligne de commande non reconnus\n"
 
 #: abook.c:406
 msgid "     -h\t--help\t\t\t\tshow usage"
-msgstr "     -h\t--help\t\t\t\tmontrer l'utilisation"
+msgstr "     -h\t--help\t\t\t\tafficher l'aide"
 
 #: abook.c:407
 msgid "     -C\t--config\t<file>\t\tuse an alternative configuration file"
 msgstr ""
-"     -C\t--config\t<fichier>\tutiliser un fichier de configuration\n"
-"\t\t\t\t\talternatif"
+"     -C\t--config\t<fichier>\tutiliser un autre fichier de configuration"
 
 #: abook.c:408
 msgid "\t--datafile\t<file>\t\tuse an alternative addressbook file"
@@ -118,7 +117,7 @@ msgstr "\t--convert\t\t\tconvertir des carnets d'adresses"
 
 #: abook.c:419
 msgid "\toptions to use with --convert:"
-msgstr "\toptions à utiliser avec --convert :"
+msgstr "\toptions à utiliser avec --convert:"
 
 #: abook.c:420
 msgid "\t--informat\t<format>\tformat for input file"
@@ -226,7 +225,7 @@ msgid ""
 "you may want to use --add-email-quiet\n"
 msgstr ""
 "impossible d'ouvrir /dev/tty\n"
-"peut-être souhaiter-vous utiliser --add-email-quiet\n"
+"peut-être souhaitez-vous utiliser --add-email-quiet\n"
 
 #: abook.c:746
 #, c-format
@@ -337,7 +336,7 @@ msgstr "Valeur de champ invalide pour le classement"
 # Comment traduire 'tab' ?
 #: edit.c:53
 msgid "Tab name too wide for screen"
-msgstr "Intitulé de \"tab\" trop large pour l'écran"
+msgstr "Intitulé d'onglet trop large pour l'écran"
 
 #: edit.c:355
 msgid "keybindings_new_123456789|n123456789"
@@ -370,20 +369,19 @@ msgstr "Entrée: "
 
 #: edit.c:478
 msgid "Day: "
-msgstr ""
+msgstr "Jour: "
 
 #: edit.c:478
 msgid "Month: "
-msgstr ""
+msgstr "Mois: "
 
 #: edit.c:478
 msgid "Year (optional): "
-msgstr ""
+msgstr "Année (optionnelle): "
 
 #: edit.c:511
-#, fuzzy
 msgid "Invalid date"
-msgstr "valeur invalide"
+msgstr "Date invalide"
 
 #: edit.c:666
 msgid "Name: "
@@ -463,7 +461,7 @@ msgstr "importer la base de données"
 
 #: filter.c:180 filter.c:297
 msgid "please select a filter"
-msgstr "veuiller choisir un filtre"
+msgstr "veuillez choisir un filtre"
 
 #: filter.c:188 filter.c:305
 msgid "x -\tcancel"
@@ -517,7 +515,7 @@ msgstr ""
 
 #: help.h:15
 msgid "\t^L\t\trefresh screen\n"
-msgstr "\t^L\t\traffraîchir l'écran\n"
+msgstr "\t^L\t\trafraîchir l'écran\n"
 
 #: help.h:17
 msgid "\tarrows / j,k\tscroll list\n"
@@ -537,7 +535,7 @@ msgstr "\tr / suppr\t\tsupprimer les entrées sélectionnées\n"
 
 #: help.h:21
 msgid "\tD\t\tduplicate item\n"
-msgstr "\tD\t\tduppliquer une entrée\n"
+msgstr "\tD\t\tdupliquer une entrée\n"
 
 #: help.h:23
 msgid "\tspace\t\tselect item\n"
@@ -651,7 +649,7 @@ msgstr "\tESC-r\t\t\trotation des adresses email vers le bas\n"
 
 #: help.h:67
 msgid "\tu\t\t\tundo\n"
-msgstr "\tu\t\t\tdéfaire\n"
+msgstr "\tu\t\t\tannuler\n"
 
 #: help.h:69
 msgid "\tm\t\t\tsend mail with mutt\n"
@@ -663,11 +661,11 @@ msgstr "\tv\t\t\tvisualiser l'URL avec un navigateur web\n"
 
 #: options.c:254
 msgid "quote mismatch"
-msgstr "problème de correspondance de caractère de quotation"
+msgstr "problème de correspondance de guillemets"
 
 #: options.c:260
 msgid "no assignment character found"
-msgstr "pas de caractère assignation trouvé"
+msgstr "pas de caractère d'affectation trouvé"
 
 #: options.c:263
 msgid "error in comma separated list"
@@ -726,7 +724,7 @@ msgstr "aucun nom de champ donné"
 #: options.c:490
 #, c-format
 msgid "%s: parse error at line %d: "
-msgstr "%s: erreur d'analyse lexicale à la ligne %d:"
+msgstr "%s: erreur d'analyse lexicale à la ligne %d: "
 
 #: options.c:494
 #, c-format
