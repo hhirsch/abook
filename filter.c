@@ -61,6 +61,7 @@ static int	elm_alias_export(FILE *out, struct db_enumerator e);
 static int	text_export_database(FILE *out, struct db_enumerator e);
 static int	spruce_export_database(FILE *out, struct db_enumerator e);
 static int	wl_export_database(FILE *out, struct db_enumerator e);
+static int	bsdcal_export_database(FILE *out, struct db_enumerator e);
 
 /*
  * end of function declarations
@@ -91,6 +92,7 @@ struct abook_output_filter e_filters[] = {
 	{ "text", N_("plain text"), text_export_database },
 	{ "wl", N_("Wanderlust address book"), wl_export_database },
 	{ "spruce", N_("Spruce address book"), spruce_export_database },
+	{ "bsdcal", N_("BSD calendar"), bsdcal_export_database },
 	{ "\0", NULL, NULL }
 };
 
@@ -1874,5 +1876,35 @@ wl_export_database(FILE *out, struct db_enumerator e)
 
 /*
  * end of wanderlust addressbook export filter
+ */
+
+/*
+ * BSD calendar export filter
+ */
+
+static int
+bsdcal_export_database(FILE *out, struct db_enumerator e)
+{
+	db_enumerate_items(e) {
+		int year, month = 0, day = 0;
+		char *anniversary = db_fget(e.item, ANNIVERSARY);
+
+		if(anniversary) {
+			parse_date_string(anniversary, &day, &month, &year);
+
+			fprintf(out,
+				_("%02d/%02d\tAnniversary of %s\n"),
+				month,
+				day,
+				safe_str(db_name_get(e.item))
+			);
+		}
+	}
+
+	return 0;
+}
+
+/*
+ * end of BSD calendar export filter
  */
 

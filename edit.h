@@ -4,6 +4,7 @@
 void		edit_item(int item);
 void		get_first_email(char *str, int item);
 void		add_item();
+int		parse_date_string(char *s, int *day, int *month, int *year);
 
 #define EDITW_COLS	(COLS - 6)
 #define EDITW_LINES	(LINES - 5)

@@ -33,8 +33,6 @@ extern int views_count;
 
 WINDOW *editw;
 
-static int parse_date_string(char *s, int *day, int *month, int *year);
-
 
 static void
 editor_tab(const int tab)
@@ -421,7 +419,7 @@ static int is_valid_date(const int day, const int month, const int year)
 	return valid;
 }
 
-static int
+int
 parse_date_string(char *s, int *day, int *month, int *year)
 {
 	int i = 0;
