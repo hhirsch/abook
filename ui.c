@@ -567,9 +567,13 @@ ui_find(int next)
 	} else {
 		char *s;
 		s = ui_readline("/", findstr, MAX_FIELD_LEN - 1, 0);
-		strncpy(findstr, s, MAX_FIELD_LEN);
-		free(s);
 		refresh_screen();
+		if(s == NULL) {
+			return; /* user cancelled (ctrl-G) */
+		} else {
+			strncpy(findstr, s, MAX_FIELD_LEN);
+			free(s);
+		}
 	}
 
 	if( (item = find_item(findstr, list_get_curitem() + !!next,
