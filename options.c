@@ -279,11 +279,12 @@ opt_set_set_option(char *p, struct option *opt)
 {
 	int len;
 
-	strtrim(p);
+	assert(p);
 
+	strtrim(p);
 	len = strlen(p);
 
-	if(p[len - 1] == '\"' && *p == '\"') {
+	if(*p == '\"' && p[len - 1] == '\"') {
 		if(len < 3)
 			return _("invalid value");
 		p[len - 1] = 0;
@@ -317,6 +318,9 @@ static const char *
 opt_set_option(char *var, char *p)
 {
 	int i;
+
+	assert(var);
+	assert(p);
 
 	for(i = 0; abook_vars[i].option; i++)
 		if(!strcmp(abook_vars[i].option, var))
