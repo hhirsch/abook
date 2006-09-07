@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.4\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
-"POT-Creation-Date: 2006-08-31 08:12+0300\n"
+"POT-Creation-Date: 2006-09-07 23:31+0200\n"
 "PO-Revision-Date: 2006-08-05 14:20+0200\n"
 "Last-Translator: Susanna Björverud <susanna.bjorverud@telia.com>\n"
 "Language-Team: none\n"
@@ -36,30 +36,30 @@ msgstr "Fel vid tilldelning av minne: %s\n"
 msgid "Press enter to continue...\n"
 msgstr "Tryck enter för att fortsätta...\n"
 
-#: abook.c:141
+#: abook.c:143
 #, c-format
 msgid "File %s is not writeable"
 msgstr "Filen %s kan inte skrivas"
 
-#: abook.c:146
+#: abook.c:148
 msgid "If you continue all changes will be lost. Do you want to continue?"
 msgstr ""
 "Om du fortsätter så kommer alla ändringar att gå förlorade. Vill du fortsätta"
 
-#: abook.c:165
+#: abook.c:167
 msgid "Save database"
 msgstr "Spara databasen"
 
-#: abook.c:167
+#: abook.c:169
 msgid "Quit without saving"
 msgstr "Avsluta utan att spara"
 
-#: abook.c:223
+#: abook.c:227
 #, c-format
 msgid "%s is not a valid HOME directory\n"
 msgstr "%s är inte en giltig hemmamapp\n"
 
-#: abook.c:254
+#: abook.c:258
 #, c-format
 msgid ""
 "Cannot combine options --mutt-query, --convert, --add-email or --add-email-"
@@ -68,33 +68,33 @@ msgstr ""
 "Det går inte att kombinera flaggorna --mutt-query, --convert, --add-email "
 "eller --add-email-quiet\n"
 
-#: abook.c:285
+#: abook.c:289
 #, c-format
 msgid "please use option --%s after --convert option\n"
 msgstr "var god och använd flaggan --%s efter flaggan --convert\n"
 
-#: abook.c:384
+#: abook.c:388
 #, c-format
 msgid "%s: unrecognized arguments on command line\n"
 msgstr "%s: okända parametrar på kommandoraden\n"
 
-#: abook.c:406
+#: abook.c:410
 msgid "     -h\t--help\t\t\t\tshow usage"
 msgstr "    -h\t--help\t\t\t\tvisa användning"
 
-#: abook.c:407
+#: abook.c:411
 msgid "     -C\t--config\t<file>\t\tuse an alternative configuration file"
 msgstr "     -C\t--config\t<fil>\t\tanvänd en alternative konfigurationsfil"
 
-#: abook.c:408
+#: abook.c:412
 msgid "\t--datafile\t<file>\t\tuse an alternative addressbook file"
 msgstr "\t--datafile\t<fil>\t\tanvänd en alternative adressboksfil"
 
-#: abook.c:409
+#: abook.c:413
 msgid "\t--mutt-query\t<string>\tmake a query for mutt"
 msgstr "\t--mutt-query\t<sträng>\tgör en förfrågan till mutt"
 
-#: abook.c:410
+#: abook.c:414
 msgid ""
 "\t--add-email\t\t\tread an e-mail message from stdin and\n"
 "\t\t\t\t\tadd the sender to the addressbook"
@@ -102,7 +102,7 @@ msgstr ""
 "\t--add-email\t\t\tläs ett ebrev från stdin och\n"
 "\t\t\t\t\tlägg till avsändaren i adressboken"
 
-#: abook.c:414
+#: abook.c:418
 msgid ""
 "\t--add-email-quiet\t\tsame as --add-email but doesn't\n"
 "\t\t\t\t\trequire to confirm adding"
@@ -110,66 +110,66 @@ msgstr ""
 "\t--add-email-quiet\t\tsamma som --add-email men utan\n"
 "\t\t\t\t\tanvändarbekräftelse"
 
-#: abook.c:418
+#: abook.c:422
 msgid "\t--convert\t\t\tconvert address book files"
 msgstr "\t--convert\t\t\tkonvertera adressbokfiler"
 
-#: abook.c:419
+#: abook.c:423
 msgid "\toptions to use with --convert:"
 msgstr "\tflaggor som kan användas med --convert:"
 
-#: abook.c:420
+#: abook.c:424
 msgid "\t--informat\t<format>\tformat for input file"
 msgstr "\t--informat\t<format>\tinputfilens format"
 
-#: abook.c:421
+#: abook.c:425
 msgid "\t\t\t\t\t(default: abook)"
 msgstr "\t\t\t\t\t(förvalt: abook)"
 
-#: abook.c:422
+#: abook.c:426
 msgid "\t--infile\t<file>\t\tsource file"
 msgstr "\t--infile\t<fil>\t\tkällfil"
 
-#: abook.c:423
+#: abook.c:427
 msgid "\t\t\t\t\t(default: stdin)"
 msgstr "\t\t\t\t\t(förvalt: stdin)"
 
-#: abook.c:424
+#: abook.c:428
 msgid "\t--outformat\t<format>\tformat for output file"
 msgstr "\t--outformat\t<format>\toutputfilens format"
 
-#: abook.c:425
+#: abook.c:429
 msgid "\t\t\t\t\t(default: text)"
 msgstr "\t\t\t\t\t(förvalt: text)"
 
-#: abook.c:426
+#: abook.c:430
 msgid "\t--outfile\t<file>\t\tdestination file"
 msgstr "\t--outfile\t<fil>\t\tmålfil"
 
-#: abook.c:427
+#: abook.c:431
 msgid "\t\t\t\t\t(default: stdout)"
 msgstr "\t\t\t\t\t(förvalt: stdout)"
 
-#: abook.c:428
+#: abook.c:432
 msgid "\t--formats\t\t\tlist available formats"
 msgstr "\t--formats\t\t\tlista tillgängliga format"
 
-#: abook.c:499
+#: abook.c:503
 #, c-format
 msgid "Cannot open database\n"
 msgstr "Kan inte öppna databasen\n"
 
-#: abook.c:625
+#: abook.c:629
 #, c-format
 msgid "too few arguments to make conversion\n"
 msgstr "alltför få parametrar för att kunna konvertera\n"
 
-#: abook.c:626
+#: abook.c:630
 #, c-format
 msgid "try --help\n"
 msgstr "prova --help\n"
 
-#: abook.c:631
+#: abook.c:635
 #, c-format
 msgid ""
 "input and output formats are the same\n"
@@ -178,46 +178,46 @@ msgstr ""
 "input- och outputformat är identiska\n"
 "avslutar...\n"
 
-#: abook.c:645
+#: abook.c:649
 #, c-format
 msgid "input format %s not supported\n"
 msgstr "inputformater %s stöds ej\n"
 
-#: abook.c:649
+#: abook.c:653
 #, c-format
 msgid "cannot read file %s\n"
 msgstr "kan inte läsa filen %s\n"
 
-#: abook.c:658
+#: abook.c:662
 #, c-format
 msgid "output format %s not supported\n"
 msgstr "outputformatet %s stöds ej\n"
 
-#: abook.c:664
+#: abook.c:668
 #, c-format
 msgid "cannot write file %s\n"
 msgstr "kan inte skriva till filen %s\n"
 
-#: abook.c:685
+#: abook.c:689
 #, c-format
 msgid "cannot open %s\n"
 msgstr "kan inte öppna %s\n"
 
-#: abook.c:688
+#: abook.c:692
 #, c-format
 msgid "%d item(s) added to %s\n"
 msgstr "%d post(er) har lagts till i %s\n"
 
-#: abook.c:690
+#: abook.c:694
 msgid "Valid sender address not found"
 msgstr "Kunde inte hitta en giltig avsändaradress"
 
-#: abook.c:730
+#: abook.c:734
 #, c-format
 msgid "Address %s already in addressbook\n"
 msgstr "Addressen %s finns redan i adressboken\n"
 
-#: abook.c:740
+#: abook.c:744
 #, c-format
 msgid ""
 "cannot open /dev/tty\n"
@@ -226,20 +226,20 @@ msgstr ""
 "kan inte öppna /dev/tty\n"
 "du bör kanske använda --add-email-quiet\n"
 
-#: abook.c:746
+#: abook.c:750
 #, fuzzy, c-format
 msgid "Add \"%s <%s>\" to %s? (%c/%c)\n"
 msgstr "Lägg till \"%s <%s>\" i %s? (j/n)\n"
 
-#: abook.c:750 abook.c:757 ui.c:343 ui.c:605
+#: abook.c:754 abook.c:761 ui.c:343 ui.c:609
 msgid "keybinding for yes|y"
 msgstr "j"
 
-#: abook.c:751 abook.c:753 ui.c:341
+#: abook.c:755 abook.c:757 ui.c:341
 msgid "keybinding for no|n"
 msgstr "n"
 
-#: abook.c:778
+#: abook.c:782
 #, c-format
 msgid "stdin is a directory or cannot stat stdin\n"
 msgstr ""
@@ -315,29 +315,29 @@ msgstr "Anteckningar"
 msgid "Anniversary day"
 msgstr ""
 
-#: database.c:164
+#: database.c:166
 msgid "field already defined"
 msgstr ""
 
-#: database.c:168
+#: database.c:170
 msgid "standard field does not need to be declared"
 msgstr ""
 
-#: database.c:183
+#: database.c:185
 #, fuzzy
 msgid "unknown type"
 msgstr "okänd flagga"
 
-#: database.c:583
+#: database.c:585
 msgid "Invalid field value defined in configuration"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
-#: database.c:586
+#: database.c:588
 #, fuzzy
 msgid "Invalid field value for sorting"
 msgstr "Ogiltigt fältvärde i konfigurationen"
 
-#: edit.c:53
+#: edit.c:57
 msgid "Tab name too wide for screen"
 msgstr "Flikrubrik för bred för skärmen"
 
@@ -372,135 +372,152 @@ msgstr "Ebrev"
 msgid "Item: "
 msgstr ""
 
-#: edit.c:478
+#: edit.c:420
+msgid "%Y-%M-%D"
+msgstr ""
+
+#: edit.c:421
+msgid "--%M-%D"
+msgstr ""
+
+#: edit.c:520
 msgid "Day: "
 msgstr ""
 
-#: edit.c:478
+#: edit.c:520
 msgid "Month: "
 msgstr ""
 
-#: edit.c:478
+#: edit.c:520
 msgid "Year (optional): "
 msgstr ""
 
-#: edit.c:511
+#: edit.c:553
 #, fuzzy
 msgid "Invalid date"
 msgstr "ogiltigt värde"
 
-#: edit.c:666
+#: edit.c:708
 msgid "Name: "
 msgstr "Namn: "
 
-#: edit.h:13
+#: edit.h:14
 msgid "?:help q:quit editor"
 msgstr ""
 
-#: filter.c:70 filter.c:81
+#: filter.c:71 filter.c:82
 msgid "abook native format"
 msgstr "abooks eget format"
 
-#: filter.c:71
+#: filter.c:72
 msgid "ldif / Netscape addressbook"
 msgstr "ldif / adressbok fr Netscape"
 
-#: filter.c:72 filter.c:83
+#: filter.c:73 filter.c:84
 msgid "mutt alias"
 msgstr "mutt-alias"
 
-#: filter.c:73 filter.c:85
+#: filter.c:74 filter.c:86
 msgid "pine addressbook"
 msgstr "pine-adressbok"
 
-#: filter.c:74 filter.c:87
+#: filter.c:75 filter.c:88
 msgid "comma separated values"
 msgstr "kommaseparerade värden"
 
-#: filter.c:75 filter.c:88
+#: filter.c:76 filter.c:89
 msgid "comma separated values (all fields)"
 msgstr "kommaseparerade värden (alla fält)"
 
-#: filter.c:76 filter.c:89
+#: filter.c:77 filter.c:90
 msgid "Palm comma separated values"
 msgstr "kommaseparerade värden från Palm"
 
-#: filter.c:82
+#: filter.c:83
 msgid "ldif / Netscape addressbook (.4ld)"
 msgstr "ldif / adressbok fr Netscape (.4ld)"
 
-#: filter.c:84
+#: filter.c:85
 msgid "html document"
 msgstr "html-dokument"
 
-#: filter.c:86
+#: filter.c:87
 msgid "GnomeCard (VCard) addressbook"
 msgstr "GnomeCard-adressbok (VCard)"
 
-#: filter.c:90
+#: filter.c:91
 msgid "elm alias"
 msgstr "elm-alias"
 
-#: filter.c:91
+#: filter.c:92
 msgid "plain text"
 msgstr "ren text"
 
-#: filter.c:92
+#: filter.c:93
 #, fuzzy
 msgid "Wanderlust address book"
 msgstr "pine-adressbok"
 
-#: filter.c:93
+#: filter.c:94
 msgid "Spruce address book"
 msgstr "Spruce-adressbok"
 
-#: filter.c:106
+#: filter.c:95
+msgid "BSD calendar"
+msgstr ""
+
+#: filter.c:108
 msgid "input:"
 msgstr "input:"
 
-#: filter.c:113
+#: filter.c:115
 msgid "output:"
 msgstr "output:"
 
-#: filter.c:178
+#: filter.c:180
 msgid "import database"
 msgstr "importera databaser"
 
-#: filter.c:180 filter.c:297
+#: filter.c:182 filter.c:299
 msgid "please select a filter"
 msgstr "var god och välj filter"
 
-#: filter.c:188 filter.c:305
+#: filter.c:190 filter.c:307
 msgid "x -\tcancel"
 msgstr "x -\tavbryt"
 
-#: filter.c:209 filter.c:343
+#: filter.c:211 filter.c:345
 msgid "Filename: "
 msgstr "Filnamn:"
 
-#: filter.c:216
+#: filter.c:218
 msgid "Error occured while opening the file"
 msgstr "Fel vid öppnandet av filen"
 
-#: filter.c:218
+#: filter.c:220
 msgid "File does not seem to be a valid addressbook"
 msgstr "Den angivna filen verkar inte vara en giltig adressbok"
 
-#: filter.c:295
+#: filter.c:297
 msgid "export database"
 msgstr "exportera databasen"
 
-#: filter.c:328
+#: filter.c:330
 msgid "Export <a>ll, export <s>elected, or <c>ancel?"
 msgstr ""
 
-#: filter.c:329 ui.c:628
+#: filter.c:331 ui.c:632
 msgid "keybindings:all/selected/cancel|asc"
 msgstr ""
 
-#: filter.c:350
+#: filter.c:352
 msgid "Error occured while exporting"
 msgstr "Fel vid export"
+
+#: filter.c:1896
+#, c-format
+msgid "%02d/%02d\tAnniversary of %s\n"
+msgstr ""
 
 #: help.h:11
 msgid "\t?\t\thelp\n"
@@ -667,20 +684,20 @@ msgstr "\tm\t\t\tskicka post med mutt\n"
 msgid "\tv\t\t\tview url with web browser\n"
 msgstr "\tv\t\t\tvisa url i webbläsare\n"
 
-#: options.c:254
+#: options.c:250
 msgid "quote mismatch"
 msgstr ""
 
-#: options.c:260
+#: options.c:256
 msgid "no assignment character found"
 msgstr ""
 
-#: options.c:263
+#: options.c:259
 #, fuzzy
 msgid "error in comma separated list"
 msgstr "kommaseparerade värden"
 
-#: options.c:292 options.c:311
+#: options.c:289 options.c:308
 msgid "invalid value"
 msgstr "ogiltigt värde"
 
@@ -770,32 +787,32 @@ msgstr "Ta bort valda post(er)"
 msgid "Clear WHOLE database"
 msgstr "Nollställ HELA databasen"
 
-#: ui.c:578
+#: ui.c:582
 msgid "Search hit bottom, continuing at top"
 msgstr "Sök nådde slutet, fortsätter från början"
 
-#: ui.c:603
+#: ui.c:607
 #, fuzzy, c-format
 msgid "Your current data will be lost - Press '%c' to continue"
 msgstr "Nuvarande data kommer att förloras - Tryck på 'y' för att fortsätta"
 
-#: ui.c:628
+#: ui.c:632
 msgid "Print <a>ll, print <s>elected, or <c>ancel?"
 msgstr ""
 
-#: ui.c:634
+#: ui.c:638
 msgid "No selected items"
 msgstr "Inga poster valda"
 
-#: ui.c:660
+#: ui.c:664
 msgid "File to open: "
 msgstr "Öppna fil: "
 
-#: ui.c:670
+#: ui.c:674
 msgid "Save current database"
 msgstr "Spara denna databas"
 
-#: ui.c:678
+#: ui.c:682
 msgid "Sorry, the specified file appears not to be a valid abook addressbook"
 msgstr ""
 "Förlåt, men den angivna filen verkar inte vara en giltig abook-adressbok"
