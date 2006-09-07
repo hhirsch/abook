@@ -180,7 +180,7 @@ print_list_field(int item, int line, int *x_pos, struct index_elem *e)
 	width = len ? bytes2width(s, len) : strwidth(s);
 	x_start = *x_pos + ((e->d.field.len < 0) ? len - width : 0);
 	if(width + x_start >= COLS)
-		width = COLS - x_start;
+		width = bytes2width(s, COLS - x_start);
 
 	if(width)
 		mvwaddnstr(list, line, x_start, s, width);
@@ -306,7 +306,10 @@ list_headerline()
 			x_pos += strwidth(e->d.text);
 		else if(e->type == INDEX_FIELD) {
 			get_field_info(e->d.field.id, NULL, &str, NULL);
-			width = e->d.field.len ? abs(e->d.field.len) : strwidth(str);
+			width = e->d.field.len ?
+				abs(e->d.field.len) : strwidth(str);
+			if(width + x_pos > COLS)
+				width = bytes2width(str, COLS - x_pos);
 			mvaddnstr(2, x_pos, str, width);
 			x_pos += width;
 		} else
