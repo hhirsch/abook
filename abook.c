@@ -187,9 +187,11 @@ int
 main(int argc, char **argv)
 {
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LOCALE_H)
-	setlocale(LC_ALL, "");
+	setlocale(LC_MESSAGES, "");
+	setlocale(LC_TIME, "");
+	setlocale(LC_CTYPE, "");
+	setlocale(LC_COLLATE, "");
 #endif
-
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 

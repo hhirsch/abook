@@ -7,6 +7,7 @@ const char *sgettext(const char *msgid); /* Strip context prefix */
 #  include <libintl.h>
 # else
 #  define gettext(Msgid) ((const char *) (Msgid))
+#  define dcgettext(Domainname, Msgid, Category) do {} while (0)
 #  define textdomain(Domainname) do {} while(0)
 #  define bindtextdomain(Domainname, Dirname) do {} while(0)
 # endif /* ENABLE_NLS */

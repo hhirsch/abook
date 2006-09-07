@@ -24,6 +24,12 @@
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
+#if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
+#       include <locale.h>
+#endif 
+
+
+static void locale_date(char *str, size_t str_len, int year, int month, int day);
 
 /*
  * some extern variables
@@ -242,22 +248,18 @@ editor_print_data(int tab, int item)
 			abook_list_free(&emails);
 		} else if(cur->field->type == FIELD_DATE) {
 			int day, month, year;
-			char buf[12];
+			char buf[64];
 
+			/* put raw representation of date in buf */
 			find_field_number(cur->field->key, &nb);
 			if((str = db_fget_byid(item, nb)) != NULL)
 				strncpy(buf, str, sizeof(buf));
 
 			if(str && parse_date_string(buf, &day, &month, &year)) {
-				if(year)
-					str = strdup_printf("%04d-%02d-%02d",
-						year, month, day);
-				else
-					str = strdup_printf("--%02d-%02d",
-						month, day);
-				mvwaddnstr(editw, y, TAB_COLON_POS + 2, str,
-					bytes2width(str, FIELD_MAX_WIDTH));
-				free(str);
+				/* put locale representation of date in buf */
+				locale_date(buf, sizeof(buf), year, month, day);
+				mvwaddnstr(editw, y, TAB_COLON_POS + 2, buf,
+					bytes2width(buf, FIELD_MAX_WIDTH));
 			}
 		} else {
 			find_field_number(cur->field->key, &nb);
@@ -395,6 +397,59 @@ edit_list(int item, int nb, int isemail)
 	field = abook_list_to_csv(list);
 	db_fput_byid(item, nb, field ? field : xstrdup(""));
 	abook_list_free(&list);
+}
+
+/*
+ * str is a buffer of max length str_len, which, after calling, will
+ * contain a representation of the given [y, m, d] date using the
+ * current locale (as defined by LC_TIME).
+ *
+ * Default is an ISO 8601 representation.
+ *
+ * %-sequences available to translators: %y, %Y, %m, %M, %d, %D represent
+ * year, month, and day (the uppercase version telling to fill with leading
+ * zeros if necessary)
+ */
+static void
+locale_date(char *str, size_t str_len, int year, int month, int day)
+{
+	char *s = str, *fmt;
+	size_t len;
+
+#if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
+	fmt = year ?	dcgettext(PACKAGE, "%Y-%M-%D", LC_TIME) :
+			dcgettext(PACKAGE, "--%M-%D", LC_TIME);
+#else
+	if(year)
+		snprintf(str, str_len, "%04d-%02d-%02d", year, month, day);
+	else
+		snprintf(str, str_len, "--%02d-%02d", month, day);
+	return;
+#endif
+
+	while(*fmt && (s - str + 1 < str_len)) {
+		if(*fmt != '%') {
+			*s++ = *fmt++;
+			continue;
+		}
+
+		len = str_len - (str - s);
+		switch(*++fmt) {
+			case 'y': s += snprintf(s, len, "%d", year); break;
+			case 'Y': s += snprintf(s, len, "%04d", year); break;
+			case 'm': s += snprintf(s, len, "%d", month); break;
+			case 'M': s += snprintf(s, len, "%02d", month); break;
+			case 'd': s += snprintf(s, len, "%d", day); break;
+			case 'D': s += snprintf(s, len, "%02d", day); break;
+			case '%': /* fall through */
+			default:
+				*s++ = '%';
+				*s++ = *fmt;
+				break;
+		}
+		fmt++;
+	}
+	*++s = 0;
 }
 
 static int is_valid_date(const int day, const int month, const int year)
