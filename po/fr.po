@@ -1,15 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translation for abook package.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# This file is distributed under the same license as the abook package.
+# Cedric Duval <cedricduval+abook@free.fr>, 2005-2006.
+# Michèle Garoche <michele.garoche@easyconnect.fr>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: abook\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-09-07 23:31+0200\n"
-"PO-Revision-Date: 2006-09-05 11:42+0200\n"
-"Last-Translator: Cedric Duval <cedricduval+abook@free.fr>\n"
+"PO-Revision-Date: 2006-09-08 14:37+0200\n"
+"Last-Translator: Michèle Garoche <michele.garoche@easyconnect.fr>\n"
 "Language-Team: french\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -182,7 +183,7 @@ msgstr ""
 #: abook.c:649
 #, c-format
 msgid "input format %s not supported\n"
-msgstr "le format source %s n'est pas supporté\n"
+msgstr "le format source %s n'est pas géré\n"
 
 #: abook.c:653
 #, c-format
@@ -192,7 +193,7 @@ msgstr "Impossible de lire le fichier %s\n"
 #: abook.c:662
 #, c-format
 msgid "output format %s not supported\n"
-msgstr "le format de destination %s n'est pas supporté\n"
+msgstr "le format de destination %s n'est pas géré\n"
 
 #: abook.c:668
 #, c-format
@@ -247,7 +248,7 @@ msgstr "stdin est un répertoire, ou impossible d'en quérir son état\n"
 
 #: abook.h:16
 msgid "q:quit  ?:help  a:add  r:remove"
-msgstr "q:quitter ?:aide a:ajouter r:supprimer"
+msgstr "q:quitter  ?:aide  a:ajouter  r:supprimer"
 
 #: database.c:45
 msgid "Name"
@@ -255,7 +256,7 @@ msgstr "Nom"
 
 #: database.c:46
 msgid "E-mail addresses"
-msgstr "Adresses email:"
+msgstr "Adresses email"
 
 #: database.c:47
 msgid "Address"
@@ -333,7 +334,6 @@ msgstr "Valeur de champ invalide définie dans la configuration"
 msgid "Invalid field value for sorting"
 msgstr "Valeur de champ invalide pour le classement"
 
-# Comment traduire 'tab' ?
 #: edit.c:57
 msgid "Tab name too wide for screen"
 msgstr "Intitulé d'onglet trop large pour l'écran"
@@ -397,7 +397,7 @@ msgstr "Nom: "
 
 #: edit.h:14
 msgid "?:help q:quit editor"
-msgstr "?:aide q:quitter l'éditeur"
+msgstr "?: aide  q: quitter l'éditeur"
 
 #: filter.c:71 filter.c:82
 msgid "abook native format"
@@ -457,7 +457,7 @@ msgstr "carnet d'adresses Spruce"
 
 #: filter.c:95
 msgid "BSD calendar"
-msgstr ""
+msgstr "Calendrier BSD"
 
 #: filter.c:108
 msgid "input:"
@@ -510,7 +510,7 @@ msgstr "Une erreur est survenue lors de l'exportation"
 #: filter.c:1896
 #, c-format
 msgid "%02d/%02d\tAnniversary of %s\n"
-msgstr ""
+msgstr "%02d/%02d\tAnniversaire de %s\n"
 
 #: help.h:11
 msgid "\t?\t\thelp\n"
@@ -548,7 +548,7 @@ msgstr "\ta\t\tajouter une entrée\n"
 
 #: help.h:20
 msgid "\tr / del\t\tremove selected items\n"
-msgstr "\tr / suppr\t\tsupprimer les entrées sélectionnées\n"
+msgstr "\tr / suppr\tsupprimer les entrées sélectionnées\n"
 
 #: help.h:21
 msgid "\tD\t\tduplicate item\n"
@@ -638,7 +638,7 @@ msgstr "\tv\t\tvisualiser l'URL avec un navigateur web\n"
 
 #: help.h:55
 msgid "\tarrows/h,l\t\tchange tab\n"
-msgstr "\tflèches/h,l\tchanger de \"tab\"\n"
+msgstr "\tflèches/h,l\tchanger d'onglet\n"
 
 #: help.h:57
 msgid "\tq\t\t\tquit to main screen\n"
@@ -863,12 +863,3 @@ msgstr "Personnalisé4"
 #: views.c:169
 msgid "Custom5"
 msgstr "Personnalisé5"
-
-#~ msgid "sorry, input for this field type is not yet implemented"
-#~ msgstr "désolé, l'entrée pour ce type de champ n'est pas encore implémentée"
-
-#~ msgid "?:help c:contact a:address p:phone o:other"
-#~ msgstr "?:aide c:contact a:adresse p:téléphone o:autre"
-
-#~ msgid "invalid custom field number"
-#~ msgstr "numéro de champ personnalisé invalide"
