@@ -1890,7 +1890,8 @@ bsdcal_export_database(FILE *out, struct db_enumerator e)
 		char *anniversary = db_fget(e.item, ANNIVERSARY);
 
 		if(anniversary) {
-			parse_date_string(anniversary, &day, &month, &year);
+			if(!parse_date_string(anniversary, &day, &month, &year))
+				continue;
 
 			fprintf(out,
 				_("%02d/%02d\tAnniversary of %s\n"),

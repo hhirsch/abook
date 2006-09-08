@@ -250,12 +250,10 @@ editor_print_data(int tab, int item)
 			int day, month, year;
 			char buf[64];
 
-			/* put raw representation of date in buf */
 			find_field_number(cur->field->key, &nb);
-			if((str = db_fget_byid(item, nb)) != NULL)
-				strncpy(buf, str, sizeof(buf));
-
-			if(str && parse_date_string(buf, &day, &month, &year)) {
+			str = db_fget_byid(item, nb);
+			
+			if(parse_date_string(str, &day, &month, &year)) {
 				/* put locale representation of date in buf */
 				locale_date(buf, sizeof(buf), year, month, day);
 				mvwaddnstr(editw, y, TAB_COLON_POS + 2, buf,
@@ -475,11 +473,17 @@ static int is_valid_date(const int day, const int month, const int year)
 }
 
 int
-parse_date_string(char *s, int *day, int *month, int *year)
+parse_date_string(char *str, int *day, int *month, int *year)
 {
 	int i = 0;
-	char *p = s;
-	assert(s && day && month && year);
+	char buf[12], *s, *p;
+
+	assert(day && month && year);
+
+	if(!str || !*str)
+		return FALSE;
+
+	p = s = strncpy(buf, str, sizeof(buf));
 
 	if(*s == '-' && *s++ == '-') { /* omitted year */
 		*year = 0;
@@ -501,7 +505,7 @@ parse_date_string(char *s, int *day, int *month, int *year)
 			}
 			p = s;
 		} else
-		return FALSE;
+			return FALSE;
 	}
 
 	if (i != 2 || !*p)
@@ -515,14 +519,11 @@ parse_date_string(char *s, int *day, int *month, int *year)
 static void
 edit_date(int item, int nb)
 {
-	int i, date[3], old = FALSE;
-	char buf[12], *s = db_fget_byid(item, nb);
+	int i, date[3], old;
+	char *s = db_fget_byid(item, nb);
 	char *field[] = { N_("Day: "), N_("Month: "), N_("Year (optional): ") };
 
-	if(s) {
-		strncpy(buf, s, sizeof(buf));
-		old = parse_date_string(buf, &date[0], &date[1], &date[2]);
-	}
+	old = parse_date_string(s, &date[0], &date[1], &date[2]);
 
 	for(i = 0; i < 3; i++) {
 		s = (old && date[i]) ? strdup_printf("%d", date[i]) : NULL;
