@@ -140,7 +140,7 @@ init_default_views()
 		{ N_("ADDRESS"),
 			{ ADDRESS, ADDRESS2, CITY, STATE, ZIP, COUNTRY, -1 } },
 		{ N_("PHONE"), { PHONE, WORKPHONE, FAX, MOBILEPHONE, -1 } },
-		{ N_("OTHER"), { NICK, URL, NOTES, -1 } },
+		{ N_("OTHER"), { NICK, URL, NOTES, ANNIVERSARY, -1 } },
 		{ 0 }
 	};
 
