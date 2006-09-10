@@ -398,32 +398,17 @@ edit_list(int item, int nb, int isemail)
 }
 
 /*
- * str is a buffer of max length str_len, which, after calling, will
- * contain a representation of the given [y, m, d] date using the
- * current locale (as defined by LC_TIME).
- *
- * Default is an ISO 8601 representation.
- *
- * %-sequences available to translators: %y, %Y, %m, %M, %d, %D represent
- * year, month, and day (the uppercase version telling to fill with leading
- * zeros if necessary)
+ * available %-sequences:
+ *   - %y, %Y, %m, %M, %d, %D represent year, month, and day
+ *     (the uppercase version telling to fill with leading zeros
+ *     if necessary)
+ *   - %I for ISO 8601 representation
  */
-static void
-locale_date(char *str, size_t str_len, int year, int month, int day)
+static size_t
+format_date(char *str, size_t str_len, char *fmt, int year, int month, int day)
 {
-	char *s = str, *fmt;
+	char *s = str;
 	size_t len;
-
-#if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
-	fmt = year ?	dcgettext(PACKAGE, "%Y-%M-%D", LC_TIME) :
-			dcgettext(PACKAGE, "--%M-%D", LC_TIME);
-#else
-	if(year)
-		snprintf(str, str_len, "%04d-%02d-%02d", year, month, day);
-	else
-		snprintf(str, str_len, "--%02d-%02d", month, day);
-	return;
-#endif
 
 	while(*fmt && (s - str + 1 < str_len)) {
 		if(*fmt != '%') {
@@ -439,15 +424,38 @@ locale_date(char *str, size_t str_len, int year, int month, int day)
 			case 'M': s += snprintf(s, len, "%02d", month); break;
 			case 'd': s += snprintf(s, len, "%d", day); break;
 			case 'D': s += snprintf(s, len, "%02d", day); break;
-			case '%': /* fall through */
-			default:
-				*s++ = '%';
-				*s++ = *fmt;
-				break;
+			case 'I': s += format_date(s, len,
+						  year ? "%Y-%M-%D" : "--%M-%D",
+						  year, month, day);
+				  break;
+			case '%': *s++ = '%'; break;
+			default: *s++ = '%'; *s++ = *fmt; break;
 		}
 		fmt++;
 	}
-	*++s = 0;
+	*s = 0;
+	return s - str;
+}
+
+/*
+ * str is a buffer of max length str_len, which, after calling, will
+ * contain a representation of the given [y, m, d] date using the
+ * current locale (as defined by LC_TIME).
+ *
+ * In the absence of any localization, use an ISO 8601 representation.
+ */
+static void
+locale_date(char *str, size_t str_len, int year, int month, int day)
+{
+	char *fmt;
+
+#if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
+	fmt = year ?	dcgettext(PACKAGE, "%Y-%M-%D", LC_TIME) :
+			dcgettext(PACKAGE, "--%M-%D", LC_TIME);
+#else
+	fmt = "%I";
+#endif
+	format_date(str, str_len, fmt, year, month, day);
 }
 
 static int is_valid_date(const int day, const int month, const int year)
