@@ -1,16 +1,16 @@
 # German translations for abook package.
-# Copyright (C) 2005 Free Software Foundation, Inc.
+# Copyright (C) 2005 Jaakko Heinonen
 # This file is distributed under the same license as the abook package.
 # Johannes Weißl <jargon@molb.org>, 2005.
-# Gerfried Fuchs <alfie@ist.org>, 2006.
+# Gerfried Fuchs <rhonda@deb.at>, 2007-2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: abook 0.5.5pre1\n"
 "Report-Msgid-Bugs-To: <abook-devel@lists.sourceforge.net>\n"
 "POT-Creation-Date: 2006-09-07 23:31+0200\n"
-"PO-Revision-Date: 2006-09-04 21:00+0200\n"
-"Last-Translator: Johannes Weißl <jargon@molb.org>\n"
+"PO-Revision-Date: 2010-02-15 18:10+0100\n"
+"Last-Translator: Gerfried Fuchs <rhonda@deb.at>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -316,9 +316,10 @@ msgstr "URL"
 msgid "Notes"
 msgstr "Bemerkung"
 
+# Anniversary already _means_ day!
 #: database.c:60
 msgid "Anniversary day"
-msgstr ""
+msgstr "Jahrestag"
 
 #: database.c:166
 msgid "field already defined"
@@ -326,7 +327,7 @@ msgstr "Feld bereits definiert"
 
 #: database.c:170
 msgid "standard field does not need to be declared"
-msgstr ""
+msgstr "Standardfeld muss nicht deklariert werden"
 
 #: database.c:185
 msgid "unknown type"
@@ -337,9 +338,8 @@ msgid "Invalid field value defined in configuration"
 msgstr "Ungültiger Feld-Wert in der Konfiguration festgelegt"
 
 #: database.c:588
-#, fuzzy
 msgid "Invalid field value for sorting"
-msgstr "Ungültiger Feld-Wert in der Konfiguration festgelegt"
+msgstr "Ungültiger Feld-Wert für die Sortierung"
 
 #: edit.c:57
 msgid "Tab name too wide for screen"
@@ -352,7 +352,7 @@ msgstr "n123456789"
 #: edit.c:357
 #, c-format
 msgid "Choose %s to modify (<1>%s%c%s%s."
-msgstr ""
+msgstr "%s zum Ändern wählen (<1>%s%c%s%s."
 
 #: edit.c:358
 msgid "email"
@@ -376,28 +376,27 @@ msgstr "Element: "
 
 #: edit.c:420
 msgid "%Y-%M-%D"
-msgstr ""
+msgstr "%Y-%M-%D"
 
 #: edit.c:421
 msgid "--%M-%D"
-msgstr ""
+msgstr "--%M-%D"
 
 #: edit.c:520
 msgid "Day: "
-msgstr ""
+msgstr "Tag: "
 
 #: edit.c:520
 msgid "Month: "
-msgstr ""
+msgstr "Monat: "
 
 #: edit.c:520
 msgid "Year (optional): "
-msgstr ""
+msgstr "Jahr (optional): "
 
 #: edit.c:553
-#, fuzzy
 msgid "Invalid date"
-msgstr "ungültiger Wert"
+msgstr "ungültiges Datum"
 
 #: edit.c:708
 msgid "Name: "
@@ -409,7 +408,7 @@ msgstr "?:Hilfe q:Editor beenden"
 
 #: filter.c:71 filter.c:82
 msgid "abook native format"
-msgstr "abooks eigenes Format"
+msgstr "abook-eigenes Format"
 
 #: filter.c:72
 msgid "ldif / Netscape addressbook"
@@ -417,11 +416,11 @@ msgstr "ldif / Netscape Adressbuch"
 
 #: filter.c:73 filter.c:84
 msgid "mutt alias"
-msgstr "mutt alias"
+msgstr "mutt-Alias"
 
 #: filter.c:74 filter.c:86
 msgid "pine addressbook"
-msgstr "pine Adressbuch"
+msgstr "pine-Adressbuch"
 
 #: filter.c:75 filter.c:88
 msgid "comma separated values"
@@ -441,7 +440,7 @@ msgstr "ldif / Netscape Adressbuch (.4ld)"
 
 #: filter.c:85
 msgid "html document"
-msgstr "HTML Dokument"
+msgstr "HTML-Dokument"
 
 #: filter.c:87
 msgid "GnomeCard (VCard) addressbook"
@@ -456,17 +455,16 @@ msgid "plain text"
 msgstr "Klartext"
 
 #: filter.c:93
-#, fuzzy
 msgid "Wanderlust address book"
-msgstr "pine Adressbuch"
+msgstr "Wanderlust-Adressbuch"
 
 #: filter.c:94
 msgid "Spruce address book"
-msgstr "Spruce Adressbuch"
+msgstr "Spruce-Adressbuch"
 
 #: filter.c:95
 msgid "BSD calendar"
-msgstr ""
+msgstr "BSD-Kalender"
 
 #: filter.c:108
 msgid "input:"
@@ -511,7 +509,7 @@ msgstr "Exportiere <a>lle, exportiere au<s>gewählte, oder bri<c>h ab?"
 
 #: filter.c:331 ui.c:632
 msgid "keybindings:all/selected/cancel|asc"
-msgstr ""
+msgstr "asc"
 
 #: filter.c:352
 msgid "Error occured while exporting"
@@ -520,7 +518,7 @@ msgstr "Fehler beim Exportieren aufgetreten"
 #: filter.c:1896
 #, c-format
 msgid "%02d/%02d\tAnniversary of %s\n"
-msgstr ""
+msgstr "%02d/%02d\tJahrestag von %s\n"
 
 #: help.h:11
 msgid "\t?\t\thelp\n"
@@ -648,19 +646,16 @@ msgid "\tv\t\tview URL with web browser\n"
 msgstr "\tv\t\tURL mit Web-Browser anzeigen\n"
 
 #: help.h:55
-#, fuzzy
 msgid "\tarrows/h,l\t\tchange tab\n"
-msgstr "\ta,c,p,o,C/Pfeilt./h,l\tTab wechseln\n"
+msgstr "\tPfeilt./h,l\t\tTab wechseln\n"
 
 #: help.h:57
-#, fuzzy
 msgid "\tq\t\t\tquit to main screen\n"
-msgstr "\tQ\t\tBeenden ohne zu speichern\n"
+msgstr "\tq\t\t\tZum Hauptschirm zurück kehren\n"
 
 #: help.h:59
-#, fuzzy
 msgid "\t1 - 5 A - Z\t\tedit fields\n"
-msgstr "\t1 - 5\t\t\tFelder bearbeiten\n"
+msgstr "\t1 - 5 A - Z\t\tFelder bearbeiten\n"
 
 #: help.h:61
 msgid "\tk or <\t\t\tprevious item\n"
@@ -671,14 +666,12 @@ msgid "\tj or >\t\t\tnext item\n"
 msgstr "\tj or >\t\t\tNächstes Element\n"
 
 #: help.h:64
-#, fuzzy
 msgid "\tr\t\t\troll e-mail addresses up\n"
-msgstr "\tr\t\t\tE-Mail-Adressen rotieren\n"
+msgstr "\tr\t\t\tE-Mail-Adressen nach oben rotieren\n"
 
 #: help.h:65
-#, fuzzy
 msgid "\tESC-r\t\t\troll e-mail addresses down\n"
-msgstr "\tr\t\t\tE-Mail-Adressen rotieren\n"
+msgstr "\tESC-r\t\t\tE-Mail-Adressen nach unten rotieren\n"
 
 #: help.h:67
 msgid "\tu\t\t\tundo\n"
@@ -694,11 +687,11 @@ msgstr "\tv\t\t\tURL mit Web-Browser anzeigen\n"
 
 #: options.c:250
 msgid "quote mismatch"
-msgstr ""
+msgstr "fehlendes Hochkomma"
 
 #: options.c:256
 msgid "no assignment character found"
-msgstr ""
+msgstr "kein Zuweisungszeichen gefunden"
 
 #: options.c:259
 msgid "error in comma separated list"
@@ -718,6 +711,8 @@ msgid ""
 "valid values for the 'preserve_fields' option are 'all', "
 "'standard' (default), and 'none'\n"
 msgstr ""
+"gültige Werte für die Option »preserve_fields« sind »all«, "
+"»standard« (Voreinstellung) und »none«\n"
 
 #: options.c:350
 #, c-format
@@ -725,6 +720,8 @@ msgid ""
 "valid values for the 'address_style' option are 'eu' (default), 'uk', and "
 "'us'\n"
 msgstr ""
+"gültige Werte für die Option »address_style« sind »eu« (Voreinstellung), »uk« "
+"und »us«\n"
 
 #: options.c:372
 msgid "invalid value assignment"
@@ -735,18 +732,20 @@ msgid ""
 "customfield: obsolete command - please use the 'field' and 'view' commands "
 "instead"
 msgstr ""
+"customfield: veralteter Befehl - verwenden Sie bitte die Befehle »field« und "
+"»view«"
 
 #: options.c:398
 msgid "no view name provided"
-msgstr ""
+msgstr "kein Name für Ansicht angegeben"
 
 #: options.c:428
 msgid "no field identifier provided"
-msgstr ""
+msgstr "keine Feldkennzeichnung angegeben"
 
 #: options.c:434
 msgid "no field name provided"
-msgstr ""
+msgstr "kein Feldname angegeben"
 
 #: options.c:490
 #, c-format
@@ -828,15 +827,15 @@ msgstr ""
 
 #: views.c:87
 msgid "undeclared field"
-msgstr ""
+msgstr "undefiniertes Feld"
 
 #: views.c:92
 msgid "maximal number of fields per view reached"
-msgstr ""
+msgstr "maximale Anzahl von Feldern für Ansicht erreicht"
 
 #: views.c:95
 msgid "field already in this view"
-msgstr ""
+msgstr "Feld in dieser Ansicht bereits vorhanden"
 
 #: views.c:139
 msgid "CONTACT"
