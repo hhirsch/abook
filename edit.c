@@ -100,7 +100,7 @@ get_first_email(char *str, int item)
 /* This only rolls emails from the 'email' field, not emails from any
  * field of type FIELD_EMAILS.
  * TODO: expand to ask for which field to roll if several are present? */
-static void
+void
 roll_emails(int item, enum rotate_dir dir)
 {
 	abook_list *emails = csv_to_abook_list(db_fget(item, EMAIL));

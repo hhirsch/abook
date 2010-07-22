@@ -1627,15 +1627,46 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 {
 	char email[MAX_EMAIL_LEN];
 	char *alias = NULL;
+	int email_addresses;
+	char *ptr;
 
 	db_enumerate_items(e) {
 		alias = mutt_alias_genalias(e.item);
 		get_first_email(email, e.item);
-		fprintf(out, *email ? "alias %s %s <%s>\n": "alias %s %s%s\n",
-				alias,
-				db_name_get(e.item),
-				email);
-		xfree(alias);
+
+		/* do not output contacts without email address */
+		/* cause this does not make sense in mutt aliases */
+		if (*email) {
+
+			/* output first email address */
+			fprintf(out, "alias %s %s <%s>\n",
+					alias,
+					db_name_get(e.item),
+					email);
+
+			/* number of email addresses */
+			email_addresses = 1;
+			ptr = db_email_get(e.item);
+			while (*ptr != '\0') {
+				if (*ptr == ',') {
+					email_addresses++;
+				}
+				ptr++;
+			}
+
+			/* output other email addresses */
+			while (email_addresses-- > 1) {
+				roll_emails(e.item, ROTATE_RIGHT);
+				get_first_email(email, e.item);
+				fprintf(out, "alias %s__%s %s <%s>\n",
+						alias,
+						email,
+						db_name_get(e.item),
+						email);
+			}
+			roll_emails(e.item, ROTATE_RIGHT);
+			xfree(alias);
+		}
 	}
 
 	return 0;

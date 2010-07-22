@@ -1,8 +1,12 @@
 #ifndef _EDIT_H
 #define _EDIT_H
 
+#include "misc.h"	/* for rotate_dir enum definition */
+
+
 void		edit_item(int item);
 void		get_first_email(char *str, int item);
+void		roll_emails(int item, enum rotate_dir dir);
 void		add_item();
 int		parse_date_string(char *s, int *day, int *month, int *year);
 
