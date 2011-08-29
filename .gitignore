@@ -1,0 +1,15 @@
+.deps
+autom4te.cache
+Makefile
+abook.spec
+config.h
+config.log
+config.status
+intl/Makefile
+po/Makefile
+po/Makefile.in
+po/POTFILES
+stamp-h1
+*.o
+*~
+abook
