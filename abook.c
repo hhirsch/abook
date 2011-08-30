@@ -320,6 +320,7 @@ parse_command_line(int argc, char **argv)
 			OPT_CONVERT,
 			OPT_INFORMAT,
 			OPT_OUTFORMAT,
+			OPT_OUTFORMAT_STR,
 			OPT_INFILE,
 			OPT_OUTFILE,
 			OPT_FORMATS
@@ -334,6 +335,7 @@ parse_command_line(int argc, char **argv)
 			{ "convert", 0, 0, OPT_CONVERT },
 			{ "informat", 1, 0, OPT_INFORMAT },
 			{ "outformat", 1, 0, OPT_OUTFORMAT },
+			{ "outformatstr", 1, 0, OPT_OUTFORMAT_STR },
 			{ "infile", 1, 0, OPT_INFILE },
 			{ "outfile", 1, 0, OPT_OUTFILE },
 			{ "formats", 0, 0, OPT_FORMATS },
@@ -378,6 +380,10 @@ parse_command_line(int argc, char **argv)
 				outformat = optarg;
 				selected_item_filter = select_output_item_filter(outformat);
 				break;
+			case OPT_OUTFORMAT_STR:
+				strncpy(custom_format, optarg, FORMAT_STRING_LEN - 1);
+				custom_format[FORMAT_STRING_LEN] = 0;
+				break;
 			case OPT_INFILE:
 				set_convert_var(infile);
 				break;
@@ -394,6 +400,11 @@ parse_command_line(int argc, char **argv)
 
 	if(! selected_item_filter.func)
 		selected_item_filter = select_output_item_filter("muttq");
+	else if (! strcmp(outformat, "custom") && *custom_format) {
+		parsed_custom_format = (char *)malloc(FORMAT_STRING_LEN * sizeof(char*));
+		custom_format_fields = (enum field_types *)malloc(FORMAT_STRING_MAX_FIELDS * sizeof(enum field_types *));
+		parse_custom_format(custom_format, parsed_custom_format, custom_format_fields);
+	}
 	if(optind < argc) {
 		fprintf(stderr, _("%s: unrecognized arguments on command line\n"),
 				argv[0]);

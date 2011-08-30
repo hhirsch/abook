@@ -100,11 +100,13 @@ struct abook_output_filter e_filters[] = {
 	{ "wl", N_("Wanderlust address book"), wl_export_database },
 	{ "spruce", N_("Spruce address book"), spruce_export_database },
 	{ "bsdcal", N_("BSD calendar"), bsdcal_export_database },
+	{ "custom", N_("Custom format"), custom_export_database },
 	{ "\0", NULL, NULL }
 };
 
 struct abook_output_item_filter u_filters[] = {
 	{ "muttq", N_("mutt alias"), muttq_print_item },
+	{ "custom", N_("Custom format"), custom_print_item },
 	{ "\0", NULL }
 };
 
