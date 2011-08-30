@@ -452,10 +452,7 @@ mutt_query(char *str)
 	init_mutt_query();
 
 	if( str == NULL || !strcasecmp(str, "all") ) {
-		struct db_enumerator e = init_db_enumerator(ENUM_ALL);
-		printf("All items\n");
-		db_enumerate_items(e)
-			muttq_print_item(stdout, e.item);
+		export_file("muttq", "-");
 	} else {
 		int search_fields[] = {NAME, EMAIL, NICK, -1};
 		int i;

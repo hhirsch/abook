@@ -60,6 +60,7 @@ static int	allcsv_export_database(FILE *out, struct db_enumerator e);
 static int	palm_export_database(FILE *out, struct db_enumerator e);
 static int	vcard_export_database(FILE *out, struct db_enumerator e);
 static int	mutt_alias_export(FILE *out, struct db_enumerator e);
+static int	mutt_query_export_database(FILE *out, struct db_enumerator e);
 static int	elm_alias_export(FILE *out, struct db_enumerator e);
 static int	text_export_database(FILE *out, struct db_enumerator e);
 static int	spruce_export_database(FILE *out, struct db_enumerator e);
@@ -87,6 +88,7 @@ struct abook_output_filter e_filters[] = {
 	{ "ldif", N_("ldif / Netscape addressbook (.4ld)"), ldif_export_database },
 	{ "vcard", N_("vCard 2 file"), vcard_export_database },
 	{ "mutt", N_("mutt alias"), mutt_alias_export },
+	{ "muttq", N_("mutt query format (internal use)"), mutt_query_export_database },
 	{ "html", N_("html document"), html_export_database },
 	{ "pine", N_("pine addressbook"), pine_export_database },
 	{ "csv", N_("comma separated values"), csv_export_database },
@@ -2054,6 +2056,15 @@ void muttq_print_item(FILE *file, int item)
 			break;
 	}
 	abook_list_free(&emails);
+}
+
+static int
+mutt_query_export_database(FILE *out, struct db_enumerator e)
+{
+  fprintf(out, "All items\n");
+  db_enumerate_items(e)
+    muttq_print_item(out, e.item);
+  return 0;
 }
 
 /*
