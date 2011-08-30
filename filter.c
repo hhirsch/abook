@@ -2332,6 +2332,89 @@ bsdcal_export_database(FILE *out, struct db_enumerator e)
 	return 0;
 }
 
+// see enum field_types @database.h
+static char *conv_table[] = {
+  "name",
+  "email",
+  "address",
+  "address2",
+  "city",
+  "state",
+  "zip",
+  "country",
+  "phone",
+  "workphone",
+  "fax",
+  "mobile",
+  "nick",
+  "url",
+  "notes",
+  "anniversary",
+  0 /* ITEM_FIELDS */
+};
+
+static int
+find_field_enum(char *s) {
+  int i = 0;
+  while (conv_table[i]) {
+    if(!safe_strcmp(conv_table[i], s))
+      return i;
+    i++;
+  }
+  // failed
+  return -1;
+}
+
+/* Convert a string with named placeholders to
+   a *printf() compatible string.
+   Stores the abook field values into ft. */
+void
+parse_custom_format(char *s, char *fmt_string, enum field_types *ft)
+{
+	if(! fmt_string || ! ft) {
+	  fprintf(stderr, _("parse_custom_format: fmt_string or ft not allocated\n"));
+	  exit(EXIT_FAILURE);
+	}
+
+	char *p, *start, *field_name = NULL;
+	p = start = s;
+
+	while(*p) {
+		if(*p == '{') {
+		  start = ++p;
+		  p = strchr(start, '}');
+		  if(! *p) {
+		    fprintf(stderr, _("parse_custom_format: invalid format\n"));
+		    exit(EXIT_FAILURE);
+		  }
+		  strcat(fmt_string, "%s");
+		  field_name = strndup(start, (size_t)(p-start));
+		  *ft = find_field_enum(field_name);
+		  if(*ft == -1) {
+		    fprintf(stderr, _("parse_custom_format: invalid placeholder: {%s}\n"), field_name);
+		    exit(EXIT_FAILURE);
+		  }
+
+		  ft++;
+		  p++;
+		  start = p;
+		} else {
+		  p = strchr(start, '{');
+		  if(p && *p) {
+		    strncat(fmt_string, start, (size_t)(p-start));
+		    start = p;
+		  }
+		  else {
+		    strncat( fmt_string,
+			     start,
+			     FORMAT_STRING_LEN - strlen(fmt_string) - 1 );
+		    break;
+		  }
+		}
+	}
+	*ft = 66;
+}
+
 /*
  * end of BSD calendar export filter
  */

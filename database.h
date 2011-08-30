@@ -6,7 +6,7 @@
 #define MAX_EMAILSTR_LEN	(MAX_LIST_ITEMS * (MAX_EMAIL_LEN + 1) + 1)
 #define MAX_FIELD_LEN		81
 
-enum {
+enum field_types {
 	NAME = 0, /* important */
 	EMAIL,
 	ADDRESS,
