@@ -100,6 +100,10 @@ struct abook_output_filter e_filters[] = {
 	{ "\0", NULL, NULL }
 };
 
+struct abook_output_item_filter u_filters[] = {
+	{ "\0", NULL }
+};
+
 /*
  * common functions
  */
@@ -120,6 +124,13 @@ print_filters()
 	for(i=0; *e_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", e_filters[i].filtname,
 			gettext(e_filters[i].desc));
+
+	putchar('\n');
+
+	puts(_("output (with query):"));
+	for(i=0; *u_filters[i].filtname ; i++)
+		printf("\t%s\t%s\n", u_filters[i].filtname,
+			gettext(u_filters[i].desc));
 
 	putchar('\n');
 }
@@ -359,6 +370,25 @@ export_database()
 	free(filename);
 
 	return 0;
+}
+
+struct abook_output_item_filter select_output_item_filter(char filtname[FILTNAME_LEN]) {
+	int i;
+	for(i=0;; i++) {
+		if(!strncasecmp(u_filters[i].filtname, filtname, FILTNAME_LEN))
+		  break;
+		if(!*u_filters[i].filtname) {
+		  i = -1;
+		  break;
+		}
+	}
+	return u_filters[i];
+}
+
+void
+e_write_item(FILE *out, int item, void (*func) (FILE *in, int item))
+{
+  (*func) (out, item);
 }
 
 static int
