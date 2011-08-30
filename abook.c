@@ -50,6 +50,8 @@ static void		add_email(int);
 char *datafile = NULL;
 static char *rcfile = NULL;
 
+struct abook_output_item_filter selected_item_filter;
+
 bool alternative_datafile = FALSE;
 bool alternative_rcfile = FALSE;
 
@@ -303,6 +305,7 @@ parse_command_line(int argc, char **argv)
 		*infile = "-",
 		*outfile = "-";
 	int c;
+	selected_item_filter = select_output_item_filter("muttq");
 
 	for(;;) {
 		int option_index = 0;
@@ -368,7 +371,8 @@ parse_command_line(int argc, char **argv)
 				set_convert_var(informat);
 				break;
 			case OPT_OUTFORMAT:
-				set_convert_var(outformat);
+				outformat = optarg;
+				selected_item_filter = select_output_item_filter(outformat);
 				break;
 			case OPT_INFILE:
 				set_convert_var(infile);
@@ -384,6 +388,8 @@ parse_command_line(int argc, char **argv)
 		}
 	}
 
+	if(! selected_item_filter.func)
+		selected_item_filter = select_output_item_filter("muttq");
 	if(optind < argc) {
 		fprintf(stderr, _("%s: unrecognized arguments on command line\n"),
 				argv[0]);
@@ -462,7 +468,7 @@ mutt_query(char *str)
 		}
 		putchar('\n');
 		while(i >= 0) {
-			muttq_print_item(stdout, i);
+			e_write_item(stdout, i, selected_item_filter.func);
 			i = find_item(str, i + 1, search_fields);
 		}
 	}

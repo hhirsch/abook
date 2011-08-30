@@ -103,6 +103,7 @@ struct abook_output_filter e_filters[] = {
 };
 
 struct abook_output_item_filter u_filters[] = {
+	{ "muttq", N_("mutt alias"), muttq_print_item },
 	{ "\0", NULL }
 };
 
