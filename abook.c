@@ -50,6 +50,10 @@ static void		add_email(int);
 char *datafile = NULL;
 static char *rcfile = NULL;
 
+// custom formatting
+char custom_format[FORMAT_STRING_LEN] = "{nick} ({name}): {mobile}";
+char *parsed_custom_format = NULL;
+enum field_types *custom_format_fields = 0;
 struct abook_output_item_filter selected_item_filter;
 
 bool alternative_datafile = FALSE;

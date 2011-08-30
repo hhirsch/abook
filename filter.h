@@ -5,6 +5,7 @@
 
 #define		FILTNAME_LEN	8
 #define		FORMAT_STRING_LEN	128
+#define		FORMAT_STRING_MAX_FIELDS	16
 
 
 struct abook_output_filter {
@@ -39,6 +40,7 @@ void		e_write_item(FILE *out, int item, void (*func) (FILE *in, int item));
 void		muttq_print_item(FILE *file, int item);
 
 void		parse_custom_format(char *s, char *fmt_string, enum field_types *ft);
+void		custom_print_item(FILE *out, int item);
 
 int		fexport(char filtname[FILTNAME_LEN], FILE *handle,
 		int enum_mode);

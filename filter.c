@@ -66,6 +66,7 @@ static int	text_export_database(FILE *out, struct db_enumerator e);
 static int	spruce_export_database(FILE *out, struct db_enumerator e);
 static int	wl_export_database(FILE *out, struct db_enumerator e);
 static int	bsdcal_export_database(FILE *out, struct db_enumerator e);
+static int	custom_export_database(FILE *out, struct db_enumerator e);
 
 /*
  * end of function declarations
@@ -2413,6 +2414,93 @@ parse_custom_format(char *s, char *fmt_string, enum field_types *ft)
 		}
 	}
 	*ft = 66;
+}
+
+static int
+custom_export_item(FILE *out, int item, char *s, enum field_types *ft);
+
+
+// used to store the format string from --outformatstr when "custom" format is used
+// default value overriden in export_file()
+extern char *parsed_custom_format;
+extern enum field_types *custom_format_fields;
+
+/* wrapper for custom_export_item:
+   1) avoid messing with extern pointer
+   2) adds \n
+   3) follow the prototype needed for an abook_output_item_filter entry */
+void
+custom_print_item(FILE *out, int item)
+{
+
+  if(custom_export_item(out, item, parsed_custom_format, custom_format_fields) == 0)
+    fprintf(out, "\n");
+}
+
+static int
+custom_export_item(FILE *out, int item, char *fmt, enum field_types *ft)
+{
+  char *p, *q = 0;
+
+  // if the first character is '!':
+  // we first check that all fields exist before continuing
+  if(*fmt == '!') {
+    enum field_types *ftp = ft;
+    while(*ft != 66) {
+      if(! db_fget(item, *ft) )
+	return 1;
+      ft++;
+    }
+    ft = ftp;
+    fmt++;
+  }
+
+  while (*fmt) {
+    if(!strncmp(fmt, "%s", 2)) {
+      fprintf(out, "%s", safe_str(db_fget(item, *ft)));
+      ft++;
+      fmt+=2;
+    } else if (*ft == 66) {
+      fprintf(out, "%s", fmt);
+      return 0;
+    } else {
+      p = strchr(fmt, '%');
+      if(*p) {
+	q = strndup(fmt, (size_t)(p-fmt));
+	fprintf(out, "%s", q);
+	free(q);
+	fmt = p;
+      }
+      else {
+	fprintf(out, "%s", fmt);
+	return 0;
+      }
+    }
+  }
+
+  return 0;
+}
+
+// used to store the format string from --outformatstr when "custom" format is used
+// default value overriden from abook.c
+extern char custom_format[FORMAT_STRING_LEN];
+
+static int
+custom_export_database(FILE *out, struct db_enumerator e)
+{
+	char *format_string =
+	  (char *)malloc(FORMAT_STRING_LEN * sizeof(char*));
+
+	enum field_types *ft =
+	  (enum field_types *)malloc(FORMAT_STRING_MAX_FIELDS * sizeof(enum field_types *));
+
+	parse_custom_format(custom_format, format_string, ft);
+
+	db_enumerate_items(e) {
+	  if(custom_export_item(out, e.item, format_string, ft) == 0)
+	    fprintf(out, "\n");
+	}
+	return 0;
 }
 
 /*
