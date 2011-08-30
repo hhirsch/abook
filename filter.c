@@ -2038,6 +2038,24 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 	return 0;
 }
 
+void muttq_print_item(FILE *file, int item)
+{
+	abook_list *emails, *e;
+	char *tmp = db_email_get(item);
+
+	emails = csv_to_abook_list(tmp);
+	free(tmp);
+
+	for(e = emails; e; e = e->next) {
+		fprintf(file, "%s\t%s\t%s\n", e->data, db_name_get(item),
+				!db_fget(item, NOTES) ?" " :db_fget(item, NOTES)
+				);
+		if(!opt_get_bool(BOOL_MUTT_RETURN_ALL_EMAILS))
+			break;
+	}
+	abook_list_free(&emails);
+}
+
 /*
  * end of mutt alias export filter
  */

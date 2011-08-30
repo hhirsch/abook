@@ -35,6 +35,7 @@ struct abook_output_item_filter
 		select_output_item_filter(char filtname[FILTNAME_LEN]);
 
 void		e_write_item(FILE *out, int item, void (*func) (FILE *in, int item));
+void		muttq_print_item(FILE *file, int item);
 
 int		fexport(char filtname[FILTNAME_LEN], FILE *handle,
 		int enum_mode);
