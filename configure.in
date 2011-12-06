@@ -9,7 +9,7 @@ dnl gettext support
 dnl ---------------
 
 AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION(0.14.1)
+AM_GNU_GETTEXT_VERSION([0.18.1])
 
 AC_DEFUN([ABOOK_EXPAND_PREFIX], [
 	$1=$2
