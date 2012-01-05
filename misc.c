@@ -77,6 +77,27 @@ is_number(char *p)
 	return 1;
 }
 
+char *
+strcasestr(char *haystack, char *needle)
+{
+	int i;
+	int k;
+
+	assert(haystack != NULL);
+	assert(needle != NULL);
+
+	for(i=0; i<strlen(haystack)-strlen(needle)+1; i++) {
+		for(k=0; k<strlen(needle); k++, i++) {
+			if (tolower(haystack[i]) != tolower(needle[k]))
+				break;
+			else if ((k+1) == strlen(needle))
+				return &haystack[i];
+		}
+	}
+
+	return NULL;
+}
+
 
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
