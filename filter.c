@@ -56,7 +56,7 @@ static int	pine_export_database(FILE *out, struct db_enumerator e);
 static int	csv_export_database(FILE *out, struct db_enumerator e);
 static int	allcsv_export_database(FILE *out, struct db_enumerator e);
 static int	palm_export_database(FILE *out, struct db_enumerator e);
-static int	gcrd_export_database(FILE *out, struct db_enumerator e);
+static int	vcard_export_database(FILE *out, struct db_enumerator e);
 static int	mutt_alias_export(FILE *out, struct db_enumerator e);
 static int	elm_alias_export(FILE *out, struct db_enumerator e);
 static int	text_export_database(FILE *out, struct db_enumerator e);
@@ -83,10 +83,10 @@ struct abook_input_filter i_filters[] = {
 struct abook_output_filter e_filters[] = {
 	{ "abook", N_("abook native format"), write_database },
 	{ "ldif", N_("ldif / Netscape addressbook (.4ld)"), ldif_export_database },
+	{ "vcard", N_("vCard 2 file"), vcard_export_database },
 	{ "mutt", N_("mutt alias"), mutt_alias_export },
 	{ "html", N_("html document"), html_export_database },
 	{ "pine", N_("pine addressbook"), pine_export_database },
-	{ "gcrd", N_("GnomeCard (VCard) addressbook"), gcrd_export_database },
 	{ "csv", N_("comma separated values"), csv_export_database },
 	{ "allcsv", N_("comma separated values (all fields)"), allcsv_export_database },
 	{ "palmcsv", N_("Palm comma separated values"), palm_export_database},
@@ -754,7 +754,7 @@ mutt_parse_file(FILE *in)
 
 		if(!mutt_read_line(in,
 					(field_id(NICK) != -1) ?
-					&item[field_id(NICK)] :	NULL,
+					&item[field_id(NICK)] : NULL,
 					&item[field_id(NAME)]))
 			mutt_parse_email(item);
 
@@ -1387,7 +1387,7 @@ vcard_get_line_element(char *line, int element)
 
 	line_copy = xstrdup(line);
 
-	/* make newline characters if exist end of string */
+	/* change newline characters, if present, to end of string */
 	for(i=0; line_copy[i]; i++) {
 		if(line_copy[i] == '\r' || line_copy[i] == '\n') {
 			line_copy[i] = '\0';
@@ -1406,6 +1406,7 @@ vcard_get_line_element(char *line, int element)
 	}
 
 	/* separate key from key attributes */
+	/* works for vCard 2 as well (automagically) */
 	if (key) {
 		for(i=0; key[i]; i++) {
 			if(key[i] == ';') {
@@ -1494,18 +1495,19 @@ vcard_parse_phone(list_item item, char *line)
 
 	/*
 	 * see rfc2426 section 3.3.1
+	 * Note: we probably support both vCard 2 and 3
 	 */
-	else if (strstr(type, "TYPE=") == type){
-		if (strcasestr(type, "home")) {
+	else {
+		if (strcasestr(type, "home") != NULL) {
 			item[index] = xstrdup(value);
 		}
-		if (strcasestr(type, "work")) {
+		if (strcasestr(type, "work") != NULL) {
 			item[index+1] = xstrdup(value);
 		}
-		if (strcasestr(type, "fax")) {
+		if (strcasestr(type, "fax") != NULL) {
 			item[index+2] = xstrdup(value);
 		}
-		if (strcasestr(type, "cell")) {
+		if (strcasestr(type, "cell") != NULL) {
 			item[index+3] = xstrdup(value);
 		}
 
@@ -1523,20 +1525,16 @@ vcard_parse_line(list_item item, char *line)
 	for(i=0; vcard_fields[i]; i++) {
 		key = vcard_fields[i];
 
-		if(!strncmp(key, line, strlen(key))) {
-			if(i == 1) {
+		if(0 == strncmp(key, line, strlen(key))) {
+			if(0 == strcmp(key, "EMAIL"))
 				vcard_parse_email(item, line);
-			}
-			else if(i == 2) {
+			else if(i == 2)
 				vcard_parse_address(item, line);
-			}
-			else if(i == 8) {
+			else if(0 == strcmp(key, "TEL"))
 				vcard_parse_phone(item, line);
-			}
-			else {
+			else
 				item[i] = vcard_get_line_element(line, VCARD_VALUE);
-			}
-			break;
+			return;
 		}
 	}
 }
@@ -1778,11 +1776,11 @@ palm_export_database(FILE *out, struct db_enumerator e)
  */
 
 /*
- * GnomeCard (VCard) addressbook export filter
+ * vCard 2 addressbook export filter
  */
 
 static int
-gcrd_export_database(FILE *out, struct db_enumerator e)
+vcard_export_database(FILE *out, struct db_enumerator e)
 {
 	int j;
 	char *name, *tmp;
@@ -1854,7 +1852,7 @@ gcrd_export_database(FILE *out, struct db_enumerator e)
 }
 
 /*
- * end of GnomeCard export filter
+ * end of vCard export filter
  */
 
 
