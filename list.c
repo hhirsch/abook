@@ -19,6 +19,7 @@
 #include "misc.h"
 #include "options.h"
 #include "xmalloc.h"
+#include "color.h"
 
 
 int curitem = -1;
@@ -194,7 +195,10 @@ print_list_field(int item, int line, int *x_pos, struct index_elem *e)
 static void
 highlight_line(WINDOW *win, int line)
 {
-	wstandout(win);
+	wattrset(win, COLOR_PAIR(CP_LIST_HIGHLIGHT));
+	if(!opt_get_bool(BOOL_USE_COLORS)) {
+		wstandout(win);
+	}
 
 	/*
 	 * this is a tricky one
@@ -224,6 +228,10 @@ print_list_line(int item, int line, int highlight)
 	struct index_elem *cur;
 	int x_pos = 1;
 
+	if(item % 2 == 0)
+		wattrset(list, COLOR_PAIR(CP_LIST_EVEN));
+	else
+		wattrset(list, COLOR_PAIR(CP_LIST_ODD));
 	scrollok(list, FALSE);
 	if(highlight)
 		highlight_line(list, line);
@@ -300,6 +308,8 @@ list_headerline()
 #if defined(A_BOLD) && defined(A_NORMAL)
 	attrset(A_BOLD);
 #endif
+	attrset(COLOR_PAIR(CP_LIST_HEADER));
+	mvhline(2, 0, ' ', COLS);
 
 	for(e = index_elements; e; e = e->next)
 		if(e->type == INDEX_TEXT)

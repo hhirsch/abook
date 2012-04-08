@@ -25,6 +25,7 @@
 #include "options.h"
 #include "filter.h"
 #include "xmalloc.h"
+#include "color.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -130,6 +131,57 @@ ui_init_curses()
 	nonl();
 	intrflush(stdscr, FALSE);
 	keypad(stdscr, TRUE);
+	if(opt_get_bool(BOOL_USE_COLORS)) {
+		start_color();
+		use_default_colors();
+		ui_init_color_pairs_user();
+	}
+}
+
+
+#define CHECK_COLOR_NAME(value, name, DEFNAME) \
+	if(!strcmp((name), (value))){ \
+		return DEFNAME; \
+	}
+short
+opt_color_to_color(enum str_opts enum_name)
+{
+	char* name = opt_get_str(enum_name);
+	CHECK_COLOR_NAME(name, "default", COLOR_DEFAULT)
+	else CHECK_COLOR_NAME(name, "black", COLOR_BLACK)
+	else CHECK_COLOR_NAME(name, "red", COLOR_RED)
+	else CHECK_COLOR_NAME(name, "green", COLOR_GREEN)
+	else CHECK_COLOR_NAME(name, "yellow", COLOR_YELLOW)
+	else CHECK_COLOR_NAME(name, "blue", COLOR_BLUE)
+	else CHECK_COLOR_NAME(name, "magenta", COLOR_MAGENTA)
+	else CHECK_COLOR_NAME(name, "cyan", COLOR_CYAN)
+	else CHECK_COLOR_NAME(name, "white", COLOR_WHITE)
+    else return COLOR_DEFAULT;
+}
+
+void
+ui_init_color_pairs_user()
+{
+	init_pair(CP_HEADER, opt_color_to_color(STR_COLOR_HEADER_FG),
+	                     opt_color_to_color(STR_COLOR_HEADER_BG));
+	init_pair(CP_FOOTER, opt_color_to_color(STR_COLOR_FOOTER_FG),
+	                     opt_color_to_color(STR_COLOR_FOOTER_BG));
+	init_pair(CP_LIST_EVEN, opt_color_to_color(STR_COLOR_LIST_EVEN_FG),
+	                        opt_color_to_color(STR_COLOR_LIST_EVEN_BG));
+	init_pair(CP_LIST_ODD,  opt_color_to_color(STR_COLOR_LIST_ODD_FG),
+	                        opt_color_to_color(STR_COLOR_LIST_ODD_BG));
+	init_pair(CP_LIST_HEADER, opt_color_to_color(STR_COLOR_LIST_HEADER_FG),
+	                     opt_color_to_color(STR_COLOR_LIST_HEADER_BG));
+	init_pair(CP_LIST_HIGHLIGHT, opt_color_to_color(STR_COLOR_LIST_HIGHLIGHT_FG),
+	                     opt_color_to_color(STR_COLOR_LIST_HIGHLIGHT_BG));
+	init_pair(CP_TAB_BORDER, opt_color_to_color(STR_COLOR_TAB_BORDER_FG),
+	                     opt_color_to_color(STR_COLOR_TAB_BORDER_BG));
+	init_pair(CP_TAB_LABEL, opt_color_to_color(STR_COLOR_TAB_LABEL_FG),
+	                     opt_color_to_color(STR_COLOR_TAB_LABEL_BG));
+	init_pair(CP_FIELD_NAME, opt_color_to_color(STR_COLOR_FIELD_NAME_FG),
+	                     opt_color_to_color(STR_COLOR_FIELD_NAME_BG));
+	init_pair(CP_FIELD_VALUE, opt_color_to_color(STR_COLOR_FIELD_VALUE_FG),
+	                     opt_color_to_color(STR_COLOR_FIELD_VALUE_BG));
 }
 
 int
@@ -179,6 +231,8 @@ headerline(const char *str)
 {
 	werase(top);
 
+	wattrset(top, COLOR_PAIR(CP_HEADER));
+	mvwhline(top, 0, 0, ' ', COLS);
 	mvwhline(top, 1, 0, UI_HLINE_CHAR, COLS);
 
 	mvwprintw(top, 0, 0, "%s | %s", PACKAGE " " VERSION, str);
@@ -355,6 +409,7 @@ refresh_statusline()
 {
 	werase(bottom);
 
+	wattrset(bottom, COLOR_PAIR(CP_FOOTER));
 	mvwhline(bottom, 0, 0, UI_HLINE_CHAR, COLS);
 
 	refresh();
@@ -593,6 +648,7 @@ ui_print_number_of_items()
 	char *str = strdup_printf("     " "|%3d/%3d",
 		selected_items(), db_n_items());
 
+	attrset(COLOR_PAIR(CP_HEADER));
 	mvaddstr(0, COLS-strlen(str), str);
 
 	free(str);

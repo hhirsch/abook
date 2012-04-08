@@ -21,6 +21,7 @@
 #include "misc.h"
 #include "views.h"
 #include "xmalloc.h"
+#include "color.h"
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -47,6 +48,7 @@ editor_tab(const int tab)
 	int x_pos = 2; /* current x pos */
 	char *tab_name;
 
+	wattrset(editw, COLOR_PAIR(CP_TAB_BORDER));
 	mvwhline(editw, TABLINE + 1, 0, UI_HLINE_CHAR, EDITW_COLS);
 
 	for(i = 0; i < views_count; i++) {
@@ -63,7 +65,9 @@ editor_tab(const int tab)
 
 		mvwaddch(editw,  TABLINE, x_pos,  UI_ULCORNER_CHAR);
 		mvwaddch(editw,  TABLINE, x_pos + 1,  UI_LBOXLINE_CHAR);
+		wattrset(editw, COLOR_PAIR(CP_TAB_LABEL));
 		mvwaddstr(editw, TABLINE, x_pos + 2,  tab_name);
+		wattrset(editw, COLOR_PAIR(CP_TAB_BORDER));
 		mvwaddch(editw,  TABLINE, x_pos + width - 3, UI_RBOXLINE_CHAR);
 		mvwaddch(editw,  TABLINE, x_pos + width - 2, UI_URCORNER_CHAR);
 
@@ -192,6 +196,7 @@ print_editor_header(int item)
 	else
 		snprintf(header, EDITW_COLS, "%s", db_name_get(item));
 
+	wattrset(editw, COLOR_PAIR(CP_TAB_LABEL));
 	mvwaddstr(editw, 0, (EDITW_COLS - strwidth(header)) / 2, header);
 
 	free(header);
@@ -215,6 +220,7 @@ editor_print_data(int tab, int item)
 		} else
 			y = FIELDS_START_Y;
 
+		wattrset(editw, COLOR_PAIR(CP_FIELD_NAME));
 		mvwprintw(editw, y, FIELDS_START_X, "%c - ",
 				(j < 10) ? '0' + j : 'A' + j - 10);
 		mvwaddnstr(editw, y, FIELDS_START_X + 4, cur->field->name,
@@ -222,6 +228,7 @@ editor_print_data(int tab, int item)
 					FIELDNAME_MAX_WIDTH));
 		mvwaddch(editw, y, TAB_COLON_POS, ':');
 
+		wattrset(editw, COLOR_PAIR(CP_FIELD_VALUE));
 		if((cur->field->type == FIELD_EMAILS) ||
 				(cur->field->type == FIELD_LIST)) {
 			abook_list *emails, *e;

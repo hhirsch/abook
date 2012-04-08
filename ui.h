@@ -10,6 +10,7 @@ enum {
 
 int		is_ui_initialized();
 void		ui_init_curses();
+void		ui_init_color_pairs_user();
 int		init_ui();
 void		close_ui();
 void		headerline(const char *str);
