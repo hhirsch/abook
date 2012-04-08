@@ -11,6 +11,7 @@ enum {
 int		is_ui_initialized();
 void		ui_init_curses();
 void		ui_init_color_pairs_user();
+void		ui_enable_mouse(bool enabled);
 int		init_ui();
 void		close_ui();
 void		headerline(const char *str);
@@ -36,6 +37,9 @@ char		*get_surname(char *s);
 void		ui_print_database();
 void		ui_open_datafile();
 
+#if NCURSES_MOUSE_VERSION != 2
+#define BUTTON5_PRESSED (0x80 | 0x8000000)
+#endif
 
 #include "options.h" /* needed for options_get_bool */
 

@@ -588,13 +588,14 @@ key_to_field_number(char c)
 static void
 edit_field(int tab, char c, int item_number)
 {
+	ui_enable_mouse(FALSE);
 	int i = 0, number, idx;
 	char *msg;
 	abook_field_list *f;
 	list_item item;
 
 	if((number = key_to_field_number(c)) < 0)
-		return;
+		goto detachfield;
 
 	edit_undo(item_number, BACKUP_ITEM);
 
@@ -602,7 +603,7 @@ edit_field(int tab, char c, int item_number)
 
 	while(1) {
 		if(!f)
-			return;
+			goto detachfield;
 
 		if(i == number)
 			break;
@@ -631,10 +632,14 @@ edit_field(int tab, char c, int item_number)
 			break;
 		case FIELD_DATE:
 			edit_date(item_number, idx);
-			return;
+			goto detachfield;
 		default:
 			assert(0);
 	}
+
+ detachfield:
+	if(opt_get_bool(BOOL_USE_MOUSE))
+	  ui_enable_mouse(TRUE);
 }
 
 static int
@@ -667,6 +672,53 @@ edit_loop(int item)
 		}
 
 		return item;
+	}
+	if(c == KEY_MOUSE) {
+		MEVENT event;
+		if(getmouse(&event) == OK) {
+			if(event.bstate & BUTTON1_CLICKED
+			   || event.bstate & BUTTON1_DOUBLE_CLICKED) {
+				int window_y, window_x;
+				getbegyx(editw, window_y, window_x);
+				if(event.y == 0) {
+					/* if first row is selected, then go back to list */
+					return -1;
+				} else if(event.y == window_y + TABLINE
+				   || event.y == window_y + TABLINE + 1) {
+					char* tab_name;
+					int mouse_x = event.x;
+					int xpos = 2 + 1; /* look at editor_tab() and try out */
+					int clicked_tab = 0;
+					while(clicked_tab < views_count) {
+						view_info(clicked_tab, &tab_name, NULL);
+						xpos += strwidth(tab_name) + 5;
+						/* fprintf(stderr, "trying tab %d\n", clicked_tab); */
+						if(xpos >= mouse_x) {
+							break; /* clicked tab was found */
+						} else {
+							/* try next tab */
+							clicked_tab++;
+						}
+					}
+					if(clicked_tab < views_count) {
+						tab = clicked_tab;
+					}
+				} else if(event.y >= window_y + FIELDS_START_Y) {
+					/* is mouse in field area? */
+					int j = 1 + event.y - window_y - FIELDS_START_Y;
+					/* field numbers start with 1, but if j='0', then char='0' */
+					/* so fix this, by adding 1 to j */
+					int field_char = (j < 10) ? '0' + j : 'A' + j - 10;
+					edit_field(tab, field_char, item);
+				}
+			} else if(event.bstate & BUTTON4_PRESSED) {
+				tab = tab == 0 ? views_count - 1 : tab - 1;
+			}
+			else if(event.bstate & BUTTON5_PRESSED) {
+				tab = tab == views_count - 1 ? 0 : tab + 1;
+			}
+			return item;
+		}
 	}
 
 	/* No uppercase nor numeric key should be used in this menu,

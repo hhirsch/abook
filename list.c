@@ -498,6 +498,12 @@ list_get_curitem()
 	return curitem;
 }
 
+int
+list_get_firstitem()
+{
+	return first_list_item;
+}
+
 void
 list_set_curitem(int i)
 {

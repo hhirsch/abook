@@ -26,6 +26,7 @@
 #include "filter.h"
 #include "xmalloc.h"
 #include "color.h"
+#include <sys/time.h>
 #ifdef HAVE_CONFIG_H
 #	include "config.h"
 #endif
@@ -51,6 +52,8 @@ static bool ui_initialized = FALSE;
 
 static bool should_resize = FALSE;
 static bool can_resize = FALSE;
+static struct timeval last_click_time;
+static int double_click_interval = 200; /* maximum time in milliseconds */
 
 static WINDOW *top = NULL, *bottom = NULL;
 
@@ -130,6 +133,11 @@ ui_init_curses()
 	noecho();
 	nonl();
 	intrflush(stdscr, FALSE);
+	if(opt_get_bool(BOOL_USE_MOUSE)) {
+		mouseinterval(0);
+		timerclear(&last_click_time);
+		ui_enable_mouse(TRUE);
+	}
 	keypad(stdscr, TRUE);
 	if(opt_get_bool(BOOL_USE_COLORS)) {
 		start_color();
@@ -138,6 +146,35 @@ ui_init_curses()
 	}
 }
 
+void
+ui_enable_mouse(bool enabled)
+{
+	mmask_t mask;
+	if(enabled) {
+		mask = BUTTON1_CLICKED | BUTTON4_PRESSED;
+#if NCURSES_MOUSE_VERSION == 2
+		mask |= BUTTON5_PRESSED;
+#endif
+	} else {
+		mask = 0;
+	}
+	mousemask(mask, NULL);
+}
+
+/** Check the time elapsed since last click and tell if it should be
+ * interpreted as a double click
+ */
+static bool
+was_double_click() {
+	struct timeval click_time, click_diff, maxdiff;
+	maxdiff.tv_sec = double_click_interval / 1000;
+	maxdiff.tv_usec = (double_click_interval % 1000)*1000;
+	gettimeofday(&click_time, NULL);
+
+	timersub(&click_time, &last_click_time, &click_diff);
+	last_click_time = click_time;
+	return !timercmp(&click_diff, &maxdiff, >);
+}
 
 #define CHECK_COLOR_NAME(value, name, DEFNAME) \
 	if(!strcmp((name), (value))){ \
@@ -503,6 +540,28 @@ get_commands()
 		if(!opt_get_bool(BOOL_SHOW_CURSOR))
 			show_cursor();
 		can_resize = FALSE; /* it's not safe to resize anymore */
+		if(ch == KEY_MOUSE) {
+			MEVENT event;
+			bool double_clicked = was_double_click();
+			if(getmouse(&event) == OK) {
+				if(event.bstate & BUTTON1_CLICKED
+				   || event.bstate & BUTTON1_DOUBLE_CLICKED) {
+					if(event.y == 0) {
+						return;
+					}
+					list_set_curitem(event.y + list_get_firstitem() - LIST_TOP);
+					if(double_clicked) {
+						edit_item(-1);
+					} else {
+						refresh_list();
+					}
+				} else if(event.bstate & BUTTON4_PRESSED) {
+					scroll_up();
+				} else if(event.bstate & BUTTON5_PRESSED) {
+					scroll_down();
+				}
+			}
+		}
 		switch(ch) {
 			case 'q': return;
 			case 'Q': quit_abook(QUIT_DONTSAVE);	break;

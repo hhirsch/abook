@@ -47,6 +47,7 @@ int		selected_items();
 void		invert_selection();
 int		list_is_empty();
 int		list_get_curitem();
+int		list_get_firstitem();
 void		list_set_curitem(int i);
 int		duplicate_item();
 
