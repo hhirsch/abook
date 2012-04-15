@@ -108,3 +108,9 @@ set sort_field=nick
 # show cursor in main display
 set show_cursor=false
 
+# colors
+set use_colors = true
+set color_header_fg = red
+set color_header_bg = default
+set color_list_header_fg = blue
+set color_list_header_bg = default
