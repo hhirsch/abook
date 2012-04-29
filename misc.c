@@ -77,8 +77,9 @@ is_number(char *p)
 	return 1;
 }
 
+#ifndef HAVE_STRCASESTR
 char *
-strcasestr(char *haystack, char *needle)
+strcasestr(const char *haystack, const char *needle)
 {
 	int i;
 	int k;
@@ -97,7 +98,7 @@ strcasestr(char *haystack, char *needle)
 
 	return NULL;
 }
-
+#endif
 
 #ifdef HAVE_CONFIG_H
 #	include "config.h"

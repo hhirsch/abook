@@ -222,6 +222,9 @@
 /* Define to 1 if you have the `strcasecmp' function. */
 #undef HAVE_STRCASECMP
 
+/* Define to 1 if you have the `strcasestr' function. */
+#undef HAVE_STRCASESTR
+
 /* Define to 1 if you have the `strcoll' function and it is properly defined.
    */
 #undef HAVE_STRCOLL

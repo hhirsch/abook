@@ -18,8 +18,6 @@ char		*strtrim(char *);
 
 int		is_number(char *s);
 
-char		*strcasestr(char *haystack, char *needle);
-
 char		*strdup_printf(const char *format, ... );
 char		*strconcat(const char *str, ...);
 
@@ -56,8 +54,8 @@ int snprintf (char *str, size_t count, const char *fmt, ...);
 #ifndef HAVE_VSNPRINTF
 int vsnprintf (char *str, size_t count, const char *fmt, va_list arg);
 #endif
-
+#ifndef HAVE_STRCASESTR
+char *strcasestr(const char *, const char *);
 #endif
 
-
-
+#endif
