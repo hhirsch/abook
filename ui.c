@@ -608,6 +608,7 @@ get_commands()
 			case 'F': sort_by_field(NULL);	break;
 
 			case '/': ui_find(0);		break;
+			case 'n':
 			case '\\': ui_find(1);		break;
 
 			case ' ': if(list_get_curitem() >= 0) {
