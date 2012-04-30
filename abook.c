@@ -710,6 +710,7 @@ init_add_email()
 	check_abook_directory();
 	init_opts();
 	load_opts(rcfile);
+	init_standard_fields();
 	atexit(free_opts);
 
 	/*
