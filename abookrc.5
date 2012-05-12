@@ -151,6 +151,11 @@ Defines if the cursor is visible in main display. Default is false.
 Defines if navigation via the mouse is activated. Default is false. Most terminals can also inhibit ncurses mouse events at runtime by holding the Shift key (restoring mouse-selection behavior).
 
 .TP
+\fBscroll_speed\fP=lines
+Defines the number of lines the adress list is scrolled by on a mouse wheel
+action. This option only takes effect if use_mouse is enabled. Default is 2.
+
+.TP
 \fBuse_colors\fP=[true|false]
 Defines if the output of abook is colorized. Default is false.
 

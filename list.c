@@ -24,6 +24,7 @@
 
 int curitem = -1;
 int first_list_item = -1;
+int scroll_speed = 2;
 char *selected = NULL;
 
 extern abook_field_list *fields_list;
@@ -130,6 +131,7 @@ init_list()
 {
 	list = newwin(LIST_LINES, LIST_COLS, LIST_TOP, 0);
 	scrollok(list, TRUE);
+	scroll_speed = abs(opt_get_int(INT_SCROLL_SPEED));
 }
 
 void
@@ -352,6 +354,39 @@ scroll_down()
 	refresh_list();
 }
 
+void
+scroll_list_up()
+{
+	if(first_list_item <= 0)
+		return;
+
+	first_list_item -= scroll_speed;
+	if(first_list_item < 0) {
+		first_list_item = 0;
+	}
+	if(curitem > LAST_LIST_ITEM) {
+		curitem = LAST_LIST_ITEM;
+	}
+
+	refresh_list();
+}
+
+void
+scroll_list_down()
+{
+	if(first_list_item > db_n_items() - 2)
+		return;
+
+	first_list_item += scroll_speed;
+	if(first_list_item >= db_n_items()) {
+		first_list_item = db_n_items() - 1;
+	}
+	if(curitem < first_list_item) {
+		curitem = first_list_item;
+	}
+
+	refresh_list();
+}
 
 void
 page_up()

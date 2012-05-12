@@ -68,6 +68,7 @@ static struct option abook_vars[] = {
 	{ "sort_field", OT_STR, STR_SORT_FIELD, UL "nick" },
 	{ "show_cursor", OT_BOOL, BOOL_SHOW_CURSOR, FALSE },
 	{ "use_mouse", OT_BOOL, BOOL_USE_MOUSE, FALSE },
+	{ "scroll_speed", OT_INT, INT_SCROLL_SPEED, UL 2 },
 	{ "use_colors", OT_BOOL, BOOL_USE_COLORS, FALSE },
 	{ "color_header_fg", OT_STR, STR_COLOR_HEADER_FG, UL "blue" },
 	{ "color_header_fg", OT_STR, STR_COLOR_HEADER_FG, UL "blue" },

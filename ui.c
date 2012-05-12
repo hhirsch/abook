@@ -556,9 +556,9 @@ get_commands()
 						refresh_list();
 					}
 				} else if(event.bstate & BUTTON4_PRESSED) {
-					scroll_up();
+					scroll_list_up();
 				} else if(event.bstate & BUTTON5_PRESSED) {
-					scroll_down();
+					scroll_list_down();
 				}
 			}
 		}

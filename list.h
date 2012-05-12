@@ -34,6 +34,8 @@ void	get_list_field(int item, struct index_elem *e, struct list_field *res);
 void		list_headerline();
 void            scroll_up();
 void            scroll_down();
+void            scroll_list_up();
+void            scroll_list_down();
 void		page_up();
 void		page_down();
 void            select_none();
