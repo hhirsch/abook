@@ -23,6 +23,7 @@ enum {
 	URL,
 	NOTES,
 	ANNIVERSARY,
+	GROUPS,
 	ITEM_FIELDS /* this is the last */
 };
 

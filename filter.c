@@ -638,10 +638,11 @@ ldif_fix_string(char *str)
 #include "getname.h"
 
 static int
-mutt_read_line(FILE *in, char **alias, char **rest)
+mutt_read_line(FILE *in, char **groups, char **alias, char **rest)
 {
-	char *line, *ptr, *tmp;
-	size_t alias_len;
+	char *line, *ptr;
+	char *start, *end;
+	abook_list *glist = NULL;
 
 	if( !(line = ptr = getaline(in)) )
 		return 1; /* error / EOF */
@@ -654,27 +655,39 @@ mutt_read_line(FILE *in, char **alias, char **rest)
 	}
 
 	ptr += 5;
-
 	SKIPWS(ptr);
 
-	tmp = ptr;
+	/* If the group option is used, save the groups */
+	*groups = NULL;
+	start = ptr;
+	int n_groups;
+	for(n_groups = 0; 0 == strncmp("-group", ptr, 6); n_groups++) {
+		ptr += 6;
+		SKIPWS(ptr);
+		start = ptr;
+		SKIPNONWS(ptr);
+		end = ptr;
+		abook_list_append(&glist,xstrndup(start, end - start));
+		SKIPWS(ptr);
+	}
 
-	while( ! ISSPACE(*ptr) )
-		ptr++;
+	if(n_groups && groups)
+		*groups = abook_list_to_csv(glist);
 
-	alias_len = (size_t)(ptr - tmp);
+	abook_list_free(&glist);	
 
+	/* alias */
+	start = ptr;
+	SKIPNONWS(ptr);
+	end = ptr;
+	SKIPWS(ptr);
 	if(alias)
-		*alias = xmalloc_inc(alias_len, 1);
+		*alias = xstrndup(start, end - start);
 
-	strncpy(*alias, tmp, alias_len);
-	*(*alias + alias_len) = 0;
-
-	SKIPWS(ptr);
-
+	/* rest (email) */
 	*rest = xstrdup(ptr);
 
-	free(line);
+	xfree(line);
 	return 0;
 }
 
@@ -755,9 +768,9 @@ mutt_parse_file(FILE *in)
 		memset(item, 0, fields_count * sizeof(char *));
 
 		if(!mutt_read_line(in,
-					(field_id(NICK) != -1) ?
-					&item[field_id(NICK)] : NULL,
-					&item[field_id(NAME)]))
+			(field_id(GROUPS) != -1) ? &item[field_id(GROUPS)] : NULL,
+			(field_id(NICK) != -1) ? &item[field_id(NICK)] : NULL,
+			&item[field_id(NAME)]) )
 			mutt_parse_email(item);
 
 		if(feof(in)) {
@@ -1688,6 +1701,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 		URL,
 		NOTES,
 		ANNIVERSARY,
+		GROUPS,
 		CSV_LAST
 	};
 
@@ -1707,7 +1721,8 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 	fprintf(out, "\"NICK\",");
 	fprintf(out, "\"URL\",");
 	fprintf(out, "\"NOTES\",");
-	fprintf(out, "\"ANNIVERSARY\"\n");
+	fprintf(out, "\"ANNIVERSARY\",");
+	fprintf(out, "\"GROUPS\"\n");
 
 	csv_export_common(out, e, allcsv_export_fields, NULL);
 
@@ -1898,16 +1913,51 @@ mutt_alias_genalias(int i)
 	return tmp;
 }
 
+/*
+ * This function is a variant of abook_list_to_csv
+ * */
+static char *
+mutt_alias_gengroups(int i)
+{
+	char *groups, *res = NULL;
+	char groupstr[7] = "-group ";
+	abook_list *list, *tmp;
+
+	groups = db_fget(i, GROUPS);
+
+	if(!groups)
+		return NULL;
+
+	list = csv_to_abook_list(groups);
+	for(tmp = list; tmp; tmp = tmp->next) {
+		if(tmp == list) {
+			res = xmalloc(strlen(groupstr)+strlen(tmp->data)+1);
+			res = strcpy(res, groupstr);
+		} else {
+			res = xrealloc(res, strlen(res)+1+strlen(groupstr)+strlen(tmp->data)+1);
+			strcat(res, " ");
+			strcat(res, groupstr);
+		}
+		strcat(res, tmp->data);
+	}
+	abook_list_free(&list);
+	xfree(groups);
+
+	return res;
+}
+
 static int
 mutt_alias_export(FILE *out, struct db_enumerator e)
 {
 	char email[MAX_EMAIL_LEN];
 	char *alias = NULL;
+	char *groups = NULL;
 	int email_addresses;
 	char *ptr;
 
 	db_enumerate_items(e) {
-		alias = mutt_alias_genalias(e.item);
+		alias = (field_id(NICK) != -1) ? mutt_alias_genalias(e.item) : NULL;
+		groups = (field_id(GROUPS) != -1) ?  mutt_alias_gengroups(e.item) : NULL;
 		get_first_email(email, e.item);
 
 		/* do not output contacts without email address */
@@ -1915,8 +1965,12 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 		if (*email) {
 
 			/* output first email address */
-			fprintf(out, "alias %s %s <%s>\n",
-					alias,
+			fprintf(out,"alias ");
+			if(groups)
+				fprintf(out, "%s ", groups);
+			if(alias)
+				fprintf(out, "%s ", alias);
+			fprintf(out, "%s <%s>\n",
 					db_name_get(e.item),
 					email);
 
@@ -1934,14 +1988,20 @@ mutt_alias_export(FILE *out, struct db_enumerator e)
 			while (email_addresses-- > 1) {
 				roll_emails(e.item, ROTATE_RIGHT);
 				get_first_email(email, e.item);
-				fprintf(out, "alias %s__%s %s <%s>\n",
-						alias,
-						email,
+				fprintf(out,"alias ");
+				if( groups )
+					fprintf(out, "%s ", groups);
+				if(alias)
+					fprintf(out, "%s__%s ", alias, email);
+				else
+					fprintf(out, "%s__%s ", db_name_get(e.item), email);
+				fprintf(out, "%s <%s>\n",
 						db_name_get(e.item),
 						email);
 			}
 			roll_emails(e.item, ROTATE_RIGHT);
 			xfree(alias);
+			xfree(groups);
 		}
 	}
 

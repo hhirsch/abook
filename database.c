@@ -58,6 +58,7 @@ abook_field standard_fields[] = {
 	{"url",		N_("URL"),		FIELD_STRING}, /* URL */
 	{"notes",	N_("Notes"),		FIELD_STRING}, /* NOTES */
 	{"anniversary",	N_("Anniversary day"),	FIELD_DATE},   /* ANNIVERSARY */
+	{"groups",	N_("Groups"),		FIELD_LIST}, /* GROUPS */
 	{0} /* ITEM_FIELDS */
 };
 

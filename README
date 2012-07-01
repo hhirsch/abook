@@ -46,6 +46,9 @@ command. (Of course you can choose another keybinding if you like.)
 It's also recommended to set pipe_decode variable in mutt configuration.
 See the mutt manual for details.
 
+Abook can also convert from/to mutt alias files and a number of other formats.
+Mutt groups are fully supported.
+
 UPGRADING FROM VERSION 0.5
 
 See RELEASE_NOTES .
