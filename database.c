@@ -522,6 +522,41 @@ remove_selected_items()
 	select_none();
 }
 
+void merge_selected_items()
+{
+	int i, j;
+	int destitem = -1;
+
+	if((list_is_empty()) || (selected_items() < 2))
+		return;
+
+	/* Find the top item */
+	for(j=0; destitem < 0; j++)
+		if(selected[j])
+			destitem = j;
+
+	/* Merge pairwise */
+	for(j = LAST_ITEM; j > destitem; j--) {
+		if(selected[j]) {
+			item_merge(database[destitem],database[j]);
+			for(i = j; i < LAST_ITEM; i++) {
+				/* TODO: this can be done by moving pointers */
+				item_copy(database[i], database[i + 1]);
+				selected[i] = selected[i + 1];
+			}
+			item_free(&database[LAST_ITEM]);
+			items--;
+		}
+	}
+
+	if(curitem > LAST_ITEM && items > 0)
+		curitem = LAST_ITEM;
+
+	adjust_list_capacity();
+
+	select_none();
+}
+
 char *
 get_surname(char *s)
 {
@@ -752,6 +787,40 @@ item_duplicate(list_item dest, list_item src)
 
 	for(i = 0; i < fields_count; i++)
 		dest[i] = src[i] ? xstrdup(src[i]) : NULL;
+}
+ 
+/*
+ * Merging works as follows:
+ * - fields present only in source are copied over to dest
+ * - multi-fields (email, groups) are checked for dupes ad merged
+ * */
+void
+item_merge(list_item dest, list_item src)
+{
+	int i, found = 0;
+	abook_list *dfield, *sfield, *ed, *es;
+
+	for(i = 0; i < fields_count; i++)
+		if (src[i]) {
+			if (!dest[i])
+			       dest[i] = xstrdup(src[i]);
+			else if((i == field_id(EMAIL)) || (i == field_id(GROUPS))) {
+				dfield = csv_to_abook_list(dest[i]);
+				sfield = csv_to_abook_list(src[i]);
+				for(es = sfield; es; es = es->next) {
+					for(found=0, ed = dfield; (!found) && ed; ed = ed->next)
+						found = (0 == strcmp(es->data,ed->data));
+					if (!found)
+						abook_list_append(&dfield, es->data);
+				}
+				xfree(dest[i]);
+				dest[i] = abook_list_to_csv(dfield);
+				abook_list_free(&dfield);
+				abook_list_free(&sfield);
+			}
+		}
+
+	item_empty(src);
 }
 
 /* 

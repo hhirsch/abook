@@ -577,6 +577,7 @@ get_commands()
 			case KEY_DC:
 			case 'd':
 			case 'r': ui_remove_items();	break;
+			case 'M': ui_merge_items();	break;
 			case 'D': duplicate_item();	break;
 			case 12: refresh_screen();	break;
 
@@ -653,6 +654,16 @@ ui_remove_items()
 
 	if(statusline_ask_boolean(_("Remove selected item(s)"), TRUE))
 		remove_selected_items();
+
+	clear_statusline();
+	refresh_list();
+}
+
+void
+ui_merge_items()
+{
+	if(statusline_ask_boolean(_("Merge selected items"), TRUE))
+		merge_selected_items();
 
 	clear_statusline();
 	refresh_list();

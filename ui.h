@@ -29,6 +29,7 @@ char *		ui_readline(const char *prompt, char *s, size_t limit,
 void		refresh_statusline();
 void		get_commands();
 void		ui_remove_items();
+void		ui_merge_items();
 void		ui_clear_database();
 void		ui_find(int next);
 void		ui_print_number_of_items();

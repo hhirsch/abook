@@ -81,6 +81,7 @@ int load_database(char *filename);
 int write_database(FILE *out, struct db_enumerator e);
 int save_database();
 void remove_selected_items();
+void merge_selected_items();
 void sort_surname();
 void sort_by_field(char *field);
 void close_database();
@@ -105,6 +106,7 @@ void item_empty(list_item item);
 void item_free(list_item *item);
 void item_copy(list_item dest, list_item src);
 void item_duplicate(list_item dest, list_item src);
+void item_merge(list_item dest, list_item src);
 
 int item_fput(list_item item, int i, char *val);
 char *item_fget(list_item item, int i);
