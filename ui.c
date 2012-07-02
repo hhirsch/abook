@@ -579,6 +579,7 @@ get_commands()
 			case 'r': ui_remove_items();	break;
 			case 'M': ui_merge_items();	break;
 			case 'D': duplicate_item();	break;
+			case 'U': ui_remove_duplicates(); break;
 			case 12: refresh_screen();	break;
 
 			case 'k':
@@ -665,6 +666,15 @@ ui_merge_items()
 	if(statusline_ask_boolean(_("Merge selected items"), TRUE))
 		merge_selected_items();
 
+	clear_statusline();
+	refresh_list();
+}
+
+void		ui_remove_duplicates()
+{
+	if(statusline_ask_boolean(_("Remove duplicates"), TRUE))
+		remove_duplicates();
+	
 	clear_statusline();
 	refresh_list();
 }

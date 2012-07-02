@@ -82,6 +82,7 @@ int write_database(FILE *out, struct db_enumerator e);
 int save_database();
 void remove_selected_items();
 void merge_selected_items();
+void remove_duplicates();
 void sort_surname();
 void sort_by_field(char *field);
 void close_database();

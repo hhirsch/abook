@@ -557,6 +557,33 @@ void merge_selected_items()
 	select_none();
 }
 
+void remove_duplicates()
+{
+	int i,j,k;
+	char *tmpj;
+	if(list_is_empty())
+		return;
+
+	/* Scan from the last one */
+	for(j = LAST_ITEM - 1; j >= 0; j--) {
+		tmpj = db_name_get(j);
+		for(i = LAST_ITEM; i > j; i--)
+			/* Check name and merge if dups */
+			if (0 == strcmp(tmpj,db_name_get(i))) {
+				item_merge(database[j],database[i]);
+				if (curitem == i) curitem--;
+				for(k = i; k < LAST_ITEM; k++) {
+					item_copy(database[k], database[k + 1]);
+				}
+				item_free(&database[LAST_ITEM]);
+				items--;
+			}
+	}
+
+	adjust_list_capacity();
+}
+
+
 char *
 get_surname(char *s)
 {
