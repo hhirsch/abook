@@ -1,3 +1,12 @@
+git
+ - vcard initial input filter (Michael Krolikowski)
+ - vcard parser improvements (Fabio Zanini, Raphaël Droz)
+ - color support (Thorsten Wißmann)
+ - mouse support (Thorsten Wißmann)
+ - extra-fields deletion bugfix (Jorrit Tijben)
+ - additinal keybinding (Hagen Fuchs)
+ - autotools update (Fabio Zanini)
+
 0.6.0
  - configurable views (Cedric Duval)
  - new field types, lists and improved custom field support (Cedric Duval)
