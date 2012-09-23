@@ -1339,7 +1339,7 @@ palmcsv_parse_file(FILE *in)
  */
 
 static char *vcard_fields[] = {
-	"FN",			/* NAME */
+	"FN",			/* FORMATTED NAME */
 	"EMAIL",		/* EMAIL */
 	"ADR",			/* ADDRESS */
 	"ADR",			/* ADDRESS2 - not used */
@@ -1354,6 +1354,7 @@ static char *vcard_fields[] = {
 	"NICKNAME",		/* NICK */
 	"URL",			/* URL */
 	"NOTE",			/* NOTES */
+	"N",			/* NAME: special case/mapping in vcard_parse_line() */
 	NULL			/* not implemented: ANNIVERSARY, ITEM_FIELDS */
 };
 
@@ -1484,6 +1485,28 @@ vcard_parse_address(list_item item, char *line)
 }
 
 static void
+vcard_parse_name(list_item item, char *line)
+{
+	// store the "N" field into "NAME" *if* no "FN:"
+	// value has already been stored here
+	if(item[0]) return;
+
+	int i = -1;
+	item[0] = vcard_get_line_element(line, VCARD_VALUE);
+	// "N:" can be multivalued => replace ';' separators by ' '
+	while(item[0][++i]) if(item[0][i] == ';') item[0][i] = ' ';
+
+	// http://www.daniweb.com/software-development/c/code/216919
+	char *original = item[0], *p = original;
+	int trimmed = 0;
+	do {
+	  if (*original != ' ' || trimmed) {
+	    trimmed = 1; *p++ = *original;
+	  }
+	} while(*original++);
+}
+
+static void
 vcard_parse_phone(list_item item, char *line)
 {
 	int index = 8;
@@ -1534,6 +1557,8 @@ vcard_parse_line(list_item item, char *line)
 				vcard_parse_address(item, line);
 			else if(0 == strcmp(key, "TEL"))
 				vcard_parse_phone(item, line);
+			else if(0 == strcmp(key, "N"))
+				vcard_parse_name(item, line);
 			else
 				item[i] = vcard_get_line_element(line, VCARD_VALUE);
 			return;
