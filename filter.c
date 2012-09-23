@@ -1509,32 +1509,25 @@ vcard_parse_name(list_item item, char *line)
 static void
 vcard_parse_phone(list_item item, char *line)
 {
-	int index = 8;
 	char *type = vcard_get_line_element(line, VCARD_KEY_ATTRIBUTE);
 	char *value = vcard_get_line_element(line, VCARD_VALUE);
 
 	/* set the standard number */
-	if (!type) {
-		item[index] = value;
-	}
+	if (!type) item_fput(item, PHONE, value);
 
 	/*
 	 * see rfc2426 section 3.3.1
 	 * Note: we probably support both vCard 2 and 3
 	 */
 	else {
-		if (strcasestr(type, "home") != NULL) {
-			item[index] = xstrdup(value);
-		}
-		if (strcasestr(type, "work") != NULL) {
-			item[index+1] = xstrdup(value);
-		}
-		if (strcasestr(type, "fax") != NULL) {
-			item[index+2] = xstrdup(value);
-		}
-		if (strcasestr(type, "cell") != NULL) {
-			item[index+3] = xstrdup(value);
-		}
+		if (strcasestr(type, "home") != NULL)
+			item_fput(item, PHONE, xstrdup(value));
+		else if (strcasestr(type, "work") != NULL)
+			item_fput(item, WORKPHONE, xstrdup(value));
+		else if (strcasestr(type, "fax") != NULL)
+			item_fput(item, FAX, xstrdup(value));
+		else if (strcasestr(type, "cell") != NULL)
+			item_fput(item, MOBILEPHONE, xstrdup(value));
 
 		xfree(type);
 		xfree(value);
