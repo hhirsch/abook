@@ -1,4 +1,8 @@
 git
+ - custom output format (Raphaël Droz)
+ - remove duplicates (Fabio Zanini)
+ - merge entries (Fabio Zanini)
+ - mutt groups support (Fabio Zanini)
  - vcard initial input filter (Michael Krolikowski)
  - vcard parser improvements (Fabio Zanini, Raphaël Droz)
  - color support (Thorsten Wißmann)
