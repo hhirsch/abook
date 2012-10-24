@@ -83,6 +83,15 @@ The following \fIoutputformats\fR are supported:
 - \fBwl\fP Wanderlust address book
 .br
 - \fBbsdcal\fP BSD calendar
+.br
+- \fBcustom\fP Custom output format, see below
+.TP
+\fB\-\-outformatstr\fP \fI<string>\fR
+Only used in the context of \fB\-\-mutt\-query\fP \fIand\fR \fB\-\-outformat\fP=\fIcustom\fR. \fI<string>\fR is a format string allowing placeholders.
+A placeholder can be any of the standard fields names (see \fBabookrc\fP(5)) and must be
+encapsulated by curly brackets.
+The default value is "{nick} ({name}): {mobile}"
+If \fI<string>\fR starts with \fI!\fR only entries whose every fields from \fI<string>\fR are non-NULL are part of the output.
 .TP
 \fB\-\-add-email\fP
 Read an e-mail message from stdin and add the sender to the addressbook.
