@@ -69,6 +69,13 @@ static int	bsdcal_export_database(FILE *out, struct db_enumerator e);
 static int	custom_export_database(FILE *out, struct db_enumerator e);
 
 /*
+ * export filter item prototypes
+ */
+
+void vcard_export_item(FILE *out, int item);
+
+
+/*
  * end of function declarations
  */
 
@@ -105,6 +112,7 @@ struct abook_output_filter e_filters[] = {
 };
 
 struct abook_output_item_filter u_filters[] = {
+	{ "vcard", N_("vCard 2 file"), vcard_export_item },
 	{ "muttq", N_("mutt alias"), muttq_print_item },
 	{ "custom", N_("Custom format"), custom_print_item },
 	{ "\0", NULL }
@@ -1853,73 +1861,76 @@ palm_export_database(FILE *out, struct db_enumerator e)
 static int
 vcard_export_database(FILE *out, struct db_enumerator e)
 {
+  db_enumerate_items(e)
+    vcard_export_item(out, e.item);
+  return 0;
+}
+
+void
+vcard_export_item(FILE *out, int item)
+{
 	int j;
 	char *name, *tmp;
 	abook_list *emails, *em;
+	fprintf(out, "BEGIN:VCARD\r\nFN:%s\r\n",
+		safe_str(db_name_get(item)));
 
-	db_enumerate_items(e) {
-		fprintf(out, "BEGIN:VCARD\r\nFN:%s\r\n",
-				safe_str(db_name_get(e.item)));
-
-		name = get_surname(db_name_get(e.item));
-	        for( j = strlen(db_name_get(e.item)) - 1; j >= 0; j-- ) {
-	                if((db_name_get(e.item))[j] == ' ')
-	                        break;
-	        }
-		fprintf(out, "N:%s;%.*s\r\n",
-			safe_str(name),
-			j,
-			safe_str(db_name_get(e.item))
-			);
-
-		free(name);
-
-		if(db_fget(e.item, ADDRESS))
-			fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\r\n",
-				safe_str(db_fget(e.item, ADDRESS)),
-				safe_str(db_fget(e.item, ADDRESS2)),
-				safe_str(db_fget(e.item, CITY)),
-				safe_str(db_fget(e.item, STATE)),
-				safe_str(db_fget(e.item, ZIP)),
-				safe_str(db_fget(e.item, COUNTRY))
-				);
-
-		if(db_fget(e.item, PHONE))
-			fprintf(out, "TEL;HOME:%s\r\n",
-					db_fget(e.item, PHONE));
-		if(db_fget(e.item, WORKPHONE))
-			fprintf(out, "TEL;WORK:%s\r\n",
-					db_fget(e.item, WORKPHONE));
-		if(db_fget(e.item, FAX))
-			fprintf(out, "TEL;FAX:%s\r\n",
-					db_fget(e.item, FAX));
-		if(db_fget(e.item, MOBILEPHONE))
-			fprintf(out, "TEL;CELL:%s\r\n",
-					db_fget(e.item, MOBILEPHONE));
-
-		tmp = db_email_get(e.item);
-		if(*tmp) {
-			emails = csv_to_abook_list(tmp);
-
-			for(em = emails; em; em = em->next)
-				fprintf(out, "EMAIL;INTERNET:%s\r\n", em->data);
-
-			abook_list_free(&emails);
-		}
-		free(tmp);
-
-		if(db_fget(e.item, NOTES))
-			fprintf(out, "NOTE:%s\r\n",
-					db_fget(e.item, NOTES));
-		if(db_fget(e.item, URL))
-			fprintf(out, "URL:%s\r\n",
-					db_fget(e.item, URL));
-
-		fprintf(out, "END:VCARD\r\n\r\n");
-
+	name = get_surname(db_name_get(item));
+	for( j = strlen(db_name_get(item)) - 1; j >= 0; j-- ) {
+	  if((db_name_get(item))[j] == ' ')
+	    break;
 	}
+	fprintf(out, "N:%s;%.*s\r\n",
+		safe_str(name),
+		j,
+		safe_str(db_name_get(item))
+		);
 
-	return 0;
+	free(name);
+
+	if(db_fget(item, ADDRESS))
+	  fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\r\n",
+		  safe_str(db_fget(item, ADDRESS)),
+		  safe_str(db_fget(item, ADDRESS2)),
+		  safe_str(db_fget(item, CITY)),
+		  safe_str(db_fget(item, STATE)),
+		  safe_str(db_fget(item, ZIP)),
+		  safe_str(db_fget(item, COUNTRY))
+		  );
+
+	if(db_fget(item, PHONE))
+	  fprintf(out, "TEL;HOME:%s\r\n",
+		  db_fget(item, PHONE));
+	if(db_fget(item, WORKPHONE))
+	  fprintf(out, "TEL;WORK:%s\r\n",
+		  db_fget(item, WORKPHONE));
+	if(db_fget(item, FAX))
+	  fprintf(out, "TEL;FAX:%s\r\n",
+		  db_fget(item, FAX));
+	if(db_fget(item, MOBILEPHONE))
+	  fprintf(out, "TEL;CELL:%s\r\n",
+		  db_fget(item, MOBILEPHONE));
+
+	tmp = db_email_get(item);
+	if(*tmp) {
+	  emails = csv_to_abook_list(tmp);
+
+	  for(em = emails; em; em = em->next)
+	    fprintf(out, "EMAIL;INTERNET:%s\r\n", em->data);
+
+	  abook_list_free(&emails);
+	}
+	free(tmp);
+
+	if(db_fget(item, NOTES))
+	  fprintf(out, "NOTE:%s\r\n",
+		  db_fget(item, NOTES));
+	if(db_fget(item, URL))
+	  fprintf(out, "URL:%s\r\n",
+		  db_fget(item, URL));
+
+	fprintf(out, "END:VCARD\r\n\r\n");
+
 }
 
 /*
