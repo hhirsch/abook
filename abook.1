@@ -27,12 +27,14 @@ Use an alternative configuration file (default is \fI$HOME/.abook/abookrc\fR).
 \fB\-\-datafile\fP \fI<filename>\fR
 Use an alternative addressbook file (default is \fI$HOME/.abook/addressbook\fR).
 .TP
-\fB\-\-mutt\-query\fP \fI<string>\fR
+\fB\-\-mutt\-query\fP \fI<string>\fR [ \fB\-\-outformat\fP \fI<outputformat>\fR ]
 Make a query for mutt (search the addressbook for \fI<string>\fR).
 .br
 The \fB\-\-datafile\fP option, as documented above, may be used
 .BI BEFORE
 this option to search a different addressbook file.
+.br
+Only a subset of the below \fI<outputformat>\fR are allowed: \fBmutt\fP (default), \fBvcard\fP and \fBcustom\fP
 .TP
 \fB\-\-convert\fP [ \fB\-\-informat\fP \fI<inputformat>\fR ] [ \fB\-\-infile\fP \fI<inputfile>\fR ] [ \fB\-\-outformat\fP \fI<outputformat>\fR ] [ \fB\-\-outfile\fP \fI<outputfile>\fR ]
 Converts \fI<inputfile>\fR in \fI<inputformat>\fR to \fI<outputfile>\fR in \fI<outputformat>\fR
@@ -87,11 +89,13 @@ The following \fIoutputformats\fR are supported:
 - \fBcustom\fP Custom output format, see below
 .TP
 \fB\-\-outformatstr\fP \fI<string>\fR
-Only used in the context of \fB\-\-mutt\-query\fP \fIand\fR \fB\-\-outformat\fP=\fIcustom\fR. \fI<string>\fR is a format string allowing placeholders.
-A placeholder can be any of the standard fields names (see \fBabookrc\fP(5)) and must be
-encapsulated by curly brackets.
+Only used if \fB\-\-mutt\-query\fP \fIor\fR \fB\-\-convert\fP is specified \fIand\fR \fB\-\-outformat\fP=\fIcustom\fR. \fI<string>\fR is a format string allowing placeholders.
+.br
+A placeholder can be any of the standard fields names (see \fBabookrc\fP(5)) and must be encapsulated by curly brackets.
+.br
 The default value is "{nick} ({name}): {mobile}"
-If \fI<string>\fR starts with \fI!\fR only entries whose every fields from \fI<string>\fR are non-NULL are part of the output.
+.br
+If \fI<string>\fR starts with \fI!\fR only entries whose all fields from \fI<string>\fR are non-NULL are included.
 .TP
 \fB\-\-add-email\fP
 Read an e-mail message from stdin and add the sender to the addressbook.

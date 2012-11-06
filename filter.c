@@ -73,7 +73,8 @@ static int	custom_export_database(FILE *out, struct db_enumerator e);
  */
 
 void vcard_export_item(FILE *out, int item);
-
+void muttq_print_item(FILE *file, int item);
+void custom_print_item(FILE *out, int item);
 
 /*
  * end of function declarations
@@ -127,21 +128,21 @@ print_filters()
 {
 	int i;
 
-	puts(_("input:"));
+	puts(_("input formats:"));
 	for(i=0; *i_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", i_filters[i].filtname,
 			gettext(i_filters[i].desc));
 
 	putchar('\n');
 
-	puts(_("output:"));
+	puts(_("output formats:"));
 	for(i=0; *e_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", e_filters[i].filtname,
 			gettext(e_filters[i].desc));
 
 	putchar('\n');
 
-	puts(_("output (with query):"));
+	puts(_("query-compatible output formats:"));
 	for(i=0; *u_filters[i].filtname ; i++)
 		printf("\t%s\t%s\n", u_filters[i].filtname,
 			gettext(u_filters[i].desc));

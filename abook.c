@@ -377,7 +377,11 @@ parse_command_line(int argc, char **argv)
 				set_convert_var(informat);
 				break;
 			case OPT_OUTFORMAT:
+				// ascii-name is stored, it's used to traverse
+				// e_filters[] in MODE_CONVERT (see export_file())
 				outformat = optarg;
+				// but in case a query-compatible filter is requested
+				// try to guess right now which one it is, from u_filters[]
 				selected_item_filter = select_output_item_filter(outformat);
 				break;
 			case OPT_OUTFORMAT_STR:
@@ -398,6 +402,12 @@ parse_command_line(int argc, char **argv)
 		}
 	}
 
+	// if the output format requested does not allow filtered querying
+	// (not in u_filter[]) and --convert has not been specified; bailout
+	if(! selected_item_filter.func && mode != MODE_CONVERT) {
+	  printf("output format %s not supported or incompatible with --mutt-query\n", outformat);
+	  exit(EXIT_FAILURE);
+	}
 	if(! selected_item_filter.func)
 		selected_item_filter = select_output_item_filter("muttq");
 	else if (! strcmp(outformat, "custom") && *custom_format) {
