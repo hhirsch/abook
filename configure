@@ -606,6 +606,7 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+VFORMAT
 ANSI2KNR
 U
 USE_INCLUDED_INTL_H_FALSE
@@ -764,6 +765,7 @@ with_libintl_prefix
 with_localedir
 with_curses
 with_readline
+enable_vformat
 enable_debug
 '
       ac_precious_vars='build_alias
@@ -1400,6 +1402,7 @@ Optional Features:
                           specify multithreading API
   --disable-threads       build without multithread safety
   --disable-rpath         do not hardcode runtime library paths
+  --enable-vformat          Use libvformat is available
   --enable-debug          Enable debugging support
 
 Optional Packages:
@@ -11470,6 +11473,77 @@ done
 if test x$ac_cv_lib_readline = xno -o x$ac_cv_lib_readline_history = xno; then
 	as_fn_error $? "*** readline library not found or it doesn't support history ***" "$LINENO" 5
 fi
+
+
+
+# Check whether --enable-vformat was given.
+if test "${enable_vformat+set}" = set; then :
+  enableval=$enable_vformat; case "${enableval}" in
+	yes) vformat=true ;;
+	no) vformat=false ;;
+	*) as_fn_error $? "bad value ${enableval} for --enable-vformat" "$LINENO" 5 ;;
+	esac
+else
+  vformat=false
+fi
+
+VFORMAT="no"
+if test x$vformat = xtrue; then
+   ac_fn_c_check_header_mongrel "$LINENO" "vf_iface.h" "ac_cv_header_vf_iface_h" "$ac_includes_default"
+if test "x$ac_cv_header_vf_iface_h" = xyes; then :
+
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for vf_read_file in -lvformat" >&5
+$as_echo_n "checking for vf_read_file in -lvformat... " >&6; }
+if ${ac_cv_lib_vformat_vf_read_file+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lvformat  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char vf_read_file ();
+int
+main ()
+{
+return vf_read_file ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_vformat_vf_read_file=yes
+else
+  ac_cv_lib_vformat_vf_read_file=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_vformat_vf_read_file" >&5
+$as_echo "$ac_cv_lib_vformat_vf_read_file" >&6; }
+if test "x$ac_cv_lib_vformat_vf_read_file" = xyes; then :
+
+     MODULES="$MODULES m_vcf"
+     VFORMAT="yes"
+     LDFLAGS="-lvformat $LDFLAGS"
+     CFLAGS="-DVFORMAT=1 $CFLAGS"
+
+fi
+
+
+fi
+
+
+fi
+
+
 
 
 if test x$ac_widec_possible = xyes; then
