@@ -8,6 +8,7 @@ dnl ---------------
 dnl gettext support
 dnl ---------------
 
+AC_USE_SYSTEM_EXTENSIONS
 AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
