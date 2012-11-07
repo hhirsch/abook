@@ -29,6 +29,10 @@
 #include "xmalloc.h"
 #include <assert.h>
 
+#ifdef VFORMAT
+#include "vcard.h"
+#endif
+
 extern abook_field_list *fields_list;
 extern int fields_count;
 
@@ -292,6 +296,18 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 
 	if(i < 0)
 		return -1;
+
+#ifdef VFORMAT
+	// this is a special case for
+	// libvformat whose API expects a filename
+	if(!strcmp(filtname, "vcard")) {
+	  if(!strcmp(filename, "-"))
+	    ret = vcard_parse_file_libvformat("/dev/stdin");
+	  else
+	    ret = vcard_parse_file_libvformat(filename);
+	}
+	else
+#endif
 
 	if(!strcmp(filename, "-")) {
 		struct stat s;
