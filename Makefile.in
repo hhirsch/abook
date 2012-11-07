@@ -92,7 +92,7 @@ am_abook_OBJECTS = abook.$(OBJEXT) abook_rl.$(OBJEXT) \
 	getname.$(OBJEXT) getopt.$(OBJEXT) getopt1.$(OBJEXT) \
 	gettext.$(OBJEXT) ldif.$(OBJEXT) list.$(OBJEXT) \
 	mbswidth.$(OBJEXT) misc.$(OBJEXT) options.$(OBJEXT) \
-	ui.$(OBJEXT) views.$(OBJEXT) xmalloc.$(OBJEXT)
+	ui.$(OBJEXT) vcard.$(OBJEXT) views.$(OBJEXT) xmalloc.$(OBJEXT)
 abook_OBJECTS = $(am_abook_OBJECTS)
 abook_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@
@@ -314,12 +314,12 @@ top_srcdir = @top_srcdir@
 abook_SOURCES = abook.c abook_rl.c database.c edit.c \
 		filter.c getname.c getopt.c getopt1.c gettext.c \
 		ldif.c list.c mbswidth.c misc.c options.c \
-		ui.c views.c xmalloc.c \
+		ui.c vcard.c views.c xmalloc.c \
 		\
- 		abook.h abook_curses.h abook_rl.h database.h edit.h \
+		abook.h abook_curses.h abook_rl.h database.h edit.h \
 		filter.h getname.h getopt.h gettext.h \
 		help.h list.h ldif.h mbswidth.h misc.h options.h \
-		ui.h views.h xmalloc.h
+		ui.h vcard.h views.h xmalloc.h
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
 		abook.spec contrib doc/HOWTO.translating_abook RELEASE_NOTES
@@ -451,6 +451,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vcard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/views.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmalloc.Po@am__quote@
 
