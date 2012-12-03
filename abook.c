@@ -377,6 +377,11 @@ parse_command_line(int argc, char **argv)
 				set_convert_var(informat);
 				break;
 			case OPT_OUTFORMAT:
+				if(mode != MODE_CONVERT && mode != MODE_QUERY) {
+				  fprintf(stderr,
+					  _("please use option --outformat after --convert or --mutt-query option\n"));
+				  exit(EXIT_FAILURE);
+				}
 				// ascii-name is stored, it's used to traverse
 				// e_filters[] in MODE_CONVERT (see export_file())
 				outformat = optarg;
