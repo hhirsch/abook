@@ -87,12 +87,20 @@ CONFIG_CLEAN_FILES = abook.spec intl/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
+am__abook_SOURCES_DIST = abook.c abook_rl.c database.c edit.c filter.c \
+	getname.c getopt.c getopt1.c gettext.c ldif.c list.c \
+	mbswidth.c misc.c options.c ui.c views.c xmalloc.c abook.h \
+	abook_curses.h abook_rl.h database.h edit.h filter.h getname.h \
+	getopt.h gettext.h help.h list.h ldif.h mbswidth.h misc.h \
+	options.h ui.h views.h xmalloc.h vcard.c vcard.h
+@ENABLE_VFORMAT_SUPPORT_TRUE@am__objects_1 = vcard.$(OBJEXT)
 am_abook_OBJECTS = abook.$(OBJEXT) abook_rl.$(OBJEXT) \
 	database.$(OBJEXT) edit.$(OBJEXT) filter.$(OBJEXT) \
 	getname.$(OBJEXT) getopt.$(OBJEXT) getopt1.$(OBJEXT) \
 	gettext.$(OBJEXT) ldif.$(OBJEXT) list.$(OBJEXT) \
 	mbswidth.$(OBJEXT) misc.$(OBJEXT) options.$(OBJEXT) \
-	ui.$(OBJEXT) vcard.$(OBJEXT) views.$(OBJEXT) xmalloc.$(OBJEXT)
+	ui.$(OBJEXT) views.$(OBJEXT) xmalloc.$(OBJEXT) \
+	$(am__objects_1)
 abook_OBJECTS = $(am_abook_OBJECTS)
 abook_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@
@@ -104,7 +112,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(abook_SOURCES)
-DIST_SOURCES = $(abook_SOURCES)
+DIST_SOURCES = $(am__abook_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -254,7 +262,6 @@ U = @U@
 USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
-VFORMAT = @VFORMAT@
 WINDRES = @WINDRES@
 WOE32 = @WOE32@
 WOE32DLL = @WOE32DLL@
@@ -311,15 +318,19 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+@ENABLE_VFORMAT_SUPPORT_FALSE@vformat_SOURCE = 
+@ENABLE_VFORMAT_SUPPORT_TRUE@vformat_SOURCE = vcard.c vcard.h
+@ENABLE_VFORMAT_SUPPORT_TRUE@AM_LDFLAGS = -lvformat
 abook_SOURCES = abook.c abook_rl.c database.c edit.c \
 		filter.c getname.c getopt.c getopt1.c gettext.c \
 		ldif.c list.c mbswidth.c misc.c options.c \
-		ui.c vcard.c views.c xmalloc.c \
+		ui.c views.c xmalloc.c \
 		\
 		abook.h abook_curses.h abook_rl.h database.h edit.h \
 		filter.h getname.h getopt.h gettext.h \
 		help.h list.h ldif.h mbswidth.h misc.h options.h \
-		ui.h vcard.h views.h xmalloc.h
+		ui.h views.h xmalloc.h \
+		$(vformat_SOURCE)
 
 EXTRA_DIST = config.rpath  ANNOUNCE BUGS FAQ abook.1 abookrc.5 sample.abookrc \
 		abook.spec contrib doc/HOWTO.translating_abook RELEASE_NOTES

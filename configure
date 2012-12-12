@@ -606,7 +606,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
-VFORMAT
+ENABLE_VFORMAT_SUPPORT_FALSE
+ENABLE_VFORMAT_SUPPORT_TRUE
 ANSI2KNR
 U
 USE_INCLUDED_INTL_H_FALSE
@@ -11487,7 +11488,6 @@ else
   vformat=false
 fi
 
-VFORMAT="no"
 if test x$vformat = xtrue; then
    ac_fn_c_check_header_mongrel "$LINENO" "vf_iface.h" "ac_cv_header_vf_iface_h" "$ac_includes_default"
 if test "x$ac_cv_header_vf_iface_h" = xyes; then :
@@ -11531,9 +11531,10 @@ $as_echo "$ac_cv_lib_vformat_vf_read_file" >&6; }
 if test "x$ac_cv_lib_vformat_vf_read_file" = xyes; then :
 
      MODULES="$MODULES m_vcf"
-     VFORMAT="yes"
-     LDFLAGS="-lvformat $LDFLAGS"
-     CFLAGS="-DVFORMAT=1 $CFLAGS"
+
+$as_echo "#define HAVE_VFORMAT 1" >>confdefs.h
+
+     have_vformat=yes
 
 fi
 
@@ -11541,6 +11542,13 @@ fi
 fi
 
 
+fi
+ if test x"$have_vformat" = "xyes"; then
+  ENABLE_VFORMAT_SUPPORT_TRUE=
+  ENABLE_VFORMAT_SUPPORT_FALSE='#'
+else
+  ENABLE_VFORMAT_SUPPORT_TRUE='#'
+  ENABLE_VFORMAT_SUPPORT_FALSE=
 fi
 
 
@@ -11743,6 +11751,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_VFORMAT_SUPPORT_TRUE}" && test -z "${ENABLE_VFORMAT_SUPPORT_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_VFORMAT_SUPPORT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

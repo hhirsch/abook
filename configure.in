@@ -137,18 +137,16 @@ AC_ARG_ENABLE(vformat, [  --enable-vformat          Use libvformat is available 
 	no) vformat=false ;;
 	*) AC_MSG_ERROR(bad value ${enableval} for --enable-vformat) ;;
 	esac], [vformat=false])
-VFORMAT="no"
 if test x$vformat = xtrue; then
    AC_CHECK_HEADER([vf_iface.h], [
      AC_CHECK_LIB([vformat], [vf_read_file], [
      MODULES="$MODULES m_vcf"
-     VFORMAT="yes"
-     LDFLAGS="-lvformat $LDFLAGS"
-     CFLAGS="-DVFORMAT=1 $CFLAGS"
+     AC_DEFINE(HAVE_VFORMAT,1,[Defined if the vformat library is available])
+     have_vformat=yes
   ])
 ])
 fi
-AC_SUBST(VFORMAT)
+AM_CONDITIONAL(ENABLE_VFORMAT_SUPPORT,test x"$have_vformat" = "xyes")
 
 dnl -------------------------
 dnl end of vformat detection

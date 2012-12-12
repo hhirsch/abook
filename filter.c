@@ -29,7 +29,7 @@
 #include "xmalloc.h"
 #include <assert.h>
 
-#ifdef VFORMAT
+#ifdef HAVE_VFORMAT
 #include "vcard.h"
 #endif
 
@@ -297,7 +297,7 @@ import_file(char filtname[FILTNAME_LEN], char *filename)
 	if(i < 0)
 		return -1;
 
-#ifdef VFORMAT
+#ifdef HAVE_VFORMAT
 	// this is a special case for
 	// libvformat whose API expects a filename
 	if(!strcmp(filtname, "vcard")) {
