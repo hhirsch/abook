@@ -640,6 +640,7 @@ ldif_convert(ldif_item item, char *type, char *value)
 				free(item_fget(item, i));
 
 			item_fput(item, i, xstrdup(value));
+			break;
 		}
 	}
 }
