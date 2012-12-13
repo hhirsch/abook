@@ -547,35 +547,42 @@ static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
 	-1,             /* "objectclass" */ /* this must be the last entry */
 };
 
-
+/*
+  Handles multi-line strings.
+  If a string starts with a space, it's the continuation
+  of the previous line. Thus we need to always read ahead.
+  But for this to work with stdin, we need to stores the next
+  line for later use in case it's not a continuation of the
+  first line.
+ */
 static char *
-ldif_read_line(FILE *in)
+ldif_read_line(FILE *in, char **next_line)
 {
 	char *buf = NULL;
 	char *ptr, *tmp;
-	long pos;
-	int i;
+	char *line;
 
-	for(i = 1;;i++) {
-		char *line;
+	// buf filled with the first line
+	if(!*next_line)
+		buf = getaline(in);
+	else {
+		buf = xstrdup(*next_line);
+		xfree(*next_line);
+	}
 
-		pos = ftell(in);
+	while(!feof(in)) {
+		// if no line already read-ahead.
 		line = getaline(in);
+		if(!line) break;
 
-		if(feof(in) || !line)
-			break;
-
-		if(i == 1) {
-			buf = line;
-			continue;
-		}
-
+		// this is not a continuation of what is already in buf
+		// store it for the next round
 		if(*line != ' ') {
-			fseek(in, pos, SEEK_SET); /* fixme ! */
-			free(line);
+			*next_line = line;
 			break;
 		}
 
+		// starts with ' ': this is the continuation of buf
 		ptr = line;
 		while( *ptr == ' ')
 			ptr++;
@@ -642,6 +649,7 @@ static int
 ldif_parse_file(FILE *handle)
 {
 	char *line = NULL;
+	char *next_line = NULL;
 	char *type, *value;
 	int vlen;
 	ldif_item item;
@@ -649,8 +657,10 @@ ldif_parse_file(FILE *handle)
 	memset(item, 0, sizeof(item));
 
 	do {
-		if( !(line = ldif_read_line(handle)) )
-			continue;
+		line = ldif_read_line(handle, &next_line);
+
+		// EOF or empty lines: continue;
+		if(!line || *line == '\0') continue;
 
 		if(-1 == (str_parse_line(line, &type, &value, &vlen))) {
 			xfree(line);
