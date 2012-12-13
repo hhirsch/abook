@@ -609,10 +609,6 @@ ldif_add_item(ldif_item li)
 
 	item = item_create();
 
-	if(!li[LDIF_ITEM_FIELDS -1])
-		goto bail_out;
-
-
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
 		if(ldif_conv_table[i] >= 0 && li[i] && *li[i])
 			item_fput(item,ldif_conv_table[i],xstrdup(li[i]));
@@ -620,7 +616,6 @@ ldif_add_item(ldif_item li)
 
 	add_item2database(item);
 
-bail_out:
 	for(i=0; i < LDIF_ITEM_FIELDS; i++)
 		xfree(li[i]);
 	item_free(&item);
