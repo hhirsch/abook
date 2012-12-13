@@ -631,8 +631,8 @@ ldif_convert(ldif_item item, char *type, char *value)
 	}
 
 	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
-		if(!safe_strcmp(ldif_field_names[i], type) && *value) {
-			if(i == LDIF_ITEM_FIELDS - 1) /* this is a dirty hack */
+                if(!strcasecmp(ldif_field_names[i], type) && *value) {
+                        if(i == LDIF_ITEM_FIELDS - 1) /* this is a dirty hack */
 				if(safe_strcmp("person", value))
 					break;
 
