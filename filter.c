@@ -883,16 +883,22 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 		int j;
 		get_first_email(email, e.item);
 
-		tmp = strdup_printf("cn=%s,mail=%s",db_name_get(e.item),email);
+		if(*email)
+			tmp = strdup_printf("cn=%s,mail=%s",db_name_get(e.item),email);
+		else
+			tmp = strdup_printf("cn=%s",db_name_get(e.item));
 
 		ldif_fput_type_and_value(out, "dn", tmp);
 		free(tmp);
 
 		for(j = 0; j < LDIF_ITEM_FIELDS; j++) {
 			if(ldif_conv_table[j] >= 0) {
-				if(ldif_conv_table[j] == EMAIL)
-					ldif_fput_type_and_value(out,
-						ldif_field_names[j], email);
+				if(ldif_conv_table[j] == EMAIL) {
+					if(*email) // don't dump en empty email field
+						ldif_fput_type_and_value(out,
+						                         ldif_field_names[j],
+						                         email);
+				}
 				else if(db_fget(e.item,ldif_conv_table[j]))
 					ldif_fput_type_and_value(out,
 						ldif_field_names[j],
