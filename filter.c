@@ -630,15 +630,8 @@ ldif_convert(ldif_item item, char *type, char *value)
 		return;
 	}
 
-	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
+	for(i=0; i < LDIF_ITEM_FIELDS - 1; i++) {
                 if(!strcasecmp(ldif_field_names[i], type) && *value) {
-                        if(i == LDIF_ITEM_FIELDS - 1) /* this is a dirty hack */
-				if(safe_strcmp("person", value))
-					break;
-
-			if(item_fget(item, i))
-				free(item_fget(item, i));
-
 			item_fput(item, i, xstrdup(value));
 			break;
 		}
