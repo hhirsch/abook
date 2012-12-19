@@ -503,8 +503,6 @@ export_file(char filtname[FILTNAME_LEN], char *filename)
 
 #include "ldif.h"
 
-static void	ldif_fix_string(char *str);
-
 /* During LDIF import we need more fields than the
    ITEM_FIELDS of a *list_item. Eg: "objectclass"
    to test valid records, ...
@@ -789,8 +787,6 @@ ldif_parse_file(FILE *handle)
 			continue; /* just skip the errors */
 		}
 
-		ldif_fix_string(value);
-
 		ldif_convert(item, type, value);
 
 		xfree(line);
@@ -800,19 +796,6 @@ ldif_parse_file(FILE *handle)
 	ldif_convert(item, "dn", "");
 
 	return 0;
-}
-
-static void
-ldif_fix_string(char *str)
-{
-	int i, j;
-
-	for(i = 0, j = 0; j < (int)strlen(str); i++, j++)
-		str[i] = ( str[j] == (char)0xc3 ?
-				(char) str[++j] + (char) 0x40 :
-				str[j] );
-
-	str[i] = 0;
 }
 
 /*
