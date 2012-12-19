@@ -505,47 +505,114 @@ export_file(char filtname[FILTNAME_LEN], char *filename)
 
 static void	ldif_fix_string(char *str);
 
-#define	LDIF_ITEM_FIELDS	16
+/* During LDIF import we need more fields than the
+   ITEM_FIELDS of a *list_item. Eg: "objectclass"
+   to test valid records, ...
+   Here we extends the existing field_types enum
+   to define new fields indexes usable during processing.
+   Newly created LDIF attr names could be associated to
+   them using ldif_conv_table[]. */
+typedef enum {
+	LDIF_OBJECTCLASS = ITEM_FIELDS + 1
+} ldif_field_types;
+
+#define	LDIF_ITEM_FIELDS	LDIF_OBJECTCLASS
 
 typedef char *ldif_item[LDIF_ITEM_FIELDS];
 
+/* LDIF field's names *must* respect the ordering
+   defined by the field_types enum from database.h
+   This is only used to define (for export only)
+   abook standard field to LDIF attr name mappings */
 static ldif_item ldif_field_names = {
-	"cn",
-	"mail",
-	"streetaddress",
-	"streetaddress2",
-        "locality",
-	"st",
-	"postalcode",
-	"countryname",
-	"homephone",
-	"description",
-	"homeurl",
-	"facsimiletelephonenumber",
-	"cellphone",
-	"xmozillaanyphone",
-	"xmozillanickname",
-	"objectclass", /* this must be the last entry */
+	"cn",			// NAME
+	"mail",			// EMAIL
+	"streetaddress",	// ADDRESS
+	"streetaddress2",	// ADDRESS2
+	"locality",		// CITY
+	"st",			// STATE
+	"postalcode",		// ZIP
+	"countryname",		// COUNTRY
+	"homephone",		// PHONE
+	"telephonenumber",	// WORKPHONE
+	"facsimiletelephonenumber",	// FAX
+	"cellphone",		// MOBILEPHONE
+	"xmozillanickname",	// NICK
+	"homeurl",		// URL
+	"description",		// NOTES
+	"anniversary",		// ANNIVERSARY
+	"ou",			// GROUPS
 };
 
-static int ldif_conv_table[LDIF_ITEM_FIELDS] = {
-	NAME,		/* "cn" */
-	EMAIL,		/* "mail" */
-	ADDRESS,	/* "streetaddress" */
-	ADDRESS2,	/* "streetaddress2" */
-        CITY,		/* "locality" */
-	STATE,		/* "st" */
-	ZIP,		/* "postalcode" */
-	COUNTRY,	/* "countryname" */
-	PHONE,		/* "homephone" */
-	NOTES,		/* "description" */
-	URL,		/* "homeurl" */
-	FAX,		/* "facsimiletelephonenumber" */
-	MOBILEPHONE,	/* "cellphone" */
-	WORKPHONE,	/* "xmozillaanyphone" */
-	NICK,		/* "xmozillanickname" */
-	-1,             /* "objectclass" */ /* this must be the last entry */
+/* Used to map LDIF attr names from input to
+   the abook restricted set of standard fields. */
+typedef struct {
+	char *key;
+	int  index;
+} ldif_available_items;
+
+static ldif_available_items ldif_conv_table[] = {
+	/* initial field names respect the field_types enum
+	   from database.h but this is only for readability.
+	   This ldif_item struct allow use to define multiple
+	   LDIF field names ("attribute names") for one abook field */
+
+	{"cn",			NAME},		// 0
+	{"mail",		EMAIL},
+	{"streetaddress",	ADDRESS},
+	{"streetaddress2",	ADDRESS2},
+	{"locality",		CITY},
+	{"st",			STATE},
+	{"postalcode",		ZIP},
+	{"countryname",		COUNTRY},
+	{"homephone",		PHONE},
+	{"telephonenumber",	WORKPHONE},	// workphone, according to Mozilla
+	{"facsimiletelephonenumber",	FAX},
+	{"cellphone",		MOBILEPHONE},
+	{"mozillanickname",	NICK},
+	{"homeurl",		URL},
+	{"description",		NOTES},
+	{"anniversary",		ANNIVERSARY},
+	{"ou",			GROUPS},	// 16
+
+	// here comes a couple of aliases
+	{"mozillasecondemail",	EMAIL},
+	{"homecity",		CITY},
+	{"zip",			ZIP},
+	{"tel",			PHONE},
+	{"xmozillaanyphone",	WORKPHONE},	// ever used ?
+	{"workphone",		WORKPHONE},
+	{"fax",			FAX},
+	{"telexnumber",		FAX},
+	{"mobilephone",		MOBILEPHONE},
+	{"mobile",		MOBILEPHONE},
+	{"xmozillanickname",	NICK},
+	{"labeledURI",		URL},
+	{"notes",		NOTES},
+	{"birthday",		ANNIVERSARY},
+	{"category",		GROUPS},
+
+	/* TODO:
+	   "sn": append to lastname ?
+	   "surname": append to lastname ?
+	   "givenname": prepend to firstname ? */
+
+	/* here starts dummy fields:
+
+	   As long as additional indexes are created
+	   (using the above ldif_field_types),
+	   any other LDIF attr name can be added and
+	   used during ldif entry processing.
+	   But obviously fields > ITEM_FIELDS (database.h) won't be
+	   copied into the final *list_item. */
+
+	/* - to avoid mistake, don't use the special ITEM_FIELDS value.
+	   - see also: http://mxr.mozilla.org/comm-central/source/mailnews/addrbook/src/nsAbLDIFService.cpp */
+
+	// used to check valid LDIF records:
+	{"objectclass",		LDIF_OBJECTCLASS}
 };
+const int LDIF_IMPORTABLE_ITEM_FIELDS = (int)sizeof(ldif_conv_table)/sizeof(*ldif_conv_table);
 
 /*
   Handles multi-line strings.
@@ -607,35 +674,90 @@ ldif_add_item(ldif_item li)
 	list_item item;
 	int i;
 
-	item = item_create();
+	/* if there's no value for "objectclass"
+	   it's probably a buggy record */
+	if(!li[LDIF_OBJECTCLASS])
+		goto bail_out;
 
-	for(i=0; i < LDIF_ITEM_FIELDS; i++) {
-		if(ldif_conv_table[i] >= 0 && li[i] && *li[i])
-			item_fput(item,ldif_conv_table[i],xstrdup(li[i]));
+	/* just copy from our extended ldif_item to a regular
+	   list_item,
+	   TODO: API could be changed so db_fput_byid() is usable */
+	item = item_create();
+	for(i=0; i < ITEM_FIELDS; i++) {
+		if(li[i] && *li[i])
+			item[i] = xstrdup(li[i]);
 	}
 
 	add_item2database(item);
-
-	for(i=0; i < LDIF_ITEM_FIELDS; i++)
-		xfree(li[i]);
 	item_free(&item);
 
+bail_out:
+	for(i=0; i < LDIF_ITEM_FIELDS; i++)
+		xfree(li[i]);
 }
 
 static void
 ldif_convert(ldif_item item, char *type, char *value)
 {
-	int i;
-
+	/* this is the first (mandatory) attribute to expected
+	   from a new valid LDIF record.
+	   The previous record must be added to the database before
+	   we can go further with the new one */
 	if(!strcmp(type, "dn")) {
 		ldif_add_item(item);
 		return;
 	}
 
-	for(i=0; i < LDIF_ITEM_FIELDS - 1; i++) {
-                if(!strcasecmp(ldif_field_names[i], type) && *value) {
-			item_fput(item, i, xstrdup(value));
-			break;
+	int i, index;
+
+	for( i=0; i < LDIF_IMPORTABLE_ITEM_FIELDS; i++ ) {
+
+		if( *value &&						// there's a value for the attr provided
+		    ldif_conv_table[i].key &&				// there exists an ldif attr name...
+		    !strcasecmp(ldif_conv_table[i].key, type)) {	// ...matching that provided at input
+
+			assert((i >= 0) && (i < LDIF_ITEM_FIELDS));
+			// which abook field this attribute's name maps to ?
+			index = ldif_conv_table[i].index;
+			assert((index >= 0) && (index < LDIF_ITEM_FIELDS));
+
+			/* TODO: here must be handled multi-valued cases
+			   (first or latest win, append or prepend values, ...)
+			   Currently: emails are appended, for other fields the
+			   first attribute found wins.
+			   Eg: the value of "mobile" will be taken into
+			   account if such a line comes before "cellphone". */
+
+			/* Remember: LDIF_ITEM_FIELDS > ITEM_FIELDS,
+			   lower (common) indexes of *ldif_item map well to *list_item.
+			   We can use item_fput()... */
+			if(index < ITEM_FIELDS) {
+				// multiple email support, but two only will stay
+				// in the final *list_item
+				if(index == EMAIL && item_fget(item, EMAIL)) {
+					item_fput(item,
+					          EMAIL,
+					          strconcat(item_fget(item, EMAIL), ",", value, 0));
+				}
+				else {
+					/* Don't override already initialized fields:
+					   This is the rule of the "first win" */
+					if(! item_fget(item, index))
+						item_fput(item, index, xstrdup(value));
+				}
+			}
+
+			/* ... but if the ldif field's name index is higher
+			   than what standards abook fields struct can hold,
+			   these extra indexes must be managed manually.
+			   This is the case of LDIF_OBJECTCLASS ("objectclass" attr) */
+			else {
+				item[index] = xstrdup(value);
+			}
+
+			// matching attr found and field filled:
+			// no further attr search is needed for `type`
+	                break;
 		}
 	}
 }
@@ -647,6 +769,11 @@ ldif_parse_file(FILE *handle)
 	char *next_line = NULL;
 	char *type, *value;
 	int vlen;
+
+	/* This is our extended fields holder to put the values from
+	   successfully parsed LDIF attributes.
+	   ldif_item item is temporary. When the end of an entry is reached,
+	   values are copied into a regular *list_item struct, see ldif_add_item() */
 	ldif_item item;
 
 	memset(item, 0, sizeof(item));
@@ -669,6 +796,7 @@ ldif_parse_file(FILE *handle)
 		xfree(line);
 	} while ( !feof(handle) );
 
+	// force registration (= ldif_add_item()) of the last LDIF entry
 	ldif_convert(item, "dn", "");
 
 	return 0;
@@ -880,25 +1008,25 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 
 		if(*email)
 			tmp = strdup_printf("cn=%s,mail=%s",db_name_get(e.item),email);
+		/* TODO: this may not be enough for a trully "Distinguished" name
+		   needed by LDAP. Appending a random uuid could do the trick */
 		else
 			tmp = strdup_printf("cn=%s",db_name_get(e.item));
 
 		ldif_fput_type_and_value(out, "dn", tmp);
 		free(tmp);
 
-		for(j = 0; j < LDIF_ITEM_FIELDS; j++) {
-			if(ldif_conv_table[j] >= 0) {
-				if(ldif_conv_table[j] == EMAIL) {
-					if(*email) // don't dump en empty email field
-						ldif_fput_type_and_value(out,
-						                         ldif_field_names[j],
-						                         email);
-				}
-				else if(db_fget(e.item,ldif_conv_table[j]))
+		for(j = 0; j < ITEM_FIELDS; j++) {
+			if(j == EMAIL) {
+				if(*email) // don't dump an empty email field
 					ldif_fput_type_and_value(out,
-						ldif_field_names[j],
-						db_fget(e.item,
-							ldif_conv_table[j]));
+					                         ldif_field_names[j],
+					                         email);
+			}
+			else if(db_fget(e.item,j)) {
+				ldif_fput_type_and_value(out,
+				                         ldif_field_names[j],
+				                         db_fget(e.item, j));
 			}
 		}
 
