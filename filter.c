@@ -998,6 +998,7 @@ static int
 ldif_export_database(FILE *out, struct db_enumerator e)
 {
 	char email[MAX_EMAILSTR_LEN];
+	abook_list *emails, *em;
 
 	fprintf(out, "version: 1\n");
 
@@ -1018,10 +1019,15 @@ ldif_export_database(FILE *out, struct db_enumerator e)
 
 		for(j = 0; j < ITEM_FIELDS; j++) {
 			if(j == EMAIL) {
-				if(*email) // don't dump an empty email field
-					ldif_fput_type_and_value(out,
-					                         ldif_field_names[j],
-					                         email);
+				if(*email) {
+					tmp = db_email_get(e.item);
+					emails = csv_to_abook_list(tmp);
+					free(tmp);
+					for(em = emails; em; em = em->next)
+						ldif_fput_type_and_value(out,
+						                         ldif_field_names[EMAIL],
+						                         em->data);
+				}
 			}
 			else if(db_fget(e.item,j)) {
 				ldif_fput_type_and_value(out,
