@@ -10,6 +10,9 @@ git
  - extra-fields deletion bugfix (Jorrit Tijben)
  - additinal keybinding (Hagen Fuchs)
  - autotools update (Fabio Zanini)
+ - case-sensitive ldif fields parsing (Christian Brabandt)
+ - ldif standard input support (Raphaël Droz)
+ - ldif extensible field management rewritting (Raphaël Droz)
 
 0.6.0
  - configurable views (Cedric Duval)

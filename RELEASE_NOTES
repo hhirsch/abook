@@ -3,8 +3,34 @@ Please read this file carefully when upgrading abook.
 A more comprehensive list of changes can be found in the ChangeLog file.
 
 --
+Git:
+  * support for mouse
+  * support for a colored UI
+  * added "groups" as a default field
+  * the UI now support merging selected entries [key M]
+    and removing duplicates [key U]
+  * a "custom" output filter allow the specification of an output
+    format using placeholders
+  * search-next is now bound to "/" too
+  * some output filters can now be used in the context
+    of --mutt-query. This is the case of "vcard" and "custom"
+    [ no --query option has been created and --mutt-query is fully
+      backward compatible ]
+  * ldif output filter has been fixed [output modified] in multiple
+    ways, does not force output to latin1 anymore and support input
+    from stdin.
+  * vcard input/output support:
+    An original input filter implementation was provided soon
+       after 0.6.0pre2.
+    In 2012, an optional build-time option to link against libvformat
+    was added for the very same task: parsing vcard.
+    - It depends on the --enable-vformat ./configure switch
+    - It's only used as an input filter, especially useful to
+      deal with multi-valued fields and encoded characters.
 
-0.6.0pre2:
+0.6.0pre2 (2010-07-22):
+  * Added anniversary as a default field
+  * Display dates according to current locale
   * The four following configuration options have been deprecated and will
     no longer be accepted by abook:
       * emailpos

@@ -2485,37 +2485,15 @@ bsdcal_export_database(FILE *out, struct db_enumerator e)
 	return 0;
 }
 
-// see enum field_types @database.h
-static char *conv_table[] = {
-  "name",
-  "email",
-  "address",
-  "address2",
-  "city",
-  "state",
-  "zip",
-  "country",
-  "phone",
-  "workphone",
-  "fax",
-  "mobile",
-  "nick",
-  "url",
-  "notes",
-  "anniversary",
-  0 /* ITEM_FIELDS */
-};
-
+// see also enum field_types @database.h
+extern abook_field standard_fields[];
 static int
 find_field_enum(char *s) {
-  int i = 0;
-  while (conv_table[i]) {
-    if(!safe_strcmp(conv_table[i], s))
-      return i;
-    i++;
-  }
-  // failed
-  return -1;
+	int i = -1;
+	while(standard_fields[++i].key)
+		if(!strcmp(standard_fields[i].key, s))
+			return i;
+	return -1;
 }
 
 /* Convert a string with named placeholders to
@@ -2529,17 +2507,17 @@ parse_custom_format(char *s, char *fmt_string, enum field_types *ft)
 	  exit(EXIT_FAILURE);
 	}
 
+	char tmp[1] = { 0 };
 	char *p, *start, *field_name = NULL;
 	p = start = s;
 
 	while(*p) {
 		if(*p == '{') {
 		  start = ++p;
+
+		  if(! *start) goto cannotparse;
 		  p = strchr(start, '}');
-		  if(! *p) {
-		    fprintf(stderr, _("parse_custom_format: invalid format\n"));
-		    exit(EXIT_FAILURE);
-		  }
+		  if(! p) goto cannotparse;
 		  strcat(fmt_string, "%s");
 		  field_name = strndup(start, (size_t)(p-start));
 		  *ft = find_field_enum(field_name);
@@ -2549,23 +2527,53 @@ parse_custom_format(char *s, char *fmt_string, enum field_types *ft)
 		  }
 
 		  ft++;
-		  p++;
-		  start = p;
-		} else {
+		  start = ++p;
+		}
+
+		else if(*p == '\\') {
+			++p;
+			if(! *p) tmp[0] = '\\'; // last char is a '\' ?
+			else if(*p == 'n') *tmp = '\n';
+			else if(*p == 't') *tmp = '\t';
+			else if(*p == 'r') *tmp = '\r';
+			else if(*p == 'v') *tmp = '\v';
+			else if(*p == 'b') *tmp = '\b';
+			else if(*p == 'a') *tmp = '\a';
+			else *tmp = *p;
+			strncat(fmt_string, tmp, 1);
+			start = ++p;
+		}
+
+		// if no '\' following: quick mode using strchr/strncat
+		else if(! strchr(start, '\\')) {
 		  p = strchr(start, '{');
-		  if(p && *p) {
+		  if(p) { // copy until the next placeholder
 		    strncat(fmt_string, start, (size_t)(p-start));
 		    start = p;
 		  }
-		  else {
+		  else { // copy till the end
 		    strncat( fmt_string,
 			     start,
 			     FORMAT_STRING_LEN - strlen(fmt_string) - 1 );
 		    break;
 		  }
 		}
+
+		// otherwise character by character
+		else {
+			strncat(fmt_string, p, 1);
+			start = ++p;
+		}
 	}
-	*ft = 66;
+
+	*ft = ITEM_FIELDS;
+	return;
+
+ cannotparse:
+	fprintf(stderr, _("%s: invalid format, index %ld\n"), __FUNCTION__, (start - s));
+	free(fmt_string);
+	while(*ft) free(ft--);
+	exit(EXIT_FAILURE);
 }
 
 static int
@@ -2598,7 +2606,7 @@ custom_export_item(FILE *out, int item, char *fmt, enum field_types *ft)
   // we first check that all fields exist before continuing
   if(*fmt == '!') {
     enum field_types *ftp = ft;
-    while(*ft != 66) {
+    while(*ft != ITEM_FIELDS) {
       if(! db_fget(item, *ft) )
 	return 1;
       ft++;
@@ -2612,7 +2620,7 @@ custom_export_item(FILE *out, int item, char *fmt, enum field_types *ft)
       fprintf(out, "%s", safe_str(db_fget(item, *ft)));
       ft++;
       fmt+=2;
-    } else if (*ft == 66) {
+    } else if (*ft == ITEM_FIELDS) {
       fprintf(out, "%s", fmt);
       return 0;
     } else {

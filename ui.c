@@ -139,7 +139,7 @@ ui_init_curses()
 		ui_enable_mouse(TRUE);
 	}
 	keypad(stdscr, TRUE);
-	if(opt_get_bool(BOOL_USE_COLORS)) {
+	if(opt_get_bool(BOOL_USE_COLORS) && has_colors()) {
 		start_color();
 		use_default_colors();
 		ui_init_color_pairs_user();

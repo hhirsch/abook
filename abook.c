@@ -415,7 +415,11 @@ parse_command_line(int argc, char **argv)
 	}
 	if(! selected_item_filter.func)
 		selected_item_filter = select_output_item_filter("muttq");
-	else if (! strcmp(outformat, "custom") && *custom_format) {
+	else if (! strcmp(outformat, "custom")) {
+		if(! *custom_format) {
+			fprintf(stderr, _("Invalid custom format string\n"));
+			exit(EXIT_FAILURE);
+		}
 		parsed_custom_format = (char *)malloc(FORMAT_STRING_LEN * sizeof(char*));
 		custom_format_fields = (enum field_types *)malloc(FORMAT_STRING_MAX_FIELDS * sizeof(enum field_types *));
 		parse_custom_format(custom_format, parsed_custom_format, custom_format_fields);
@@ -465,6 +469,8 @@ show_usage()
 	puts	(_("					(default: text)"));
 	puts	(_("	--outfile	<file>		destination file"));
 	puts	(_("					(default: stdout)"));
+	puts	(_("	--outformatstr	<str>   	format to use for \"custom\" --outformat"));
+	puts	(_("					(default: \"{nick} ({name}): {mobile}\")"));
 	puts	(_("	--formats			list available formats"));
 }
 
@@ -496,7 +502,12 @@ mutt_query(char *str)
 			printf("Not found\n");
 			quit_mutt_query(EXIT_FAILURE);
 		}
-		putchar('\n');
+		// mutt expects a leading line containing
+		// a message about the query.
+		// Others output filter supporting query (vcard, custom)
+		// don't needs this.
+		if(!strcmp(selected_item_filter.filtname, "muttq"))
+			putchar('\n');
 		while(i >= 0) {
 			e_write_item(stdout, i, selected_item_filter.func);
 			i = find_item(str, i + 1, search_fields);
