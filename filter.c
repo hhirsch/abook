@@ -2027,15 +2027,18 @@ vcard_export_item(FILE *out, int item)
 
 	free(name);
 
-	if(db_fget(item, ADDRESS))
-	  fprintf(out, "ADR:;;%s;%s;%s;%s;%s;%s\r\n",
-		  safe_str(db_fget(item, ADDRESS)),
-		  safe_str(db_fget(item, ADDRESS2)),
-		  safe_str(db_fget(item, CITY)),
-		  safe_str(db_fget(item, STATE)),
-		  safe_str(db_fget(item, ZIP)),
-		  safe_str(db_fget(item, COUNTRY))
-		  );
+	// see rfc6350 section 6.3.1
+	if(db_fget(item, ADDRESS)) {
+		fprintf(out, "ADR:;%s;%s;%s;%s;%s;%s\r\n",
+		        // pobox (unsupported)
+		        safe_str(db_fget(item, ADDRESS2)), // ext (n°, ...)
+		        safe_str(db_fget(item, ADDRESS)), // street
+		        safe_str(db_fget(item, CITY)), // locality
+		        safe_str(db_fget(item, STATE)), // region
+		        safe_str(db_fget(item, ZIP)), // code (postal)
+		        safe_str(db_fget(item, COUNTRY)) // country
+		        );
+	}
 
 	if(db_fget(item, PHONE))
 	  fprintf(out, "TEL;HOME:%s\r\n",
