@@ -78,32 +78,27 @@ int vcard_parse_file_libvformat(char *filename) {
     // PO Box, Extended Addr, Street, Locality, Region, Postal Code, Country
     if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "ADR", NULL)) {
       props = 0;
-      // US address ?
-      propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, ADDRESS, xstrdup(propval));
-      // address
-      propval = vf_get_prop_value_string(prop, props++);
-      // TODO: concat ?
+      // PO Box: abook ignores
+      vf_get_prop_value_string(prop, props++);
 
-      // street: TODO: address1 instead ?
+      // ext-address
       propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, ADDRESS2, xstrdup(propval));
-      // city
+      if(propval) item_fput(item, ADDRESS2, xstrdup(propval));
+      // address (street)
       propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, CITY, xstrdup(propval));
-      // state
+      if(propval) item_fput(item, ADDRESS, xstrdup(propval));
+      // locality (city)
       propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, STATE, xstrdup(propval));
+      if(propval) item_fput(item, CITY, xstrdup(propval));
+      // region (state)
       propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, ZIP, xstrdup(propval));
+      if(propval) item_fput(item, STATE, xstrdup(propval));
+      // postal-code (zip)
       propval = vf_get_prop_value_string(prop, props++);
-      if(propval)
-	item_fput(item, COUNTRY, xstrdup(propval));
+      if(propval) item_fput(item, ZIP, xstrdup(propval));
+      // country
+      propval = vf_get_prop_value_string(prop, props++);
+      if(propval) item_fput(item, COUNTRY, xstrdup(propval));
     }
 
 

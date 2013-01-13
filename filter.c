@@ -1538,7 +1538,7 @@ static char *vcard_fields[] = {
 	"FN",			/* FORMATTED NAME */
 	"EMAIL",		/* EMAIL */
 	"ADR",			/* ADDRESS */
-	"ADR",			/* ADDRESS2 - not used */
+	"ADR",			/* ADDRESS2 */
 	"ADR",			/* CITY */
 	"ADR",			/* STATE */
 	"ADR",			/* ZIP */
@@ -1552,20 +1552,6 @@ static char *vcard_fields[] = {
 	"NOTE",			/* NOTES */
 	"N",			/* NAME: special case/mapping in vcard_parse_line() */
 	NULL			/* not implemented: ANNIVERSARY, ITEM_FIELDS */
-};
-
-/*
- * mappings between vCard ADR field and abook's ADDRESS
- * see rfc2426 section 3.2.1
- */
-static int vcard_address_fields[] = {
-	-1,			/* vCard(post office box) - not used */
-	-1,			/* vCard(the extended address) - not used */
-	2,			/* vCard(the street address) - ADDRESS */
-	4,			/* vCard(the locality) - CITY */
-	5,			/* vCard(the region) - STATE */
-	6,			/* vCard(the postal code) - ZIP */
-	7			/* vCard(the country name) - COUNTRY */
 };
 
 enum {
@@ -1651,6 +1637,11 @@ vcard_parse_email(list_item item, char *line)
 	}
 }
 
+
+/*
+ * mappings between vCard ADR field and abook's ADDRESS
+ * see rfc2426 section 3.2.1
+ */
 static void
 vcard_parse_address(list_item item, char *line)
 {
@@ -1663,21 +1654,22 @@ vcard_parse_address(list_item item, char *line)
 	if(!value)
 		return;
 
-	address_field = value;
-	for(i=k=0; value[i]; i++) {
-		if(value[i] == ';') {
-			value[i] = '\0';
-			if(vcard_address_fields[k] >= 0) {
-				item[vcard_address_fields[k]] = xstrdup(address_field);
-			}
-			address_field = &value[i+1];
-			k++;
-			if((k+1)==(sizeof(vcard_address_fields)/sizeof(*vcard_address_fields)))
-				break;
-		}
-	}
-	item[vcard_address_fields[k]] = xstrdup(address_field);
-	xfree(value);
+	// vCard(post office box) - not used
+	strsep(&value, ";");
+	// vCard(the extended address)
+	item_fput(item, ADDRESS2, xstrdup(strsep(&value, ";")));
+	// vCard(the street address)
+	item_fput(item, ADDRESS, xstrdup(strsep(&value, ";")));
+	// vCard(the locality)
+	item_fput(item, CITY, xstrdup(strsep(&value, ";")));
+	// vCard(the region)
+	item_fput(item, STATE, xstrdup(strsep(&value, ";")));
+	// vCard(the postal code)
+	item_fput(item, ZIP, xstrdup(strsep(&value, ";")));
+	// vCard(the country name)
+	item_fput(item, COUNTRY, xstrdup(strsep(&value, ";")));
+
+	if(*value) xfree(value);
 }
 
 static void
