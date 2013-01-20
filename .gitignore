@@ -5,10 +5,12 @@ abook.spec
 config.h
 config.log
 config.status
+config.cache
 intl/Makefile
 po/Makefile
 po/Makefile.in
 po/POTFILES
+po/*.gmo
 stamp-h1
 *.o
 *~

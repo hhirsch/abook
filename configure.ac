@@ -1,15 +1,16 @@
 dnl abook configure.in
 
-AC_INIT(abook.c)
+AC_INIT
+AC_CONFIG_SRCDIR([abook.c])
 AM_INIT_AUTOMAKE(abook, 0.6.0pre2)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER(config.h)
 
 dnl ---------------
 dnl gettext support
 dnl ---------------
 
 AC_USE_SYSTEM_EXTENSIONS
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
 AC_DEFUN([ABOOK_EXPAND_PREFIX], [
@@ -42,7 +43,7 @@ dnl end of gettext support
 dnl ----------------------
 
 AC_PROG_CC
-AC_ISC_POSIX
+AC_SEARCH_LIBS([strerror],[cposix])
 AM_C_PROTOTYPES
 if test "x$U" != "x"; then
 	AC_MSG_ERROR(Compiler not ANSI compliant)
@@ -178,4 +179,5 @@ if test x$GCC = xyes; then
 	CFLAGS="-Wall $CFLAGS"
 fi
 
-AC_OUTPUT(Makefile abook.spec intl/Makefile po/Makefile.in)
+AC_CONFIG_FILES([Makefile abook.spec po/Makefile.in])
+AC_OUTPUT

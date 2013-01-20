@@ -35,7 +35,7 @@ uninstall-local:
 	-rm -f $(DESTDIR)$(mandir)/man5/abookrc.5
 
 
-SUBDIRS = intl po
+SUBDIRS = po
 
 ACLOCAL_AMFLAGS = -I m4
 
