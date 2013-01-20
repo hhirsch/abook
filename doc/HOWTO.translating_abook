@@ -193,7 +193,7 @@ A few notes:
   contributors can contact you if they want to join you in the
   translation team, or have remarks/typo fixes to give about the
   translations. You can either just give your name/nick, or add an email
-  address, f ex "Last-Translator: Cédric Duval <cedricduval+abook@free.fr>\n".
+  address, f ex "Last-Translator: CÃ©dric Duval <cedricduval+abook@free.fr>\n".
 
 * Comments
   Adding comments (lines begining with the '#' character) can be a good
@@ -207,6 +207,12 @@ A few notes:
   (standard length is 80 characters). Don't translate blindly, try to
   look where your string will be displayed to adapt your translation.
 
+* Testing translations
+  To give a look at the live translations without really installing abook
+  you can install abook and its mo files in a subdirectory:
+  ./configure --prefix $(pwd)/fakeinstall/usr ; make install
+  Then, eg: LANGUAGE=sv ./fakeinstall/usr/bin/abook
+
 * A few useful tools
   The po-file format is very simple, and the file can be edited with a
   standard text editor.
@@ -214,8 +220,8 @@ A few notes:
   But if you prefer, there are few specialized tools you may find
   convenient for translating:
    * poEdit (http://www.poedit.org/)
-   * KBabel (http://i18n.kde.org/tools/kbabel/)
-   * GTranslator (http://gtranslator.sourceforge.net/)
+   * Lokalize (http://userbase.kde.org/Lokalize/)
+   * GTranslator (http://projects.gnome.org/gtranslator/)
    * Emacs po mode
    * Vim po mode
      (http://vim.sourceforge.net/scripts/script.php?script_id=695
@@ -229,6 +235,6 @@ And finally
 I hope you'll have fun contributing to a more internationalized world. :)
 
 If you have any more questions, don't hesitate to contact me
-(Cédric Duval <cedricduval+abook@free.fr>) or the abook development
+(CÃ©dric Duval <cedricduval+abook@free.fr>) or the abook development
 mailing list (http://lists.sourceforge.net/lists/listinfo/abook-devel).
 

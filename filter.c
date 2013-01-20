@@ -1645,10 +1645,7 @@ vcard_parse_email(list_item item, char *line)
 static void
 vcard_parse_address(list_item item, char *line)
 {
-	int i;
-	int k;
 	char *value;
-	char *address_field;
 
 	value = vcard_get_line_element(line, VCARD_VALUE);
 	if(!value)
@@ -2000,7 +1997,7 @@ vcard_export_database(FILE *out, struct db_enumerator e)
 void
 vcard_export_item(FILE *out, int item)
 {
-	int j;
+	int j, email_no;
 	char *name, *tmp;
 	abook_list *emails, *em;
 	fprintf(out, "BEGIN:VCARD\r\nFN:%s\r\n",
@@ -2048,9 +2045,10 @@ vcard_export_item(FILE *out, int item)
 	tmp = db_email_get(item);
 	if(*tmp) {
 	  emails = csv_to_abook_list(tmp);
-
-	  for(em = emails; em; em = em->next)
-	    fprintf(out, "EMAIL;INTERNET:%s\r\n", em->data);
+	  fprintf(out, "EMAIL;PREF;INTERNET:%s\r\n", emails->data);
+	  email_no = 1;
+	  for(em = emails->next; em; em = em->next, email_no++ )
+		  fprintf(out, "EMAIL;%d;INTERNET:%s\r\n", email_no, em->data);
 
 	  abook_list_free(&emails);
 	}

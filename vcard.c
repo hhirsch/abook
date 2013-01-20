@@ -16,6 +16,8 @@
 #include <string.h>
 
 #include "database.h"
+#include "options.h" // bool
+#include "misc.h" // abook_list_to_csv
 #include "xmalloc.h"
 
 #include "vcard.h"
@@ -32,51 +34,50 @@ int vcard_parse_file_libvformat(char *filename) {
   // property number (used for multivalued properties)
   int props = 0;
   // temporary values
-  char *propval;
-  char multival[MAX_FIELD_LEN] = { 0 };
-  size_t available = MAX_FIELD_LEN;
+  abook_list *multivalues = NULL;
+  char *propval = 0;
+  bool phone_found;
 
   do {
     list_item item = item_create();
+    phone_found = false;
+    /* Note: libvformat use va_args, we *must* cast the last
+       NULL argument to (char*) for arch where
+       sizeof(int) != sizeof(char *) */
 
     // fullname [ or struct-name [ or name ] ]
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "FN", NULL))
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "FN", (char*)0))
       if ((propval = vf_get_prop_value_string(prop, 0)))
 	item_fput(item, NAME, xstrdup(propval));
 
-    if (!propval && vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "N", "*", NULL)) {
-      // TODO: GIVENNAME , FAMILYNAME
+    if (!propval && vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "N", (char*)0)) {
+      // TODO: GIVENNAME, FAMILYNAME
       propval = vf_get_prop_value_string(prop, 0);
       if(propval)
 	item_fput(item, NAME, xstrdup(propval));
     }
 
-    if (!propval && vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NAME", NULL)) {
+    if (!propval && vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NAME", (char*)0)) {
       propval = vf_get_prop_value_string(prop, 0);
       if(propval)
 	item_fput(item, NAME, xstrdup(propval));
     }
 
-    // email(s)
-    // TODO: use our strconcat() ?
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "EMAIL", NULL)) {
-      props = 0;
-      available = MAX_FIELD_LEN;
-      while (available > 0 && props < 5) {
-	propval = vf_get_prop_value_string(prop, props++);
-	if(!propval) continue;
-	if (available > 0 && *multival != 0)
-	  strncat(multival, ",", available--);
-	strncat(multival, propval, available);
-	available -= strlen(propval);
-      }
-      if (available < MAX_FIELD_LEN)
-	item_fput(item, EMAIL, xstrdup(multival));
+    // email(s). (TODO: EMAIL;PREF: should be abook's first)
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "EMAIL", (char*)0)) {
+	    do {
+		    props = 0;
+		    while ((propval = vf_get_prop_value_string(prop, props++))) {
+			    abook_list_append(&multivalues, propval);
+		    }
+	    } while (vf_get_next_property(&prop));
+	    item_fput(item, EMAIL, abook_list_to_csv(multivalues));
+	    abook_list_free(&multivalues);
     }
 
     // format for ADR:
     // PO Box, Extended Addr, Street, Locality, Region, Postal Code, Country
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "ADR", NULL)) {
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "ADR", (char*)0)) {
       props = 0;
       // PO Box: abook ignores
       vf_get_prop_value_string(prop, props++);
@@ -101,91 +102,65 @@ int vcard_parse_file_libvformat(char *filename) {
       if(propval) item_fput(item, COUNTRY, xstrdup(propval));
     }
 
-
-    /*
-    // city: not in libvformat
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "ADR", "CITY", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, CITY, xstrdup(propval));
+    // phone numbers
+    // home
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "HOME", (char*)0) && (propval = vf_get_prop_value_string(prop, 0))) {
+	    item_fput(item, PHONE, xstrdup(propval)); phone_found = true;
     }
-    // state
-    // zip
-    // country
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "C", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, COUNTRY, xstrdup(propval));
-    }
-    */
-
-    // phone
-    // check for HOME
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "HOME")) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, PHONE, xstrdup(propval));
-    }
-    // or grab a more generic one otherwise
-    else if(vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, PHONE, xstrdup(propval));
-    }
-
     // workphone
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "WORK", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, WORKPHONE, xstrdup(propval));
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "WORK", (char*)0) && (propval = vf_get_prop_value_string(prop, 0))) {
+	    item_fput(item, WORKPHONE, xstrdup(propval)); phone_found = true;
     }
 
     // fax
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "FAX", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, FAX, xstrdup(propval));
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "FAX", (char*)0) && (propval = vf_get_prop_value_string(prop, 0))) {
+	    item_fput(item, FAX, xstrdup(propval)); phone_found = true;
     }
 
     // cellphone
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "CELL", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, MOBILEPHONE, xstrdup(propval));
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", "CELL", (char*)0) && (propval = vf_get_prop_value_string(prop, 0))) {
+	    item_fput(item, MOBILEPHONE, xstrdup(propval)); phone_found = true;
+    }
+
+    // or grab any other one as default
+    if(! phone_found && vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "TEL", (char*)0) && (propval = vf_get_prop_value_string(prop, 0))) {
+	    item_fput(item, PHONE, xstrdup(propval));
     }
 
     // nick
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NICKNAME", NULL)) {
-      propval = vf_get_prop_value_string(prop, 0);
-      item_fput(item, NICK, xstrdup(propval));
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NICKNAME", (char*)0)) {
+	    propval = vf_get_prop_value_string(prop, 0);
+	    item_fput(item, NICK, xstrdup(propval));
     }
 
     // url
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "URL", NULL)) {
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "URL", (char*)0)) {
       propval = vf_get_prop_value_string(prop, 0);
       item_fput(item, URL, xstrdup(propval));
     }
 
     // notes
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NOTE", NULL)) {
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "NOTE", (char*)0)) {
       propval = vf_get_prop_value_string(prop, 0);
       item_fput(item, NOTES, xstrdup(propval));
     }
 
     // anniversary
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "BDAY", NULL)) {
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "BDAY", (char*)0)) {
       propval = vf_get_prop_value_string(prop, 0);
       item_fput(item, ANNIVERSARY, xstrdup(propval));
     }
 
     // (mutt) groups
-    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "CATEGORIES", NULL)) {
-	props = 0;
-	available = MAX_FIELD_LEN;
-	*multival = 0;
-	while (available > 0 && props < 5) {
-	  propval = vf_get_prop_value_string(prop, props++);
-	  if(!propval) continue;
-	  if (available > 0 && *multival != 0)
-	    strncat(multival, ",", available--);
-	  strncat(multival, propval, available);
-	  available -= strlen(propval);
-	}
-	if (available < MAX_FIELD_LEN)
-	  item_fput(item, GROUPS, xstrdup(multival));
+    if (vf_get_property(&prop, vfobj, VFGP_FIND, NULL, "CATEGORIES", (char*)0)) {
+	    do {
+		    props = 0;
+		    while ((propval = vf_get_prop_value_string(prop, props++))) {
+			    abook_list_append(&multivalues, propval);
+		    }
+	    } while (vf_get_next_property(&prop));
+	    item_fput(item, GROUPS, abook_list_to_csv(multivalues));
+	    abook_list_free(&multivalues);
     }
 
     add_item2database(item);

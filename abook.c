@@ -390,8 +390,8 @@ parse_command_line(int argc, char **argv)
 				selected_item_filter = select_output_item_filter(outformat);
 				break;
 			case OPT_OUTFORMAT_STR:
-				strncpy(custom_format, optarg, FORMAT_STRING_LEN - 1);
-				custom_format[FORMAT_STRING_LEN] = 0;
+				strncpy(custom_format, optarg, FORMAT_STRING_LEN);
+				custom_format[FORMAT_STRING_LEN - 1] = 0;
 				break;
 			case OPT_INFILE:
 				set_convert_var(infile);
