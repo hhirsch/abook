@@ -14,8 +14,8 @@
 
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.68],,
-[m4_warning([this file was generated for autoconf 2.68.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.69],,
+[m4_warning([this file was generated for autoconf 2.69.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically `autoreconf'.])])
@@ -415,18 +415,6 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS],
      [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
      [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
 ])
-
-# Copyright (C) 1996, 1997, 2000, 2001, 2003, 2005
-# Free Software Foundation, Inc.
-#
-# This file is free software; the Free Software Foundation
-# gives unlimited permission to copy and/or distribute it,
-# with or without modifications, as long as this notice is preserved.
-
-# serial 8
-
-# AM_CONFIG_HEADER is obsolete.  It has been replaced by AC_CONFIG_HEADERS.
-AU_DEFUN([AM_CONFIG_HEADER], [AC_CONFIG_HEADERS($@)])
 
 # Do all the work for Automake.                             -*- Autoconf -*-
 
@@ -1009,34 +997,13 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
-m4_include([m4/codeset.m4])
-m4_include([m4/fcntl-o.m4])
 m4_include([m4/gettext.m4])
-m4_include([m4/glibc2.m4])
-m4_include([m4/glibc21.m4])
 m4_include([m4/iconv.m4])
-m4_include([m4/intdiv0.m4])
-m4_include([m4/intl.m4])
 m4_include([m4/intlmacosx.m4])
-m4_include([m4/intmax.m4])
-m4_include([m4/inttypes-pri.m4])
-m4_include([m4/inttypes_h.m4])
-m4_include([m4/lcmessage.m4])
 m4_include([m4/lib-ld.m4])
 m4_include([m4/lib-link.m4])
 m4_include([m4/lib-prefix.m4])
-m4_include([m4/lock.m4])
-m4_include([m4/longlong.m4])
 m4_include([m4/nls.m4])
 m4_include([m4/po.m4])
-m4_include([m4/printf-posix.m4])
 m4_include([m4/progtest.m4])
-m4_include([m4/size_max.m4])
-m4_include([m4/stdint_h.m4])
-m4_include([m4/threadlib.m4])
-m4_include([m4/uintmax_t.m4])
-m4_include([m4/visibility.m4])
-m4_include([m4/wchar_t.m4])
-m4_include([m4/wint_t.m4])
-m4_include([m4/xsize.m4])
 m4_include([acinclude.m4])
