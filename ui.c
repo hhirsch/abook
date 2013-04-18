@@ -653,7 +653,7 @@ ui_remove_items()
 	if(list_is_empty())
 		return;
 
-	if(statusline_ask_boolean(_("Remove selected item(s)"), TRUE))
+	if(statusline_ask_boolean(_("Remove selected item(s)"), FALSE))
 		remove_selected_items();
 
 	clear_statusline();
@@ -663,7 +663,7 @@ ui_remove_items()
 void
 ui_merge_items()
 {
-	if(statusline_ask_boolean(_("Merge selected items"), TRUE))
+	if(statusline_ask_boolean(_("Merge selected items"), FALSE))
 		merge_selected_items();
 
 	clear_statusline();
@@ -672,7 +672,7 @@ ui_merge_items()
 
 void		ui_remove_duplicates()
 {
-	if(statusline_ask_boolean(_("Remove duplicates"), TRUE))
+	if(statusline_ask_boolean(_("Remove duplicates"), FALSE))
 		remove_duplicates();
 	
 	clear_statusline();
