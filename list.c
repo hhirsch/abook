@@ -357,8 +357,13 @@ scroll_down()
 void
 scroll_list_up()
 {
-	if(first_list_item <= 0)
+	if(first_list_item <= 0) {
+		if(curitem != 0) {
+			curitem--;
+			refresh_list();
+		}
 		return;
+	}
 
 	first_list_item -= scroll_speed;
 	if(first_list_item < 0) {
@@ -374,12 +379,17 @@ scroll_list_up()
 void
 scroll_list_down()
 {
-	if(first_list_item > db_n_items() - 2)
+	if(LAST_LIST_ITEM > db_n_items() - 2) {
+		if(curitem < LAST_LIST_ITEM) {
+			curitem++;
+			refresh_list();
+		}
 		return;
+	}
 
 	first_list_item += scroll_speed;
-	if(first_list_item >= db_n_items()) {
-		first_list_item = db_n_items() - 1;
+	if(LAST_LIST_ITEM > db_n_items() - 1) {
+		first_list_item = db_n_items() - LIST_LINES;
 	}
 	if(curitem < first_list_item) {
 		curitem = first_list_item;
