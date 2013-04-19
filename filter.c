@@ -1287,6 +1287,11 @@ pine_export_database(FILE *out, struct db_enumerator e)
  * csv import filter
  */
 
+/* This is used by both allcsv_export_database() and csv_export_common()
+   to distinguish between standard and defined fields.
+   To avoid confusions this should stay > ITEM_FIELDS  */
+#define CUSTOM_FIELD_START_INDEX       (ITEM_FIELDS + 10)
+
 /* FIXME
  * these files should be parsed according to a certain
  * lay out, or the default if layout is not given, at
@@ -1815,7 +1820,12 @@ csv_export_common(FILE *out, struct db_enumerator e,
 			else if(CSV_IS_SPECIAL(fields[i])) {
 				if(special_func)
 					(*special_func)(out, e.item, fields[i]);
-			} else
+			}
+			else if(fields[i] >= CUSTOM_FIELD_START_INDEX) {
+				fprintf(out, "\"%s\"",
+					safe_str(db_fget_byid(e.item, fields[i] - CUSTOM_FIELD_START_INDEX)));
+			}
+			else
 				/*fprintf(out,(
 			strchr(safe_str(database[e.item][field_idx(fields[i])]), ',') ||
 			strchr(safe_str(database[e.item][field_idx(fields[i])]), '\"')) ?
@@ -1858,7 +1868,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 	 * TODO: Should get these atomatically from abook_fileds
 	 *  - JH
 	 */
-	int allcsv_export_fields[] = {
+	int allcsv_export_fields[ITEM_FIELDS + 6] = { // only the 5 custom fields are allowed so far
 		NAME,
 		EMAIL,
 		ADDRESS,
@@ -1870,7 +1880,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 		PHONE,
 		WORKPHONE,
 		FAX,
-		MOBILEPHONE, // spelled "mobile" in standard_fields
+		MOBILEPHONE, // spelt "mobile" in standard_fields
 		NICK,
 		URL,
 		NOTES,
@@ -1884,7 +1894,43 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 	while(allcsv_export_fields[i+1] != CSV_LAST) {
 		fprintf(out, "\"%s\",", standard_fields[i++].key);
 	}
-	fprintf(out, "\"%s\"\n", standard_fields[i].key);
+	fprintf(out, "\"%s\"", standard_fields[i].key);
+
+	/*
+	  Custom fields handling:
+	  This loop appends custom fields' id at the end of allcsv_export_fields and shift
+	  the CSV_LAST sentinel value each time one is found.
+	  CUSTOM_FIELD_START_INDEX is added to these index values so csv_export_common()
+	  can later recognize them and call db_fget_byid() instead of the traditional db_fget()
+
+	  It only search for defined the [legacy?] "custom" fields.
+	*/
+
+	// pointer to the end of the field list
+	int append_field = ITEM_FIELDS;
+	// custom field's trailing number (between 1 and 5)
+	int j;
+	// full custom field name, eg "custom4"
+	char custom_field_key[8];
+	// index used by custom_field_key
+	int field_no;
+	// name of the defined field <field_no> as chosen by the user
+	char *custom_field_name;
+
+	for (j = 1; j <= 5; j++) {
+		snprintf(custom_field_key, 8, "custom%d", j++);
+		if(find_declared_field(custom_field_key)) {
+			find_field_number(custom_field_key, &field_no);
+			get_field_info(field_no, NULL, &custom_field_name, NULL);
+			// append the field to the list
+			allcsv_export_fields[append_field] = field_no + CUSTOM_FIELD_START_INDEX;
+			allcsv_export_fields[++append_field] = CSV_LAST;
+			// print column name
+			fprintf(out, ",\"%s\"", custom_field_name);
+		}
+	}
+	free(custom_field_name);
+	fprintf(out, "\n");
 
 	csv_export_common(out, e, allcsv_export_fields, NULL);
 
