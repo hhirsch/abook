@@ -5,6 +5,7 @@ A more comprehensive list of changes can be found in the ChangeLog file.
 --
 Git:
   * support for mouse
+  * scrolling now affects the viewport instead of the cursor
   * support for a colored UI
   * added "groups" as a default field
   * the UI now support merging selected entries [key M]
@@ -27,8 +28,12 @@ Git:
     - It depends on the --enable-vformat ./configure switch
     - It's only used as an input filter, especially useful to
       deal with multi-valued fields and encoded characters.
-  * allcsv output's header changed to lowercase
-    and "MOBILEPHONE" changed to "mobile" (consistent w.r.t. standard_fields)
+  * when the UI requests a confirmation from the user before a
+    destructive operation it does not treat unknown key as yes anymore.
+  * allcsv output changes:
+    - header line uses lowercase
+    - "MOBILEPHONE" column name changed to "mobile" (consistent w.r.t. standard_fields)
+    - now outputs defined custom fields as well
 
 0.6.0pre2 (2010-07-22):
   * Added anniversary as a default field
