@@ -35,6 +35,8 @@
 
 extern abook_field_list *fields_list;
 extern int fields_count;
+// see also enum field_types @database.h
+extern abook_field standard_fields[];
 
 /*
  * function declarations
@@ -1868,7 +1870,7 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 		PHONE,
 		WORKPHONE,
 		FAX,
-		MOBILEPHONE,
+		MOBILEPHONE, // spelled "mobile" in standard_fields
 		NICK,
 		URL,
 		NOTES,
@@ -1878,23 +1880,11 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
 	};
 
 	fprintf(out, "#");
-	fprintf(out, "\"NAME\",");
-	fprintf(out, "\"EMAIL\",");
-	fprintf(out, "\"ADDRESS\",");
-	fprintf(out, "\"ADDRESS2\",");
-	fprintf(out, "\"CITY\",");
-	fprintf(out, "\"STATE\",");
-	fprintf(out, "\"ZIP\",");
-	fprintf(out, "\"COUNTRY\",");
-	fprintf(out, "\"PHONE\",");
-	fprintf(out, "\"WORKPHONE\",");
-	fprintf(out, "\"FAX\",");
-	fprintf(out, "\"MOBILEPHONE\",");
-	fprintf(out, "\"NICK\",");
-	fprintf(out, "\"URL\",");
-	fprintf(out, "\"NOTES\",");
-	fprintf(out, "\"ANNIVERSARY\",");
-	fprintf(out, "\"GROUPS\"\n");
+	int i = 0;
+	while(allcsv_export_fields[i+1] != CSV_LAST) {
+		fprintf(out, "\"%s\",", standard_fields[i++].key);
+	}
+	fprintf(out, "\"%s\"\n", standard_fields[i].key);
 
 	csv_export_common(out, e, allcsv_export_fields, NULL);
 
@@ -2478,8 +2468,6 @@ bsdcal_export_database(FILE *out, struct db_enumerator e)
 	return 0;
 }
 
-// see also enum field_types @database.h
-extern abook_field standard_fields[];
 static int
 find_field_enum(char *s) {
 	int i = -1;

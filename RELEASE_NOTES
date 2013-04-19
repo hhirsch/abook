@@ -27,6 +27,8 @@ Git:
     - It depends on the --enable-vformat ./configure switch
     - It's only used as an input filter, especially useful to
       deal with multi-valued fields and encoded characters.
+  * allcsv output's header changed to lowercase
+    and "MOBILEPHONE" changed to "mobile" (consistent w.r.t. standard_fields)
 
 0.6.0pre2 (2010-07-22):
   * Added anniversary as a default field
