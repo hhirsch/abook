@@ -1557,8 +1557,9 @@ static char *vcard_fields[] = {
 	"NICKNAME",		/* NICK */
 	"URL",			/* URL */
 	"NOTE",			/* NOTES */
+	"BDAY",			/* ANNIVERSARY */
 	"N",			/* NAME: special case/mapping in vcard_parse_line() */
-	NULL			/* not implemented: ANNIVERSARY, ITEM_FIELDS */
+	NULL			/* ITEM_FIELDS */
 };
 
 enum {
@@ -2064,6 +2065,13 @@ vcard_export_item(FILE *out, int item)
 		);
 
 	free(name);
+
+	if(db_fget(item, NICK))
+	  fprintf(out, "NICKNAME:%s\r\n",
+		  safe_str(db_fget(item, NICK)));
+	if(db_fget(item, ANNIVERSARY))
+	  fprintf(out, "BDAY:%s\r\n",
+		  safe_str(db_fget(item, ANNIVERSARY)));
 
 	// see rfc6350 section 6.3.1
 	if(db_fget(item, ADDRESS)) {
