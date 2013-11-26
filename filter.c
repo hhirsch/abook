@@ -1660,20 +1660,33 @@ vcard_parse_address(list_item item, char *line)
 
 	// vCard(post office box) - not used
 	strsep(&value, ";");
+	if(!value) return;
+
 	// vCard(the extended address)
 	item_fput(item, ADDRESS2, xstrdup(strsep(&value, ";")));
+	if(!value) return;
+
 	// vCard(the street address)
 	item_fput(item, ADDRESS, xstrdup(strsep(&value, ";")));
+	if(!value) return;
+
 	// vCard(the locality)
 	item_fput(item, CITY, xstrdup(strsep(&value, ";")));
+	if(!value) return;
+
 	// vCard(the region)
 	item_fput(item, STATE, xstrdup(strsep(&value, ";")));
+	if(!value) return;
+
 	// vCard(the postal code)
 	item_fput(item, ZIP, xstrdup(strsep(&value, ";")));
+	if(!value) return;
+
 	// vCard(the country name)
 	item_fput(item, COUNTRY, xstrdup(strsep(&value, ";")));
 
-	if(*value) xfree(value);
+	// support of optional trailing ";" to the ADR field
+	if(value && *value) xfree(value);
 }
 
 static void
