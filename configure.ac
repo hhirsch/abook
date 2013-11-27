@@ -1,9 +1,9 @@
 dnl abook configure.in
 
-AC_INIT
+AC_INIT([Abook], [0.6.0pre2], [abook-devel@lists.sourceforge.net], [abook], [http://abook.sourceforge.net])
 AC_CONFIG_SRCDIR([abook.c])
-AM_INIT_AUTOMAKE(abook, 0.6.0pre2)
 AC_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE
 
 dnl ---------------
 dnl gettext support
@@ -44,7 +44,6 @@ dnl ----------------------
 
 AC_PROG_CC
 AC_SEARCH_LIBS([strerror],[cposix])
-AM_C_PROTOTYPES
 if test "x$U" != "x"; then
 	AC_MSG_ERROR(Compiler not ANSI compliant)
 fi
