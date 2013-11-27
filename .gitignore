@@ -11,6 +11,7 @@ po/Makefile
 po/Makefile.in
 po/POTFILES
 po/*.gmo
+po/stamp-po
 stamp-h1
 *.o
 *~
