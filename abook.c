@@ -704,7 +704,7 @@ convert(char *srcformat, char *srcfile, char *dstformat, char *dstfile)
  * --add-email handling
  */
 
-static int add_email_count = 0;
+static int add_email_count = 0, add_email_found = 0;
 
 static void
 quit_add_email()
@@ -715,7 +715,7 @@ quit_add_email()
 			exit(EXIT_FAILURE);
 		}
 		printf(_("%d item(s) added to %s\n"), add_email_count, datafile);
-	} else {
+	} else if (add_email_found == 0) {
 		puts(_("Valid sender address not found"));
 	}
 
@@ -814,6 +814,7 @@ add_email(int quiet)
 	do {
 		line = getaline(stdin);
 		if(line && !strncasecmp("From:", line, 5) ) {
+			add_email_found++;
 			getname(line, &name, &email);
 			add_email_count += add_email_add_item(quiet,
 					name, email);
