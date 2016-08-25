@@ -1,6 +1,4 @@
-
- ABOOK by JH <jheinonen@users.sourceforge.net>
- -----
+# ABOOK by JH <jheinonen@users.sourceforge.net>
 
 Abook is an addressbook program with mutt mail client support.
 
