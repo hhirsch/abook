@@ -239,6 +239,9 @@ prepare_database_internals()
 	/* the only two mandatory fields */
 	declare_standard_field(NAME);
 	declare_standard_field(EMAIL);
+
+	/* search NICK as well */
+	declare_standard_field(NICK);
 }
 
 int
