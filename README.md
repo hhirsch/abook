@@ -1,12 +1,16 @@
 # Abook
 A classic adress book for the command line.
+
 Reviewers wanted! Add a ticket to ask to get added as a reviewer https://github.com/hhirsch/abook/issues/new
 
 Originally created by JH <jheinonen@users.sourceforge.net> 
+
 And this fork is maintained by Henry Hirsch.
 
 The original repo can be found at http://abook.sourceforge.net/
+
 The original mailing list can be found at https://lists.sourceforge.net/lists/listinfo/abook-devel
+
 But both of those appear to be inactive.
 
 ## Compilation
