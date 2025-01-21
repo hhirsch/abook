@@ -3,7 +3,6 @@ Reviewers wanted! [Please add a ticket to ask to get added as a reviewer](https:
 A classic adress book for the command line.
 
 Originally created by [JH](jheinonen@users.sourceforge.net).
-And this fork is maintained by Henry Hirsch.
 
 ## SourceForge Page
 - The original repo can be found at http://abook.sourceforge.net/
